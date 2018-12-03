@@ -1,5 +1,5 @@
-import {URLForEndpoint, NewRequest, parseResponseAndHandleErrors} from "@/data/requests";
-import {ERROR_SERVER_UNREACHABLE} from "@/data/datasourceConst";
+import {URLForEndpoint, NewRequest, parseResponseAndHandleErrors} from "../data/requests";
+import {ERROR_SERVER_UNREACHABLE} from "../data/datasourceConst";
 
 export default class DataSource {
     static get shared() {
@@ -22,6 +22,18 @@ export default class DataSource {
         let response;
         try {
             response = await fetch(url, request);
+        } catch (err) {
+            throw ERROR_SERVER_UNREACHABLE;
+        }
+        return await parseResponseAndHandleErrors(response);
+    }
+
+    async customCatAPI(){
+        const request = NewRequest("GET");
+
+        let response;
+        try {
+            response = await fetch("https://cat-fact.herokuapp.com/facts", request);
         } catch (err) {
             throw ERROR_SERVER_UNREACHABLE;
         }
