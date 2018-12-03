@@ -28,9 +28,26 @@ export default class DataSource {
         return await parseResponseAndHandleErrors(response);
     }
 
-    async customCatAPI(){
-        const request = NewRequest("GET");
+    async customCatAPI() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        const request = {
+            method: "GET",
+            headers: headers
+        };
 
+        let response;
+        try {
+            response = await fetch("https://cat-fact.herokuapp.com/facts", request);
+        } catch (err) {
+            throw ERROR_SERVER_UNREACHABLE;
+        }
+        return await parseResponseAndHandleErrors(response);
+    }
+
+    // SAMPLE 2
+    async customCatAPI2() {
+        const request = NewRequest('GET');
         let response;
         try {
             response = await fetch("https://cat-fact.herokuapp.com/facts", request);
