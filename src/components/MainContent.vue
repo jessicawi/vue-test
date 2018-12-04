@@ -2,9 +2,9 @@
     <div id="main-content">
         <slot/>
         <h2>API content below:</h2>
-        <!-- render item in list one by one -->
-        <div v-for="item in list" :key="item._id">
-            {{ item.text }}
+        <!-- render object in list(array) one by one -->
+        <div v-for="object in list" :key="object.CNYCode">
+            {{object.CNYid}} - {{ object.CNYname }}
         </div>
 
         <h2>End APi content</h2>
@@ -23,15 +23,11 @@
         },
         async mounted() {
             // get data from api
-            const response = await DataSource.shared.customCatAPI();
-            const etonTest = await DataSource.shared.soapTest()
-
-            // console.log(response, ' api response');
-
+            let response = await DataSource.shared.getCountryList();
 
             // assign data to "list"
-            this.list = response.all;
-            this.etonTest = etonTest
+            this.list = response.Table;
+            console.log(response);
         },
     };
 </script>

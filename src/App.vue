@@ -2,7 +2,10 @@
     <div id="app">
         <Header/>
         <MainContent>
-            <Step/>
+
+            <!-- content here -->
+            <!-- route -->
+
         </MainContent>
     </div>
 </template>
@@ -20,6 +23,9 @@
             Header,
         }
     };
+
+
+
 </script>
 
 <style>

@@ -20,8 +20,8 @@
             };
         },
         async mounted() {
-            const res = await DataSource.shared.callAPI('departments', 'GET');
-            this.methods = res.json;
+            // const res = await DataSource.shared.callAPI('Students', 'GET');
+            // this.methods = res.json;
         },
     };
 </script>
