@@ -58,11 +58,13 @@ async function parseResponseAndHandleErrors(response) {
     if (responseStatusNumber >= 400 && responseStatusNumber <= 599) {
         throw await response.json();
     }
-
+console.log(response)
     // Parse response
     let json;
     try {
         json = await response.json();
+        console.log(json)
+
     } catch (err) {
         throw ERROR_INVALID_RESPONSE;
     }
