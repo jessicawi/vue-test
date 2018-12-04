@@ -24,10 +24,14 @@
         async mounted() {
             // get data from api
             const response = await DataSource.shared.customCatAPI();
-            console.log(response, ' api response');
+            const etonTest = await DataSource.shared.soapTest()
+
+            // console.log(response, ' api response');
+
 
             // assign data to "list"
             this.list = response.all;
+            this.etonTest = etonTest
         },
     };
 </script>

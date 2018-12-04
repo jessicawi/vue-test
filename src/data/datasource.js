@@ -57,4 +57,23 @@ export default class DataSource {
         return await parseResponseAndHandleErrors(response);
     }
 
+// search javascript fetch API with a SOAP web service in google
+    async soapTest() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        const request = {
+            method: "GET",
+            headers: headers
+        };
+
+        let response;
+        try {
+            response = await fetch("http://local.emsv2/controller/Students.asmx/activeStudent?studentID=string", request);
+            console.log(response, " eton house soap test response, should get 'code:1'")
+        } catch (err) {
+            throw ERROR_SERVER_UNREACHABLE;
+        }
+        return await parseResponseAndHandleErrors(response);
+    }
+
 }
