@@ -36,7 +36,7 @@
         },
         methods: {
             stepChange: function (step) {
-                this.step = step;
+                this.step = Step;
             }
         }
     };
