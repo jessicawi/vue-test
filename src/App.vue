@@ -2,7 +2,7 @@
     <div id="app">
         <Header/>
         <MainContent>
-
+            <router-view/>
             <!-- content here -->
             <!-- route -->
 
@@ -11,9 +11,9 @@
 </template>
 
 <script>
-    import Header from "@/components/Header";
-    import MainContent from "@/components/MainContent";
-    import Step from "@/components/Step";
+    import Header from "./components/Header";
+    import MainContent from "./components/MainContent";
+    import Step from "./components/Step";
 
     export default {
         name: 'app',
