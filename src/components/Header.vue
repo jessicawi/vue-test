@@ -1,6 +1,7 @@
 <template>
     <div id="header">
-        充值
+        <router-link :to="{ name: 'Home'}">Home Page</router-link>
+        <router-link :to="{ name: 'Login'}">Login Page</router-link>
     </div>
 </template>
 
