@@ -1,7 +1,10 @@
 <template>
     <div id="header">
-        <router-link :to="{ name: 'Home'}">Home Page</router-link>
-        <router-link :to="{ name: 'Login'}">Login Page</router-link>
+        <div class="top-menu">
+            <router-link :to="{ name: 'Home'}">Home Page</router-link>
+            <router-link :to="{ name: 'Login'}">Login Page</router-link>
+            <router-link :to="{ name: 'CountryList'}">Country List Page</router-link>
+        </div>
     </div>
 </template>
 
@@ -18,5 +21,9 @@
         padding: 15px;
         position: fixed;
         width: 100%;
+    }
+
+    .top-menu a {
+        padding: 2px 5px;
     }
 </style>
