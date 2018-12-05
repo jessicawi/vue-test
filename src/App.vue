@@ -3,9 +3,6 @@
         <Header/>
         <MainContent>
             <router-view/>
-            <!-- content here -->
-            <!-- route -->
-
         </MainContent>
     </div>
 </template>
@@ -13,12 +10,10 @@
 <script>
     import Header from "./components/Header";
     import MainContent from "./components/MainContent";
-    import Step from "./components/Step";
 
     export default {
         name: 'app',
         components: {
-            Step,
             MainContent,
             Header,
         }

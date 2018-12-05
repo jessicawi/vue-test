@@ -43,7 +43,20 @@
 </script>
 
 <style scoped>
-    #step {
+    .step-bar {
+        display: flex;
+        justify-content: space-around;
+    }
 
+    .step-bar div {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        background: #99ddff;
+        cursor: pointer;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        border-radius: 50%;
     }
 </style>

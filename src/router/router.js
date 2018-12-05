@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import loginPage from "../pages/loginPage";
-import homePage from "../pages/homePage";
-import countryListPage from "../pages/countryListPage";
+import loginPage from "../pages/LoginPage";
+import homePage from "../pages/HomePage";
+import countryListPage from "../pages/CountryListPage";
 
 Vue.use(VueRouter);
 
