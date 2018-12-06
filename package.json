@@ -13,6 +13,7 @@
     "jquery": "^3.3.1",
     "vue": "^2.5.17",
     "vue-router": "^3.0.2",
+    "vue-session": "^1.0.0",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10"

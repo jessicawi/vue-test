@@ -1,7 +1,9 @@
 import {URLForEndpoint, NewRequest, parseResponseAndHandleErrors, parseObject} from "../data/requests";
 import {ERROR_SERVER_UNREACHABLE} from "../data/datasourceConst";
 import axios from "axios";
+import jQuery from 'jquery';
 
+const API_HOST = process.env.VUE_APP_ROOT_API;
 export default class DataSource {
     static get shared() {
         if (DataSource.instance == null || DataSource.instance === undefined) {
@@ -28,6 +30,38 @@ export default class DataSource {
         }
         return await parseResponseAndHandleErrors(response);
     }
+
+
+    callWebService(endPoint, data, method) {
+        const request = {
+            dataType: "json",
+            url: endPoint,
+            cache: false,
+            success: function (response) {
+                return response
+            }
+        };
+
+        if (method) {
+            request.method = method
+        }
+
+        if (data) {
+            request.data = data
+        }
+
+        return jQuery.ajax(request);
+    }
+
+
+    login(userId, password) {
+        const data = {
+            userID: userId,
+            userPassword: password
+        }
+        return this.callWebService("http://local.emsv2/controller/Login.asmx/checkLogin", data)
+    }
+
 
     async getCountryList() {
         let response;
@@ -80,72 +114,5 @@ export default class DataSource {
     }
 
 
-    // LOGIN SAMPLE, NOT TESTED
-    async login(username, password) {
-        const headers = new Headers();
-        // headers.append("Content-Type", "application/json");
-        const request = {
-            method: "POST",
-            // headers: headers,
-        };
-
-        const requestBody = {
-            userID: username,
-            userPassword: password,
-        };
-        console.log(requestBody)
-
-        request.body = JSON.stringify(requestBody);
-
-        let response;
-        try {
-            response = await axios.post("http://local.emsv2/controller/Login.asmx/checkLogin", requestBody);
-            console.log(response, ' 1')
-            console.log(response.hasOwnProperty("d"), ' 2')
-            const data = response.hasOwnProperty("d") ? response.d : response;
-            console.log(data, ' 3')
-        } catch (err) {
-            console.log(err);
-            throw ERROR_SERVER_UNREACHABLE;
-        }
-        return await parseObject(response.data);
-    }
-
-    // LOGIN SAMPLE, NOT TESTED
-    async login2(username, password) {
-        const headers = new Headers();
-        headers.append("Content-Type", "application/json");
-        const request = {
-            method: "POST",
-            headers: headers,
-        };
-
-        const requestBody = {
-            userID: username,
-            userPassword: password,
-        };
-        console.log(requestBody)
-
-        request.body = JSON.stringify(requestBody);
-
-        let response;
-        try {
-            response = await axios("http://local.emsv2/controller/Login.asmx/checkLogin", {
-                method: "post",
-                headers: {
-                    'Content-Type': null
-                },
-                data: {
-                    userID: username,
-                    userPassword: password,
-                },
-
-            });
-        } catch (err) {
-            console.log(err);
-            throw ERROR_SERVER_UNREACHABLE;
-        }
-        return await parseResponseAndHandleErrors(response);
-    }
 }
 

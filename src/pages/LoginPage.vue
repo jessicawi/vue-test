@@ -10,7 +10,7 @@
 
         <div class="row">
             <div class="login-wrap">
-                <div class="col-md-6 mb-6 login-img"><img src="../assets/login-img.jpg"/> </div>
+                <div class="col-md-6 mb-6 login-img"><img src="../assets/login-img.jpg"/></div>
                 <div class="col-md-6 mb-6 login-form">
                     <div class="login-header mb-5">
                         <div class="col-md-10">
@@ -42,7 +42,8 @@
                                 Your password is required.
                             </div>
                         </div>
-                        <small class="d-block text-left">By signing in, you accept the terms found in our <a href="">Trust Centre</a></small>
+                        <small class="d-block text-left">By signing in, you accept the terms found in our <a href="">Trust
+                            Centre</a></small>
                         <div class="row d-flex mt-3">
                             <div class="col-md-6"></div>
                             <div class="col-md-6">
@@ -119,40 +120,62 @@
         methods: {
             async onSubmit() {
                 this.response = "<< Requesting.. >>";
-                jQuery.ajax({
-                    dataType: "json",
-                    url: "http://local.emsv2/controller/Login.asmx/checkLogin",
-                    data:
-                        {
-                            'userID': this.usernameInput,
-                            'userPassword': this.passwordInput,
-                        },
-                    cache: false,
-                    success: function (response) {
-                        if (response) {
-                            switch (response.code) {
-                                case "1":
-                                    this.response = `Login Success - ${JSON.stringify(response)}`;
-                                    // window.location.replace("/");
-                                    break;
-                                case "2":
-                                    this.response = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
-                                    break;
-                                case "3":
-                                    this.response = `Invalid password - sample 2: code: ${response.code}`;
-                                    break;
-                                case "99":
-                                    this.response = `Please fill in all field - sample 3: code: ${response.code}`;
-                                    break;
-                                default:
-                                    alert("Please try again later");
-                                    this.response = JSON.stringify(response);
-                            }
-                        } else {
-                            alert('Error');
-                        }
-                    }.bind(this)
-                });
+                const response = await DataSource.shared.login(this.usernameInput, this.passwordInput);
+                console.log(response);
+                if (response) {
+                    switch (response.code) {
+                        case "1":
+                            this.response = `Login Success - ${JSON.stringify(response)}`;
+                            window.location.replace("/");
+                            break;
+                        case "2":
+                            this.response = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
+                            break;
+                        case "3":
+                            this.response = `Invalid password - sample 2: code: ${response.code}`;
+                            break;
+                        case "99":
+                            this.response = `Please fill in all field - sample 3: code: ${response.code}`;
+                            break;
+                        default:
+                            alert("Please try again later");
+                            this.response = JSON.stringify(response);
+                    }
+                }
+                // jQuery.ajax({
+                //     dataType: "json",
+                //     url: "http://local.emsv2/controller/Login.asmx/checkLogin",
+                //     data:
+                //         {
+                //             'userID': this.usernameInput,
+                //             'userPassword': this.passwordInput,
+                //         },
+                //     cache: false,
+                //     success: function (response) {
+                //         if (response) {
+                //             switch (response.code) {
+                //                 case "1":
+                //                     this.response = `Login Success - ${JSON.stringify(response)}`;
+                //                     // window.location.replace("/");
+                //                     break;
+                //                 case "2":
+                //                     this.response = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
+                //                     break;
+                //                 case "3":
+                //                     this.response = `Invalid password - sample 2: code: ${response.code}`;
+                //                     break;
+                //                 case "99":
+                //                     this.response = `Please fill in all field - sample 3: code: ${response.code}`;
+                //                     break;
+                //                 default:
+                //                     alert("Please try again later");
+                //                     this.response = JSON.stringify(response);
+                //             }
+                //         } else {
+                //             alert('Error');
+                //         }
+                //     }.bind(this)
+                // });
             },
         },
         data() {
@@ -198,6 +221,7 @@
     .login-img {
         margin: 0px -15px;
     }
+
     .login-form {
         padding: 30px;
         margin: auto;
@@ -230,6 +254,7 @@
         border-radius: 0px;
         padding: 0px;
     }
+
     .social-item {
         background: #3b5798;
         color: #fff;
