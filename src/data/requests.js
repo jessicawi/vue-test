@@ -58,13 +58,10 @@ async function parseResponseAndHandleErrors(response) {
     if (responseStatusNumber >= 400 && responseStatusNumber <= 599) {
         throw await response.json();
     }
-console.log(response)
     // Parse response
     let json;
     try {
         json = await response.json();
-        console.log(json)
-
     } catch (err) {
         throw ERROR_INVALID_RESPONSE;
     }
@@ -76,4 +73,30 @@ console.log(response)
     return json;
 }
 
-export {URLForEndpoint, NewRequest, NewHtmlRequest, parseResponseAndHandleErrors};
+async function parseObject(response) {
+    // If not successful, throw JSON as response
+    let responseStatusNumber = Number(response.status);
+    if (responseStatusNumber >= 400 && responseStatusNumber <= 599) {
+        throw await response.text();
+    }
+
+    console.log(response)
+    console.log(response.d)
+    // Parse response
+    let json;
+    try {
+        json = await response.text();
+        console.log(typeof json)
+    } catch (err) {
+        throw ERROR_INVALID_RESPONSE;
+    }
+
+    if (json === undefined) {
+        throw ERROR_INVALID_RESPONSE;
+    }
+
+    return json;
+}
+
+
+export {URLForEndpoint, NewRequest, NewHtmlRequest, parseObject, parseResponseAndHandleErrors};

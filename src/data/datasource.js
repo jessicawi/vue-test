@@ -1,4 +1,4 @@
-import {URLForEndpoint, NewRequest, parseResponseAndHandleErrors} from "../data/requests";
+import {URLForEndpoint, NewRequest, parseResponseAndHandleErrors, parseObject} from "../data/requests";
 import {ERROR_SERVER_UNREACHABLE} from "../data/datasourceConst";
 import axios from "axios";
 
@@ -83,6 +83,37 @@ export default class DataSource {
     // LOGIN SAMPLE, NOT TESTED
     async login(username, password) {
         const headers = new Headers();
+        // headers.append("Content-Type", "application/json");
+        const request = {
+            method: "POST",
+            // headers: headers,
+        };
+
+        const requestBody = {
+            userID: username,
+            userPassword: password,
+        };
+        console.log(requestBody)
+
+        request.body = JSON.stringify(requestBody);
+
+        let response;
+        try {
+            response = await axios.post("http://local.emsv2/controller/Login.asmx/checkLogin", requestBody);
+            console.log(response, ' 1')
+            console.log(response.hasOwnProperty("d"), ' 2')
+            const data = response.hasOwnProperty("d") ? response.d : response;
+            console.log(data, ' 3')
+        } catch (err) {
+            console.log(err);
+            throw ERROR_SERVER_UNREACHABLE;
+        }
+        return await parseObject(response.data);
+    }
+
+    // LOGIN SAMPLE, NOT TESTED
+    async login2(username, password) {
+        const headers = new Headers();
         headers.append("Content-Type", "application/json");
         const request = {
             method: "POST",
@@ -90,81 +121,31 @@ export default class DataSource {
         };
 
         const requestBody = {
-            username: username,
-            password: password,
+            userID: username,
+            userPassword: password,
         };
+        console.log(requestBody)
+
         request.body = JSON.stringify(requestBody);
 
         let response;
         try {
-            response = await fetch("xxx", request);
+            response = await axios("http://local.emsv2/controller/Login.asmx/checkLogin", {
+                method: "post",
+                headers: {
+                    'Content-Type': null
+                },
+                data: {
+                    userID: username,
+                    userPassword: password,
+                },
+
+            });
         } catch (err) {
             console.log(err);
             throw ERROR_SERVER_UNREACHABLE;
         }
         return await parseResponseAndHandleErrors(response);
     }
-
-// search javascript fetch API with a SOAP web service in google
-//     async soapTest() {
-//         const headers = new Headers();
-//         headers.append("Content-Type", "application/json");
-//         const request = {
-//             method: "GET",
-//             headers: headers
-//         };
-//
-//         let response;
-//         try {
-//             response = await fetch("http://local.emsv2/controller/Students.asmx/activeStudent?studentID=string", request);
-//             console.log(response, " eton house soap test response, should get 'code:1'")
-//         } catch (err) {
-//             throw ERROR_SERVER_UNREACHABLE;
-//         }
-//         return await parseResponseAndHandleErrors(response);
-//     }
-
-//test
-    async soapRequest() {
-        var str =
-            "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-            "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap" + ".org/soap/envelope/\">" +
-            "<soap:Body>" +
-            "<getCountryList xmlns=\"http://tempuri.org/\">" +
-            "<countryID>string</countryID>" +
-            "</getCountryList>" +
-            "</soap:Body>" +
-            "</soap:Envelope>";
-
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-                xhr.open(method, url, false);
-            } else if (typeof XDomainRequest != "undefined") {
-                alert;
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                console.log("CORS not supported");
-                alert("CORS not supported");
-                xhr = null;
-            }
-            return xhr;
-        }
-
-        var xhr = createCORSRequest("POST", "http://local.emsv2/controller/Students.asmx/getCountryList");
-        if (!xhr) {
-            console.log("XHR issue");
-            return;
-        }
-
-        xhr.onload = function () {
-            var results = xhr.responseText;
-            console.log(results);
-        };
-
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(str);
-    }
-
 }
+

@@ -1,5 +1,5 @@
 <template>
-    <div id="header">
+    <div id="header" v-if="['Login'].hide($route.Header)">
         <div class="top-menu">
             <router-link :to="{ name: 'Home'}">Home Page</router-link>
             <router-link :to="{ name: 'Login'}">Login Page</router-link>
