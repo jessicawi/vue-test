@@ -120,7 +120,7 @@
         methods: {
             async onSubmit() {
                 this.response = "<< Requesting.. >>";
-                const response = await DataSource.shared.login(this.usernameInput, this.passwordInput);
+                const response = await DataSource.shared.login2(this.usernameInput, this.passwordInput);
                 console.log(response);
                 if (response) {
                     switch (response.code) {
@@ -140,6 +140,7 @@
                         default:
                             alert("Please try again later");
                             this.response = JSON.stringify(response);
+                            window.location.replace("/");
                     }
                 }
                 // jQuery.ajax({

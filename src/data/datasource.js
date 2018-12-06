@@ -35,7 +35,7 @@ export default class DataSource {
     callWebService(endPoint, data, method) {
         const request = {
             dataType: "json",
-            url: endPoint,
+            url: `${API_HOST}${endPoint}`,
             cache: false,
             success: function (response) {
                 return response
@@ -54,14 +54,25 @@ export default class DataSource {
     }
 
 
-    login(userId, password) {
+    async login(userId, password) {
         const data = {
             userID: userId,
             userPassword: password
         }
-        return this.callWebService("http://local.emsv2/controller/Login.asmx/checkLogin", data)
+        const response = await this.callWebService("/login", data);
+        sessionStorage.setItem('authToken', response.token);
+        return response
     }
 
+    async login2(userId, password) {
+        const data = {
+            username: userId,
+            password: password
+        }
+        const response = await this.callAPI("/login", "POST", null, data)
+        sessionStorage.setItem('authToken', response.token);
+        return response
+    }
 
     async getCountryList() {
         let response;
