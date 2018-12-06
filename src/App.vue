@@ -31,6 +31,7 @@
         text-align: center;
         color: #2c3e50;
         background: #f1f1f1;
+        font-size: 0.8rem;
     }
 
     .white-box {
@@ -40,4 +41,6 @@
         box-shadow: 1px 1px 4px #e0e0e0;
         margin: 5px 0;
     }
+
+
 </style>
