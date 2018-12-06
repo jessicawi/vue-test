@@ -5,7 +5,6 @@
 
         <h2>Step Change Sample</h2>
         <Step/>
-        <button v-on:click="showSession" v-if="token===null">show session token</button>
         <div>
             <b>session token:</b> {{token}}<br/><br/>
         </div>
@@ -28,7 +27,7 @@
         },
         methods: {
             showSession: async function () {
-                this.token = sessionStorage.getItem('authToken');
+                this.token = sessionStorage.getItem('authToken') || "no token";
             }
         }
     };

@@ -58,8 +58,8 @@ export default class DataSource {
         const data = {
             userID: userId,
             userPassword: password
-        }
-        const response = await this.callWebService("/login", data);
+        };
+        const response = await this.callWebService("/controller/Login.asmx/checkLogin", data);
         sessionStorage.setItem('authToken', response.token);
         return response
     }

@@ -17,4 +17,9 @@
         max-width: 1200px;
         margin: auto;
     }
+    @media (max-width: 740px){
+        #main-content {
+            padding-top: 20px !important;
+        }
+    }
 </style>
