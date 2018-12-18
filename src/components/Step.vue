@@ -24,7 +24,7 @@
 </template>
 
 <script>
-    import Method from "@/components/StepContent/Method";
+    import Method from "../components/StepContent/Method";
 
     export default {
         name: 'Step',

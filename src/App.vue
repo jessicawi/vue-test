@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div v-if="isLoading===false" id="app">
         <Header/>
         <MainContent>
             <router-view/>
@@ -13,12 +13,24 @@
 
     export default {
         name: 'app',
+        data() {
+            return {
+                isLoading: true,
+                token: null,
+            }
+        },
         components: {
             MainContent,
             Header,
+        },
+        mounted() {
+            const isLogin = sessionStorage.getItem('authToken');
+            if (this.$route.path !== "/login" && (!isLogin || isLogin === "null")) {
+                this.$router.push('/login')
+            }
+            this.isLoading = false;
         }
     };
-
 
 
 </script>
@@ -42,5 +54,14 @@
         margin: 5px 0;
     }
 
+    a {
+        text-decoration: none !important;
+    }
 
+</style>
+
+<style lang="scss">
+    $theme-colors: (
+            primary: #006400
+    )
 </style>

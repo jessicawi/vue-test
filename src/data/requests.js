@@ -2,7 +2,7 @@ import QueryString from "querystring";
 import {ERROR_INVALID_RESPONSE} from "./datasourceConst";
 import {selectedLocale} from "../locale";
 
-const API_HOST = `${process.env.VUE_APP_ROOT_API}`;
+const API_HOST = process.env.VUE_APP_ROOT_API;
 
 function URLForEndpoint(endpoint, params = null) {
     let url = API_HOST + endpoint;

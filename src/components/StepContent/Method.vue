@@ -1,6 +1,6 @@
 <template>
     <div id="method">
-        <TopUp/>
+        fdlsfk ;dfkl;d fk;
         <div v-for="method in methods" :key="method.name">
             {{ method.name }}
         </div>
@@ -8,12 +8,10 @@
 </template>
 
 <script>
-    import TopUp from "@/components/TopUp";
     import DataSource from "@/data/datasource";
 
     export default {
         name: 'Method',
-        components: {TopUp},
         data() {
             return {
                 methods: [],

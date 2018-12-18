@@ -1,19 +1,59 @@
 <template>
     <div>
-        <h1>Home Page</h1>
-        <p>Hello!</p>
-
-        <h2>Step Change Sample</h2>
-        <Step/>
+        <!--<Step/>-->
+        <div>
+            <b>session token:</b> {{token}}<br/><br/>{{userType}}<br/><br/>
+            <div v-for="object in list" :key="object.UserIDSession">
+                {{object.UserIDSession}}
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import Step from "../components/Step";
+    import DataSource from "../data/datasource";
 
     export default {
         name: 'homePage',
+        data() {
+            return {
+                token: null,
+                userType: null,
+                list: [],
+                results: "",
+            }
+        },
         components: {Step},
+        async mounted() {
+            this.showSession()
+            // user menu
+            const isParent = sessionStorage.getItem('userTypeSession');
+            if (isParent !== "parent") {
+                this.results = response;
+
+                // window.location.replace("/");
+            }
+            let response =  await DataSource.shared.getUserMenu();
+            this.list = response.Table;
+            console.log(response);
+            //login text
+
+            const isLogin = sessionStorage.getItem('authToken');
+            if (isLogin && isLogin !== "null") {
+                this.results = `You already logged in`;
+                // window.location.replace("/");
+            }
+        },
+        // mounted() {
+        //     this.showSession()
+        // },
+        methods: {
+            showSession: async function () {
+                this.token = sessionStorage.getItem('authToken') || "no token";
+                this.userType = sessionStorage.getItem('userTypeSession');
+            }
+        }
     };
 </script>
 
