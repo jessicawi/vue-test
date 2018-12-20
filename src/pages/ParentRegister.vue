@@ -112,20 +112,20 @@
                         if (response) {
                             switch (response.code) {
                                 case "1":
-                                    this.results = `Login Success, Welcome Back`;
+                                    this.results = `Registration Success`;
                                     //this.results = `Login Success - ${JSON.stringify(response)}`;
                                     // window.location.replace("/");
                                     break;
                                 case "2":
-                                    this.results = `Invalid Email ID`;
+                                    this.results = `Invalid Student Info`;
                                     //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
                                     break;
                                 case "3":
-                                    this.results = `Invalid Password`;
+                                    this.results = `Existing Account`;
                                     //this.results = `Invalid password - sample 2: code: ${response.code}`;
                                     break;
                                 case "99":
-                                    this.error = `Please fill in all field`;
+                                    this.error = `Please try again later`;
                                     //this.results = `Please fill in all field - sample 3: code: ${response.code}`;
                                     break;
                                 default:

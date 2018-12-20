@@ -6,6 +6,8 @@
             <div v-for="object in list" :key="object.UserIDSession">
                 {{object.UserIDSession}}
             </div>
+            <h4>USER MENU</h4>
+            <div style="height: 100px;overflow-y: scroll;width:80%;margin: auto;border:1px solid;">{{usermenu}}</div>
         </div>
     </div>
 </template>
@@ -22,6 +24,7 @@
                 userType: null,
                 list: [],
                 results: "",
+                usermenu: "",
             }
         },
         components: {Step},
@@ -37,6 +40,7 @@
             let response =  await DataSource.shared.getUserMenu();
             this.list = response.Table;
             console.log(response);
+            this.usermenu = response;
             //login text
 
             const isLogin = sessionStorage.getItem('authToken');

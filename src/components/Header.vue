@@ -42,6 +42,35 @@
                 Parent
             </vs-sidebar-item>
 
+            <vs-sidebar-group title="Post" icon="dashboard">
+                <vs-sidebar-item index="6.1" icon="dashboard"  :to="{ name: 'Staff Post'}">
+                    Staff Post
+                </vs-sidebar-item>
+                <vs-sidebar-item index="6.2" icon="dashboard"  :to="{ name: 'Parent Post'}">
+                    Parent Post
+                </vs-sidebar-item>
+                <vs-sidebar-item index="6.3" icon="dashboard" :to="{ name: 'Save Post'}">
+                    Save Post
+                </vs-sidebar-item>
+                <vs-sidebar-item index="6.4" icon="dashboard" :to="{ name: 'Pending Post'}">
+                    Pending Post
+                </vs-sidebar-item>
+                <vs-sidebar-item index="6.5" icon="dashboard" :to="{ name: 'Update Post'}">
+                    Update Post
+                </vs-sidebar-item>
+            </vs-sidebar-group>
+            <vs-sidebar-group title="Approver" icon="dashboard">
+                <vs-sidebar-item index="7.1" icon="dashboard" :to="{ name: 'Approver'}">
+                    Approver List
+                </vs-sidebar-item>
+                <vs-sidebar-item index="7.2" icon="dashboard" :to="{ name: 'Save Approver'}">
+                    Save Approver
+                </vs-sidebar-item>
+                <vs-sidebar-item index="7.3" icon="dashboard" :to="{ name: 'Update Approver'}">
+                    Update Approver
+                </vs-sidebar-item>
+            </vs-sidebar-group>
+
             <div class="footer-sidebar" slot="footer">
                 <vs-button icon="reply" color="danger" type="flat">log out</vs-button>
                 <vs-button icon="settings" color="primary" type="border"></vs-button>
@@ -149,5 +178,10 @@
     }
     .vs-navbar--item span {
         display: none !important;
+    }
+    .vs-sidebar-group h4 {
+        color: white;
+        opacity: 0.8;
+        font-size: .85rem !important;
     }
 </style>

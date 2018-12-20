@@ -137,6 +137,100 @@ export default class DataSource {
         return response;
     }
 
+    async getStaffPost() {
+        const data = {};
+
+        data.UserID_Session = sessionStorage.getItem('userIDSession');
+
+        const response = await this.callWebService("/controller/Posting.asmx/getPostStaff", data, "POST");
+        return response;
+    }
+
+    async getParentPost() {
+        const data = {};
+
+        data.UserID_Session = sessionStorage.getItem('userIDSession');
+
+        const response = await this.callWebService("/controller/Posting.asmx/getPostParent", data, "POST");
+        return response;
+    }
+
+    async savePost(postContent, tagAcademicYearID, profolio, tagUserID, tagClassID, tagLevelID) {
+        const data = {
+            postContent: postContent,
+            tagAcademicYearID : tagAcademicYearID,
+            profolio : profolio,
+            tagUserID : tagUserID,
+            tagClassID : tagClassID,
+            tagLevelID : tagLevelID
+        };
+        data.UserSchool_Session = sessionStorage.getItem('schoolSession');
+        data.UserID_Session = sessionStorage.getItem('userIDSession');
+        const response = await this.callWebService("/controller/Posting.asmx/savePost", data, "POST");
+        return response;
+    }
+
+    async pendingPost(ID) {
+        const data = {
+            ID: ID
+        };
+        data.UserID_Session = sessionStorage.getItem('userIDSession');
+        const response = await this.callWebService("/controller/Posting.asmx/getPendingApproverPost", data, "POST");
+        return response;
+    }
+
+    async updatePost(actionStatus, postID, postContent, profolio, tagUserID, tagClassID, tagLevelID) {
+        const data = {
+            actionStatus: actionStatus,
+            postID: postID,
+            postContent: postContent,
+            profolio : profolio,
+            tagUserID : tagUserID,
+            tagClassID : tagClassID,
+            tagLevelID : tagLevelID
+        };
+        data.UserID_Session = sessionStorage.getItem('userIDSession');
+        const response = await this.callWebService("/controller/Posting.asmx/updatePost", data, "POST");
+        return response;
+    }
+
+    async getApproverMaster() {
+        const data = {};
+
+        data.UserSchool_Session = sessionStorage.getItem('schoolSession');
+
+        const response = await this.callWebService("/controller/Posting.asmx/getApproverMaster", data, "POST");
+        return response;
+    }
+
+    async saveApproverMaster(approverLevel,approverUserID) {
+        const data = {
+            approverLevel: approverLevel,
+            approverUserID: approverUserID
+        };
+
+        data.UserSchool_Session = sessionStorage.getItem('schoolSession');
+        data.UserID_Session = sessionStorage.getItem('userIDSession');
+
+        const response = await this.callWebService("/controller/Posting.asmx/saveApproverMaster", data, "POST");
+        return response;
+    }
+
+    async updateApproverMaster(approverID,approverLevel,approverUserID,status) {
+        const data = {
+            approverID: approverID,
+            approverLevel: approverLevel,
+            approverUserID: approverUserID,
+            status: status,
+        };
+
+        data.UserSchool_Session = sessionStorage.getItem('schoolSession');
+        data.UserID_Session = sessionStorage.getItem('userIDSession');
+
+        const response = await this.callWebService("/controller/Posting.asmx/updateApproverMaster", data, "POST");
+        return response;
+    }
+
     async login2(userId, password) {
         const data = {
             username: userId,
