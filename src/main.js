@@ -8,13 +8,17 @@ import Vuesax from 'vuesax';
 import 'vuesax/dist/vuesax.css'
 import 'material-icons/iconfont/material-icons.css';
 import "./custom.css"
-import vbclass from 'vue-body-class'
+import vbclass from 'vue-body-class';
+// import VueUploadComponent from 'vue-file-upload-component';
+import quillEditor from 'vue-quill-editor'
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
 Vue.use(Vuesax);
 Vue.use(vbclass, router);
+// Vue.use(VueUploadComponent);
+Vue.use(quillEditor);
 
 new Vue({
     router,

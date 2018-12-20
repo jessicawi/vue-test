@@ -54,7 +54,6 @@
         name: 'saveApprover',
         data() {
             return {
-                approverSaveResults: "",
                 approverLevel: "",
                 approverUserID: "",
                 isLoading: ""

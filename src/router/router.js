@@ -11,6 +11,7 @@ import staffPost from "../pages/StaffPost";
 import parentPost from "../pages/ParentPost";
 import savePost from "../pages/savePost";
 import pendingPost from "../pages/PendingPost";
+import approvePost from "../pages/ApprovePost";
 import updatePost from "../pages/updatePost";
 import parentRegister from "../pages/ParentRegister";
 import getApproverMaster from "../pages/Approver";
@@ -78,6 +79,11 @@ const router = new VueRouter({
             path: '/pending-post',
             name: 'Pending Post',
             component: pendingPost,
+        },
+        {
+            path: '/approve-post',
+            name: 'Approve Post',
+            component: approvePost,
         },
         {
             path: '/update-post',

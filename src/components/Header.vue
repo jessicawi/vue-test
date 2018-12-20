@@ -58,6 +58,9 @@
                 <vs-sidebar-item index="6.5" icon="dashboard" :to="{ name: 'Update Post'}">
                     Update Post
                 </vs-sidebar-item>
+                <vs-sidebar-item index="6.6" icon="dashboard" :to="{ name: 'Approve Post'}">
+                    Approve Post
+                </vs-sidebar-item>
             </vs-sidebar-group>
             <vs-sidebar-group title="Approver" icon="dashboard">
                 <vs-sidebar-item index="7.1" icon="dashboard" :to="{ name: 'Approver'}">

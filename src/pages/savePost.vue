@@ -9,6 +9,10 @@
                     <textarea type="text" class="form-control" id="postContent" v-model="postContent"
                               placeholder="CONTENT"
                               required></textarea>
+                    <quill-editor ref="myTextEditor"
+                                  v-model="content"
+                                  :config="editorOption">
+                    </quill-editor>
                     <div class="invalid-feedback" style="width: 100%;">
                         Your content is required.
                     </div>
@@ -64,6 +68,9 @@
                     </div>
                 </div>
 
+                <div class="mb-2">
+
+                </div>
                 <div class="system-msg"><p>{{results}}</p>
                     <p v-if="error" style="color: red">{{error}}</p></div>
                 <div class="row d-flex mt-3 mb-5">
@@ -81,6 +88,7 @@
 
 <script>
     import DataSource from "../data/datasource";
+    import quillEditor from "vue-quill-editor";
 
     export default {
         name: 'staffPost',
@@ -93,8 +101,15 @@
                 profolio: "",
                 tagUserID: "",
                 tagClassID: "",
-                tagLevelID: ""
+                tagLevelID: "",
+                // files: [],
+                content: '<h2>Example</h2>',
+                editorOption: {}
             }
+        },
+        components: {
+            // FileUpload: VueUploadComponent
+            quillEditor
         },
         methods: {
             async onSubmit() {
@@ -123,7 +138,7 @@
                     this.error = e;
                 }
 
-            },
+            }
         }
     };
 </script>

@@ -179,6 +179,17 @@ export default class DataSource {
         return response;
     }
 
+    async approvePost(postApproverID,actionStatus,postID) {
+        const data = {
+            actionStatus: actionStatus,
+            postApproverID: postApproverID,
+            postID: postID
+        };
+        data.UserID_Session = sessionStorage.getItem('userIDSession');
+        const response = await this.callWebService("/controller/Posting.asmx/approvePost", data, "POST");
+        return response;
+    }
+
     async updatePost(actionStatus, postID, postContent, profolio, tagUserID, tagClassID, tagLevelID) {
         const data = {
             actionStatus: actionStatus,
