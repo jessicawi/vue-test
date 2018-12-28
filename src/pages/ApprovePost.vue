@@ -25,16 +25,6 @@
                         Your Post Approver ID is required.
                     </div>
                 </div>
-
-                <div class="mb-2">
-                    <!--<label for="password">Password</label>-->
-                    <input type="text" class="form-control" id="postID" v-model="postID"
-                           placeholder="Post ID"
-                           required>
-                    <div class="invalid-feedback" style="width: 100%;">
-                        Your Post ID is required.
-                    </div>
-                </div>
                 <div class="system-msg"><p>{{approverSaveResults}}</p></div>
                 <div class="row d-flex mt-3 mb-5">
                     <div class="col-md-6"></div>
@@ -64,24 +54,23 @@
                 postApproverID: "",
                 actionStatus: "",
                 isLoading: "",
-                postID: ""
             }
         },
         methods: {
             async onSubmit() {
                 try {
                     this.isLoading = true;
-                    const response = await DataSource.shared.approvePost(this.postApproverID, this.actionStatus, this.postID);
+                    const response = await DataSource.shared.approvePost(this.postApproverID, this.actionStatus);
                     this.isLoading = false;
                     console.log(response);
                     if (response) {
                         switch (response.code) {
                             case "1":
-                                this.results = `Approver created`;
+                                this.results = `Post Approved`;
                                 //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
                                 break;
                             case "2":
-                                this.results = `Duplicated approver`;
+                                this.results = `Pending Earlier Approver Level`;
                                 //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
                                 break;
                             case "88":

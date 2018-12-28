@@ -6,7 +6,7 @@
 
         <vs-spacer></vs-spacer>
 
-        <vs-input icon="search" placeholder="Search" v-model="search"/>
+        <!--<vs-input icon="search" placeholder="Search" v-model="search"/>-->
         <vs-navbar-item index="0">
             <a href="#"><vs-icon icon="feedback"></vs-icon><span>Feedback</span></a>
         </vs-navbar-item>

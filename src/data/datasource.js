@@ -32,7 +32,7 @@ export default class DataSource {
     }
 
     // by default, withToken set to true
-    callWebService(endPoint, data, method, withToken = true) {
+    callWebService(endPoint, data, method, withToken = true, withFormData = false) {
         const request = {
             dataType: "json",
             url: `${API_HOST}${endPoint}`,
@@ -58,6 +58,13 @@ export default class DataSource {
             data.UserUniversity_Session = sessionStorage.getItem('userUniversitySession');
         }
 
+        // this is just testing, remove this if savePost not working
+        // this might just use for upload file request only(formData), not for whole request
+        if (withFormData) {
+            request.processData = false;
+            request.contentType = false;
+        }
+
         // get token from session
         // const token = sessionStorage.getItem('authToken');
 
@@ -68,6 +75,38 @@ export default class DataSource {
         // }
 
         return jQuery.ajax(request);
+    }
+
+    async uploadFile(files) {
+        const formData = new FormData();
+        formData.append('token', sessionStorage.getItem('authToken'));
+        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+
+
+        formData.append("file", files[0]);
+        formData.append("postID", "POS201800000328");
+        console.log(formData);
+        console.log(files);
+
+        const request = {
+            url: `${API_HOST}/controller/Upload_File.asmx/uploadFile`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        return jQuery.ajax(request);
+
+        // const response = await this.callWebService("/controller/Upload_File.asmx/uploadFile", data, "POST", true, true);
+        // return response;
     }
 
 
@@ -115,6 +154,7 @@ export default class DataSource {
 
     async getParentList(familyId = "", parentLastName = "", parentFirstName = "") {
         const data = {
+            total: 20,
             familyID: familyId,
             parentFirstName: parentFirstName,
             parentLastName: parentLastName,
@@ -158,32 +198,37 @@ export default class DataSource {
     async savePost(postContent, tagAcademicYearID, profolio, tagUserID, tagClassID, tagLevelID) {
         const data = {
             postContent: postContent,
-            tagAcademicYearID : tagAcademicYearID,
-            profolio : profolio,
-            tagUserID : tagUserID,
-            tagClassID : tagClassID,
-            tagLevelID : tagLevelID
+            tagAcademicYearID: tagAcademicYearID,
+            profolio: profolio,
+            tagUserID: tagUserID,
+            tagClassID: tagClassID,
+            tagLevelID: tagLevelID,
         };
         data.UserSchool_Session = sessionStorage.getItem('schoolSession');
         data.UserID_Session = sessionStorage.getItem('userIDSession');
+        console.log(data);
         const response = await this.callWebService("/controller/Posting.asmx/savePost", data, "POST");
         return response;
     }
 
-    async pendingPost(ID) {
+    async pendingPost(ID, PostID, PostContent, PostStatus, PostCreatedDate, PostApproverID) {
         const data = {
-            ID: ID
+            ID: ID,
+            PostID: PostID,
+            PostContent: PostContent,
+            PostStatus: PostStatus,
+            PostCreatedDate: PostCreatedDate,
+            PostApproverID: PostApproverID
         };
         data.UserID_Session = sessionStorage.getItem('userIDSession');
         const response = await this.callWebService("/controller/Posting.asmx/getPendingApproverPost", data, "POST");
         return response;
     }
 
-    async approvePost(postApproverID,actionStatus,postID) {
+    async approvePost(postApproverID, actionStatus) {
         const data = {
             actionStatus: actionStatus,
             postApproverID: postApproverID,
-            postID: postID
         };
         data.UserID_Session = sessionStorage.getItem('userIDSession');
         const response = await this.callWebService("/controller/Posting.asmx/approvePost", data, "POST");
@@ -195,10 +240,10 @@ export default class DataSource {
             actionStatus: actionStatus,
             postID: postID,
             postContent: postContent,
-            profolio : profolio,
-            tagUserID : tagUserID,
-            tagClassID : tagClassID,
-            tagLevelID : tagLevelID
+            profolio: profolio,
+            tagUserID: tagUserID,
+            tagClassID: tagClassID,
+            tagLevelID: tagLevelID
         };
         data.UserID_Session = sessionStorage.getItem('userIDSession');
         const response = await this.callWebService("/controller/Posting.asmx/updatePost", data, "POST");
@@ -214,7 +259,7 @@ export default class DataSource {
         return response;
     }
 
-    async saveApproverMaster(approverLevel,approverUserID) {
+    async saveApproverMaster(approverLevel, approverUserID) {
         const data = {
             approverLevel: approverLevel,
             approverUserID: approverUserID
@@ -227,7 +272,7 @@ export default class DataSource {
         return response;
     }
 
-    async updateApproverMaster(approverID,approverLevel,approverUserID,status) {
+    async updateApproverMaster(approverID, approverLevel, approverUserID, status) {
         const data = {
             approverID: approverID,
             approverLevel: approverLevel,

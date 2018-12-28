@@ -1,9 +1,32 @@
 <template>
     <div id="staff-post" class="mt-3 container">
-        <div>
-            <h4>STAFF POST</h4>
-            <b>result:</b> {{staffPostResults}}
-        </div>
+        <vs-row>
+            <!--<b>result:</b> {{staffPostResults}}-->
+            <vs-col vs-justify="center" vs-w="8">
+                <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12" v-for="object in list" :key="object.PostID">
+                    <vs-card actionable class="cardx">
+                        <div slot="header">
+                            <h3>
+                                {{object.PostContent}}
+                            </h3>
+                        </div>
+                        <div>
+                            <span>Author: {{object.PostCreatedBy}}</span>
+                        </div>
+                        <!--<div slot="footer">-->
+                            <!--<vs-row vs-justify="flex-end">-->
+                                <!--<vs-button color="primary" type="gradient" >View</vs-button>-->
+                                <!--<vs-button color="danger" type="gradient">Delete</vs-button>-->
+                            <!--</vs-row>-->
+                        <!--</div>-->
+                    </vs-card>
+                </vs-col>
+
+            </vs-col>
+            <vs-col vs-justify="center" vs-w="4">
+                profile here
+            </vs-col>
+        </vs-row>
     </div>
 
 </template>
@@ -44,9 +67,6 @@
                         this.staffPostResults = `Please try again later`;
                         //this.results = `Please fill in all field - sample 3: code: ${response.code}`;
                         break;
-                    default:
-                        alert("Please try again later");
-                        this.staffPostResults = JSON.stringify(response);
                 }
             }
         }
@@ -54,4 +74,10 @@
 </script>
 
 <style scoped>
+    .cardx {
+        margin: 0px 15px;
+        width: calc(100% - 30px);
+        margin: 15px;
+        margin-bottom: 20px;
+    }
 </style>

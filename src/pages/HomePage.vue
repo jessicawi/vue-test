@@ -39,6 +39,7 @@
             }
             let response =  await DataSource.shared.getUserMenu();
             this.list = response.Table;
+
             console.log(response);
             this.usermenu = response;
             //login text

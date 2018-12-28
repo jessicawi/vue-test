@@ -17,6 +17,7 @@ import parentRegister from "../pages/ParentRegister";
 import getApproverMaster from "../pages/Approver";
 import saveApproverMaster from "../pages/saveApprover";
 import updateApproverMaster from "../pages/updateApprover";
+import testPage from "../pages/test";
 
 Vue.use(VueRouter);
 
@@ -55,38 +56,38 @@ const router = new VueRouter({
             component: parentList
         },
         {
-            path: '/parent-registration',
+            path: '/register/parent',
             name: 'Parent Registration',
             component: parentRegister,
             meta: { bodyClass: 'parent-register' }
         },
         {
-            path: '/post-staff',
-            name: 'Staff Post',
+            path: '/post/staff',
+            name: 'Latest Update (Staff)',
             component: staffPost,
         },
         {
-            path: '/post-parent',
+            path: '/post/parent',
             name: 'Parent Post',
             component: parentPost,
         },
         {
-            path: '/save-post',
+            path: '/post/save',
             name: 'Save Post',
             component: savePost,
         },
         {
-            path: '/pending-post',
+            path: '/post/pending',
             name: 'Pending Post',
             component: pendingPost,
         },
         {
-            path: '/approve-post',
+            path: '/post/approve',
             name: 'Approve Post',
             component: approvePost,
         },
         {
-            path: '/update-post',
+            path: '/post/update',
             name: 'Update Post',
             component: updatePost,
         },
@@ -96,21 +97,21 @@ const router = new VueRouter({
             component: getApproverMaster,
         },
         {
-            path: '/save-approver',
+            path: '/approver/save',
             name: 'Save Approver',
             component: saveApproverMaster,
         },
 
         {
-            path: '/update-approver',
+            path: '/approver/update',
             name: 'Update Approver',
             component: updateApproverMaster,
         },
         {
-            path: '/countries',
-            name: 'CountryList',
-            component: countryListPage
-        },
+            path: '/test-page',
+            name: 'Test',
+            component: testPage
+        }
     ]
 });
 

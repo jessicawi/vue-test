@@ -68,6 +68,9 @@
                     </div>
                 </div>
 
+                <input type="file" @change="onFileChanged">
+                <button @click.prevent="onUpload">Upload!</button>
+
                 <div class="mb-2">
 
                 </div>
@@ -89,6 +92,9 @@
 <script>
     import DataSource from "../data/datasource";
     import quillEditor from "vue-quill-editor";
+    import vue2Dropzone from 'vue2-dropzone'
+    import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+    import '@websanova/vue-upload';
 
     export default {
         name: 'staffPost',
@@ -104,20 +110,37 @@
                 tagLevelID: "",
                 // files: [],
                 content: '<h2>Example</h2>',
-                editorOption: {}
+                editorOption: {},
+                selectedFile: null,
+
+                dropzoneOptions: {
+                    url: 'http://local.emsv2/controller/Upload_File.asmx/uploadFile',
+                }
             }
         },
         components: {
             // FileUpload: VueUploadComponent
-            quillEditor
+            quillEditor,
+            vueDropzone: vue2Dropzone
         },
         methods: {
+            onFileChanged(event) {
+                this.selectedFile = event.target.files
+            },
+            async onUpload() {
+                const formData = new FormData();
+                console.log(this.selectedFile);
+                formData.append('myFile', this.selectedFile, this.selectedFile.name)
+                this.formData = formData
+
+                await DataSource.shared.uploadFile(this.selectedFile)
+            },
             async onSubmit() {
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
-                    const saveResponse = await DataSource.shared.savePost(this.postContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID);
-                    console.log(saveResponse);
+                    const saveResponse = await DataSource.shared.savePost(this.postContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID, this.formData);
+                    console.log('response ', saveResponse);
                     if (saveResponse) {
                         switch (saveResponse.code) {
                             case "1":
@@ -135,6 +158,7 @@
                         }
                     }
                 } catch (e) {
+                    console.log(e)
                     this.error = e;
                 }
 

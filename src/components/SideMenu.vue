@@ -1,15 +1,83 @@
+<template>
+    <div>
+        <vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active"
+                    icon-pack="fa">
 
-<nav id="sidebar" class="">
-    <div class="sidebar-header">
-        <a href="/"><img class="main-logo" src="/img/logo/logo.png" alt=""></a>
-        <strong><img src="/img/logo/logosn.png" alt=""></strong>
+            <div class="header-sidebar" slot="header">
+                <img src="../assets/kagami.jpg"/>
+            </div>
+
+            <vs-sidebar-group v-for="item in primaryMenuFiltered" :key=item.MENid :title=item.MENname
+                              :icon=item.MENicon>
+                <vs-sidebar-item v-for="submenu in item.subMenus" :icon=submenu.MENicon :to=submenu.MENurl>
+                    {{submenu.MENname}}
+                </vs-sidebar-item>
+            </vs-sidebar-group>
+        </vs-sidebar>
     </div>
-    <div class="left-custom-menu-adp-wrap comment-scrollbar mCustomScrollbar _mCS_1 mCS-autoHide" style="position: relative; overflow: visible;"><div id="mCSB_1" class="mCustomScrollBox mCS-light-1 mCSB_vertical mCSB_outside" style="max-height: none;" tabindex="0"><div id="mCSB_1_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
-        <nav class="sidebar-nav left-sidebar-menu-pro">
-            <ul class="metismenu" id="menu1">
+</template>
 
+<script>
+    import DataSource from "../data/datasource";
 
-                <li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-gear icon-wrap"></i> <span class="mini-click-non">Administration</span></a><ul class="submenu-angle collapse" id="MEN301" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-list-alt icon-wrap"></i> <span class="mini-click-non">Dashboards</span></a><ul class="submenu-angle collapse" id="MENMIS100" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-file-archive-o icon-wrap"></i> <span class="mini-click-non">Document Management</span></a><ul class="submenu-angle collapse" id="MEN150" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-question-circle icon-wrap"></i> <span class="mini-click-non">Enquiry/Prospect</span></a><ul class="submenu-angle collapse" id="MEN100" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-credit-card custom icon-wrap"></i> <span class="mini-click-non">Finance</span></a><ul class="submenu-angle collapse" id="MEN801" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-book icon-wrap"></i> <span class="mini-click-non">Library Management</span></a><ul class="submenu-angle collapse" id="men9200" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-cubes icon-wrap"></i> <span class="mini-click-non">Operations</span></a><ul class="submenu-angle collapse" id="MEN441" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-reorder icon-wrap"></i> <span class="mini-click-non">Others</span></a><ul class="submenu-angle collapse" id="MEN3333" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-male icon-wrap"></i> <span class="mini-click-non">Parents</span></a><ul class="submenu-angle collapse" id="MEN1101" aria-expanded="false"><li><a href="/module/parent/manage-relationship.aspx"><i class="fa  null  sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Manage Relationship</span></a></li><li><a href="/module/parent/parent-list.aspx"><i class="fa  null  sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">View/Edit Parents Details</span></a></li></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-user-plus icon-wrap"></i> <span class="mini-click-non">Pre Admission</span></a><ul class="submenu-angle collapse" id="MEN9221" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-file-text icon-wrap"></i> <span class="mini-click-non">Reports</span></a><ul class="submenu-angle collapse" id="MEN901" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-user-secret icon-wrap"></i> <span class="mini-click-non">Security and Permissions</span></a><ul class="submenu-angle collapse" id="MEN401" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-mortar-board icon-wrap"></i> <span class="mini-click-non">Student</span></a><ul class="submenu-angle collapse" id="MEN0000" aria-expanded="false"><li><a href="/module/student/student-list.aspx"><i class="fa  null  sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Advance Search</span></a></li><li><a href="/module/student/student.aspx"><i class="fa  null  sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Create Student</span></a></li></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-bus icon-wrap"></i> <span class="mini-click-non">Transportation</span></a><ul class="submenu-angle collapse" id="MENT901" aria-expanded="false"></ul></li></ul>
-        </nav>
-    </div></div><div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-light-1 mCSB_scrollTools_vertical" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; display: block; height: 787px; max-height: 790px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div></div>
-</nav>
+    export default {
+        name: 'sideMenu',
+        data() {
+            return {
+                primaryMenu: [],
+                nonPrimaryTable: [],
+                primaryMenuFiltered:[],
+                active: false
+            };
+        },
+        async mounted() {
+            const response = await DataSource.shared.getUserMenu();
+            if (response) {
+                this.primaryMenu = response.PrimaryTable.Table;
+                this.primaryMenu.forEach(m => {
+                    console.log(m);
+                    switch (m.MENname) {
+                        case "Administration":
+                        case "Dashboards":
+                        case "Pre Admission":
+                            this.primaryMenuFiltered.push(m);
+                    }
+                });
+                console.log(this.primaryMenuFiltered);
+
+                this.nonPrimaryTable = response.NonPrimaryTable.Table;
+                this.nonPrimaryTable.map(d => {
+                    if (d.MENnewurl == null && d.MENnewurl === "") {
+                        return null;
+                    }
+
+                    if (d.MGPMENparentid_2 === null || d.MGPMENparentid_2 === "") {
+                        this.primaryMenuFiltered.find(parentMenu => {
+                                if (parentMenu.MENid === d.MGPMENparentid) {
+                                    if (Array.isArray(parentMenu.subMenus)) {
+                                        parentMenu.subMenus.push(d);
+                                    } else {
+                                        parentMenu.subMenus = [d];
+                                    }
+
+                                }
+                            }
+                        );
+                    } else {
+                        this.primaryMenuFiltered.find(parentMenu => {
+                                if (parentMenu.MENid === d.MGPMENparentid_2) {
+                                    if (Array.isArray(parentMenu.subMenus)) {
+                                        parentMenu.subMenus.push(d);
+                                    } else {
+                                        parentMenu.subMenus = [d];
+                                    }
+                                }
+                            }
+                        );
+                    }
+                });
+            }
+        },
+        methods: {}
+    };
+</script>

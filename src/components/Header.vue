@@ -16,79 +16,86 @@
     <!--</div>-->
     <!--</div>-->
     <div>
-    <div id="parentx-static" class="header" >
+        <div id="parentx-static" class="header">
 
-        <vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active">
+            <SideMenu/>
 
-            <div class="header-sidebar" slot="header">
-                <img src="../assets/kagami.jpg" />
-            </div>
+            <!--<vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active">-->
 
-            <vs-sidebar-item index="1" icon="dashboard" :to="{ name: 'Home'}">
-                Dashboard
-            </vs-sidebar-item>
+                <!--<div class="header-sidebar" slot="header">-->
+                    <!--<img src="../assets/kagami.jpg"/>-->
+                <!--</div>-->
 
-            <vs-sidebar-item index="2" icon="dashboard" :to="{ name: 'Parent Registration'}">
-                Parent Registration
-            </vs-sidebar-item>
 
-            <vs-sidebar-item index="3" icon="dashboard">
-                Document
-            </vs-sidebar-item>
-            <vs-sidebar-item index="4" icon="dashboard"  :to="{ name: 'Student List'}">
-                Student
-            </vs-sidebar-item>
-            <vs-sidebar-item index="5" icon="dashboard"  :to="{ name: 'Parent List'}">
-                Parent
-            </vs-sidebar-item>
+                <!--<vs-sidebar-item index="1" icon="dashboard" :to="{ name: 'Home'}">-->
+                    <!--Dashboard-->
+                <!--</vs-sidebar-item>-->
 
-            <vs-sidebar-group title="Post" icon="dashboard">
-                <vs-sidebar-item index="6.1" icon="dashboard"  :to="{ name: 'Staff Post'}">
-                    Staff Post
-                </vs-sidebar-item>
-                <vs-sidebar-item index="6.2" icon="dashboard"  :to="{ name: 'Parent Post'}">
-                    Parent Post
-                </vs-sidebar-item>
-                <vs-sidebar-item index="6.3" icon="dashboard" :to="{ name: 'Save Post'}">
-                    Save Post
-                </vs-sidebar-item>
-                <vs-sidebar-item index="6.4" icon="dashboard" :to="{ name: 'Pending Post'}">
-                    Pending Post
-                </vs-sidebar-item>
-                <vs-sidebar-item index="6.5" icon="dashboard" :to="{ name: 'Update Post'}">
-                    Update Post
-                </vs-sidebar-item>
-                <vs-sidebar-item index="6.6" icon="dashboard" :to="{ name: 'Approve Post'}">
-                    Approve Post
-                </vs-sidebar-item>
-            </vs-sidebar-group>
-            <vs-sidebar-group title="Approver" icon="dashboard">
-                <vs-sidebar-item index="7.1" icon="dashboard" :to="{ name: 'Approver'}">
-                    Approver List
-                </vs-sidebar-item>
-                <vs-sidebar-item index="7.2" icon="dashboard" :to="{ name: 'Save Approver'}">
-                    Save Approver
-                </vs-sidebar-item>
-                <vs-sidebar-item index="7.3" icon="dashboard" :to="{ name: 'Update Approver'}">
-                    Update Approver
-                </vs-sidebar-item>
-            </vs-sidebar-group>
+                <!--<vs-sidebar-item index="2" icon="dashboard" :to="{ name: 'Parent Registration'}">-->
+                    <!--Parent Registration-->
+                <!--</vs-sidebar-item>-->
 
-            <div class="footer-sidebar" slot="footer">
-                <vs-button icon="reply" color="danger" type="flat">log out</vs-button>
-                <vs-button icon="settings" color="primary" type="border"></vs-button>
-            </div>
+                <!--<vs-sidebar-item index="3" icon="dashboard">-->
+                    <!--Document-->
+                <!--</vs-sidebar-item>-->
+                <!--<vs-sidebar-item index="4" icon="dashboard" :to="{ name: 'Student List'}">-->
+                    <!--Student-->
+                <!--</vs-sidebar-item>-->
+                <!--<vs-sidebar-item index="5" icon="dashboard" :to="{ name: 'Parent List'}">-->
+                    <!--Parent-->
+                <!--</vs-sidebar-item>-->
 
-        </vs-sidebar>
-    </div></div>
+                <!--<vs-sidebar-group title="Post" icon="dashboard">-->
+                    <!--<vs-sidebar-item index="6.1" icon="dashboard" :to="{ name: 'Staff Post'}">-->
+                        <!--Staff Post-->
+                    <!--</vs-sidebar-item>-->
+                    <!--<vs-sidebar-item index="6.2" icon="dashboard" :to="{ name: 'Parent Post'}">-->
+                        <!--Parent Post-->
+                    <!--</vs-sidebar-item>-->
+                    <!--<vs-sidebar-item index="6.3" icon="dashboard" :to="{ name: 'Save Post'}">-->
+                        <!--Save Post-->
+                    <!--</vs-sidebar-item>-->
+                    <!--<vs-sidebar-item index="6.4" icon="dashboard" :to="{ name: 'Pending Post'}">-->
+                        <!--Pending Post-->
+                    <!--</vs-sidebar-item>-->
+                    <!--<vs-sidebar-item index="6.5" icon="dashboard" :to="{ name: 'Update Post'}">-->
+                        <!--Update Post-->
+                    <!--</vs-sidebar-item>-->
+                    <!--<vs-sidebar-item index="6.6" icon="dashboard" :to="{ name: 'Approve Post'}">-->
+                        <!--Approve Post-->
+                    <!--</vs-sidebar-item>-->
+                <!--</vs-sidebar-group>-->
+                <!--<vs-sidebar-group title="Approver" icon="dashboard">-->
+                    <!--<vs-sidebar-item index="7.1" icon="dashboard" :to="{ name: 'Approver'}">-->
+                        <!--Approver List-->
+                    <!--</vs-sidebar-item>-->
+                    <!--<vs-sidebar-item index="7.2" icon="dashboard" :to="{ name: 'Save Approver'}">-->
+                        <!--Save Approver-->
+                    <!--</vs-sidebar-item>-->
+                    <!--<vs-sidebar-item index="7.3" icon="dashboard" :to="{ name: 'Update Approver'}">-->
+                        <!--Update Approver-->
+                    <!--</vs-sidebar-item>-->
+                <!--</vs-sidebar-group>-->
+
+                <!--<div class="footer-sidebar" slot="footer">-->
+                    <!--<vs-button icon="reply" color="danger" type="flat">log out</vs-button>-->
+                    <!--<vs-button icon="settings" color="primary" type="border"></vs-button>-->
+                <!--</div>-->
+
+            <!--</vs-sidebar>-->
+        </div>
+    </div>
 
 </template>
 
 <script>
+    import SideMenu from "./SideMenu";
+
     export default {
         name: 'Header',
-        data:()=>({
-            active:false
+        components: {SideMenu},
+        data: () => ({
+            active: false
         }),
         // data() {
         //     return {
@@ -103,7 +110,7 @@
     };
 </script>
 
-<style >
+<style>
     #header {
         background: #fff;
         text-align: center;
@@ -115,14 +122,17 @@
     .top-menu a {
         padding: 2px 5px;
     }
+
     #parentx-static {
         overflow: hidden;
         position: absolute;
         width: 260px;
     }
-    header.vs-sidebar--header{
+
+    header.vs-sidebar--header {
         background: #f8f6f7 !important;
     }
+
     .header-sidebar {
         display: flex;
         align-items: center;
@@ -130,26 +140,31 @@
         flex-direction: column;
         width: 100%;
     }
+
     .header-sidebar h4 {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
     }
+
     .header-sidebar h4 > button {
         margin-left: 10px;
     }
+
     .footer-sidebar {
         display: flex;
         align-items: center;
         justify-content: space-between;
         width: 100%;
     }
+
     .footer-sidebar > button {
-        border: 0px solid rgba(0,0,0,0) !important;
-        border-left: 1px solid rgba(0,0,0,0.07) !important;
+        border: 0px solid rgba(0, 0, 0, 0) !important;
+        border-left: 1px solid rgba(0, 0, 0, 0.07) !important;
         border-radius: 0px !important;
     }
+
     .vs-sidebar--background {
         z-index: 0 !important;
         background: #413f56 !important;
@@ -179,9 +194,11 @@
     .vs-divider .after, .vs-divider .before {
         border-color: #504e68 !important;
     }
+
     .vs-navbar--item span {
         display: none !important;
     }
+
     .vs-sidebar-group h4 {
         color: white;
         opacity: 0.8;

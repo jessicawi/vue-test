@@ -17,7 +17,7 @@
             return {
                 isLoading: true,
                 token: null,
-            }
+            };
         },
         components: {
             MainContent,
@@ -26,7 +26,7 @@
         mounted() {
             const isLogin = sessionStorage.getItem('authToken');
             if (this.$route.path !== "/login" && (!isLogin || isLogin === "null")) {
-                this.$router.push('/login')
+                this.$router.push('/login');
             }
             this.isLoading = false;
         }
@@ -36,6 +36,10 @@
 </script>
 
 <style>
+    .el-table th > .cell {
+        white-space: nowrap;
+    }
+
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
