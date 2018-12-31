@@ -51,7 +51,6 @@
         width: 50px;
         overflow: hidden;
     }
-
     .vs-navbar--item i {
         float: right;
     }
@@ -59,6 +58,7 @@
         background: #413f56 !important;
         color: white;
         padding: 5px 0px;
+        z-index: 999 !important;
     }
 
     .topbar a {

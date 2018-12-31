@@ -298,14 +298,18 @@ export default class DataSource {
     }
 
     async getCountryList() {
-        let response;
-        try {
-            response = await fetch("http://local.emsv2/controller/Students.asmx/getCountryList?countryID=");
-        } catch (err) {
-            console.log(err);
-            throw ERROR_SERVER_UNREACHABLE;
-        }
-        return await parseResponseAndHandleErrors(response);
+        // let response;
+        // try {
+        //     response = await fetch("http://local.emsv2/controller/Students.asmx/getCountryList?countryID=");
+        // } catch (err) {
+        //     console.log(err);
+        //     throw ERROR_SERVER_UNREACHABLE;
+        // }
+        // return await parseResponseAndHandleErrors(response);
+        const data = {};
+
+        const response = await this.callWebService("/controller/Students.asmx/getCountryList", data, "POST");
+        return response;
     }
 
     // SAMPLE 2 using axios

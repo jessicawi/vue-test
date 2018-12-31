@@ -36,12 +36,14 @@
 </script>
 
 <style>
+    body{
+    }
     .el-table th > .cell {
         white-space: nowrap;
     }
 
     #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        font-family: 'Montserrat', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
@@ -61,7 +63,6 @@
     a {
         text-decoration: none !important;
     }
-
 </style>
 
 <style lang="scss">

@@ -15,6 +15,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import {DataTables, DataTablesServer} from 'vue-data-tables';
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
+import { Modal } from 'bootstrap-vue/es/components';
 
 locale.use(lang)
 Vue.config.productionTip = false;
@@ -26,7 +27,7 @@ Vue.use(ElementUI);
 Vue.use(Vuesax);
 Vue.use(vbclass, router);
 Vue.use(quillEditor);
-
+Vue.use(Modal);
 
 new Vue({
     router,

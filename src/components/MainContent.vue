@@ -28,7 +28,7 @@
         margin-left: 260px;
         position: relative;
         z-index: 99;
-        background: white;
+        background: #f5f6fa;
     }
     @media (max-width: 740px){
         #main-content {

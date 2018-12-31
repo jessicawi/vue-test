@@ -5,7 +5,7 @@ import homePage from "../pages/HomePage";
 import countryListPage from "../pages/CountryListPage";
 import forgotPassword from "../pages/ForgotPassword";
 import resetPassword from "../pages/ResetPassword";
-import studentList from "../pages/StudentList";
+import studentList from "../pages/Student";
 import parentList from "../pages/ParentList";
 import staffPost from "../pages/StaffPost";
 import parentPost from "../pages/ParentPost";
