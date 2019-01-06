@@ -6,9 +6,10 @@
                 <div class="feed-header">
                     <h4 class="text-left">Activity</h4>
                     <div class="addPost">
-                        <b-btn v-b-modal.modal1>ADD NOTE</b-btn>
+                        <b-btn v-b-modal.modal1 @click="showModal">ADD NOTE</b-btn>
                     </div>
                 </div>
+                <div class="success">{{success}}</div>
                 <div class="" v-for="object in list" :key="object.PostID">
                     <div class="feed-box">
                         <div class="author">
@@ -40,7 +41,7 @@
             </vs-col>
         </div>
 
-        <b-modal id="modal1" hide-footer title="ADD NOTE">
+        <b-modal id="modal1" hide-footer title="ADD NOTE" v-model="isModalOpen">
             <form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">
 
                 <div class="mb-3">
@@ -106,20 +107,21 @@
                         </div>
                     </div>
                 </div>
-                <input type="file" @change="onFileChanged">
-                <button @click.prevent="onUpload">Upload!</button>
+
+                <input type="file" multiple @change="onFileChanged" ref="fileupload">
+                <!--<button @click.prevent="onUpload">Upload!</button>-->
 
                 <div class="mb-2">
 
                 </div>
-                <div class="system-msg"><p>{{results}}</p>
+                <div class="system-msg" v-bind:class="{'bg-danger': systemmsgError===true}">{{results}}
                     <p v-if="error" style="color: red">{{error}}</p></div>
-                <div class="row d-flex mt-5 mb-2">
+                <div class="row d-flex submit-wrap">
                     <div class="col-md-6">
-                        <b-btn class="btn-lg" variant="outline-danger" block @click="hideModal">Cancel</b-btn>
+                        <b-btn class="float-left" @click="hideModal">Cancel</b-btn>
                     </div>
                     <div class="col-md-6">
-                        <button class="btn btn-primary btn-lg btn-block login-btn" type="submit">Submit
+                        <button class="btn btn-primary login-btn" type="submit">Submit
                         </button>
                     </div>
                 </div>
@@ -133,14 +135,17 @@
 <script>
     import DataSource from "../data/datasource";
     import quillEditor from "vue-quill-editor";
-    import vue2Dropzone from 'vue2-dropzone';
-    import 'vue2-dropzone/dist/vue2Dropzone.min.css';
-    import '@websanova/vue-upload';
+    // import vue2Dropzone from 'vue2-dropzone';
+    // import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+    // import '@websanova/vue-upload';
 
     export default {
         name: 'staffPost',
         data() {
             return {
+                files: [],
+                systemmsgError: false,
+                isModalOpen: false,
                 token: null,
                 userType: null,
                 list: [],
@@ -149,7 +154,7 @@
                 results: "",
                 postContent: "",
                 tagAcademicYearID: "",
-                profolio: "",
+                profolio: "No",
                 tagUserID: "",
                 tagClassID: "",
                 tagLevelID: "",
@@ -157,7 +162,7 @@
                 content: '<h2>Example</h2>',
                 editorOption: {},
                 selectedFile: null,
-
+                success: null,
                 dropzoneOptions: {
                     url: 'http://local.emsv2/controller/Upload_File.asmx/uploadFile',
                 }
@@ -166,7 +171,6 @@
         components: {
             // FileUpload: VueUploadComponent
             quillEditor,
-            vueDropzone: vue2Dropzone
         },
         // components: {Step},
         async mounted() {
@@ -174,6 +178,20 @@
             // user menu
             this.staffPostResults = response;
             let response = await DataSource.shared.getStaffPost();
+
+            let postArray = [];
+            response.Table.forEach(async d => {
+                console.log(d, ' dd');
+                const fileRes = await DataSource.shared.postFile(d.PostID);
+                console.log(fileRes);
+                // postArray.push(fileRes);
+            });
+
+            // const fileResponse = await DataSource.shared.postFile(response.postID);
+            // console.log(fileResponse);
+
+            // console.log(postArray)
+
             this.list = response.Table;
             console.log(response);
             if (response) {
@@ -193,34 +211,53 @@
                 }
             }
         },
+
         methods: {
+            showModal() {
+                this.isModalOpen = true;
+            },
+            hideModal() {
+                this.isModalOpen = false;
+            },
             onFileChanged(event) {
                 this.selectedFile = event.target.files;
             },
             async onUpload() {
-                const formData = new FormData();
-                console.log(this.selectedFile);
-                formData.append('myFile', this.selectedFile, this.selectedFile.name);
-                this.formData = formData;
-
-                await DataSource.shared.uploadFile(this.selectedFile);
+                // const formData = new FormData();
+                // console.log(this.selectedFile);
+                // formData.append('myFile', this.selectedFile, this.selectedFile.name);
+                // this.formData = formData;
+                // await DataSource.shared.uploadFile(this.selectedFile);
             },
             async onSubmit() {
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
-                    const saveResponse = await DataSource.shared.savePost(this.postContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID, this.formData);
-                    console.log('response ', saveResponse);
+                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.postContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID);
+
                     if (saveResponse) {
                         switch (saveResponse.code) {
                             case "1":
+                                this.isModalOpen = false;
+                                console.log('success');
+                                // reset all input filed to blank
+                                this.selectedFile = null;
+                                this.$refs.fileupload.value = "";
+                                this.postContent = null;
+                                this.tagAcademicYearID = null;
+                                this.profolio = null;
+                                this.tagUserID = null;
+                                this.tagClassID = null;
                                 this.results = `Post Submitted`;
+                                this.success = 'Post Submitted, activity will be active in a while';
                                 break;
                             case "88":
                                 this.results = `Please Login to submit post`;
+                                this.systemmsgError = true;
                                 break;
                             case "99":
-                                this.results = `Please try again later`;
+                                this.results = `Please fill in content`;
+                                this.systemmsgError = true;
                                 break;
                             // default:
                             //     alert("Please try again later");
@@ -232,7 +269,8 @@
                     this.error = e;
                 }
 
-            }
+            },
+
         }
     };
 </script>
@@ -366,11 +404,11 @@
     }
 
     #profolio:checked + .toggle:before {
-        background: #947ADA;
+        background: #b9b9b9;
     }
 
     #profolio:checked + .toggle span {
-        background: #4F2EDC;
+        background: #f44252;
         transform: translateX(20px);
         transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
         box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
@@ -419,27 +457,28 @@
         top: -2px;
         font-size: 13px;
     }
+
     strong.feed-subtitle {
         border-bottom: 1px solid #413f5617;
         padding-bottom: 10px;
         margin-bottom: 10px;
         display: block;
     }
+
+    .success {
+        text-align: left;
+        padding: 10px;
+        background: #dedfe6;
+        border-radius: 20px;
+    }
+
+    .success:empty {
+        display: none;
+        padding: 0px;
+    }
 </style>
 
 <style>
-    div#modal1 header {
-        background: url("../assets/modal-bg.png");
-    }
 
-    #modal1 .form-control {
-        background: #ebebeb80;
-        border: 0px;
-        padding: 10px;
-    }
-
-    #modal1 .btn {
-        border-radius: 52px !important;
-    }
 
 </style>

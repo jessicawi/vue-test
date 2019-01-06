@@ -17,28 +17,47 @@
             <a href="#"><vs-icon icon="calendar_today"></vs-icon><span>Calendar</span></a>
         </vs-navbar-item>
         <vs-navbar-item index="3">
-            <a href="/login"><vs-icon icon="account_circle"></vs-icon><span>Account</span></a>
+            <vs-dropdown >
+                <a class="a-icon" href="#">
+                    <vs-icon icon="account_circle"></vs-icon><span>Account</span>
+                </a>
+
+                <vs-dropdown-menu>
+                    <vs-dropdown-item>
+                        <span @click="logout">Logout</span>
+                    </vs-dropdown-item>
+                </vs-dropdown-menu>
+            </vs-dropdown>
         </vs-navbar-item>
     </vs-navbar>
 </template>
 
 <script>
+    import DataSource from "../data/datasource";
     export default {
         name: 'navBar',
         data() {
             return {
                 activeItem: 0,
-                // loginmsg: "",
+                // isLoading: true,
+                // token: null,
+                // isLoggedIn: null
             }
         },
+        methods: {
+            logout() {
+                    DataSource.shared.logout();
+            }
+        }
         // mounted() {
-        //     //login text
-        //
         //     const isLogin = sessionStorage.getItem('authToken');
-        //     if (isLogin && isLogin !== "null") {
-        //         this.loginmsg = `Welcome Back`;
-        //         // window.location.replace("/");
+        //     if (this.$route.path !== "/login" && (!isLogin || isLogin === "null")) {
+        //         this.$router.push('/login');
+        //     } else if (isLogin) {
+        //         this.isLoggedIn = true;
+        //         setTimeout(this.warningLogout, 10800); // 3 hours
         //     }
+        //     this.isLoading = false;
         // },
     };
 </script>
@@ -77,4 +96,20 @@
         border-radius: 40px !important;
         padding: 8px 0px;
     }
+    .examplex {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .examplex .a-icon {
+        outline: none;
+        text-decoration: none !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .examplex .a-icon i {
+        font-size: 18px;
+    }
+
 </style>

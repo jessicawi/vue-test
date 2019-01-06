@@ -4,12 +4,25 @@
         <MainContent>
             <router-view/>
         </MainContent>
+        <b-modal id="modaltimeout" hide-footer title="SESSION EXPIRED" v-model="isSessionModalOpen">
+            Session expired, press ok to continue login, press cancel to logout
+            <br/>
+            <div class="row d-flex submit-wrap">
+                <div class="col-md-6">
+                    <b-btn class="float-left" @click="cancelClick">Cancel</b-btn>
+                </div>
+                <div class="col-md-6">
+                    <b-btn class="float-right" @click="okClick">OK</b-btn>
+                </div>
+            </div>
+        </b-modal>
     </div>
 </template>
 
 <script>
     import Header from "./components/Header";
     import MainContent from "./components/MainContent";
+    import DataSource from "./data/datasource";
 
     export default {
         name: 'app',
@@ -17,6 +30,8 @@
             return {
                 isLoading: true,
                 token: null,
+                isLoggedIn: null,
+                isSessionModalOpen: false,
             };
         },
         components: {
@@ -27,8 +42,29 @@
             const isLogin = sessionStorage.getItem('authToken');
             if (this.$route.path !== "/login" && (!isLogin || isLogin === "null")) {
                 this.$router.push('/login');
+            } else if (isLogin) {
+                this.isLoggedIn = true;
+                setTimeout(this.warningLogout, 10800000); // 3 hours
             }
             this.isLoading = false;
+        },
+        methods: {
+            warningLogout() {
+                this.isSessionModalOpen = true;
+                // const result = "Session expired, press ok to continue login, press cancel to logout";
+                setTimeout(this.cancelClick, 10800);
+
+            },
+            okClick() {
+                // continue login
+                // repeating after some time warning session expired
+                setTimeout(this.warningLogout, 10800000); // 3 hours
+                this.isSessionModalOpen = false;
+
+            },
+            cancelClick() {
+                DataSource.shared.logout();
+            }
         }
     };
 
@@ -36,8 +72,9 @@
 </script>
 
 <style>
-    body{
+    body {
     }
+
     .el-table th > .cell {
         white-space: nowrap;
     }
@@ -63,10 +100,11 @@
     a {
         text-decoration: none !important;
     }
+
 </style>
 
 <style lang="scss">
     $theme-colors: (
-            primary: #006400
+            primary: #f44252
     )
 </style>

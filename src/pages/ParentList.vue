@@ -62,6 +62,7 @@
         },
         methods: {
             handleSelectionChange(val) {
+                console.log(val)
                 this.selectedRow = val;
             },
             async onSubmit() {

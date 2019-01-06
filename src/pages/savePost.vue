@@ -132,14 +132,13 @@
                 console.log(this.selectedFile);
                 formData.append('myFile', this.selectedFile, this.selectedFile.name)
                 this.formData = formData
-
                 await DataSource.shared.uploadFile(this.selectedFile)
             },
             async onSubmit() {
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
-                    const saveResponse = await DataSource.shared.savePost(this.postContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID, this.formData);
+                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.postContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID, this.formData);
                     console.log('response ', saveResponse);
                     if (saveResponse) {
                         switch (saveResponse.code) {

@@ -12,6 +12,10 @@ export default class DataSource {
         return DataSource.instance;
     }
 
+    constructor() {
+        this.loggedIn = false;
+    }
+
     async callAPI(endPoint, method = "GET", queryObject, requestBody, hasContentType = true) {
         const url = URLForEndpoint(endPoint, queryObject);
         const request = NewRequest(method, hasContentType);
@@ -74,19 +78,23 @@ export default class DataSource {
         //     request.headers = {"Authorization": token};
         // }
 
+        console.log(request, '  ssss');
+
         return jQuery.ajax(request);
     }
 
-    async uploadFile(files) {
+    async uploadFile(files, postID) {
+        console.log(postID);
         const formData = new FormData();
         formData.append('token', sessionStorage.getItem('authToken'));
         formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
 
+        console.log(files);
 
         formData.append("file", files[0]);
-        formData.append("postID", "POS201800000328");
-        console.log(formData);
-        console.log(files);
+        formData.append("postID", postID);
+        // console.log(formData);
+        // console.log(files);
 
         const request = {
             url: `${API_HOST}/controller/Upload_File.asmx/uploadFile`,
@@ -125,6 +133,17 @@ export default class DataSource {
         return response;
     }
 
+    logout() {
+        sessionStorage.removeItem('authToken');
+        sessionStorage.removeItem('schoolSession');
+        sessionStorage.removeItem('userIDSession');
+        sessionStorage.removeItem('userTypeSession');
+        sessionStorage.removeItem('userUniversitySession');
+        sessionStorage.removeItem('usRidSession');
+        window.location.replace("/login");
+
+    }
+
     async parentRegister(userEmail, userPassword, studentIDNo, studentID_Index, studentDOB, studentIDType) {
         const data = {
             userEmail: userEmail,
@@ -138,10 +157,10 @@ export default class DataSource {
         return response;
     }
 
-    async getStudent(studentId = "", studentIndex = "", studentFirstName = "", studentLastName = "", parentName = "") {
+    async getStudent(studentID, studentID_Index, studentFirstName, studentLastName, parentName) {
         const data = {
-            studentID: studentId,
-            studentID_Index: studentIndex,
+            studentID: studentID,
+            studentID_Index: studentID_Index,
             studentFirstName: studentFirstName,
             studentLastName: studentLastName,
             parentName: parentName,
@@ -152,9 +171,28 @@ export default class DataSource {
         return response;
     }
 
-    async getParentList(familyId = "", parentLastName = "", parentFirstName = "") {
+    async checkStudentDuplication(studentFirstName, studentLastName, studentDOB, studentIDType, studentID) {
         const data = {
-            total: 20,
+            studentFirstName: studentFirstName,
+            studentLastName: studentLastName,
+            studentDOB: studentDOB,
+            studentIDType: studentIDType,
+            studentID: studentID,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/checkStudentDuplication", data, "POST");
+        return response;
+    }
+
+    async saveStudent(jsonString) {
+        const data = {
+            jsonString: jsonString,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/saveStudent", data, "POST");
+        return response;
+    }
+
+    async getParentList(familyId, parentLastName, parentFirstName) {
+        const data = {
             familyID: familyId,
             parentFirstName: parentFirstName,
             parentLastName: parentLastName,
@@ -162,6 +200,45 @@ export default class DataSource {
             // UserSchool_Session: sessionStorage.getItem('schoolSession'),
         };
         const response = await this.callWebService("/controller/Parents.asmx/getParentList", data, "POST");
+        return response;
+    }
+
+    async saveParent(jsonString, studentID) {
+        const data = {
+            jsonString: jsonString,
+            studentID: studentID,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/saveParent", data, "POST");
+        return response;
+    }
+
+    async saveParentWithFamilyID(parentID, studentID) {
+        const data = {
+            parentID: parentID,
+            studentID: studentID,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/saveParentWithFamilyID", data, "POST");
+        return response;
+    }
+
+    async getAcademicYearDateRange(academicYearID) {
+        const data = {
+            academicYearID: academicYearID,
+        };
+        const response = await this.callWebService("/controller/Course.asmx/getAcademicYearDateRange", data, "POST");
+        return response;
+    }
+
+    async setLevel(studentID, levelID, fromDate, toDate, academicYearID, intakeYear) {
+        const data = {
+            studentID: studentID,
+            levelID: levelID,
+            fromDate: fromDate,
+            toDate: toDate,
+            academicYearID: academicYearID,
+            intakeYear: intakeYear,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/setLevel", data, "POST");
         return response;
     }
 
@@ -195,19 +272,52 @@ export default class DataSource {
         return response;
     }
 
-    async savePost(postContent, tagAcademicYearID, profolio, tagUserID, tagClassID, tagLevelID) {
-        const data = {
-            postContent: postContent,
-            tagAcademicYearID: tagAcademicYearID,
-            profolio: profolio,
-            tagUserID: tagUserID,
-            tagClassID: tagClassID,
-            tagLevelID: tagLevelID,
+    async savePost(files, postContent, tagAcademicYearID, profolio, tagUserID, tagClassID, tagLevelID) {
+        const formData = new FormData();
+        formData.append('token', sessionStorage.getItem('authToken'));
+        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+
+        if (files && files.length > 1) {
+            formData.append("upload", files);
+        } else if (files) {
+            formData.append("upload", files[0]);
+        }
+
+        formData.append("postContent", postContent);
+        formData.append("tagAcademicYearID", tagAcademicYearID);
+        formData.append("profolio", profolio);
+        formData.append("tagUserID", tagUserID);
+        formData.append("tagClassID", tagClassID);
+        formData.append("tagLevelID", tagLevelID);
+
+        const request = {
+            url: `${API_HOST}/controller/Posting.asmx/savePost`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
         };
-        data.UserSchool_Session = sessionStorage.getItem('schoolSession');
-        data.UserID_Session = sessionStorage.getItem('userIDSession');
-        console.log(data);
-        const response = await this.callWebService("/controller/Posting.asmx/savePost", data, "POST");
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async postFile(postID) {
+        console.log(postID, ' poss');
+        const data = {
+            postID: postID
+        };
+        const response = await this.callWebService("/controller/Posting.asmx/getPostFile", data, "POST");
         return response;
     }
 
@@ -235,11 +345,11 @@ export default class DataSource {
         return response;
     }
 
-    async updatePost(actionStatus, postID, postContent, profolio, tagUserID, tagClassID, tagLevelID) {
+    async updatePost(actionStatus, postID, UpdateContent, profolio, tagUserID, tagClassID, tagLevelID) {
         const data = {
             actionStatus: actionStatus,
             postID: postID,
-            postContent: postContent,
+            postContent: UpdateContent,
             profolio: profolio,
             tagUserID: tagUserID,
             tagClassID: tagClassID,
@@ -300,15 +410,42 @@ export default class DataSource {
     async getCountryList() {
         // let response;
         // try {
-        //     response = await fetch("http://local.emsv2/controller/Students.asmx/getCountryList?countryID=");
+        //     response = await fetch("http://local.emsv2/controller/Students.asmx/getCountryList");
         // } catch (err) {
         //     console.log(err);
         //     throw ERROR_SERVER_UNREACHABLE;
         // }
         // return await parseResponseAndHandleErrors(response);
+
         const data = {};
 
         const response = await this.callWebService("/controller/Students.asmx/getCountryList", data, "POST");
+        return response;
+    }
+
+    async getLevel() {
+        const data = {};
+        const response = await this.callWebService("/controller/Course.asmx/getLevel", data, "POST");
+        return response;
+    }
+
+    async getStudentDropDownList(jsonString) {
+        const data = {
+            jsonString: jsonString,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getStudentDropDownList", data, "POST");
+        return response;
+    }
+
+    async getAcademicYear() {
+        const data = {};
+        const response = await this.callWebService("/controller/Course.asmx/getAcademicYear", data, "POST");
+        return response;
+    }
+
+    async getIntakeYear() {
+        const data = {};
+        const response = await this.callWebService("/controller/Students.asmx/getIntakeYear", data, "POST");
         return response;
     }
 

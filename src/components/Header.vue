@@ -17,72 +17,7 @@
     <!--</div>-->
     <div>
         <div id="parentx-static" class="header">
-
             <SideMenu/>
-
-            <!--<vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active">-->
-
-                <!--<div class="header-sidebar" slot="header">-->
-                    <!--<img src="../assets/kagami.jpg"/>-->
-                <!--</div>-->
-
-
-                <!--<vs-sidebar-item index="1" icon="dashboard" :to="{ name: 'Home'}">-->
-                    <!--Dashboard-->
-                <!--</vs-sidebar-item>-->
-
-                <!--<vs-sidebar-item index="2" icon="dashboard" :to="{ name: 'Parent Registration'}">-->
-                    <!--Parent Registration-->
-                <!--</vs-sidebar-item>-->
-
-                <!--<vs-sidebar-item index="3" icon="dashboard">-->
-                    <!--Document-->
-                <!--</vs-sidebar-item>-->
-                <!--<vs-sidebar-item index="4" icon="dashboard" :to="{ name: 'Student List'}">-->
-                    <!--Student-->
-                <!--</vs-sidebar-item>-->
-                <!--<vs-sidebar-item index="5" icon="dashboard" :to="{ name: 'Parent List'}">-->
-                    <!--Parent-->
-                <!--</vs-sidebar-item>-->
-
-                <!--<vs-sidebar-group title="Post" icon="dashboard">-->
-                    <!--<vs-sidebar-item index="6.1" icon="dashboard" :to="{ name: 'Staff Post'}">-->
-                        <!--Staff Post-->
-                    <!--</vs-sidebar-item>-->
-                    <!--<vs-sidebar-item index="6.2" icon="dashboard" :to="{ name: 'Parent Post'}">-->
-                        <!--Parent Post-->
-                    <!--</vs-sidebar-item>-->
-                    <!--<vs-sidebar-item index="6.3" icon="dashboard" :to="{ name: 'Save Post'}">-->
-                        <!--Save Post-->
-                    <!--</vs-sidebar-item>-->
-                    <!--<vs-sidebar-item index="6.4" icon="dashboard" :to="{ name: 'Pending Post'}">-->
-                        <!--Pending Post-->
-                    <!--</vs-sidebar-item>-->
-                    <!--<vs-sidebar-item index="6.5" icon="dashboard" :to="{ name: 'Update Post'}">-->
-                        <!--Update Post-->
-                    <!--</vs-sidebar-item>-->
-                    <!--<vs-sidebar-item index="6.6" icon="dashboard" :to="{ name: 'Approve Post'}">-->
-                        <!--Approve Post-->
-                    <!--</vs-sidebar-item>-->
-                <!--</vs-sidebar-group>-->
-                <!--<vs-sidebar-group title="Approver" icon="dashboard">-->
-                    <!--<vs-sidebar-item index="7.1" icon="dashboard" :to="{ name: 'Approver'}">-->
-                        <!--Approver List-->
-                    <!--</vs-sidebar-item>-->
-                    <!--<vs-sidebar-item index="7.2" icon="dashboard" :to="{ name: 'Save Approver'}">-->
-                        <!--Save Approver-->
-                    <!--</vs-sidebar-item>-->
-                    <!--<vs-sidebar-item index="7.3" icon="dashboard" :to="{ name: 'Update Approver'}">-->
-                        <!--Update Approver-->
-                    <!--</vs-sidebar-item>-->
-                <!--</vs-sidebar-group>-->
-
-                <!--<div class="footer-sidebar" slot="footer">-->
-                    <!--<vs-button icon="reply" color="danger" type="flat">log out</vs-button>-->
-                    <!--<vs-button icon="settings" color="primary" type="border"></vs-button>-->
-                <!--</div>-->
-
-            <!--</vs-sidebar>-->
         </div>
     </div>
 
@@ -121,12 +56,6 @@
 
     .top-menu a {
         padding: 2px 5px;
-    }
-
-    #parentx-static {
-        overflow: hidden;
-        position: absolute;
-        width: 260px;
     }
 
     header.vs-sidebar--header {
@@ -168,10 +97,11 @@
     .vs-sidebar--background {
         z-index: 0 !important;
         background: #413f56 !important;
+        position: absolute !important;
     }
 
     .vs-sidebar {
-        background: transparent !important;
+        background: #413f56 !important;
     }
 
     .vs-sidebar--item a {
@@ -204,4 +134,6 @@
         opacity: 0.8;
         font-size: .85rem !important;
     }
+
+
 </style>

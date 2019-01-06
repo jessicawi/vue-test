@@ -22,7 +22,7 @@
         <br/>
         <br/>
         <br/>
-        {{value1}} / {{value2}}
+        {{value1}} / {{value2}} {{value1}} / {{value2}} {{value1}} / {{value2}}
     </div>
 
 </template>

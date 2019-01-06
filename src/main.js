@@ -13,11 +13,15 @@ import quillEditor from 'vue-quill-editor';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import {DataTables, DataTablesServer} from 'vue-data-tables';
-import lang from 'element-ui/lib/locale/lang/en'
-import locale from 'element-ui/lib/locale'
-import { Modal } from 'bootstrap-vue/es/components';
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
+import {Modal} from 'bootstrap-vue/es/components';
+import VueUploadComponent from "vue-upload-component";
 
-locale.use(lang)
+Vue.component('file-upload', VueUploadComponent);
+
+
+locale.use(lang);
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);

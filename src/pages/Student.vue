@@ -1,6 +1,14 @@
 <template>
     <div id="student" class="mt-3 container">
         <div class="row form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <label>Mode: </label><label>{{lblCreateOrEdit}}</label>
+                <label style="display:none;">{{lblStudentID}}</label>
+                <label style="display:none;">{{lblParentID}}</label>
+            </div>
+        </div>
+
+        <div class="row form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" >
             <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 studentAreaDiv">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <h2>Personal Information</h2>
@@ -29,7 +37,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Nationality</label>
                     <select v-model="ddlStudentNationality" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality, text: item.CNYname }">{{ item.CNYname }}</option>
+                        <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality.trim(), text: item.CNYname.trim() }">{{ item.CNYname.trim() }}</option>
                     </select>
                 </div>
 
@@ -51,14 +59,14 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Birth Place</label>
                     <select v-model="ddlStudentBirthPlace" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality, text: item.CNYname }">{{ item.CNYname }}</option>
+                        <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality.trim(), text: item.CNYname.trim() }">{{ item.CNYname.trim() }}</option>
                     </select>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Identification Type</label>
                     <select v-model="ddlStudentIdentificationType" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in ddlStudentIdentificationType" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <option v-for="item in ddlStudentIdentificationTypeList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                     </select>
                 </div>
 
@@ -71,20 +79,21 @@
                     <label>Identification Expiry Date</label>
                     <div class="date">
                         <el-date-picker v-model="inputStudentIdentificationExpiryDate" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
+
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Religion</label>
                     <select v-model="ddlStudentReligion" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in ddlStudentReligion" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <option v-for="item in ddlStudentReligionList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                     </select>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Additional Language</label>
                     <select v-model="ddlStudentAdditionalLanguage" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in ddlStudentAdditionalLanguage" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <option v-for="item in ddlStudentAdditionalLanguageList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                     </select>
                 </div>
 
@@ -101,7 +110,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Meal Preferences</label>
                     <select v-model="ddlStudentMealPreferences" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in ddlStudentMealPreferences" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <option v-for="item in ddlStudentMealPreferencesList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                     </select>
                 </div>
 
@@ -118,7 +127,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Membership</label>
                     <select v-model="ddlStudentMembership" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in ddlStudentMembership" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <option v-for="item in ddlStudentMembershipList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                     </select>
                 </div>
             </div>
@@ -152,14 +161,14 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Residency Status</label>
                     <select v-model="ddlStudentResidencyStatus" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in ddlStudentResidencyStatus" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <option v-for="item in ddlStudentResidencyStatusList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                     </select>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Payer</label>
                     <select v-model="ddlStudentPayer" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in ddlStudentPayer" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <option v-for="item in ddlStudentPayerList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                     </select>
                 </div>
 
@@ -204,7 +213,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Country</label>
                     <select v-model="ddlStudentAddressCountry" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality, text: item.CNYname }">{{ item.CNYname }}</option>
+                        <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality.trim(), text: item.CNYname.trim() }">{{ item.CNYname.trim() }}</option>
                     </select>
                 </div>
 
@@ -242,7 +251,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Country</label>
                     <select v-model="ddlStudentAddressCorrespondanceCountry" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality, text: item.CNYname }">{{ item.CNYname }}</option>
+                        <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality.trim(), text: item.CNYname.trim() }">{{ item.CNYname.trim() }}</option>
                     </select>
                 </div>
 
@@ -319,7 +328,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label style="width:100%;">Search Family</label>
-                        <button type="button" class="btn btn-primary waves-effect waves-light m-r-10" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#myModal" style="display:block;" id="btnSearchFamilyID">Search</button>
+                        <button v-bind:disabled="editModeDisable" type="button" class="btn btn-primary waves-effect waves-light m-r-10" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#myModal" style="display:block;" id="btnSearchFamilyID">Search</button>
                     </div>
                 </div>
 
@@ -330,8 +339,8 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Parent Mode</label>
-                        <select v-model="ddlParentMode" class="form-control pro-edt-select form-control-primary">
-                            <option v-for="item in ddlParentMode" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <select v-model="ddlParentMode" v-bind:disabled="editModeDisable" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in ddlParentModeList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                         </select>
                     </div>
 
@@ -342,54 +351,54 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Middle Name</label>
-                        <input type="text" class="form-control"  v-model="inputFatherMiddleName">
+                        <input type="text" class="form-control"  v-model="inputFatherMiddleName" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Last Name</label>
-                        <input type="text" class="form-control"  v-model="inputFatherLastName">
+                        <input type="text" class="form-control"  v-model="inputFatherLastName" v-bind:disabled="editModeDisable">
                         <label id = "lblFatherNameDuplicated" style="display:none;">Father name is duplicated, please double confirm</label>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Date of Birth</label>
                         <div class="date">
-                            <el-date-picker v-model="inputFatherDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
+                            <el-date-picker v-model="inputFatherDateofBirth" v-bind:disabled="editModeDisable" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Occupation</label>
-                        <input type="text" class="form-control"  v-model="inputFatherOccupation">
+                        <input type="text" class="form-control"  v-model="inputFatherOccupation" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Identification Type</label>
-                        <select v-model="ddlFatherIdentificationType" class="form-control pro-edt-select form-control-primary">
-                            <option v-for="item in ddlFatherIdentificationType" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <select v-model="ddlFatherIdentificationType" v-bind:disabled="editModeDisable" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in ddlFatherIdentificationTypeList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                         </select>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Identification No</label>
-                        <input type="text" class="form-control"  v-model="inputFatherIdentificationNo">
+                        <input type="text" class="form-control"  v-model="inputFatherIdentificationNo" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Identification No Expiry Date</label>
                         <div class="date">
-                            <el-date-picker v-model="inputFatherIdentificationNoExpiryDate" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
+                            <el-date-picker v-model="inputFatherIdentificationNoExpiryDate" v-bind:disabled="editModeDisable" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Mobile No</label>
-                        <input type="text" class="form-control"  v-model="inputFatherMobileNo">
+                        <input type="text" class="form-control"  v-model="inputFatherMobileNo" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Email</label>
-                        <input type="text" class="form-control"  v-model="inputFatherEmail">
+                        <input type="text" class="form-control"  v-model="inputFatherEmail" v-bind:disabled="editModeDisable">
                     </div>
                 </div>
 
@@ -400,59 +409,59 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>First Name</label>
-                        <input type="text" class="form-control"  v-model="inputMotherFirstName">
+                        <input type="text" class="form-control"  v-model="inputMotherFirstName" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Middle Name</label>
-                        <input type="text" class="form-control"  v-model="inputMotherMiddleName">
+                        <input type="text" class="form-control"  v-model="inputMotherMiddleName" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Last Name</label>
-                        <input type="text" class="form-control"  v-model="inputMotherLastName">
+                        <input type="text" class="form-control"  v-model="inputMotherLastName" v-bind:disabled="editModeDisable">
                         <label id = "lblMotherNameDuplicated" style="display:none;">Mother name is duplicated, please double confirm</label>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Date of Birth</label>
                         <div class="date">
-                            <el-date-picker v-model="inputMotherDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
+                            <el-date-picker v-model="inputMotherDateofBirth" v-bind:disabled="editModeDisable" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Occupation</label>
-                        <input type="text" class="form-control"  v-model="inputMotherOccupation">
+                        <input type="text" class="form-control"  v-model="inputMotherOccupation" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Identification Type</label>
-                        <select v-model="ddlMotherIdentificationType" class="form-control pro-edt-select form-control-primary">
-                            <option v-for="item in ddlMotherIdentificationType" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
+                        <select v-model="ddlMotherIdentificationType" v-bind:disabled="editModeDisable" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in ddlMotherIdentificationTypeList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>
                         </select>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Identification No</label>
-                        <input type="text" class="form-control" v-model="inputMotherIdentificationNo">
+                        <input type="text" class="form-control" v-model="inputMotherIdentificationNo" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Identification No Expiry Date</label>
                         <div class="date">
-                            <el-date-picker v-model="inputMotherIdentificationNoExpiryDate" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
+                            <el-date-picker v-model="inputMotherIdentificationNoExpiryDate" v-bind:disabled="editModeDisable" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Mobile No</label>
-                        <input type="text" class="form-control"  v-model="inputMotherMobileNo">
+                        <input type="text" class="form-control"  v-model="inputMotherMobileNo" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Email</label>
-                        <input type="text" class="form-control"  v-model="inputMotherEmail">
+                        <input type="text" class="form-control"  v-model="inputMotherEmail" v-bind:disabled="editModeDisable">
                     </div>
                 </div>
 
@@ -463,39 +472,39 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Address 1</label>
-                        <input type="text" class="form-control"  v-model="inputParentAddress1">
+                        <input type="text" class="form-control"  v-model="inputParentAddress1" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Address 2</label>
-                        <input type="text" class="form-control"  v-model="inputParentAddress2">
+                        <input type="text" class="form-control"  v-model="inputParentAddress2" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Address 3</label>
-                        <input type="text" class="form-control"  v-model="inputParentAddress3">
+                        <input type="text" class="form-control"  v-model="inputParentAddress3" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>City</label>
-                        <input type="text" class="form-control"  v-model="inputParentCity">
+                        <input type="text" class="form-control"  v-model="inputParentCity" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Landline No</label>
-                        <input type="text" class="form-control"  v-model="inputParentLandlineNo">
+                        <input type="text" class="form-control"  v-model="inputParentLandlineNo" v-bind:disabled="editModeDisable">
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Country</label>
-                        <select v-model="ddlParentCountry" class="form-control pro-edt-select form-control-primary">
-                            <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality, text: item.CNYname }">{{ item.CNYname }}</option>
+                        <select v-model="ddlParentCountry" v-bind:disabled="editModeDisable" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in countryList" v-bind:value="{ id: item.CNYnationality.trim(), text: item.CNYname.trim() }">{{ item.CNYname.trim() }}</option>
                         </select>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Postal Code</label>
-                        <input type="text" class="form-control"  v-model="inputParentPostalCode">
+                        <input type="text" class="form-control"  v-model="inputParentPostalCode" v-bind:disabled="editModeDisable">
                     </div>
                 </div>
             </div>
@@ -526,20 +535,21 @@
             await this.BindStudentIntakeYear();
         },
         async mounted() {
+            await this.LoadStudentParentInfo();
         },
         data() {
             return {
                 countryList: [],
-                ddlStudentIdentificationType: [],
-                ddlStudentReligion: [],
-                ddlStudentAdditionalLanguage: [],
-                ddlStudentMealPreferences: [],
-                ddlStudentMembership: [],
-                ddlStudentResidencyStatus: [],
-                ddlStudentPayer: [],
-                ddlFatherIdentificationType: [],
-                ddlMotherIdentificationType: [],
-                ddlParentMode: [],
+                ddlStudentIdentificationTypeList: [],
+                ddlStudentReligionList: [],
+                ddlStudentAdditionalLanguageList: [],
+                ddlStudentMealPreferencesList: [],
+                ddlStudentMembershipList: [],
+                ddlStudentResidencyStatusList: [],
+                ddlStudentPayerList: [],
+                ddlFatherIdentificationTypeList: [],
+                ddlMotherIdentificationTypeList: [],
+                ddlParentModeList: [],
                 levelList: [],
                 academicYearList: [],
                 studentIntakeYearList: [],
@@ -552,6 +562,81 @@
                 inputMotherDateofBirth: '',
                 inputMotherIdentificationNoExpiryDate: '',
                 ddlStudentGender: '',
+                inputStudentFirstName: '',
+                inputStudentMiddleName: '',
+                inputStudentLastName: '',
+                inputStudentPreferredName: '',
+                ddlStudentNationality: '',
+                ddlStudentBirthPlace: '',
+                inputStudentIdentificationNo: '',
+                inputStudent1stEmergencyContactNo: '',
+                inputStudent2ndEmergencyContactNo: '',
+                inputStudentFirstLanguageSpoken: '',
+                inputSecondLanguageSpoken: '',
+                ddlStudentSelectLevel: '',
+                ddlStudentFirstAcademicYear: '',
+                inputStudentID: '',
+                ddlStudentIntakeYear: '',
+                inputStudentAddress1: '',
+                inputStudentAddress2: '',
+                inputStudentAddress3: '',
+                inputStudentCity: '',
+                inputStudentPostalCode: '',
+                inputStudentCorrespondanceAddress1: '',
+                inputStudentCorrespondanceAddress2: '',
+                inputStudentCorrespondanceAddress3: '',
+                inputStudentCorrespondanceCity: '',
+                ddlStudentAddressCorrespondanceCountry: '',
+                inputStudentCorrespondancePostalCode: '',
+                inputStudentMobileNo: '',
+                inputStudentOfficeTelNo: '',
+                inputStudentEmail: '',
+                taMajorAilmentsList: '',
+                taMedicationAllergiesList: '',
+                inputBloodGroup: '',
+                inputBloodDonorNo: '',
+                inputNameofFamilyDoctor: '',
+                inputClinicAddress: '',
+                inputClinicPhoneNo: '',
+                inputFamilyID: '',
+                inputFamilyParentID: '',
+                inputFatherFirstName: '',
+                inputFatherMiddleName: '',
+                inputFatherLastName: '',
+                inputFatherOccupation: '',
+                inputFatherIdentificationNo: '',
+                inputFatherMobileNo: '',
+                inputFatherEmail: '',
+                inputMotherFirstName: '',
+                inputMotherMiddleName: '',
+                inputMotherLastName: '',
+                inputMotherOccupation: '',
+                inputMotherIdentificationNo: '',
+                inputMotherMobileNo: '',
+                inputMotherEmail: '',
+                inputParentAddress1: '',
+                inputParentAddress2: '',
+                inputParentAddress3: '',
+                inputParentCity: '',
+                inputParentLandlineNo: '',
+                ddlParentCountry: '',
+                inputParentPostalCode: '',
+                ddlStudentAddressCountry: '',
+                ddlStudentIdentificationType: '',
+                ddlStudentReligion: '',
+                ddlStudentAdditionalLanguage: '',
+                ddlStudentMealPreferences: '',
+                ddlStudentMembership: '',
+                ddlStudentResidencyStatus: '',
+                ddlStudentPayer: '',
+                ddlFatherIdentificationType: '',
+                ddlMotherIdentificationType: '',
+                ddlParentMode: '',
+
+                editModeDisable:'',
+                lblCreateOrEdit:'',
+                lblStudentID:'',
+                lblParentID: '',
             };
         },
         methods: {
@@ -587,32 +672,32 @@
                         this.studentDropDownListResponse.forEach(m => {
 
                             if (m.OGPname.trim() === "Student Identification Type") {
-                                this.ddlStudentIdentificationType.push(m);
+                                this.ddlStudentIdentificationTypeList.push(m);
                             }
                             else if (m.OGPname.trim() === 'Religion') {
-                                this.ddlStudentReligion.push(m);
+                                this.ddlStudentReligionList.push(m);
                             }
                             else if (m.OGPname.trim() === 'Mother Tongue') {
-                                this.ddlStudentAdditionalLanguage.push(m);
+                                this.ddlStudentAdditionalLanguageList.push(m);
                             }
                             else if (m.OGPname.trim() === 'Meal Preferences') {
-                                this.ddlStudentMealPreferences.push(m);
+                                this.ddlStudentMealPreferencesList.push(m);
                             }
                             else if (m.OGPname.trim() === 'Student Membership') {
-                                this.ddlStudentMembership.push(m);
+                                this.ddlStudentMembershipList.push(m);
                             }
                             else if (m.OGPname.trim() === 'Residency Status') {
-                                this.ddlStudentResidencyStatus.push(m);
+                                this.ddlStudentResidencyStatusList.push(m);
                             }
                             else if (m.OGPname.trim() === 'Sponsorship Type') {
-                                this.ddlStudentPayer.push(m);
+                                this.ddlStudentPayerList.push(m);
                             }
                             else if (m.OGPname.trim() === 'ParentID') {
-                                this.ddlFatherIdentificationType.push(m);
-                                this.ddlMotherIdentificationType.push(m);
+                                this.ddlFatherIdentificationTypeList.push(m);
+                                this.ddlMotherIdentificationTypeList.push(m);
                             }
                             else if (m.OGPname.trim() === 'Parent Mode') {
-                                this.ddlParentMode.push(m);
+                                this.ddlParentModeList.push(m);
                             }
                         });
                     }
@@ -659,6 +744,29 @@
                     this.results = e;
                 }
             },
+            async LoadStudentParentInfo() {
+                try {
+                    if (this.$route.query.id != null)
+                    {
+                        this.lblCreateOrEdit = "Edit";
+                        this.lblStudentID = this.$route.query.id;
+                        this.editModeDisable = true;
+
+                        const response = await DataSource.shared.getStudent(this.$route.query.id, "", "", "", "");
+
+                        if (response)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        this.lblCreateOrEdit = "New";
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
             async Save() {
                 try {
                     //students
@@ -666,108 +774,214 @@
                     jsonString = jsonString + ',"Middle_name":"' + this.inputStudentMiddleName + '"';
                     jsonString = jsonString + ',"Last_name":"' + this.inputStudentLastName + '"';
                     jsonString = jsonString + ',"Sex":"' + this.ddlStudentGender + '"';
-                    // jsonString = jsonString + ',"st_corr_add_flrNo":"' + $("#inputStudentCorrespondanceAddress1").val() + '"';
-                    // jsonString = jsonString + ',"st_corr_add_blkNo":"' + $("#inputStudentCorrespondanceAddress2").val() + '"';
-                    // jsonString = jsonString + ',"st_corr_add_stName":"' + $("#inputStudentCorrespondanceCity").val() + '"';
-                    // jsonString = jsonString + ',"st_corr_add_pstcode":"' + $("#inputStudentCorrespondancePostalCode").val() + '"';
-                    // jsonString = jsonString + ',"st_prm_add_pstcode":"' + $("#inputStudentPostalCode").val() + '"';
-                    // jsonString = jsonString + ',"st_prm_add_blkNo":"' + $("#inputStudentAddress1").val() + '"';
-                    // jsonString = jsonString + ',"st_prm_add_flrNo":"' + $("#inputStudentAddress2").val() + '"';
-                    // jsonString = jsonString + ',"st_prm_add_BlgName":"' + $("#inputStudentAddress3").val() + '"';
-                    // jsonString = jsonString + ',"DOB":"' + $("#inputStudentDateOfBirth").val() + '"';
-                    // jsonString = jsonString + ',"St_Religion":"' + $("#ddlStudentReligion").val() + '"';
-                    // jsonString = jsonString + ',"Nationality":"' + $("#ddlStudentNationality").val() + '"';
-                    // jsonString = jsonString + ',"Regst_date":"' + $("#inputFirstCommencementDate").val() + '"';
-                    // jsonString = jsonString + ',"st_prm_add_country":"' + $("#ddlStudentAddressCountry").val() + '"';
-                    // jsonString = jsonString + ',"Handphone":"' + $("#inputStudentMobileNo").val() + '"';
-                    // jsonString = jsonString + ',"st_corr_add_BlgName":"' + $("#inputStudentCorrespondanceAddress3").val() + '"';
-                    // jsonString = jsonString + ',"student_type":"' + $("#ddlStudentResidencyStatus").val() + '"';
-                    // jsonString = jsonString + ',"sponsor_type":"' + $("#ddlStudentPayer").val() + '"';
-                    // jsonString = jsonString + ',"ID_Type":"' + $("#ddlStudentIdentificationType").val() + '"';
-                    // jsonString = jsonString + ',"ID_Number":"' + $("#inputStudentIdentificationNo").val() + '"';
-                    // jsonString = jsonString + ',"st_prm_add_stName":"' + $("#inputStudentCity").val() + '"';
-                    // jsonString = jsonString + ',"st_corr_add_country":"' + $("#ddlStudentAddressCorrespondanceCountry").val() + '"';
-                    // jsonString = jsonString + ',"Fax":"' + $("#inputStudent2ndEmergencyContactNo").val() + '"';
-                    // jsonString = jsonString + ',"email":"' + $("#inputStudentEmail").val() + '"';
-                    // jsonString = jsonString + ',"Telephone":"' + $("#inputStudent1stEmergencyContactNo").val() + '"';
-                    // jsonString = jsonString + ',"Offphone":"' + $("#inputStudentOfficeTelNo").val() + '"';
-                    // jsonString = jsonString + ',"Course_Type":"' + $("#ddlStudentSelectLevel").val() + '"';
-                    // jsonString = jsonString + ',"Family_Doctor":"' + $("#inputNameofFamilyDoctor").val() + '"';
-                    // jsonString = jsonString + ',"Ailments":"' + $("#taMajorAilmentsList").val() + '"';
-                    // jsonString = jsonString + ',"medication_allergic_to":"' + $("#taMedicationAllergiesList").val() + '"';
-                    // jsonString = jsonString + ',"BLD_grp":"' + $("#inputBloodGroup").val() + '"';
-                    // jsonString = jsonString + ',"BLD_donor_no":"' + $("#inputBloodDonorNo").val() + '"';
-                    // jsonString = jsonString + ',"clinic_add":"' + $("#inputClinicAddress").val() + '"';
-                    // jsonString = jsonString + ',"clinic_ph_no":"' + $("#inputClinicPhoneNo").val() + '"';
-                    // jsonString = jsonString + ',"Semester":"' + $("#ddlStudentFirstAcademicYear").val() + '"';
-                    // jsonString = jsonString + ',"St_Preferred_Name":"' + $("#inputStudentPreferredName").val() + '"';
-                    // jsonString = jsonString + ',"St_Mother_Tongue":"' + $("#ddlStudentAdditionalLanguage").val() + '"';
-                    // jsonString = jsonString + ',"St_Meal_Preferences":"' + $("#ddlStudentMealPreferences").val() + '"';
-                    // jsonString = jsonString + ',"St_Birth_Place":"' + $("#ddlStudentBirthPlace").val() + '"';
-                    // jsonString = jsonString + ',"St_AdditionalLanguage":"' + $("#inputStudentFirstLanguageSpoken").val() + '"';
-                    // jsonString = jsonString + ',"St_SecondLanguageSpoken":"' + $("#inputSecondLanguageSpoken").val() + '"';
-                    // jsonString = jsonString + ',"ST_StudentMemership":"' + $("#ddlStudentMembership").val() + '"';
-                    // jsonString = jsonString + ',"ID_ExpDate":"' + $("#inputStudentIdentificationExpiryDate").val() + '"';
-                    // //students
-                    //
-                    // //parent
-                    // var jsonString2 = '"PAR_Mode":"' + $("#ddlParentMode").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_FirstName":"' + $("#inputFatherFirstName").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_MiddleName":"' + $("#inputFatherMiddleName").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_LastName":"' + $("#inputFatherLastName").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_DOB":"' + $("#inputFatherDateofBirth").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Occupation":"' + $("#inputFatherOccupation").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_FatResContact":"' + $("#inputParentLandlineNo ").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Phone":"' + $("#inputFatherMobileNo").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Email":"' + $("#inputFatherEmail").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_IDType":"' + $("#ddlFatherIdentificationType").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_UID":"' + $("#inputFatherIdentificationNo").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Loc_Residence_No":"' + $("#inputParentAddress1").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Loc_Address1":"' + $("#inputParentAddress2").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Loc_Address2":"' + $("#inputParentAddress3").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Loc_Postalcode":"' + $("#inputParentPostalCode").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Loc_City":"' + $("#inputParentCity").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Loc_Country":"' + $("#ddlParentCountry").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_City":"' + $("#inputParentCity").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_Country":"' + $("#ddlParentCountry").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_PostalCode":"' + $("#inputParentPostalCode").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_FirstName":"' + $("#inputMotherFirstName").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_MiddleName":"' + $("#inputMotherMiddleName").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_LastName":"' + $("#inputMotherLastName").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_DOB":"' + $("#inputMotherDateofBirth").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Occupation":"' + $("#inputMotherOccupation").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_MotResContact":"' + $("#inputParentLandlineNo ").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Phone":"' + $("#inputMotherMobileNo").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Email":"' + $("#inputMotherEmail").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_IDType":"' + $("#ddlMotherIdentificationType").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_UID":"' + $("#inputMotherIdentificationNo").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Residence_No":"' + $("#inputParentAddress1").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Address1":"' + $("#inputParentAddress2").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Address2":"' + $("#inputParentAddress3").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Loc_City":"' + $("#inputParentCity").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Country":"' + $("#ddlParentCountry").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Postalcode":"' + $("#inputParentPostalCode").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_City":"' + $("#inputParentCity").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_Country":"' + $("#ddlParentCountry").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_PostalCode":"' + $("#inputParentPostalCode").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_GarResContact":"' + $("#inputParentLandlineNo ").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_Residence_No":"' + $("#inputParentAddress1").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_City":"' + $("#inputParentAddress1").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_Country":"' + $("#inputParentAddress2").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_PostalCode":"' + $("#inputParentAddress3").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Residence_No":"' + $("#inputParentAddress1").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Address1":"' + $("#inputParentAddress2").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Address2":"' + $("#inputParentAddress3").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_City":"' + $("#inputParentCity").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Country":"' + $("#ddlParentCountry").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Guardian_Postalcode":"' + $("#inputParentPostalCode").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Father_IDExpDate":"' + $("#inputFatherIdentificationNoExpiryDate").val() + '"';
-                    // jsonString2 = jsonString2 + ',"PAR_Mother_IDExpDate":"' + $("#inputMotherIdentificationNoExpiryDate").val() + '"';
-                    // //parent
+                    jsonString = jsonString + ',"st_corr_add_flrNo":"' + this.inputStudentCorrespondanceAddress1 + '"';
+                    jsonString = jsonString + ',"st_corr_add_blkNo":"' + this.inputStudentCorrespondanceAddress2 + '"';
+                    jsonString = jsonString + ',"st_corr_add_stName":"' + this.inputStudentCorrespondanceCity + '"';
+                    jsonString = jsonString + ',"st_corr_add_pstcode":"' + this.inputStudentCorrespondancePostalCode + '"';
+                    jsonString = jsonString + ',"st_prm_add_pstcode":"' + this.inputStudentPostalCode + '"';
+                    jsonString = jsonString + ',"st_prm_add_blkNo":"' + this.inputStudentAddress1 + '"';
+                    jsonString = jsonString + ',"st_prm_add_flrNo":"' + this.inputStudentAddress2 + '"';
+                    jsonString = jsonString + ',"st_prm_add_BlgName":"' + this.inputStudentAddress3 + '"';
+                    jsonString = jsonString + ',"DOB":"' + this.inputStudentDateOfBirth + '"';
+                    jsonString = jsonString + ',"St_Religion":"' + this.ddlStudentReligion.id + '"';
+                    jsonString = jsonString + ',"Nationality":"' + this.ddlStudentNationality.id + '"';
+                    jsonString = jsonString + ',"Regst_date":"' + this.inputFirstCommencementDate + '"';
+                    jsonString = jsonString + ',"st_prm_add_country":"' + this.ddlStudentAddressCountry.id + '"';
+                    jsonString = jsonString + ',"Handphone":"' + this.inputStudentMobileNo + '"';
+                    jsonString = jsonString + ',"st_corr_add_BlgName":"' + this.inputStudentCorrespondanceAddress3 + '"';
+                    jsonString = jsonString + ',"student_type":"' + this.ddlStudentResidencyStatus.id + '"';
+                    jsonString = jsonString + ',"sponsor_type":"' + this.ddlStudentPayer.id + '"';
+                    jsonString = jsonString + ',"ID_Type":"' + this.ddlStudentIdentificationType.id + '"';
+                    jsonString = jsonString + ',"ID_Number":"' + this.inputStudentIdentificationNo + '"';
+                    jsonString = jsonString + ',"st_prm_add_stName":"' + this.inputStudentCity + '"';
+                    jsonString = jsonString + ',"st_corr_add_country":"' + this.ddlStudentAddressCorrespondanceCountry.id + '"';
+                    jsonString = jsonString + ',"Fax":"' + this.inputStudent2ndEmergencyContactNo + '"';
+                    jsonString = jsonString + ',"email":"' + this.inputStudentEmail + '"';
+                    jsonString = jsonString + ',"Telephone":"' + this.inputStudent1stEmergencyContactNo + '"';
+                    jsonString = jsonString + ',"Offphone":"' + this.inputStudentOfficeTelNo + '"';
+                    jsonString = jsonString + ',"Course_Type":"' + this.ddlStudentSelectLevel + '"';
+                    jsonString = jsonString + ',"Family_Doctor":"' + this.inputNameofFamilyDoctor + '"';
+                    jsonString = jsonString + ',"Ailments":"' + this.taMajorAilmentsList + '"';
+                    jsonString = jsonString + ',"medication_allergic_to":"' + this.taMedicationAllergiesList + '"';
+                    jsonString = jsonString + ',"BLD_grp":"' + this.inputBloodGroup + '"';
+                    jsonString = jsonString + ',"BLD_donor_no":"' + this.inputBloodDonorNo + '"';
+                    jsonString = jsonString + ',"clinic_add":"' + this.inputClinicAddress + '"';
+                    jsonString = jsonString + ',"clinic_ph_no":"' + this.inputClinicPhoneNo + '"';
+                    jsonString = jsonString + ',"Semester":"' + this.ddlStudentFirstAcademicYear.id + '"';
+                    jsonString = jsonString + ',"St_Preferred_Name":"' + this.inputStudentPreferredName + '"';
+                    jsonString = jsonString + ',"St_Mother_Tongue":"' + this.ddlStudentAdditionalLanguage.id + '"';
+                    jsonString = jsonString + ',"St_Meal_Preferences":"' + this.ddlStudentMealPreferences.id + '"';
+                    jsonString = jsonString + ',"St_Birth_Place":"' + this.ddlStudentBirthPlace.id + '"';
+                    jsonString = jsonString + ',"St_AdditionalLanguage":"' + this.inputStudentFirstLanguageSpoken + '"';
+                    jsonString = jsonString + ',"St_SecondLanguageSpoken":"' + this.inputSecondLanguageSpoken + '"';
+                    jsonString = jsonString + ',"ST_StudentMemership":"' + this.ddlStudentMembership.id + '"';
+                    jsonString = jsonString + ',"ID_ExpDate":"' + this.inputStudentIdentificationExpiryDate + '"';
+                    //students
+
+                    //parent
+                    let jsonString2 = '"PAR_Mode":"' + this.ddlParentMode.id + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_FirstName":"' + this.inputFatherFirstName + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_MiddleName":"' + this.inputFatherMiddleName + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_LastName":"' + this.inputFatherLastName + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_DOB":"' + this.inputFatherDateofBirth + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Occupation":"' + this.inputFatherOccupation + '"';
+                    jsonString2 = jsonString2 + ',"PAR_FatResContact":"' + this.inputParentLandlineNo  + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Phone":"' + this.inputFatherMobileNo + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Email":"' + this.inputFatherEmail + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_IDType":"' + this.ddlFatherIdentificationType.id + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_UID":"' + this.inputFatherIdentificationNo + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Residence_No":"' + this.inputParentAddress1 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Address1":"' + this.inputParentAddress2 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Address2":"' + this.inputParentAddress3 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Postalcode":"' + this.inputParentPostalCode + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_City":"' + this.inputParentCity + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Country":"' + this.ddlParentCountry + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_City":"' + this.inputParentCity + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Country":"' + this.ddlParentCountry.id + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_PostalCode":"' + this.inputParentPostalCode + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_FirstName":"' + this.inputMotherFirstName + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_MiddleName":"' + this.inputMotherMiddleName + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_LastName":"' + this.inputMotherLastName + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_DOB":"' + this.inputMotherDateofBirth + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Occupation":"' + this.inputMotherOccupation + '"';
+                    jsonString2 = jsonString2 + ',"PAR_MotResContact":"' + this.inputParentLandlineNo + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Phone":"' + this.inputMotherMobileNo + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Email":"' + this.inputMotherEmail + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_IDType":"' + this.ddlMotherIdentificationType.id + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_UID":"' + this.inputMotherIdentificationNo + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Residence_No":"' + this.inputParentAddress1 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Address1":"' + this.inputParentAddress2 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Address2":"' + this.inputParentAddress3 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_City":"' + this.inputParentCity + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Country":"' + this.ddlParentCountry.id + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Postalcode":"' + this.inputParentPostalCode + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_City":"' + this.inputParentCity + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Country":"' + this.ddlParentCountry + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_PostalCode":"' + this.inputParentPostalCode + '"';
+                    jsonString2 = jsonString2 + ',"PAR_GarResContact":"' + this.inputParentLandlineNo + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_Residence_No":"' + this.inputParentAddress1 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_City":"' + this.inputParentAddress1 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_Country":"' + this.inputParentAddress2 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_PostalCode":"' + this.inputParentAddress3 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Residence_No":"' + this.inputParentAddress1 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Address1":"' + this.inputParentAddress2 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Address2":"' + this.inputParentAddress3 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_City":"' + this.inputParentCity + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Country":"' + this.ddlParentCountry.id + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Guardian_Postalcode":"' + this.inputParentPostalCode + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_IDExpDate":"' + this.inputFatherIdentificationNoExpiryDate + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_IDExpDate":"' + this.inputMotherIdentificationNoExpiryDate + '"';
+                    //parent
+
+                    jsonString = '{ ' + jsonString + ' }'
+                    jsonString2 = '{ ' + jsonString2 + ' }'
+
+                    if (this.lblCreateOrEdit == "New")
+                    {
+                        const chkStuRes = await DataSource.shared.checkStudentDuplication(this.inputStudentFirstName, this.inputStudentLastName, this.inputStudentDateOfBirth, this.inputStudentIdentificationNo, this.ddlStudentIdentificationType.id);
+                        if (chkStuRes) {
+                            if (chkStuRes.code == "1")
+                            {
+                                const saveStuRes = await DataSource.shared.saveStudent(jsonString);
+                                if (chkStuRes) {
+                                    if (saveStuRes.code == "1")
+                                    {
+                                        let studentID = saveStuRes.studentID;
+
+                                        //parent
+                                        if (this.inputFamilyID == "")
+                                        {
+                                            const saveParRes = await DataSource.shared.saveParent(jsonString2, studentID);
+
+                                            if (saveParRes)
+                                            {
+                                                if (saveParRes.code != "1")
+                                                {
+                                                    alert('Save Parent Error - Please try again later');
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            const saveParRes = await DataSource.shared.saveParentWithFamilyID(this.inputFamilyParentID, studentID);
+
+                                            if (saveParRes)
+                                            {
+                                                if (saveParRes.code != "1")
+                                                {
+                                                    alert('Save Parent With Family ID Error - Please try again later');
+                                                }
+                                            }
+                                        }
+                                        //parent
+
+                                        //set level
+                                        const getAcaYearRes = await DataSource.shared.getAcademicYearDateRange(this.ddlStudentFirstAcademicYear.id);
+
+                                        if (getAcaYearRes)
+                                        {
+                                            if (getAcaYearRes.code == "99")
+                                            {
+                                                alert('Get Academic Year Error - Please try again later');
+                                            }
+                                            else
+                                            {
+                                                let academicYearFromDate, academicYearToDate;
+
+                                                this.getAcaYearResTemp = getAcaYearRes.Table;
+                                                this.getAcaYearResTemp.forEach(m => {
+                                                    academicYearFromDate = m.SMT_From;
+                                                    academicYearToDate = m.SMT_To;
+                                                });
+
+                                                const getSetLvlRes = await DataSource.shared.setLevel(studentID, this.ddlStudentSelectLevel.id, academicYearFromDate, academicYearToDate, this.ddlStudentFirstAcademicYear.id, this.ddlStudentIntakeYear.id);
+
+                                                if (getSetLvlRes)
+                                                {
+                                                    if (getSetLvlRes.code == "1")
+                                                    {
+                                                        this.$router.push('Student?id=' + studentID);
+                                                    }
+                                                    else
+                                                    {
+                                                        alert('Save Student Level Error - Please try again later');
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //set level
+                                    }
+                                    else
+                                    {
+                                        alert("Save Student Error - Please try again later");
+                                    }
+                                }
+                            }
+                            else if (chkStuRes.code == "2")
+                            {
+                                alert("This student is existing");
+                            }
+                            else
+                            {
+                                alert("Check Student Error - Please try again later");
+                            }
+                        }
+                    }
+                    else if (this.lblCreateOrEdit == "Edit")
+                    {
+                        //alert(JSON.stringify($("#student")));
+                      //  this.$message(JSON.stringify($("#student")))
+                    }
+                    else
+                    {
+                        this.$message("Error! Please try again later")
+                    }
 
                     //this.$message(this.ddlStudentNationality.id)
                     //this.$message(this.ddlStudentGender)
-                    console.log(jsonString)
+                    //console.log(jsonString)
+                    //console.log(jsonString2)
+                    //console.log(this.lblCreateOrEdit)
                 } catch (e) {
                     this.results = e;
                 }
