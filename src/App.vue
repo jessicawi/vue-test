@@ -40,9 +40,9 @@
         },
         mounted() {
             const isLogin = sessionStorage.getItem('authToken');
-            if (this.$route.path !== "/login" && (!isLogin || isLogin === "null")) {
-                this.$router.push('/login');
-            } else if (isLogin) {
+            if (this.$route.path !== "/login" && this.$route.path !== "/register/parent" && this.$route.path !== "/reset-password"  && (!isLogin || isLogin === "null")) {
+                this.$router.push('/login')
+            }else if (isLogin) {
                 this.isLoggedIn = true;
                 setTimeout(this.warningLogout, 10800000); // 3 hours
             }

@@ -26,7 +26,7 @@
                 </div>
                 <!-- if menu has no submenu, click will route to url (MENnewurl) -->
                 <div v-else>
-                    <div class="parent-menu">
+                    <div class="parent-menu" v-if="item.MENnewurl">
                         <!-- if MENnewurl has value -->
                         <router-link v-if="item.MENnewurl" :to="item.MENnewurl">
                             <i :class="item.MENicon"></i> {{item.MENname}}
@@ -116,6 +116,7 @@
                     }
                 });
             }
+
         },
         methods: {
             handleParentMenuClick(menuId) {
@@ -127,7 +128,7 @@
                 else {
                     this.currentParentMenuId = menuId;
                 }
-            }
+            },
         }
     };
 </script>
@@ -199,8 +200,10 @@
     }
 
     .submenu-active a{
-        color: red;
+        color: #fff;
     }
+
+
 
 </style>
 

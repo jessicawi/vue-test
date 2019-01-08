@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div id="resetPassword" class="content">
         <div class="backstretch">
             <img src="../assets/bg.jpg"/>
         </div>
@@ -108,7 +108,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    #header {
+    .topbar {
         display: none;
     }
 
@@ -221,6 +221,9 @@
         transform: scaleY(0) translateZ(0);
         opacity: 0;
     }
+    div#resetPassword {
+        margin-left: -260px;
+    }
 
     @media (max-width: 1025px) {
         .backstretch img {
@@ -239,4 +242,10 @@
     }
 
 
+</style>
+
+<style>
+    .resetPassword header{
+        display: none;
+    }
 </style>

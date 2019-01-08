@@ -1,9 +1,9 @@
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router/router';
 import BootstrapVue from 'bootstrap-vue';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Vuesax from 'vuesax';
 import 'vuesax/dist/vuesax.css';
 import 'material-icons/iconfont/material-icons.css';
@@ -17,7 +17,8 @@ import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 import {Modal} from 'bootstrap-vue/es/components';
 import VueUploadComponent from "vue-upload-component";
-import Vuelidate from 'vuelidate'
+import Vuelidate from 'vuelidate';
+import VueCharts from 'vue-chartjs';
 Vue.component('file-upload', VueUploadComponent);
 
 
@@ -33,6 +34,7 @@ Vue.use(vbclass, router);
 Vue.use(quillEditor);
 Vue.use(Modal);
 Vue.use(Vuelidate);
+Vue.use(VueCharts);
 
 new Vue({
     router,
