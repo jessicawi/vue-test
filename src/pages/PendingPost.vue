@@ -175,7 +175,7 @@
                                 console.log("clicked row data: ", row);
 
                                 // call approve post api
-                                const response = await DataSource.shared.approvePostapprovePost(row.PostApproverID, "Approved");
+                                const response = await DataSource.shared.approvePost(row.PostApproverID, "Approved");
                                 console.log('approve response: ', response);
 
                                 // update pending post view on success
@@ -364,4 +364,8 @@
         line-height: 30px;
         margin-right: 10px;
     }
+    .action-list button:focus {
+        color: #67c23a;
+    }
+
 </style>

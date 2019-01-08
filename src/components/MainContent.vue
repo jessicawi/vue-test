@@ -92,4 +92,32 @@
         margin: 20px 20px 0px !important;
         padding: 10px;
     }
+
+    .form-group__message, .error {
+        display: none;
+    }
+
+    .form-group--error + .form-group__message, .form-group--error + .error {
+        display: block;
+    }
+
+    ::-webkit-scrollbar-track
+    {
+        /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+        /*border-radius: 10px;*/
+        background-color: #413f56 ;
+    }
+
+    ::-webkit-scrollbar
+    {
+        width: 12px;
+        background-color: #696688;
+    }
+
+    ::-webkit-scrollbar-thumb
+    {
+        border-radius: 10px;
+        /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
+        background-color: #323142;
+    }
 </style>

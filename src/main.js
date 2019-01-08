@@ -17,7 +17,7 @@ import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 import {Modal} from 'bootstrap-vue/es/components';
 import VueUploadComponent from "vue-upload-component";
-
+import Vuelidate from 'vuelidate'
 Vue.component('file-upload', VueUploadComponent);
 
 
@@ -32,6 +32,7 @@ Vue.use(Vuesax);
 Vue.use(vbclass, router);
 Vue.use(quillEditor);
 Vue.use(Modal);
+Vue.use(Vuelidate);
 
 new Vue({
     router,

@@ -10,11 +10,13 @@
                     </div>
                 </div>
                 <div class="success">{{success}}</div>
+                <div v-if="isLoading">Loading...</div>
+
                 <div class="" v-for="object in list" :key="object.PostID">
                     <div class="feed-box">
                         <div class="author">
                             <div class="profile"><img src="../assets/boy.png"/></div>
-                            <span>{{object.PostCreatedBy}}</span>
+                            <span>{{object.PostCreatedBy}}____{{object.PostID}}</span>
                         </div>
                         <div class="content">
                             <div class="content-icon">
@@ -24,6 +26,13 @@
                                 <strong class="feed-subtitle"> ADD A NOTE</strong>
                                 {{object.PostContent}}
                             </p>
+                            <div class="postFile" v-if="object.postFiles">
+                                <div class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
+                                    <img :src="postFile.PostItemPath"
+                                         :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>
+                                    {{postFile.PostItemCreatedDate}}
+                                </div>
+                            </div>
                         </div>
                         <small class="date">{{object.PostCreatedDate}}</small>
                         <!--<div slot="footer">-->
@@ -44,20 +53,22 @@
         <b-modal id="modal1" hide-footer title="ADD NOTE" v-model="isModalOpen">
             <form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">
 
-                <div class="mb-3">
+                <div class="mb-3 form-group" :class="{ 'form-group--error': $v.content.$error }">
                     <!--<label for="username">Username</label>-->
                     <textarea type="text" class="form-control" id="postContent" v-model="postContent"
                               placeholder="CONTENT"
-                              required></textarea>
+                              required v-model.trim="$v.content.$model"></textarea>
                     <quill-editor ref="myTextEditor"
                                   v-model="content"
                                   :config="editorOption">
                     </quill-editor>
-                    <div class="invalid-feedback" style="width: 100%;">
-                        Your content is required.
-                    </div>
                 </div>
 
+                <div class="error" v-if="!$v.content.required">Field is required</div>
+                <div class="error" v-if="!$v.content.minLength">Name must have at least
+                    {{$v.content.$params.minLength.min}} letters.
+                </div>
+                <tree-view :data="$v.content" :options="{rootObjectKey: '$v.content', maxDepth: 2}"></tree-view>
 
                 <div class="mb-2">
                     <input type="checkbox" name="profolio" id="profolio" value="1" true-value="Yes" false-value="No"
@@ -138,6 +149,7 @@
     // import vue2Dropzone from 'vue2-dropzone';
     // import 'vue2-dropzone/dist/vue2Dropzone.min.css';
     // import '@websanova/vue-upload';
+    import {required, minLength} from 'vuelidate/lib/validators';
 
     export default {
         name: 'staffPost',
@@ -159,13 +171,14 @@
                 tagClassID: "",
                 tagLevelID: "",
                 // files: [],
-                content: '<h2>Example</h2>',
+                content: '',
                 editorOption: {},
                 selectedFile: null,
                 success: null,
                 dropzoneOptions: {
                     url: 'http://local.emsv2/controller/Upload_File.asmx/uploadFile',
-                }
+                },
+                isLoading: true,
             };
         },
         components: {
@@ -176,40 +189,35 @@
         async mounted() {
             // this.showSession()
             // user menu
-            this.staffPostResults = response;
-            let response = await DataSource.shared.getStaffPost();
-
-            let postArray = [];
-            response.Table.forEach(async d => {
-                console.log(d, ' dd');
-                const fileRes = await DataSource.shared.postFile(d.PostID);
-                console.log(fileRes);
-                // postArray.push(fileRes);
-            });
-
-            // const fileResponse = await DataSource.shared.postFile(response.postID);
-            // console.log(fileResponse);
-
-            // console.log(postArray)
-
-            this.list = response.Table;
-            console.log(response);
-            if (response) {
-                switch (response.code) {
-                    case "2":
-                        this.staffPostResults = `No Record Found`;
-                        //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
-                        break;
-                    case "88":
-                        this.staffPostResults = `Please login`;
-                        //this.results = `Invalid password - sample 2: code: ${response.code}`;
-                        break;
-                    case "99":
-                        this.staffPostResults = `Please try again later`;
-                        //this.results = `Please fill in all field - sample 3: code: ${response.code}`;
-                        break;
+            try {
+                let response = await DataSource.shared.getStaffPost();
+                for (let item of response.Table) {
+                    const fileRes = await DataSource.shared.getPostFile(item.PostID);
+                    if (fileRes.Table) {
+                        item.postFiles = fileRes.Table;
+                    }
                 }
+                this.list = response.Table;
+            } catch (e) {
+                console.log(e, '  errrr');
             }
+            this.isLoading = false;
+            // if (response) {
+            //     switch (response.code) {
+            //         case "2":
+            //             this.staffPostResults = `No Record Found`;
+            //             //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
+            //             break;
+            //         case "88":
+            //             this.staffPostResults = `Please login`;
+            //             //this.results = `Invalid password - sample 2: code: ${response.code}`;
+            //             break;
+            //         case "99":
+            //             this.staffPostResults = `Please try again later`;
+            //             //this.results = `Please fill in all field - sample 3: code: ${response.code}`;
+            //             break;
+            //     }
+            // }
         },
 
         methods: {
@@ -271,6 +279,12 @@
 
             },
 
+        },
+        validations: {
+            content: {
+                required,
+                minLength: minLength(4)
+            }
         }
     };
 </script>
@@ -476,9 +490,9 @@
         display: none;
         padding: 0px;
     }
+
 </style>
 
 <style>
-
 
 </style>

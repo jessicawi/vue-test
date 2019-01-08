@@ -312,7 +312,7 @@ export default class DataSource {
         return response;
     }
 
-    async postFile(postID) {
+    async getPostFile(postID) {
         console.log(postID, ' poss');
         const data = {
             postID: postID

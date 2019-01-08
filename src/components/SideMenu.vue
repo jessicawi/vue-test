@@ -7,18 +7,20 @@
                 <img src="../assets/kagami.jpg"/>
             </div>
 
-            <div class="menu-wrap" v-for="item in primaryMenuFiltered" :key=item.MENid>
-
+            <div class="menu-wrap" v-for="item in primaryMenuFiltered" :key=item.MENid
+                 :class="{'menu-wrap-active':currentParentMenuId===item.MENid}">
                 <!-- if menu has submenu, click will open submenu -->
                 <div v-if="item.subMenus">
-                    <div class="parent-menu has-sub-menu" @click="handleParentMenuClick(item.MENname)" :class="{'menu-active':currentMenu===item.MENname}">
+                    <div class="parent-menu has-sub-menu"
+                         @click="handleParentMenuClick(item.MENid)">
                         <i :class="item.MENicon"></i>{{item.MENname}} <i class="material-icons">keyboard_arrow_down</i>
                     </div>
-                    <div class="sub-menu" v-if="item.subMenus" :class="{'menu-active':currentMenu===item.MENname}">
-                        <div v-for="submenu in item.subMenus">
-                            <router-link :to="submenu.MENnewurl">
+
+                    <div class="sub-menu" v-if="item.subMenus">
+                        <div v-for="submenu in item.subMenus" :class="{'submenu-active':currentMenu===submenu.MENid}">
+                            <a :href="submenu.MENnewurl">
                                 <i :class="submenu.MENicon"></i> {{submenu.MENname}}
-                            </router-link>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -48,11 +50,14 @@
         name: 'sideMenu',
         data() {
             return {
+                pathName: null,
                 primaryMenu: [],
                 nonPrimaryTable: [],
                 primaryMenuFiltered: [],
                 active: false,
                 currentMenu: null,
+                currentParentMenuId: null,
+                currentParentMenuId2: null
             };
         },
         async mounted() {
@@ -73,6 +78,14 @@
 
                 this.nonPrimaryTable = response.NonPrimaryTable.Table;
                 this.nonPrimaryTable.map(d => {
+
+                    // set current active menu based on URL pathname
+                    if (d.MENnewurl === window.location.pathname) {
+                        this.currentMenu = d.MENid;
+                        this.currentParentMenuId = d.MGPMENparentid;
+                        this.currentParentMenuId2 = d.MGPMENparentid_2;
+                    }
+
                     if (d.MENnewurl != null && d.MENnewurl != "") {
                         //return null;
 
@@ -105,14 +118,14 @@
             }
         },
         methods: {
-            handleParentMenuClick(menuName) {
+            handleParentMenuClick(menuId) {
                 // if clicked menu already open, then make it close
-                if (this.currentMenu === menuName) {
-                    this.currentMenu = null;
+                if (this.currentParentMenuId === menuId) {
+                    this.currentParentMenuId = null;
                 }
                 // open clicked menu
                 else {
-                    this.currentMenu = menuName;
+                    this.currentParentMenuId = menuId;
                 }
             }
         }
@@ -143,7 +156,7 @@
         opacity: 0;
     }
 
-    .menu-active {
+    .menu-wrap-active .sub-menu {
         height: auto;
         visibility: visible;
         opacity: 1;
@@ -152,7 +165,10 @@
     .vs-sidebar--items {
         overflow-y: initial;
     }
-    .parent-menu i {width: 29px;}
+
+    .parent-menu i {
+        width: 29px;
+    }
 
     .sub-menu a {
         color: #9796a9;
@@ -169,6 +185,7 @@
     .sub-menu a:hover {
         color: white;
     }
+
     .parent-menu i.material-icons {
         font-size: 26px;
         float: right;
@@ -176,9 +193,13 @@
         top: -3px;
     }
 
-    .parent-menu.menu-active {
+    .menu-wrap-active .parent-menu, .parent-menu.menu-active {
         background: #eb4958;
         color: white;
+    }
+
+    .submenu-active a{
+        color: red;
     }
 
 </style>
@@ -191,12 +212,13 @@
         width: 260px;
         height: 100vh;
         background: #413f56;
-        overflow-y:auto;
+        overflow-y: auto;
     }
 
     #parentx-static .vs-sidebar.vs-sidebar-parent {
         height: 100vh !important;
     }
+
     .vs-sidebar--items {
         height: 100vh !important;
     }

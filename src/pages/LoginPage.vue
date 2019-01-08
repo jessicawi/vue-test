@@ -15,7 +15,7 @@
                     <div class="login-header mb-5 row">
                         <div class="col-md-10">
                             <h4 class="mb-3 text-muted">Login</h4>
-                            <span>Don't have an account? <a href="">Find out how</a> </span>
+                            <span>Don't have an account? <a href="/register/parent">Find out how</a> </span>
                         </div>
                         <div class="col-md-2 pl-0 pr-0">
                             <img src="../assets/kagami.jpg"/>
@@ -53,36 +53,36 @@
                                         :disabled="isLoading===true">
                                     Login
                                 </button>
-                                <small><a href="">Forgot password</a></small>
+                                <small><a href="/reset-password">Forgot password</a></small>
                             </div>
                         </div>
                     </form>
-                    <div class="social-wrap row">
-                        <div class="col-md-6 pr-2">
-                            <a class="social-item facebook">
-                                <i class="fa fa-facebook" aria-hidden="true"></i>
-                                <span>Connect with Facebook</span>
-                            </a>
-                        </div>
-                        <div class="col-md-6 pl-2">
-                            <a class="social-item twitter">
-                                <i class="fa fa-twitter" aria-hidden="true"></i>
-                                <span>Connect with Twitter</span>
-                            </a>
-                        </div>
-                        <div class="col-md-6 pr-2">
-                            <a class="social-item linkedin">
-                                <i class="fa fa-linkedin" aria-hidden="true"></i>
-                                <span>Connect with Linkedin</span>
-                            </a>
-                        </div>
-                        <div class="col-md-6 pl-2">
-                            <a class="social-item google">
-                                <i class="fa fa-google-plus" aria-hidden="true"></i>
-                                <span>Connect with Google +</span>
-                            </a>
-                        </div>
-                    </div>
+                    <!--<div class="social-wrap row">-->
+                        <!--<div class="col-md-6 pr-2">-->
+                            <!--<a class="social-item facebook">-->
+                                <!--<i class="fa fa-facebook" aria-hidden="true"></i>-->
+                                <!--<span>Connect with Facebook</span>-->
+                            <!--</a>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-6 pl-2">-->
+                            <!--<a class="social-item twitter">-->
+                                <!--<i class="fa fa-twitter" aria-hidden="true"></i>-->
+                                <!--<span>Connect with Twitter</span>-->
+                            <!--</a>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-6 pr-2">-->
+                            <!--<a class="social-item linkedin">-->
+                                <!--<i class="fa fa-linkedin" aria-hidden="true"></i>-->
+                                <!--<span>Connect with Linkedin</span>-->
+                            <!--</a>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-6 pl-2">-->
+                            <!--<a class="social-item google">-->
+                                <!--<i class="fa fa-google-plus" aria-hidden="true"></i>-->
+                                <!--<span>Connect with Google +</span>-->
+                            <!--</a>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
             </div>
         </div>
