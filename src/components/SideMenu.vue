@@ -4,7 +4,7 @@
                     icon-pack="fa">
 
             <div class="header-sidebar" slot="header">
-                <img src="../assets/kagami.jpg"/>
+                <a href="/"><img src="../assets/kagami.jpg"/></a>
             </div>
 
             <div class="menu-wrap" v-for="item in primaryMenuFiltered" :key=item.MENid

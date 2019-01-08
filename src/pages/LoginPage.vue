@@ -53,7 +53,7 @@
                                         :disabled="isLoading===true">
                                     Login
                                 </button>
-                                <small><a href="/reset-password">Forgot password</a></small>
+                                <small><a href="/reset-email">Forgot password</a></small>
                             </div>
                         </div>
                     </form>
@@ -310,13 +310,6 @@
 
     a.social-item:hover {
         background: #404040 !important;
-    }
-
-    .system-msg p {
-        background: #dbdbdb;
-        margin: 10px 0px 0px;
-        border-radius: 3px;
-        line-height: 50px;
     }
 
     .login-box {

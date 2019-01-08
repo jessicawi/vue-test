@@ -144,6 +144,24 @@ export default class DataSource {
 
     }
 
+    async resetEmailPassword(userEmail){
+        const data = {
+            userEmail: userEmail
+        };
+        const response = await this.callWebService("/controller/Login.asmx/resetPasswordEmail", data, "POST", false);
+        return response;
+    }
+
+    async resetPassword(userEmail, userPassword, otp){
+        const data = {
+            userEmail: userEmail,
+            userPassword: userPassword,
+            otp: otp
+        };
+        const response = await this.callWebService("/controller/Login.asmx/resetPassword", data, "POST", false);
+        return response;
+    }
+
     async parentRegister(userEmail, userPassword, studentIDNo, studentID_Index, studentDOB, studentIDType) {
         const data = {
             userEmail: userEmail,
@@ -191,6 +209,23 @@ export default class DataSource {
         return response;
     }
 
+    async updateStudent(studentID, jsonString) {
+        const data = {
+            studentID: studentID,
+            jsonString: jsonString,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/updateStudent", data, "POST");
+        return response;
+    }
+
+    async activeStudent(studentID) {
+        const data = {
+            studentID: studentID,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/activeStudent", data, "POST");
+        return response;
+    }
+
     async getParentList(familyId, parentLastName, parentFirstName) {
         const data = {
             familyID: familyId,
@@ -200,6 +235,81 @@ export default class DataSource {
             // UserSchool_Session: sessionStorage.getItem('schoolSession'),
         };
         const response = await this.callWebService("/controller/Parents.asmx/getParentList", data, "POST");
+        return response;
+    }
+
+    async getParent(parentID, familyID) {
+        const data = {
+            parentID: parentID,
+            familyID: familyID,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/getParent", data, "POST");
+        return response;
+    }
+
+    async getRelationship(familyID, studentID, parentFirstName, parentLastName, studentName) {
+        const data = {
+            familyID: familyID,
+            studentID: studentID,
+            parentFirstName: parentFirstName,
+            parentLastName: parentLastName,
+            studentName: studentName,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/getRelationship", data, "POST");
+        return response;
+    }
+
+    async updateRelationship(familyID, studentID) {
+        const data = {
+            familyID: familyID,
+            studentID: studentID,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/updateRelationship", data, "POST");
+        return response;
+    }
+
+    async getStudentLevel(studentID) {
+        const data = {
+            studentID: studentID,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getStudentLevel", data, "POST");
+        return response;
+    }
+
+    async getEditClass(semID, subjectcourseID) {
+        const data = {
+            semID: semID,
+            subjectcourseID: subjectcourseID,
+        };
+        const response = await this.callWebService("/controller/Course.asmx/getEditClass", data, "POST");
+        return response;
+    }
+
+    async getStudentClass(studentID, courseID) {
+        const data = {
+            studentID: studentID,
+            courseID: courseID,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getStudentClass", data, "POST");
+        return response;
+    }
+
+    async updateLevel(studentID, studentCourseID, actionMode) {
+        const data = {
+            studentID: studentID,
+            studentCourseID: studentCourseID,
+            actionMode: actionMode,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/updateLevel", data, "POST");
+        return response;
+    }
+
+    async getSibling(studentID_Index, studentID) {
+        const data = {
+            studentID_Index: studentID_Index,
+            studentID: studentID,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getSibling", data, "POST");
         return response;
     }
 
@@ -221,6 +331,15 @@ export default class DataSource {
         return response;
     }
 
+    async updateParent(parentID, jsonString) {
+        const data = {
+            parentID: parentID,
+            jsonString: jsonString,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/updateParent", data, "POST");
+        return response;
+    }
+
     async getAcademicYearDateRange(academicYearID) {
         const data = {
             academicYearID: academicYearID,
@@ -239,6 +358,16 @@ export default class DataSource {
             intakeYear: intakeYear,
         };
         const response = await this.callWebService("/controller/Students.asmx/setLevel", data, "POST");
+        return response;
+    }
+
+    async checkParentDuplication(firstName, lastName, checkMode) {
+        const data = {
+            firstName: firstName,
+            lastName: lastName,
+            checkMode: checkMode,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/checkParentDuplication", data, "POST");
         return response;
     }
 

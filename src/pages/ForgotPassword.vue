@@ -177,13 +177,6 @@
         border-color: #999;
     }
 
-    .system-msg p {
-        background: #dbdbdb;
-        margin: 10px 0px 0px;
-        border-radius: 3px;
-        line-height: 50px;
-    }
-
     .login-box {
         display: flex;
         height: 100%;

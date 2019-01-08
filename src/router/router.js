@@ -4,9 +4,15 @@ import loginPage from "../pages/LoginPage";
 import homePage from "../pages/HomePage";
 import countryListPage from "../pages/CountryListPage";
 import forgotPassword from "../pages/ForgotPassword";
+import resetEmail from "../pages/ResetEmail";
 import resetPassword from "../pages/ResetPassword";
-import studentList from "../pages/Student";
+import studentList from "../pages/StudentList";
+import student from "../pages/Student";
+import studentEditLevel from "../pages/StudentEditLevel";
+import studentEditClass from "../pages/StudentEditClass";
 import parentList from "../pages/ParentList";
+import parent from "../pages/Parent";
+import manageRelationship from "../pages/ManageRelationship";
 import staffPost from "../pages/StaffPost";
 import parentPost from "../pages/ParentPost";
 import savePost from "../pages/savePost";
@@ -41,20 +47,51 @@ const router = new VueRouter({
             component: forgotPassword
         },
         {
+            path: '/reset-email',
+            name: 'resetEmail',
+            component: resetEmail,
+            meta: { bodyClass: 'resetEmail' }
+        },
+        {
             path: '/reset-password',
             name: 'ResetPassword',
             component: resetPassword,
             meta: { bodyClass: 'resetPassword' }
         },
         {
-            path: '/student',
+            path: '/student-list',
             name: 'Student List',
             component: studentList
         },
         {
-            path: '/parent',
+            path: '/student',
+            name: 'Student',
+            component: student
+        },
+        {
+            path: '/student-edit-level',
+            name: 'Student Edit Level',
+            component: studentEditLevel
+        },
+        {
+            path: '/student-edit-class',
+            name: 'Student Edit Class',
+            component: studentEditClass
+        },
+        {
+            path: '/parent-list',
             name: 'Parent List',
             component: parentList
+        },
+        {
+            path: '/parent',
+            name: 'Parent',
+            component: parent
+        },
+        {
+            path: '/manage-relationship',
+            name: 'Manage Relationship',
+            component: manageRelationship
         },
         {
             path: '/register/parent',

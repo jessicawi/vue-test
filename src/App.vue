@@ -40,7 +40,7 @@
         },
         mounted() {
             const isLogin = sessionStorage.getItem('authToken');
-            if (this.$route.path !== "/login" && this.$route.path !== "/register/parent" && this.$route.path !== "/reset-password"  && (!isLogin || isLogin === "null")) {
+            if (this.$route.path !== "/login" && this.$route.path !== "/register/parent" && this.$route.path !== "/reset-password" && this.$route.path !== "/reset-email"  && (!isLogin || isLogin === "null")) {
                 this.$router.push('/login')
             }else if (isLogin) {
                 this.isLoggedIn = true;

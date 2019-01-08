@@ -3,17 +3,14 @@
         <div class="backstretch">
             <img src="../assets/bg.jpg"/>
         </div>
-        <!--<div class="pb-5">-->
-        <!--<h2>Login Test</h2>-->
-        <!--<p class="lead">Fill in the form and submit to get the response from the server.</p>-->
-        <!--</div>-->
 
         <div class="row login-box">
             <div class="resetlink-wrap">
-                <div class="col-md-12 mb-6 login-form col-sm-12"  v-if="step===1">
+                <div class="col-md-12 mb-6 login-form col-sm-12">
                     <div class="login-header mb-5 row">
                         <div class="col-md-10">
-                            <h4 class="mb-3 text-muted">Reset Password</h4>
+                            <h4 class="mb-3 text-muted">Reset Password</h4><br/>
+                            <span>Your password needs to have at least one symbol or number, <br/>and have at least 8 characters.</span>
                         </div>
                         <div class="col-md-2 pl-0 pr-0">
                             <img src="../assets/kagami.jpg"/>
@@ -22,65 +19,48 @@
                     <div class="reset-content">
                         <form class="needs-validation" novalidate @submit.prevent="onSubmit">
 
-                            <div class="mb-3">
-                                <input type="password" class="form-control" id="password" v-model="currentPassword"
-                                       placeholder="Current Password"
-                                       required>
-                                <div class="invalid-feedback" style="width: 100%;">
-                                    Your password is invalid.
-                                </div>
+                            <div class="mb-3 form-group" :class="{ 'form-group--error': $v.userEmail.$error }">
+                                <input type="email" class="form-control" id="userEmail" v-model="userEmail"
+                                       placeholder="Email Address"
+                                       v-model.trim="$v.userEmail.$model">
                             </div>
-                            <div class="mb-3">
-                                <input type="password" class="form-control" id="password" v-model="newPassword"
+                            <div class="error" v-if="!$v.userEmail.required">Email is required</div>
+                            <div class="error" v-if="!$v.userEmail.email">Enter a valid email</div>
+
+                            <div class="mb-3 form-group" :class="{ 'form-group--error': $v.userPassword.$error }">
+                                <input type="password" class="form-control" id="userPassword" v-model="userPassword"
                                        placeholder="New Password"
-                                       required>
-                                <div class="invalid-feedback" style="width: 100%;">
-                                    Passwords must contain: a minimum of 1 lower case letter, a minimum of 1 upper case letter, a minimum of 1 numeric character and a minimum of 1 special character
-                                </div>
+                                       v-model.trim="$v.userPassword.$model">
                             </div>
-                            <div class="mb-3">
-                                <input type="password" class="form-control" id="password" v-model="confirmNewPassword"
-                                       placeholder="Confirm New Password"
-                                       required>
-                                <div class="invalid-feedback" style="width: 100%;">
-                                    Your password and confirmation password do not match
-                                </div>
+                            <div class="error" v-if="!$v.userPassword.required">Password is required</div>
+                            <div class="error" v-if="!$v.userPassword.minLength">Password must have at least 6 letters.</div>
+
+
+                            <div class="mb-3 form-group" :class="{ 'form-group--error': $v.otp.$error }">
+                                <input type="text" class="form-control" id="otp" v-model="otp"
+                                       placeholder="OTP"
+                                       v-model.trim="$v.otp.$model">
                             </div>
+                            <div class="error" v-if="!$v.otp.required">OTP is required</div>
+
                             <div class="system-msg"><p>{{results}}</p></div>
                             <div class="row d-flex mt-3 mb-5">
                                 <div class="col-md-12">
-                                    <button class="btn btn-primary btn-lg btn-block login-btn" type="submit"
-                                            v-on:click="stepChange(2)">Update Password
+                                    <button class="btn btn-primary btn-lg btn-block login-btn" type="submit" v-show="isLoading===false">
+                                        Submit
                                     </button>
+                                    <div class="loading" v-if="isLoading===true">
+                                        <div class="load-3">
+                                            <div class="line"></div>
+                                            <div class="line"></div>
+                                            <div class="line"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <!--<transition name="slide-fade">-->
-                    <!--<div class="reset-content-2"  v-if="step===2">-->
-                    <!--<span style="margin-bottom: 10px;display: block;">Reset link has send to your registered email ID</span>-->
-
-                    <!--<button class="btn btn-primary btn-lg btn-block login-btn" type="submit">Done</button>-->
-                    <!--</div>-->
-                    <!--</transition>-->
                 </div>
-                <transition  name="flip" mode="out-in">
-                    <div class="col-md-12 mb-6 login-form col-sm-12"  v-if="step===2">
-                        <div class="login-header mb-5 row">
-                            <div class="col-md-10">
-                                <h4 class="mb-3 text-muted">Password Reset</h4>
-                            </div>
-                            <div class="col-md-2 pl-0 pr-0">
-                                <img src="../assets/kagami.jpg"/>
-                            </div>
-                        </div>
-                        <div class="reset-content-2">
-                            <span style="margin-bottom: 10px;display: block;">Your password has been reset successfully</span>
-
-                            <router-link :to="{ name: 'Home' }"><button class="btn btn-primary btn-lg btn-block login-btn" >Continue to Dashboard</button></router-link>
-                        </div>
-                    </div>
-                </transition>
             </div>
         </div>
     </div>
@@ -88,17 +68,67 @@
 
 <script>
 
+    import DataSource from "../data/datasource";
+    import { required, minLength, email } from 'vuelidate/lib/validators'
+
     export default {
-        name: 'Step',
+        name: 'ResetPassword',
         data() {
             return {
-                step: 1,
+                results: "",
+                userEmail: "",
+                userPassword: "",
+                otp: "",
+                isLoading: false,
             };
         },
-        methods: {
-            stepChange: function (step) {
-                this.step = step;
+        validations: {
+            userEmail: {
+                required,
+                email
+            },
+            userPassword: {
+                required,
+                minLength: minLength(6)
+            },
+            otp: {
+                required
             }
+        },
+        methods: {
+            async onSubmit() {
+                //this.results = "<< Requesting.. >>";
+                try {
+                    this.isLoading = true;
+                    const response = await DataSource.shared.resetPassword(this.userEmail, this.userPassword, this.otp);
+                    this.isLoading = false;
+                    console.log(response);
+                    if (response) {
+                        switch (response.code) {
+                            case "1":
+                                window.location.replace("/login");
+                                this.results = `Password Reset`;
+                                //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
+                                break;
+                            case "2":
+                                this.results = `Invalid OTP`;
+                                //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
+                                break;
+                            case "3":
+                                this.results = `OTP Expired`;
+                                //this.results = `Invalid password - sample 2: code: ${response.code}`;
+                                break;
+                            case "99":
+                                this.results = `Please Try Again`;
+                                //this.results = `Please fill in all field - sample 3: code: ${response.code}`;
+                                break;
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                    this.isLoading = false;
+                }
+            },
         }
 
 
@@ -191,13 +221,6 @@
         border-color: #999;
     }
 
-    .system-msg p {
-        background: #dbdbdb;
-        margin: 10px 0px 0px;
-        border-radius: 3px;
-        line-height: 50px;
-    }
-
     .login-box {
         display: flex;
         height: 100%;
@@ -221,6 +244,7 @@
         transform: scaleY(0) translateZ(0);
         opacity: 0;
     }
+
     div#resetPassword {
         margin-left: -260px;
     }
@@ -245,7 +269,7 @@
 </style>
 
 <style>
-    .resetPassword header{
+    .resetPassword header {
         display: none;
     }
 </style>
