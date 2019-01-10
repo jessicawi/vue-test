@@ -24,7 +24,7 @@ import getApproverMaster from "../pages/Approver";
 import saveApproverMaster from "../pages/saveApprover";
 import updateApproverMaster from "../pages/updateApprover";
 import testPage from "../pages/test";
-
+import  userList from "../pages/userList";
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -149,6 +149,11 @@ const router = new VueRouter({
             path: '/test-page',
             name: 'Test',
             component: testPage
+        },
+        {
+            path: '/user-list',
+            name: 'userList',
+            component: userList
         }
     ]
 });

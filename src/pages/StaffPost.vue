@@ -1,8 +1,8 @@
 <template>
-    <div id="staff-post" class="mt-3 container">
+    <div id="staff-post" class="container">
         <div class="row">
             <!--<b>result:</b> {{staffPostResults}}-->
-            <div class="col-md-8">
+            <div class="col-md-8 mt-4">
                 <div class="feed-header">
                     <h4 class="text-left">Activity</h4>
                     <div class="addPost">
@@ -13,28 +13,43 @@
                 <div v-if="isLoading">Loading...</div>
 
                 <div class="" v-for="object in list" :key="object.PostID">
-                    <div class="feed-box">
+                    <div class="feed-box" v-bind:class="[object.PostID]">
                         <div class="author">
                             <div class="profile"><img src="../assets/boy.png"/></div>
-                            <span>{{object.PostCreatedBy}}____{{object.PostID}}</span>
+                            <div class="feed-heading">
+                                <span>{{object.PostCreatedBy}}</span>
+                                <small class="date"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                                    {{object.PostCreatedDate}}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="image-wrapper" v-if="object.postFiles">
+                            <ul>
+                                <li class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
+                                    <img :src="postFile.PostItemPath"
+                                         :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"  v-if="checkIfImage(postFile.PostItemPath)"/>
+                                </li>
+                            </ul>
                         </div>
                         <div class="content">
-                            <div class="content-icon">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </div>
                             <p>
-                                <strong class="feed-subtitle"> ADD A NOTE</strong>
+                                <!--<strong class="feed-subtitle"> ADD A NOTE</strong>-->
                                 {{object.PostContent}}
                             </p>
-                            <div class="postFile" v-if="object.postFiles">
-                                <div class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
-                                    <img :src="postFile.PostItemPath"
-                                         :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>
-                                    {{postFile.PostItemCreatedDate}}
-                                </div>
+                        </div>
+                        <div class="postFile" v-if="object.postFiles">
+                            <div class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
+                                <!--<img :src="postFile.PostItemPath" :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>-->
+
+
+                                <a v-if="!checkIfImage(postFile.PostItemPath)" v-bind:href="[postFile.PostItemPath]"
+                                   :class="{'post-disabled':postFile.PostItemStatus !=='Active'}">
+                                    <i class="fa fa-file" aria-hidden="true"></i>
+                                    {{postFile.PostItemPostID}}
+                                </a>
+                                <!--{{postFile.PostItemCreatedDate}}-->
                             </div>
                         </div>
-                        <small class="date">{{object.PostCreatedDate}}</small>
                         <!--<div slot="footer">-->
                         <!--<vs-row vs-justify="flex-end">-->
                         <!--<vs-button color="primary" type="gradient" >View</vs-button>-->
@@ -45,8 +60,40 @@
                 </div>
 
             </div>
-            <vs-col vs-justify="center" vs-w="4">
-                profile here
+            <vs-col vs-justify="center" vs-w="4" class="right-sideBar">
+                <div class="dashboard-title mt-4 mb-3"><h5 class="text-center">Announcement</h5></div>
+                <div class="announcement__wrapper">
+                    <div class="announcement__item">
+                        <div class="subtitle">
+                            <h6>Holidays</h6>
+                        </div>
+                        <div class="desc">
+                            we offer academic, social and personal success for every student. Through opportunities to
+                            learn from the best, experiences beyond the ordinary, and the encouragement to achieve more
+                            than what they thought possible.
+                        </div>
+                    </div>
+                    <div class="announcement__item">
+                        <div class="subtitle">
+                            <h6>Holidays</h6>
+                        </div>
+                        <div class="desc">
+                            we offer academic, social and personal success for every student. Through opportunities to
+                            learn from the best, experiences beyond the ordinary, and the encouragement to achieve more
+                            than what they thought possible.
+                        </div>
+                    </div>
+                    <div class="announcement__item">
+                        <div class="subtitle">
+                            <h6>Holidays</h6>
+                        </div>
+                        <div class="desc">
+                            we offer academic, social and personal success for every student. Through opportunities to
+                            learn from the best, experiences beyond the ordinary, and the encouragement to achieve more
+                            than what they thought possible.
+                        </div>
+                    </div>
+                </div>
             </vs-col>
         </div>
 
@@ -60,7 +107,10 @@
                               required v-model.trim="$v.content.$model"></textarea>
                     <quill-editor ref="myTextEditor"
                                   v-model="content"
-                                  :config="editorOption">
+                                  :options="editorOption"
+                                  @blur="onEditorBlur($event)"
+                                  @focus="onEditorFocus($event)"
+                                  @ready="onEditorReady($event)">
                     </quill-editor>
                 </div>
 
@@ -68,7 +118,6 @@
                 <div class="error" v-if="!$v.content.minLength">Name must have at least
                     {{$v.content.$params.minLength.min}} letters.
                 </div>
-                <tree-view :data="$v.content" :options="{rootObjectKey: '$v.content', maxDepth: 2}"></tree-view>
 
                 <div class="mb-2">
                     <input type="checkbox" name="profolio" id="profolio" value="1" true-value="Yes" false-value="No"
@@ -150,6 +199,7 @@
     // import 'vue2-dropzone/dist/vue2Dropzone.min.css';
     // import '@websanova/vue-upload';
     import {required, minLength} from 'vuelidate/lib/validators';
+    import isImage from "is-image";
 
     export default {
         name: 'staffPost',
@@ -172,13 +222,37 @@
                 tagLevelID: "",
                 // files: [],
                 content: '',
-                editorOption: {},
+                editorOption: {
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],
+                            ['blockquote', 'code-block'],
+                            [{ 'header': 1 }, { 'header': 2 }],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                            [{ 'script': 'sub' }, { 'script': 'super' }],
+                            [{ 'indent': '-1' }, { 'indent': '+1' }],
+                            [{ 'direction': 'rtl' }],
+                            [{ 'size': ['small', false, 'large', 'huge'] }],
+                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                            [{ 'font': [] }],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'align': [] }],
+                            ['clean'],
+                            ['link', 'image', 'video']
+                        ],
+                        syntax: {
+                            highlight: text => hljs.highlightAuto(text).value
+                        }
+                    }
+                },
                 selectedFile: null,
                 success: null,
                 dropzoneOptions: {
                     url: 'http://local.emsv2/controller/Upload_File.asmx/uploadFile',
                 },
                 isLoading: true,
+                saveResponse: "",
+                PostItemPath: "",
             };
         },
         components: {
@@ -196,8 +270,15 @@
                     if (fileRes.Table) {
                         item.postFiles = fileRes.Table;
                     }
+
+                    // get name
+                    // const author = await DataSource.shared.getPostFile(item.PostCreatedBy);
+                    // console.log(author);
+                    // item.authorName = ;
                 }
                 this.list = response.Table;
+                let saveResponse = await DataSource.shared.getPostDropdown();
+                console.log(saveResponse);
             } catch (e) {
                 console.log(e, '  errrr');
             }
@@ -221,6 +302,9 @@
         },
 
         methods: {
+            checkIfImage(file) {
+                return isImage(file);
+            },
             showModal() {
                 this.isModalOpen = true;
             },
@@ -278,6 +362,15 @@
                 }
 
             },
+            onEditorBlur(editor) {
+                console.log('editor blur!', editor)
+            },
+            onEditorFocus(editor) {
+                console.log('editor focus!', editor)
+            },
+            onEditorReady(editor) {
+                console.log('editor ready!', editor)
+            }
 
         },
         validations: {
@@ -285,7 +378,15 @@
                 required,
                 minLength: minLength(4)
             }
-        }
+        },
+        computed: {
+            editor() {
+                return this.$refs.myTextEditor.quill
+            },
+            contentCode() {
+                return hljs.highlightAuto(this.content).value
+            }
+        },
     };
 </script>
 
@@ -294,48 +395,113 @@
     .author {
         text-align: left;
         font-weight: bold;
-    }
-
-    .content {
-        padding: 10px 0px;
-        text-align: left;
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        margin: 0px 0px 10px 77px;
-        background: #ffffff;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
         padding: 20px;
-        border-radius: 4px;
-        border-bottom: 2px solid #efefef;
+    }
+
+    .feed-heading {
+        display: inline-block;
+        text-align: left;
+    }
+
+    .feed-box .content {
+        padding: 10px 0px;
+        text-align: left;
+        margin: 10px 0px 0px;
+        border-top: 1px solid #edf0f4;
+        border-left: 3px solid #f44353;
     }
 
     .feed-box {
-        padding: 20px 20px;
-        margin: 0px 0px 0px 20px;
+        margin: 20px 0px;
         position: relative;
+        background: white;
+        border-radius: 3px;
+        box-shadow: 0px 0px 10px -7px;
     }
 
-    .feed-box:before {
-        content: "";
-        width: 1px;
-        height: 92%;
-        background: #3333331c;
+    .postFile {
         display: block;
+        width: 100%;
+    }
+
+    .postFile__item a {
+        display: inline-block;
+        padding: 5px 20px 5px 46px;
+        /* background: #f5f9fc; */
+        border-radius: 20px;
+        margin: 10px;
+        float: left;
+        border: 1px solid #b7d3e8;
+        position: relative;
+        color: #8ca0af;
+        overflow: hidden;
+        font-weight: normal;
+    }
+
+    .postFile__item a i {
+        color: #b7d3e8;
+        background: #f5f9fc;
         position: absolute;
-        left: 26px;
-        top: 34px;
+        left: 0px;
+        height: 100%;
+        width: 32px;
+        top: 0px;
+        text-align: center;
+        border-right: 1px solid #b7d3e8;
+        line-height: 28px;
+    }
+
+    .postFile__item {
+        border-top: 1px solid #eee;
+        margin-bottom: -10px;
+        display: table;
+        width: 100%;
+    }
+
+    li.postFile__item img {
+        max-width: 100%;
+        display: initial;
+        object-fit: cover;
+    }
+
+    .image-wrapper li.postFile__item {
+        display: flex;
+        width: 21%;
+        height: 100px;
+        overflow: hidden;
+        margin: 0px 2%;
+    }
+
+    .image-wrapper li.postFile__item:first-child {
+        width: 96%;
+        height: 200px;
+    }
+
+    .image-wrapper li.postFile__item:empty{
+        display:none;
+    }
+
+    .image-wrapper ul {
+        padding: 0px;
+        margin: 0px;
     }
 
     .profile {
         width: 52px;
         position: relative;
-        left: -19px;
         display: inline-block;
+        margin-right: 20px;
     }
 
     .profile img {
         max-width: 100%;
-        background: #ccc;
+        background: #e6ecf7;
         border-radius: 100%;
     }
 
@@ -358,7 +524,6 @@
     }
 
     small.date {
-        text-align: right;
         display: block;
         color: #9a9a9a;
     }
@@ -449,27 +614,42 @@
     }
 
     .feed-header h4 {
-        float: left;
         margin-right: 20px;
-    }
-
-    .addPost {
+        display: inline-block;
         float: left;
+        line-height: 37px;
+        margin-bottom: 0px;
+        font-size: 18px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding-left: 10px;
+        color: #5a6a79;
     }
 
     .feed-header {
+        background: #f5f9fc;
+        padding: 10px;
+        border: 1px solid #d4e4f1;
         display: table;
+        width: 100%;
+    }
+
+    .addPost {
+        display: inline-block;
+        float: right;
     }
 
     .addPost button {
-        background: #413f56;
+        background: #3e445c;
         border: 0px;
-        color: #8f8bbd;
-        font-weight: bold;
-        border-radius: 21px;
+        color: #ffffff;
+        border-radius: 2px;
         position: relative;
-        top: -2px;
         font-size: 13px;
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        /* margin-top: 20px; */
     }
 
     strong.feed-subtitle {
@@ -482,14 +662,39 @@
     .success {
         text-align: left;
         padding: 10px;
-        background: #dedfe6;
-        border-radius: 20px;
+        background: linear-gradient(to right, #e644513b, #e6ecf7);
+        margin-top: 10px;
+        color: #3e445c;
     }
 
     .success:empty {
         display: none;
         padding: 0px;
     }
+
+    .right-sideBar {
+        padding: 0px 20px;
+    }
+
+    .announcement__item {
+        background: #f5f9fc;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: left;
+        border: 1px solid #d4e4f1;
+    }
+
+    .announcement__item img {
+        max-width: 80%;
+        margin: 20px 0px;
+        border-radius: 4px;
+    }
+
+    .announcement__item .subtitle h6 {
+        font-weight: bold;
+    }
+
+
 
 </style>
 

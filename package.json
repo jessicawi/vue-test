@@ -14,6 +14,7 @@
     "chart.js": "^2.7.3",
     "element-ui": "^2.4.11",
     "eslint-loader": "^2.1.1",
+    "is-image": "^2.0.0",
     "jquery": "^3.3.1",
     "material-icons": "^0.2.3",
     "object-path": "^0.11.4",

@@ -73,7 +73,7 @@
         async created() {
             this.lblStudentID = this.$route.query.id;
             await this.BindStudentInfo();
-            await this.BindStudentLevel();
+            //await this.BindStudentLevel();
             await this.BindAcademicYear();
             await this.BindStudentIntakeYear();
         },
@@ -147,9 +147,9 @@
                     this.results = e;
                 }
             },
-            async BindStudentLevel() {
+            async BindStudentLevel(customLevelNotEqual) {
                 try {
-                    const response = await DataSource.shared.getLevel();
+                    const response = await DataSource.shared.getLevel(customLevelNotEqual);
                     if (response) {
                         this.levelListResponse = response.Table;
                         this.levelListResponse.forEach(m => {
@@ -201,6 +201,24 @@
                         else
                         {
                             this.list = response.Table;
+
+                            //filter the added level to BindStudentLevel
+                            let customLevelNotEqual='';
+                            this.GetStudentLevelListResponse = response.Table;
+                            this.GetStudentLevelListResponse.forEach(m => {
+                                if (customLevelNotEqual == '')
+                                {
+                                    customLevelNotEqual = m.PK_Course_ID;
+                                }
+                                else
+                                {
+                                    customLevelNotEqual = customLevelNotEqual + "," + m.PK_Course_ID;
+                                }
+                            });
+
+                            this.BindStudentLevel(customLevelNotEqual);
+                            //filter the added level to BindStudentLevel
+
                         }
                     }
                 } catch (e) {
@@ -290,7 +308,7 @@
                     }
                     else
                     {
-
+                        alert('Please fill in all the information');
                     }
 
                 } catch (e) {

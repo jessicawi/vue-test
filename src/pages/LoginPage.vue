@@ -48,11 +48,16 @@
                         <div class="row d-flex mt-3 mb-5">
                             <div class="col-md-6"></div>
                             <div class="col-md-6">
-                                <button class="btn btn-primary btn-lg btn-block login-btn"
-                                        type="submit"
-                                        :disabled="isLoading===true">
+                                <button class="btn btn-primary btn-lg btn-block login-btn" type="submit" v-show="isLoading===false" :class="{ 'd-none': redirecting===true }">
                                     Login
                                 </button>
+                                <div class="loading mb-4" v-if="isLoading===true">
+                                    <div class="load-3">
+                                        <div class="line"></div>
+                                        <div class="line"></div>
+                                        <div class="line"></div>
+                                    </div>
+                                </div>
                                 <small><a href="/reset-email">Forgot password</a></small>
                             </div>
                         </div>
@@ -86,28 +91,6 @@
                 </div>
             </div>
         </div>
-        <!--<div class="col-md-12">-->
-        <!--<div class="row">-->
-        <!--<div class="col-xl-6">-->
-        <!--<h4 class="d-flex justify-content-between align-items-center mb-3">-->
-        <!--<span class="text-muted">Request</span>-->
-        <!--</h4>-->
-        <!--<div class="form-group">-->
-        <!--<textarea class="form-control text-request bg-white" rows="15" readonly-->
-        <!--v-model="request"></textarea>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-xl-6">-->
-        <!--<h4 class="d-flex justify-content-between align-items-center mb-3">-->
-        <!--<span class="text-muted">Response {{ status }}</span>-->
-        <!--</h4>-->
-        <!--<div class="form-group">-->
-        <!--<textarea class="form-control text-response bg-white" rows="15" readonly-->
-        <!--v-model="response"></textarea>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
     </div>
 </template>
 
@@ -127,7 +110,7 @@
                 try{
                     this.isLoading = true;
                     const response = await DataSource.shared.login(this.usernameInput, this.passwordInput);
-                    this.isLoading = false;
+                    this.redirecting = true;
                     console.log(response);
                     if (response) {
                         if (response.token) {
@@ -173,6 +156,7 @@
                 passwordInput: "",
                 results: "",
                 isLoading:false,
+                redirecting: ""
             };
         },
     };

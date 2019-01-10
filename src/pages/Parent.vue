@@ -11,8 +11,9 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>First Name</label>
-                            <input type="text" class="form-control" ref="inputFatherFirstName" >
+                            <label>* First Name</label>
+                            <input type="text" class="form-control" ref="inputFatherFirstName" v-model="inputFatherFirstName" :class="{ 'requiredFields': $v.inputFatherFirstName.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputFatherFirstName.$error">First Name Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -21,15 +22,17 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control" ref="inputFatherLastName">
+                            <label>* Last Name</label>
+                            <input type="text" class="form-control" ref="inputFatherLastName" v-model="inputFatherLastName" :class="{ 'requiredFields': $v.inputFatherLastName.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputFatherLastName.$error">Last Name Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Date of Birth</label>
+                            <label>* Date of Birth</label>
                             <div class="date">
-                                <el-date-picker v-model="inputFatherDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"></el-date-picker>
+                                <el-date-picker v-model="inputFatherDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date" :class="{ 'requiredFields': $v.inputFatherDateofBirth.$error }"></el-date-picker >
                             </div>
+                            <div class="requiredFieldsMsg" v-if="$v.inputFatherDateofBirth.$error">Date of Birth Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -213,8 +216,9 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>First Name</label>
-                            <input type="text" class="form-control" ref="inputMotherFirstName">
+                            <label>* First Name</label>
+                            <input type="text" class="form-control" ref="inputMotherFirstName" v-model="inputMotherFirstName" :class="{ 'requiredFields': $v.inputMotherFirstName.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputMotherFirstName.$error">First Name Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -223,15 +227,17 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control" ref="inputMotherLastName">
+                            <label>* Last Name</label>
+                            <input type="text" class="form-control" ref="inputMotherLastName" v-model="inputMotherLastName" :class="{ 'requiredFields': $v.inputMotherLastName.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputMotherLastName.$error">Last Name Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Date of Birth</label>
+                            <label>* Date of Birth</label>
                             <div class="date">
-                                <el-date-picker v-model="inputMotherDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"></el-date-picker>
+                                <el-date-picker v-model="inputMotherDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date" :class="{ 'requiredFields': $v.inputMotherDateofBirth.$error }"></el-date-picker>
                             </div>
+                            <div class="requiredFieldsMsg" v-if="$v.inputMotherDateofBirth.$error">Date of Birth Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -686,7 +692,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
-                    <button v-on:click="Save" type="button" class="btn btn-primary waves-effect waves-light m-r-10" >Save</button>
+                    <button v-on:click="Validation" type="button" class="btn btn-primary waves-effect waves-light m-r-10" >Save</button>
                 </div>
             </div>
         </div>
@@ -695,6 +701,7 @@
 
 <script>
     import DataSource from "../data/datasource";
+    import { required } from "vuelidate/lib/validators";
 
     export default {
         name: "Parent",
@@ -711,6 +718,10 @@
                 ddlMotherEmploymentStatusList: [],
                 ddlGuardianEmploymentStatusList: [],
 
+                inputFatherFirstName: '',
+                inputFatherLastName: '',
+                inputMotherFirstName: '',
+                inputMotherLastName: '',
                 inputFatherDateofBirth: '',
                 inputFatherIdentificationNoExpiryDate: '',
                 inputMotherDateofBirth: '',
@@ -728,6 +739,15 @@
 
                 lblParentID: '',
             };
+        },
+        validations: {
+            inputFatherFirstName: { required },
+            inputFatherLastName: { required },
+            inputFatherDateofBirth: { required },
+            inputMotherFirstName: { required },
+            inputMotherLastName: { required },
+            inputMotherDateofBirth: { required },
+
         },
         async created() {
             await this.BindCountryList();
@@ -1083,6 +1103,21 @@
                     this.results = e;
                 }
             },
+            async Validation(){
+                try {
+                    this.$v.$touch();
+
+                    if(this.$v.$error)
+                    {
+                        alert('Please fill in all * fields');
+                        return;
+                    }
+
+                    this.Save();
+                } catch (e) {
+                    this.results = e;
+                }
+            },
         },
     }
 </script>
@@ -1095,6 +1130,15 @@
     .el-date-editor, .el-input
     {
         width:100% !important;
+    }
+    .requiredFields
+    {
+        border-color: #f79483;
+    }
+    .requiredFieldsMsg
+    {
+        color: red;
+        font-weight: bold;
     }
 </style>
 

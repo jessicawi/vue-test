@@ -17,8 +17,9 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>First Name</label>
-                            <input type="text" class="form-control" v-model="inputStudentFirstName">
+                            <label>* First Name</label>
+                            <input type="text" class="form-control form__input" v-model="inputStudentFirstName" :class="{ 'requiredFields': $v.inputStudentFirstName.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentFirstName.$error">First Name Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -27,8 +28,9 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control"  v-model="inputStudentLastName">
+                            <label>* Last Name</label>
+                            <input type="text" class="form-control"  v-model="inputStudentLastName" :class="{ 'requiredFields': $v.inputStudentLastName.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentLastName.$error">Last Name Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -37,10 +39,11 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Nationality</label>
-                            <select v-model="ddlStudentNationality" class="form-control pro-edt-select form-control-primary">
+                            <label>* Nationality</label>
+                            <select v-model="ddlStudentNationality" class="form-control pro-edt-select form-control-primary" :class="{ 'requiredFields': $v.ddlStudentNationality.$error }">
                                 <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{ item.CNYname.trim() }}</option>
                             </select>
+                            <div class="requiredFieldsMsg" v-if="$v.ddlStudentNationality.$error">Nationality Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -52,10 +55,11 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Date of Birth</label>
+                            <label>* Date of Birth</label>
                             <div class="date">
-                                <el-date-picker v-model="inputStudentDateOfBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"></el-date-picker>
+                                <el-date-picker v-model="inputStudentDateOfBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date" :class="{ 'requiredFields': $v.inputStudentDateOfBirth.$error }"></el-date-picker>
                             </div>
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentDateOfBirth.$error">First Name Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -66,22 +70,25 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification Type</label>
-                            <select v-model="ddlStudentIdentificationType" class="form-control pro-edt-select form-control-primary">
+                            <label>* Identification Type</label>
+                            <select v-model="ddlStudentIdentificationType" class="form-control pro-edt-select form-control-primary" :class="{ 'requiredFields': $v.ddlStudentIdentificationType.$error }">
                                 <option v-for="item in ddlStudentIdentificationTypeList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
                             </select>
+                            <div class="requiredFieldsMsg" v-if="$v.ddlStudentIdentificationType.$error">FIdentification Type Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification No</label>
-                            <input type="text" class="form-control"  v-model="inputStudentIdentificationNo">
+                            <label>* Identification No</label>
+                            <input type="text" class="form-control"  v-model="inputStudentIdentificationNo" :class="{ 'requiredFields': $v.inputStudentIdentificationNo.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentIdentificationNo.$error">Identification No Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification Expiry Date</label>
+                            <label>* Identification Expiry Date</label>
                             <div class="date">
-                                <el-date-picker v-model="inputStudentIdentificationExpiryDate" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
+                                <el-date-picker v-model="inputStudentIdentificationExpiryDate" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a day" :class="{ 'requiredFields': $v.inputStudentIdentificationExpiryDate.$error }"></el-date-picker>
                             </div>
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentIdentificationExpiryDate.$error">First Name Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -140,24 +147,27 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Select Level</label>
-                            <select v-model="ddlStudentSelectLevel" class="form-control pro-edt-select form-control-primary">
+                            <label>* Select Level</label>
+                            <select v-model="ddlStudentSelectLevel" class="form-control pro-edt-select form-control-primary" :class="{ 'requiredFields': $v.ddlStudentSelectLevel.$error }">
                                 <option v-for="item in levelList" v-bind:value="item.PK_Course_ID.trim()">{{ item.CRS_Course_Name.trim() }}</option>
                             </select>
+                            <div class="requiredFieldsMsg" v-if="$v.ddlStudentSelectLevel.$error">Level Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>First Commencement Date</label>
+                            <label>* First Commencement Date</label>
                             <div class="date">
-                                <el-date-picker v-model="inputFirstCommencementDate" type="date" format="dd/MM/yyyy" value-format="dd/MM/yyyy" placeholder="Pick a day"></el-date-picker>
+                                <el-date-picker v-model="inputFirstCommencementDate" type="date" format="dd/MM/yyyy" value-format="dd/MM/yyyy" placeholder="Pick a day" :class="{ 'requiredFields': $v.inputFirstCommencementDate.$error }"></el-date-picker>
                             </div>
+                            <div class="requiredFieldsMsg" v-if="$v.inputFirstCommencementDate.$error">First Commencement Date Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>First Academic Year</label>
-                            <select v-model="ddlStudentFirstAcademicYear" class="form-control pro-edt-select form-control-primary">
+                            <label>* First Academic Year</label>
+                            <select v-model="ddlStudentFirstAcademicYear" class="form-control pro-edt-select form-control-primary" :class="{ 'requiredFields': $v.ddlStudentFirstAcademicYear.$error }">
                                 <option v-for="item in academicYearList" v-bind:value="item.PK_Semester_ID.trim()">{{ item.SMT_Code.trim() }}</option>
                             </select>
+                            <div class="requiredFieldsMsg" v-if="$v.ddlStudentFirstAcademicYear.$error">First Academic Year Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -168,10 +178,11 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Payer</label>
-                            <select v-model="ddlStudentPayer" class="form-control pro-edt-select form-control-primary">
+                            <label>* Payer</label>
+                            <select v-model="ddlStudentPayer" class="form-control pro-edt-select form-control-primary" :class="{ 'requiredFields': $v.ddlStudentPayer.$error }">
                                 <option v-for="item in ddlStudentPayerList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
                             </select>
+                            <div class="requiredFieldsMsg" v-if="$v.ddlStudentPayer.$error">Payer Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -180,10 +191,11 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Intake Year</label>
-                            <select v-model="ddlStudentIntakeYear" class="form-control pro-edt-select form-control-primary">
+                            <label>* Intake Year</label>
+                            <select v-model="ddlStudentIntakeYear" class="form-control pro-edt-select form-control-primary" :class="{ 'requiredFields': $v.ddlStudentIntakeYear.$error }">
                                 <option v-for="item in studentIntakeYearList" v-bind:value="item.PK_PAI_ID.trim()">{{ item.PAI_Intake_No.trim() }}</option>
                             </select>
+                            <div class="requiredFieldsMsg" v-if="$v.ddlStudentIntakeYear.$error">Intake Year Require</div>
                         </div>
                     </div>
 
@@ -193,8 +205,9 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 1</label>
-                            <input type="text" class="form-control"  v-model="inputStudentAddress1">
+                            <label>* Address 1</label>
+                            <input type="text" class="form-control"  v-model="inputStudentAddress1" :class="{ 'requiredFields': $v.inputStudentAddress1.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentAddress1.$error">Address 1 Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -220,8 +233,9 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Postal Code</label>
-                            <input type="text" class="form-control"  v-model="inputStudentPostalCode">
+                            <label>* Postal Code</label>
+                            <input type="text" class="form-control" v-model="inputStudentPostalCode" :class="{ 'requiredFields': $v.inputStudentPostalCode.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentPostalCode.$error">Postal Code Require</div>
                         </div>
                     </div>
 
@@ -231,8 +245,9 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 1</label>
-                            <input type="text" class="form-control"  v-model="inputStudentCorrespondanceAddress1">
+                            <label>* Address 1</label>
+                            <input type="text" class="form-control"  v-model="inputStudentCorrespondanceAddress1" :class="{ 'requiredFields': $v.inputStudentCorrespondanceAddress1.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentCorrespondanceAddress1.$error">Address 1 Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -258,8 +273,9 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Postal Code</label>
-                            <input type="text" class="form-control"  v-model="inputStudentCorrespondancePostalCode">
+                            <label>* Postal Code</label>
+                            <input type="text" class="form-control"  v-model="inputStudentCorrespondancePostalCode" :class="{ 'requiredFields': $v.inputStudentCorrespondancePostalCode.$error }">
+                            <div class="requiredFieldsMsg" v-if="$v.inputStudentCorrespondancePostalCode.$error">Postal Code Require</div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -341,15 +357,17 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Parent Mode</label>
-                                <select v-model="ddlParentMode" v-bind:disabled="editModeDisable" class="form-control pro-edt-select form-control-primary">
+                                <label>* Parent Mode</label>
+                                <select v-model="ddlParentMode" v-bind:disabled="editModeDisable" class="form-control pro-edt-select form-control-primary" :class="{ 'requiredFields': $v.ddlParentMode.$error }">
                                     <option v-for="item in ddlParentModeList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
                                 </select>
+                                <div class="requiredFieldsMsg" v-if="$v.ddlParentMode.$error">Parent Mode Require</div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>First Name</label>
-                                <input type="text" class="form-control"  v-model="inputFatherFirstName" v-bind:disabled="editModeDisable" v-on:blur="CheckParentDup()">
+                                <label>* First Name</label>
+                                <input type="text" class="form-control"  v-model="inputFatherFirstName" v-bind:disabled="editModeDisable" v-on:blur="CheckParentDup()" :class="{ 'requiredFields': $v.inputFatherFirstName.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputFatherFirstName.$error">First Name Require</div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -358,8 +376,9 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Last Name</label>
-                                <input type="text" class="form-control"  v-model="inputFatherLastName" v-bind:disabled="editModeDisable" v-on:blur="CheckParentDup()">
+                                <label>* Last Name</label>
+                                <input type="text" class="form-control"  v-model="inputFatherLastName" v-bind:disabled="editModeDisable" v-on:blur="CheckParentDup()" :class="{ 'requiredFields': $v.inputFatherLastName.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputFatherLastName.$error">Last Name Require</div>
                                 <label v-if="lblFatherNameDuplicated">Father name is duplicated, please double confirm</label>
                             </div>
 
@@ -371,8 +390,9 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Occupation</label>
-                                <input type="text" class="form-control"  v-model="inputFatherOccupation" v-bind:disabled="editModeDisable">
+                                <label>* Occupation</label>
+                                <input type="text" class="form-control"  v-model="inputFatherOccupation" v-bind:disabled="editModeDisable" :class="{ 'requiredFields': $v.inputFatherOccupation.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputFatherOccupation.$error">Occupation Require</div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -411,8 +431,9 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>First Name</label>
-                                <input type="text" class="form-control"  v-model="inputMotherFirstName" v-bind:disabled="editModeDisable" v-on:blur="CheckParentDup()">
+                                <label>* First Name</label>
+                                <input type="text" class="form-control"  v-model="inputMotherFirstName" v-bind:disabled="editModeDisable" v-on:blur="CheckParentDup()" :class="{ 'requiredFields': $v.inputMotherFirstName.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputMotherFirstName.$error">First Name Require</div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -421,8 +442,9 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Last Name</label>
-                                <input type="text" class="form-control"  v-model="inputMotherLastName" v-bind:disabled="editModeDisable" v-on:blur="CheckParentDup()">
+                                <label>* Last Name</label>
+                                <input type="text" class="form-control"  v-model="inputMotherLastName" v-bind:disabled="editModeDisable" v-on:blur="CheckParentDup()" :class="{ 'requiredFields': $v.inputMotherLastName.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputMotherLastName.$error">Last Name Require</div>
                                 <label v-if="lblMotherNameDuplicated">Mother name is duplicated, please double confirm</label>
                             </div>
 
@@ -474,8 +496,9 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Address 1</label>
-                                <input type="text" class="form-control"  v-model="inputParentAddress1" v-bind:disabled="editModeDisable">
+                                <label>* Address 1</label>
+                                <input type="text" class="form-control"  v-model="inputParentAddress1" v-bind:disabled="editModeDisable" :class="{ 'requiredFields': $v.inputParentAddress1.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputParentAddress1.$error">Address 1 Require</div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -506,8 +529,9 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Postal Code</label>
-                                <input type="text" class="form-control"  v-model="inputParentPostalCode" v-bind:disabled="editModeDisable">
+                                <label>* Postal Code</label>
+                                <input type="text" class="form-control"  v-model="inputParentPostalCode" v-bind:disabled="editModeDisable" :class="{ 'requiredFields': $v.inputParentPostalCode.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputParentPostalCode.$error">Postal Code Require</div>
                             </div>
                         </div>
                     </div>
@@ -532,7 +556,7 @@
 
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
-                <button v-on:click="Save" type="button" class="btn btn-primary waves-effect waves-light m-r-10" >Save</button>
+                <button v-on:click="Validation" type="button" class="btn btn-primary waves-effect waves-light m-r-10" >Save</button>
                 <button v-if="btnActive" v-on:click="Active" type="button" class="btn btn-primary waves-effect waves-light m-r-10" style="margin-left:10px;">Activate</button>
             </div>
         </div>
@@ -577,6 +601,7 @@
 
 <script>
     import DataSource from "../data/datasource";
+    import { required } from "vuelidate/lib/validators";
 
     export default {
         name: "Student",
@@ -758,6 +783,32 @@
                 selectedRow: null,
             };
         },
+        validations: {
+            inputStudentFirstName: { required },
+            inputStudentLastName: { required },
+            ddlStudentNationality: { required },
+            inputStudentDateOfBirth: { required },
+            ddlStudentIdentificationType: { required },
+            inputStudentIdentificationNo: { required },
+            inputStudentIdentificationExpiryDate: { required },
+            ddlStudentSelectLevel: { required },
+            inputFirstCommencementDate: { required },
+            ddlStudentFirstAcademicYear: { required },
+            ddlStudentPayer: { required },
+            ddlStudentIntakeYear: { required },
+            inputStudentAddress1: { required },
+            inputStudentPostalCode: { required },
+            inputStudentCorrespondanceAddress1: { required },
+            inputStudentCorrespondancePostalCode: { required },
+            ddlParentMode: { required },
+            inputFatherFirstName: { required },
+            inputFatherLastName: { required },
+            inputFatherOccupation: { required },
+            inputMotherFirstName: { required },
+            inputMotherLastName: { required },
+            inputParentAddress1: { required },
+            inputParentPostalCode: { required },
+        },
         methods: {
             async BindCountryList() {
                 try {
@@ -826,7 +877,7 @@
             },
             async BindStudentLevel() {
                 try {
-                    const response = await DataSource.shared.getLevel();
+                    const response = await DataSource.shared.getLevel('');
                     if (response) {
                         this.levelListResponse = response.Table;
                         this.levelListResponse.forEach(m => {
@@ -1351,6 +1402,21 @@
                     this.results = e;
                 }
             },
+            async Validation(){
+                try {
+                    this.$v.$touch();
+
+                    if(this.$v.$error)
+                    {
+                        alert('Please fill in all * fields');
+                        return;
+                    }
+
+                    this.Save();
+                } catch (e) {
+                    this.results = e;
+                }
+            },
         },
     }
 </script>
@@ -1367,6 +1433,15 @@
     .el-date-editor, .el-input
     {
         width:100% !important;
+    }
+    .requiredFields
+    {
+        border-color: #f79483;
+    }
+    .requiredFieldsMsg
+    {
+        color: red;
+        font-weight: bold;
     }
 </style>
 

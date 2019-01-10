@@ -78,14 +78,20 @@
                                     Your studentIDNo is required.
                                 </div>
                             </div>
-
-                            <div class="system-msg"><p>{{results}}</p>
-                                <p v-if="error" style="color: red">{{error}}</p></div>
+                            <div class="system-msg"><p>{{results}}</p></div>
                             <div class="row d-flex mt-3 mb-5">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-primary btn-lg btn-block login-btn" type="submit">Register
+                                    <button class="btn btn-primary btn-lg btn-block login-btn" type="submit" v-show="isLoading===false" :class="{ 'd-none': redirecting===true }">
+                                        Register
                                     </button>
+                                    <div class="loading" v-if="isLoading===true">
+                                        <div class="load-3">
+                                            <div class="line"></div>
+                                            <div class="line"></div>
+                                            <div class="line"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -102,19 +108,36 @@
 
         export default {
             name: 'parentRegister',
+            data() {
+                return {
+                    results: "",
+                    userEmail: "",
+                    userPassword: "",
+                    studentID_Index: "",
+                    studentDOB: "",
+                    studentIDType: "",
+                    studentIDNo: "",
+                    error: "",
+                    isLoading: false,
+                    redirecting: ""
+                };
+            },
             methods: {
                 async onSubmit() {
                     this.error = "";
                     //this.results = "<< Requesting.. >>";
                     try {
+                        this.isLoading = true;
                         const response = await DataSource.shared.parentRegister(this.userEmail, this.userPassword, this.studentIDNo, this.studentID_Index, this.studentDOB, this.studentIDType);
+                        this.isLoading = false;
                         console.log(response);
                         if (response) {
                             switch (response.code) {
                                 case "1":
                                     this.results = `Registration Success`;
+                                    this.redirecting = true;
                                     //this.results = `Login Success - ${JSON.stringify(response)}`;
-                                    // window.location.replace("/");
+                                    window.location.replace("/login");
                                     break;
                                 case "2":
                                     this.results = `Invalid Student Info`;
@@ -125,31 +148,19 @@
                                     //this.results = `Invalid password - sample 2: code: ${response.code}`;
                                     break;
                                 case "99":
-                                    this.error = `Please try again later`;
+                                    this.results = `Please try again later`;
                                     //this.results = `Please fill in all field - sample 3: code: ${response.code}`;
                                     break;
-                                default:
-                                    alert("Please try again later");
-                                    this.results = JSON.stringify(response);
                             }
                         }
+                        console.log(results);
                     } catch (e) {
+                        console.log("error", error);
                         this.error = e;
+                        this.isLoading = false;
                     }
 
                 },
-            },
-            data() {
-                return {
-                    results: "",
-                    userEmail: "",
-                    userPassword: "",
-                    studentID_Index: "",
-                    studentDOB: "",
-                    studentIDType: "",
-                    studentIDNo: "",
-                    error: ""
-                };
             },
         };
 

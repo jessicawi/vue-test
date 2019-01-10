@@ -10,6 +10,9 @@ import 'material-icons/iconfont/material-icons.css';
 import "./custom.css";
 import vbclass from 'vue-body-class';
 import quillEditor from 'vue-quill-editor';
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import {DataTables, DataTablesServer} from 'vue-data-tables';

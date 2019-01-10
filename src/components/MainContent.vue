@@ -8,13 +8,13 @@
 
 <script>
     import navBar from "../components/Nav";
-    import Header from "../components/Header";
+    // import Header from "../components/Header";
 
     export default {
         name: 'MainContent',
         components: {
             navBar,
-            Header,
+            // Header,
         }
     };
 </script>
@@ -28,7 +28,7 @@
         margin-left: 260px;
         position: relative;
         z-index: 99;
-        background: #f5f6fa;
+        background: #edf0f4;
         overflow-x: hidden;
     }
     @media (max-width: 740px){

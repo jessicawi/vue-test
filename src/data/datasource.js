@@ -78,8 +78,6 @@ export default class DataSource {
         //     request.headers = {"Authorization": token};
         // }
 
-        console.log(request, '  ssss');
-
         return jQuery.ajax(request);
     }
 
@@ -171,8 +169,14 @@ export default class DataSource {
             studentIDType: studentIDType,
             studentIDNo: studentIDNo
         };
-        const response = await this.callWebService("/controller/Register.asmx/parentRegistration", data, "POST", false);
+        let response = await this.callWebService("/controller/Register.asmx/parentRegistration", data, "POST", false);
+
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+
         return response;
+
     }
 
     async getStudent(studentID, studentID_Index, studentFirstName, studentLastName, parentName) {
@@ -276,10 +280,11 @@ export default class DataSource {
         return response;
     }
 
-    async getEditClass(semID, subjectcourseID) {
+    async getEditClass(semID, subjectcourseID, customClassNotEqual) {
         const data = {
             semID: semID,
             subjectcourseID: subjectcourseID,
+            customClassNotEqual: customClassNotEqual,
         };
         const response = await this.callWebService("/controller/Course.asmx/getEditClass", data, "POST");
         return response;
@@ -291,6 +296,16 @@ export default class DataSource {
             courseID: courseID,
         };
         const response = await this.callWebService("/controller/Students.asmx/getStudentClass", data, "POST");
+        return response;
+    }
+
+    async setClass(studentID, classID, studentCourseID) {
+        const data = {
+            studentID: studentID,
+            classID: classID,
+            studentCourseID: studentCourseID,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/setClass", data, "POST");
         return response;
     }
 
@@ -392,6 +407,12 @@ export default class DataSource {
         return response;
     }
 
+    async getPostDropdown(){
+        const data = {};
+        const response = await this.callWebService("/controller/Posting.asmx/getPostDropDown",data, "POST");
+        return response;
+    }
+
     async getParentPost() {
         const data = {};
 
@@ -442,7 +463,6 @@ export default class DataSource {
     }
 
     async getPostFile(postID) {
-        console.log(postID, ' poss');
         const data = {
             postID: postID
         };
@@ -552,8 +572,10 @@ export default class DataSource {
         return response;
     }
 
-    async getLevel() {
-        const data = {};
+    async getLevel(customLevelNotEqual) {
+        const data = {
+            customLevelNotEqual: customLevelNotEqual,
+        };
         const response = await this.callWebService("/controller/Course.asmx/getLevel", data, "POST");
         return response;
     }
@@ -575,6 +597,12 @@ export default class DataSource {
     async getIntakeYear() {
         const data = {};
         const response = await this.callWebService("/controller/Students.asmx/getIntakeYear", data, "POST");
+        return response;
+    }
+
+    async getUserList(){
+        const data = {};
+        const response = await  this.callWebService("/controller/UserMagt.asmx/getUserList", data, "POST");
         return response;
     }
 
