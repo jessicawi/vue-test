@@ -9,10 +9,6 @@
                     <textarea type="text" class="form-control" id="postContent" v-model="postContent"
                               placeholder="CONTENT"
                               required></textarea>
-                    <quill-editor ref="myTextEditor"
-                                  v-model="content"
-                                  :config="editorOption">
-                    </quill-editor>
                     <div class="invalid-feedback" style="width: 100%;">
                         Your content is required.
                     </div>
@@ -91,7 +87,6 @@
 
 <script>
     import DataSource from "../data/datasource";
-    import quillEditor from "vue-quill-editor";
     import vue2Dropzone from 'vue2-dropzone'
     import 'vue2-dropzone/dist/vue2Dropzone.min.css'
     import '@websanova/vue-upload';
@@ -120,7 +115,6 @@
         },
         components: {
             // FileUpload: VueUploadComponent
-            quillEditor,
             vueDropzone: vue2Dropzone
         },
         methods: {

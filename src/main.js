@@ -9,10 +9,6 @@ import 'vuesax/dist/vuesax.css';
 import 'material-icons/iconfont/material-icons.css';
 import "./custom.css";
 import vbclass from 'vue-body-class';
-import quillEditor from 'vue-quill-editor';
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import {DataTables, DataTablesServer} from 'vue-data-tables';
@@ -34,7 +30,6 @@ Vue.use(DataTablesServer);
 Vue.use(ElementUI);
 Vue.use(Vuesax);
 Vue.use(vbclass, router);
-Vue.use(quillEditor);
 Vue.use(Modal);
 Vue.use(Vuelidate);
 Vue.use(VueCharts);

@@ -27,7 +27,8 @@
                             <ul>
                                 <li class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
                                     <img :src="postFile.PostItemPath"
-                                         :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"  v-if="checkIfImage(postFile.PostItemPath)"/>
+                                         :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"
+                                         v-if="checkIfImage(postFile.PostItemPath)"/>
                                 </li>
                             </ul>
                         </div>
@@ -93,6 +94,7 @@
                             than what they thought possible.
                         </div>
                     </div>
+
                 </div>
             </vs-col>
         </div>
@@ -105,13 +107,11 @@
                     <textarea type="text" class="form-control" id="postContent" v-model="postContent"
                               placeholder="CONTENT"
                               required v-model.trim="$v.content.$model"></textarea>
-                    <quill-editor ref="myTextEditor"
-                                  v-model="content"
-                                  :options="editorOption"
-                                  @blur="onEditorBlur($event)"
-                                  @focus="onEditorFocus($event)"
-                                  @ready="onEditorReady($event)">
-                    </quill-editor>
+                    <!--<RichTextEditor @inputChange="inputChange"/>-->
+                    <!--<div>-->
+                    <!--<p>Output:</p>-->
+                    <!--{{postContent}}-->
+                    <!--</div>-->
                 </div>
 
                 <div class="error" v-if="!$v.content.required">Field is required</div>
@@ -167,10 +167,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="row inputFile-box">
+                    <div class="col-md-12">
+                        <input type="file" multiple @change="onFileChanged" ref="fileupload" class="inputfile"
+                               id="inputfile"
+                               data-multiple-caption="{count} files selected">
+                        <label for="inputfile" @click="inputFile()">Choose a file</label>
+                        <!--<button @click.prevent="onUpload">Upload!</button>-->
 
-                <input type="file" multiple @change="onFileChanged" ref="fileupload">
-                <!--<button @click.prevent="onUpload">Upload!</button>-->
-
+                        <div class="btn btn-primary" v-if="selectedFile" @click="clearPreview()"><strong>X</strong> REMOVE ALL</div>
+                        <div class="uploadFile-image">
+                            <div v-for="(file, key) in selectedFile" class="col-md-3 file-listing">
+                                <!--{{ file.name }}-->
+                                <img class="preview" v-bind:ref="'image'+parseInt( key )"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="mb-2">
 
                 </div>
@@ -194,17 +207,19 @@
 
 <script>
     import DataSource from "../data/datasource";
-    import quillEditor from "vue-quill-editor";
     // import vue2Dropzone from 'vue2-dropzone';
     // import 'vue2-dropzone/dist/vue2Dropzone.min.css';
     // import '@websanova/vue-upload';
     import {required, minLength} from 'vuelidate/lib/validators';
     import isImage from "is-image";
+    import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
 
     export default {
         name: 'staffPost',
+        components: {RichTextEditor},
         data() {
             return {
+                html: '',
                 files: [],
                 systemmsgError: false,
                 isModalOpen: false,
@@ -222,29 +237,6 @@
                 tagLevelID: "",
                 // files: [],
                 content: '',
-                editorOption: {
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'underline', 'strike'],
-                            ['blockquote', 'code-block'],
-                            [{ 'header': 1 }, { 'header': 2 }],
-                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                            [{ 'script': 'sub' }, { 'script': 'super' }],
-                            [{ 'indent': '-1' }, { 'indent': '+1' }],
-                            [{ 'direction': 'rtl' }],
-                            [{ 'size': ['small', false, 'large', 'huge'] }],
-                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                            [{ 'font': [] }],
-                            [{ 'color': [] }, { 'background': [] }],
-                            [{ 'align': [] }],
-                            ['clean'],
-                            ['link', 'image', 'video']
-                        ],
-                        syntax: {
-                            highlight: text => hljs.highlightAuto(text).value
-                        }
-                    }
-                },
                 selectedFile: null,
                 success: null,
                 dropzoneOptions: {
@@ -254,10 +246,6 @@
                 saveResponse: "",
                 PostItemPath: "",
             };
-        },
-        components: {
-            // FileUpload: VueUploadComponent
-            quillEditor,
         },
         // components: {Step},
         async mounted() {
@@ -300,8 +288,10 @@
             //     }
             // }
         },
-
         methods: {
+            inputChange(input) {
+                this.postContent = input;
+            },
             checkIfImage(file) {
                 return isImage(file);
             },
@@ -313,6 +303,7 @@
             },
             onFileChanged(event) {
                 this.selectedFile = event.target.files;
+                this.getImagePreviews();
             },
             async onUpload() {
                 // const formData = new FormData();
@@ -362,29 +353,45 @@
                 }
 
             },
-            onEditorBlur(editor) {
-                console.log('editor blur!', editor)
-            },
-            onEditorFocus(editor) {
-                console.log('editor focus!', editor)
-            },
-            onEditorReady(editor) {
-                console.log('editor ready!', editor)
-            }
+            getImagePreviews() {
+                /*
+                  Iterate over all of the files and generate an image preview for each one.
+                */
+                for (let i = 0; i < this.selectedFile.length; i++) {
+                    /*
+                      Ensure the file is an image file
+                    */
+                    if (/\.(jpe?g|png|gif)$/i.test(this.selectedFile[i].name)) {
+                        /*
+                          Create a new FileReader object
+                        */
+                        let reader = new FileReader();
 
+                        /*
+                          Add an event listener for when the file has been loaded
+                          to update the src on the file preview.
+                        */
+                        reader.addEventListener("load", function () {
+                            this.$refs['image' + parseInt(i)][0].src = reader.result;
+                        }.bind(this), false);
+
+                        /*
+                          Read the data for the file in through the reader. When it has
+                          been loaded, we listen to the event propagated and set the image
+                          src to what was loaded from the reader.
+                        */
+                        reader.readAsDataURL(this.selectedFile[i]);
+                    }
+                }
+            },
+            clearPreview() {
+                this.selectedFile = null;
+            }
         },
         validations: {
             content: {
                 required,
                 minLength: minLength(4)
-            }
-        },
-        computed: {
-            editor() {
-                return this.$refs.myTextEditor.quill
-            },
-            contentCode() {
-                return hljs.highlightAuto(this.content).value
             }
         },
     };
@@ -483,8 +490,8 @@
         height: 200px;
     }
 
-    .image-wrapper li.postFile__item:empty{
-        display:none;
+    .image-wrapper li.postFile__item:empty {
+        display: none;
     }
 
     .image-wrapper ul {
@@ -695,9 +702,71 @@
     }
 
 
-
 </style>
 
 <style>
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .inputfile + label {
+        font-size: 1.25em;
+        color: white;
+        background-color: #606266;
+        display: table !important;
+        padding: 5px 20px;
+        border-radius: 5px;
+        margin: 10px auto 20px;
+    }
+
+    .inputfile:focus + label,
+    .inputfile + label:hover {
+        background-color: #f44252;
+    }
+
+    .inputfile + label {
+        cursor: pointer; /* "hand" cursor */
+    }
+
+    .file-listing img {
+        max-width: 100%;
+        cursor: pointer;
+    }
+
+    .uploadFile-image .file-listing {
+        float: left;
+        padding: 10px;
+        background: #eee;
+        margin: 5px;
+    }
+
+    .uploadFile-image {
+        display: table;
+        width: 100%;
+        margin: 20px 0px;
+    }
+
+    .file-listing img:hover {
+        opacity: 0.5;
+    }
+
+    .inputFile-box .btn {
+        background: transparent;
+        border: 0px;
+        color: #222;
+        float: right;
+        padding: 5px 20px;
+        margin-bottom: 10px;
+        font-size: 11px;
+    }
+
+    .inputFile-box .btn:hover {
+        background: #eee;
+    }
 
 </style>

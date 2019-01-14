@@ -4,16 +4,16 @@
             <h4 class="title">Pending Post</h4>
             <div v-if="list && list.length>0">
                 <el-row style="margin-bottom: 10px" class="data-top">
-                        <el-dropdown @command="handleClick" class="float-right">
-                            <el-button type="primary">Actions<i class="el-icon-caret-bottom el-icon--right"></i>
-                            </el-button>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item command="approve">Approve</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
+                    <el-dropdown @command="handleClick" class="float-right">
+                        <el-button type="primary">Actions<i class="el-icon-caret-bottom el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="approve">Approve</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                 </el-row>
-                <data-tables-server :data="list" @selection-change="handleSelectionChange" :fit="false"
-                                    :action-col="actionCol">
+                <data-tables :data="list" @selection-change="handleSelectionChange" :fit="false"
+                             :action-col="actionCol" :table-props="tableProps.defaultSort">
                     <el-table-column type="selection" width="55"></el-table-column>
 
                     <el-table-column v-for="title in titles" :prop="title.prop" :label="title.label" :key="title.prop"
@@ -21,7 +21,7 @@
                                      sortable="custom">
                     </el-table-column>
 
-                </data-tables-server>
+                </data-tables>
             </div>
             <div v-else-if="results==='No Record Found'">
                 No Record Found
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="mb-2 d-none">
-                    <input type="text" class="form-control" id="postID" v-model="viewModal"
+                    <input type="text" class="form-control" id="postID" v-model="postID"
                            placeholder="Post ID"
                            required>
                     <div class="invalid-feedback" style="width: 100%;">
@@ -118,6 +118,16 @@
                             <td>{{PostCreatedBy}}</td>
                         </tr>
                     </table>
+                    <div class="post-image-wrapper">
+                        <ul>
+                            <li class="postFile__item col-md-4" v-for="postFile in currentFiles" :key="postFile.ID">
+                                <span @click="handleImageRemove(postFile.ID)" class="remove"><i class="fa fa-times" aria-hidden="true"></i></span>
+                                <img :src="postFile.PostItemPath"
+                                     :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
 
                 <div class="system-msg" v-bind:class="{'bg-danger': systemmsgError===true}"><p>{{results}}</p>
@@ -142,10 +152,13 @@
         name: 'PendingPost',
         data() {
             return {
+                error: null,
                 selectedRows: [],
                 isModalOpen: false,
                 list: [],
-                viewModal: "",
+                currentFiles: [],
+                fileRes: "",
+                postID: "",
                 titles: [{
                     prop: "ID",
                     label: "ID"
@@ -197,8 +210,17 @@
                         handler: async row => {
                             console.log(row, ' ss');
                             try {
+
+                                const fileRes = await DataSource.shared.getPostFile(row.PostID);
+                                console.log(fileRes);
+                                if (fileRes.Table) {
+                                    this.currentFiles = fileRes.Table;
+                                } else {
+                                    this.currentFiles = null;
+                                }
+
                                 this.isModalOpen = true;
-                                this.viewModal = row.PostID;
+                                this.postID = row.PostID;
                                 this.UpdateContent = row.PostContent;
                                 this.profolio = row.PostProfolio;
                                 this.tagUserID = row.tagUserID;
@@ -215,6 +237,12 @@
                     }
                     ]
                 },
+                tableProps: {
+                    defaultSort: {
+                        prop: 'PostID',
+                        order: 'descending'
+                    }
+                },
                 selectedRow: null,
                 results: null,
                 actionStatus: "",
@@ -224,9 +252,17 @@
                 PostCreatedDate: "",
                 PostCreatedBy: "",
                 systemmsgError: false,
+                tagLevelID: "",
+                tagUserID: "",
+                tagClassID: "",
+                PostItemPath: "",
             };
         },
         methods: {
+            handleImageRemove(fileId) {
+                console.log(fileId);
+                this.currentFiles = this.currentFiles.filter(d => d.ID !== fileId);
+            },
             handleSelectionChange(rows) {
                 console.log(rows);
                 this.selectedRows = rows;
@@ -237,6 +273,7 @@
             async getPendingPost() {
                 try {
                     const response = await DataSource.shared.pendingPost();
+                    console.log(response);
                     if (response) {
                         this.list = response.Table;
                         switch (response.code) {
@@ -262,7 +299,7 @@
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
-                    const saveResponse = await DataSource.shared.updatePost(this.postContent, this.actionStatus, this.postID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID);
+                    const saveResponse = await DataSource.shared.updatePost(this.currentFiles, this.actionStatus, this.postID, this.postContent, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID, );
                     console.log(saveResponse);
                     if (saveResponse) {
                         switch (saveResponse.code) {
@@ -364,8 +401,44 @@
         line-height: 30px;
         margin-right: 10px;
     }
+
     .action-list button:focus {
         color: #67c23a;
+    }
+
+    .post-image-wrapper .postFile__item img {
+        max-width: 95%;
+        background: #eee;
+        padding: 10px;
+        margin: 5px;
+    }
+
+    .post-image-wrapper .postFile__item {
+        float: left;
+        list-style: none;
+        padding: 0px;
+    }
+
+    .post-image-wrapper {
+        display: table;
+        width: 100%;
+    }
+    .post-image-wrapper .postFile__item .remove {
+        background: #f44252;
+        width: 20px;
+        height: 20px;
+        display: block;
+        text-align: center;
+        color: white;
+        border-radius: 21px;
+        float: right;
+        margin-bottom: -20px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .post-image-wrapper .postFile__item .remove:hover{
+        background: #ce3845;
     }
 
 </style>

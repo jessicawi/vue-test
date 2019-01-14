@@ -142,7 +142,7 @@ export default class DataSource {
 
     }
 
-    async resetEmailPassword(userEmail){
+    async resetEmailPassword(userEmail) {
         const data = {
             userEmail: userEmail
         };
@@ -150,7 +150,7 @@ export default class DataSource {
         return response;
     }
 
-    async resetPassword(userEmail, userPassword, otp){
+    async resetPassword(userEmail, userPassword, otp) {
         const data = {
             userEmail: userEmail,
             userPassword: userPassword,
@@ -407,9 +407,9 @@ export default class DataSource {
         return response;
     }
 
-    async getPostDropdown(){
+    async getPostDropdown() {
         const data = {};
-        const response = await this.callWebService("/controller/Posting.asmx/getPostDropDown",data, "POST");
+        const response = await this.callWebService("/controller/Posting.asmx/getPostDropDown", data, "POST");
         return response;
     }
 
@@ -428,7 +428,17 @@ export default class DataSource {
         formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
 
         if (files && files.length > 1) {
-            formData.append("upload", files);
+            for (let key in files) {
+                // console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        formData.append(`upload_${key}`, files[key]);
+                    } else {
+                        formData.append("upload", files[key]);
+                    }
+                }
+            }
         } else if (files) {
             formData.append("upload", files[0]);
         }
@@ -494,18 +504,54 @@ export default class DataSource {
         return response;
     }
 
-    async updatePost(actionStatus, postID, UpdateContent, profolio, tagUserID, tagClassID, tagLevelID) {
-        const data = {
-            actionStatus: actionStatus,
-            postID: postID,
-            postContent: UpdateContent,
-            profolio: profolio,
-            tagUserID: tagUserID,
-            tagClassID: tagClassID,
-            tagLevelID: tagLevelID
+    async updatePost(currentFiles, actionStatus, postID, UpdateContent, profolio, tagUserID, tagClassID, tagLevelID) {
+        const formData = new FormData();
+        formData.append('token', sessionStorage.getItem('authToken'));
+        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+console.log(currentFiles);
+        if (currentFiles && currentFiles.length > 1) {
+            for (let key in currentFiles) {
+                // console.log(key);
+                if (currentFiles.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        formData.append(`upload_${key}`, currentFiles[key]);
+                    } else {
+                        formData.append("upload", currentFiles[key]);
+                    }
+                }
+            }
+        } else if (currentFiles) {
+            formData.append("upload", currentFiles[0]);
+        }
+
+        formData.append("actionStatus", actionStatus);
+        formData.append("postID", postID);
+        formData.append("UpdateContent", UpdateContent);
+        formData.append("profolio", profolio);
+        formData.append("tagUserID", tagUserID);
+        formData.append("tagClassID", tagClassID);
+        formData.append("tagLevelID", tagLevelID);
+
+        const request = {
+            url: `${API_HOST}/controller/Posting.asmx/updatePost`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
         };
-        data.UserID_Session = sessionStorage.getItem('userIDSession');
-        const response = await this.callWebService("/controller/Posting.asmx/updatePost", data, "POST");
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
         return response;
     }
 
@@ -539,8 +585,8 @@ export default class DataSource {
             status: status,
         };
 
-        data.UserSchool_Session = sessionStorage.getItem('schoolSession');
-        data.UserID_Session = sessionStorage.getItem('userIDSession');
+        // data.UserSchool_Session = sessionStorage.getItem('schoolSession');
+        // data.UserID_Session = sessionStorage.getItem('userIDSession');
 
         const response = await this.callWebService("/controller/Posting.asmx/updateApproverMaster", data, "POST");
         return response;
@@ -600,9 +646,9 @@ export default class DataSource {
         return response;
     }
 
-    async getUserList(){
+    async getUserList() {
         const data = {};
-        const response = await  this.callWebService("/controller/UserMagt.asmx/getUserList", data, "POST");
+        const response = await this.callWebService("/controller/UserMagt.asmx/getUserList", data, "POST");
         return response;
     }
 
