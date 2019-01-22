@@ -1,689 +1,802 @@
 <template>
-    <div id="parent" class="mt-3 container">
+    <div id="parent" class="mt-3 container  pt-5">
         <label style="display:none !important;">{{lblParentID}}</label>
 
         <b-tabs class="parentPageBTabs">
             <b-tab title="Father" active>
-                <div class="row">
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 fatherAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Father's Personal Information</h2>
+                <div class="">
+                    <div class="fatherAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Father's Personal Information</h5>
                         </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>* First Name</label>
-                            <input type="text" class="form-control" ref="inputFatherFirstName" v-model="inputFatherFirstName" :class="{ 'requiredFields': $v.inputFatherFirstName.$error }">
-                            <div class="requiredFieldsMsg" v-if="$v.inputFatherFirstName.$error">First Name Require</div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Middle Name</label>
-                            <input type="text" class="form-control" ref="inputFatherMiddleName">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>* Last Name</label>
-                            <input type="text" class="form-control" ref="inputFatherLastName" v-model="inputFatherLastName" :class="{ 'requiredFields': $v.inputFatherLastName.$error }">
-                            <div class="requiredFieldsMsg" v-if="$v.inputFatherLastName.$error">Last Name Require</div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>* Date of Birth</label>
-                            <div class="date">
-                                <el-date-picker v-model="inputFatherDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date" :class="{ 'requiredFields': $v.inputFatherDateofBirth.$error }"></el-date-picker >
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>* First Name</label>
+                                <input type="text" class="form-control" ref="inputFatherFirstName"
+                                       v-model="inputFatherFirstName"
+                                       :class="{ 'requiredFields': $v.inputFatherFirstName.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputFatherFirstName.$error">First Name
+                                    Require
+                                </div>
                             </div>
-                            <div class="requiredFieldsMsg" v-if="$v.inputFatherDateofBirth.$error">Date of Birth Require</div>
-                        </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Employment Status</label>
-                            <select v-model="ddlFatherEmploymentStatus" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlFatherEmploymentStatusList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Middle Name</label>
+                                <input type="text" class="form-control" ref="inputFatherMiddleName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Occupation</label>
-                            <input type="text" class="form-control" ref="inputFatherOccupation">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>* Last Name</label>
+                                <input type="text" class="form-control" ref="inputFatherLastName"
+                                       v-model="inputFatherLastName"
+                                       :class="{ 'requiredFields': $v.inputFatherLastName.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputFatherLastName.$error">Last Name Require
+                                </div>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Designation</label>
-                            <input type="text" class="form-control" ref="inputFatherDesignation">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>* Date of Birth</label>
+                                <div class="date">
+                                    <el-date-picker v-model="inputFatherDateofBirth" format="dd/MM/yyyy"
+                                                    value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"
+                                                    :class="{ 'requiredFields': $v.inputFatherDateofBirth.$error }"></el-date-picker>
+                                </div>
+                                <div class="requiredFieldsMsg" v-if="$v.inputFatherDateofBirth.$error">Date of Birth
+                                    Require
+                                </div>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Home Tel No</label>
-                            <input type="text" class="form-control" ref="inputFatherHomeTelNo">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Employment Status</label>
+                                <select v-model="ddlFatherEmploymentStatus"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlFatherEmploymentStatusList"
+                                            v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Office Tel No</label>
-                            <input type="text" class="form-control" ref="inputFatherOfficeTelNo">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Occupation</label>
+                                <input type="text" class="form-control" ref="inputFatherOccupation">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Fax</label>
-                            <input type="text" class="form-control" ref="inputFatherFax">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Designation</label>
+                                <input type="text" class="form-control" ref="inputFatherDesignation">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Mobile No</label>
-                            <input type="text" class="form-control" ref="inputFatherMobileNo">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Home Tel No</label>
+                                <input type="text" class="form-control" ref="inputFatherHomeTelNo">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Email</label>
-                            <input type="text" class="form-control" ref="inputFatherEmail">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Office Tel No</label>
+                                <input type="text" class="form-control" ref="inputFatherOfficeTelNo">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Nationality</label>
-                            <select ref="ddlFatherNationality" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Fax</label>
+                                <input type="text" class="form-control" ref="inputFatherFax">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Religion</label>
-                            <select v-model="ddlFatherReligion" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlFatherReligionList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Mobile No</label>
+                                <input type="text" class="form-control" ref="inputFatherMobileNo">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Remarks</label>
-                            <input type="text" class="form-control" ref="inputFatherRemarks">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Email</label>
+                                <input type="text" class="form-control" ref="inputFatherEmail">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification Type</label>
-                            <select v-model="ddlFatherIdentificationType" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlFatherIdentificationTypeList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Nationality</label>
+                                <select ref="ddlFatherNationality"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{
+                                        item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification No</label>
-                            <input type="text" class="form-control" ref="inputFatherIdentificationNo">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Religion</label>
+                                <select v-model="ddlFatherReligion"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlFatherReligionList" v-bind:value="item.OPTvalue.trim()">{{
+                                        item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification No Expiry Date</label>
-                            <div class="date">
-                                <el-date-picker v-model="inputFatherIdentificationNoExpiryDate" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"></el-date-picker>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Remarks</label>
+                                <input type="text" class="form-control" ref="inputFatherRemarks">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Identification Type</label>
+                                <select v-model="ddlFatherIdentificationType"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlFatherIdentificationTypeList"
+                                            v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Identification No</label>
+                                <input type="text" class="form-control" ref="inputFatherIdentificationNo">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Identification No Expiry Date</label>
+                                <div class="date">
+                                    <el-date-picker v-model="inputFatherIdentificationNoExpiryDate" format="dd/MM/yyyy"
+                                                    value-format="dd/MM/yyyy" type="date"
+                                                    placeholder="Pick a date"></el-date-picker>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 fatherAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Father's Local Residential Address</h2>
+                    <div class="fatherAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Father's Local Residential Address</h5>
                         </div>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 1</label>
+                                <input type="text" class="form-control" ref="inputFatherAddress1">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 1</label>
-                            <input type="text" class="form-control" ref="inputFatherAddress1">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 2</label>
+                                <input type="text" class="form-control" ref="inputFatherAddress2">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 2</label>
-                            <input type="text" class="form-control" ref="inputFatherAddress2">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 3</label>
+                                <input type="text" class="form-control" ref="inputFatherAddress3">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 3</label>
-                            <input type="text" class="form-control" ref="inputFatherAddress3">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>City</label>
+                                <input type="text" class="form-control" ref="inputFatherCity">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>City</label>
-                            <input type="text" class="form-control" ref="inputFatherCity">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Country</label>
+                                <select ref="ddlFatherCountry" class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                        item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Country</label>
-                            <select ref="ddlFatherCountry" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Postal Code</label>
-                            <input type="text" class="form-control" ref="inputFatherPostalCode">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Postal Code</label>
+                                <input type="text" class="form-control" ref="inputFatherPostalCode">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 fatherAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Father's Company Address</h2>
+                    <div class="fatherAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Father's Company Address</h5>
                         </div>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Name</label>
+                                <input type="text" class="form-control" ref="inputFatherCompanyName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Name</label>
-                            <input type="text" class="form-control" ref="inputFatherCompanyName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Addressee Name</label>
+                                <input type="text" class="form-control" ref="inputFatherCompanyAddresseeName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Addressee Name</label>
-                            <input type="text" class="form-control" ref="inputFatherCompanyAddresseeName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 1</label>
+                                <input type="text" class="form-control" ref="inputFatherCompanyAddress1">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 1</label>
-                            <input type="text" class="form-control" ref="inputFatherCompanyAddress1">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 2</label>
+                                <input type="text" class="form-control" ref="inputFatherCompanyAddress2">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 2</label>
-                            <input type="text" class="form-control" ref="inputFatherCompanyAddress2">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 3</label>
+                                <input type="text" class="form-control" ref="inputFatherCompanyAddress3">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 3</label>
-                            <input type="text" class="form-control" ref="inputFatherCompanyAddress3">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company City</label>
+                                <input type="text" class="form-control" ref="inputFatherCompanyCity">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company City</label>
-                            <input type="text" class="form-control" ref="inputFatherCompanyCity">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Country</label>
+                                <select ref="ddlFatherCompanyCountry"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">
+                                        {{item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Country</label>
-                            <select ref="ddlFatherCompanyCountry" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Postal Code</label>
+                                <input type="text" class="form-control" ref="inputFatherCompanyPostalCode">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Postal Code</label>
-                            <input type="text" class="form-control" ref="inputFatherCompanyPostalCode">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Email</label>
-                            <input type="text" class="form-control" ref="inputFatherCompanyEmail">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Email</label>
+                                <input type="text" class="form-control" ref="inputFatherCompanyEmail">
+                            </div>
                         </div>
                     </div>
                 </div>
             </b-tab>
-            <b-tab title="Mother" >
-                <div class="row">
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 motherAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Mother's Personal Information</h2>
+            <b-tab title="Mother">
+                <div class="">
+                    <div class="motherAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Mother's Personal Information</h5>
                         </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>* First Name</label>
-                            <input type="text" class="form-control" ref="inputMotherFirstName" v-model="inputMotherFirstName" :class="{ 'requiredFields': $v.inputMotherFirstName.$error }">
-                            <div class="requiredFieldsMsg" v-if="$v.inputMotherFirstName.$error">First Name Require</div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Middle Name</label>
-                            <input type="text" class="form-control" ref="inputMotherMiddleName">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>* Last Name</label>
-                            <input type="text" class="form-control" ref="inputMotherLastName" v-model="inputMotherLastName" :class="{ 'requiredFields': $v.inputMotherLastName.$error }">
-                            <div class="requiredFieldsMsg" v-if="$v.inputMotherLastName.$error">Last Name Require</div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>* Date of Birth</label>
-                            <div class="date">
-                                <el-date-picker v-model="inputMotherDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date" :class="{ 'requiredFields': $v.inputMotherDateofBirth.$error }"></el-date-picker>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>* First Name</label>
+                                <input type="text" class="form-control" ref="inputMotherFirstName"
+                                       v-model="inputMotherFirstName"
+                                       :class="{ 'requiredFields': $v.inputMotherFirstName.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputMotherFirstName.$error">First Name Require
+                                </div>
                             </div>
-                            <div class="requiredFieldsMsg" v-if="$v.inputMotherDateofBirth.$error">Date of Birth Require</div>
-                        </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Employment Status</label>
-                            <select v-model="ddlMotherEmploymentStatus" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlMotherEmploymentStatusList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Middle Name</label>
+                                <input type="text" class="form-control" ref="inputMotherMiddleName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Occupation</label>
-                            <input type="text" class="form-control" ref="inputMotherOccupation">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>* Last Name</label>
+                                <input type="text" class="form-control" ref="inputMotherLastName"
+                                       v-model="inputMotherLastName"
+                                       :class="{ 'requiredFields': $v.inputMotherLastName.$error }">
+                                <div class="requiredFieldsMsg" v-if="$v.inputMotherLastName.$error">Last Name Require
+                                </div>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Designation</label>
-                            <input type="text" class="form-control" ref="inputMotherDesignation">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>* Date of Birth</label>
+                                <div class="date">
+                                    <el-date-picker v-model="inputMotherDateofBirth" format="dd/MM/yyyy"
+                                                    value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"
+                                                    :class="{ 'requiredFields': $v.inputMotherDateofBirth.$error }"></el-date-picker>
+                                </div>
+                                <div class="requiredFieldsMsg" v-if="$v.inputMotherDateofBirth.$error">Date of Birth
+                                    Require
+                                </div>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Home Tel No</label>
-                            <input type="text" class="form-control" ref="inputMotherHomeTelNo">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Employment Status</label>
+                                <select v-model="ddlMotherEmploymentStatus"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlMotherEmploymentStatusList"
+                                            v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Office Tel No</label>
-                            <input type="text" class="form-control" ref="inputMotherOfficeTelNo">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Occupation</label>
+                                <input type="text" class="form-control" ref="inputMotherOccupation">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Fax</label>
-                            <input type="text" class="form-control" ref="inputMotherFax">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Designation</label>
+                                <input type="text" class="form-control" ref="inputMotherDesignation">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Mobile No</label>
-                            <input type="text" class="form-control" ref="inputMotherMobileNo">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Home Tel No</label>
+                                <input type="text" class="form-control" ref="inputMotherHomeTelNo">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Email</label>
-                            <input type="text" class="form-control" ref="inputMotherEmail">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Office Tel No</label>
+                                <input type="text" class="form-control" ref="inputMotherOfficeTelNo">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Nationality</label>
-                            <select ref="ddlMotherNationality" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Fax</label>
+                                <input type="text" class="form-control" ref="inputMotherFax">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Religion</label>
-                            <select v-model="ddlMotherReligion" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlMotherReligionList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Mobile No</label>
+                                <input type="text" class="form-control" ref="inputMotherMobileNo">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Remarks</label>
-                            <input type="text" class="form-control" ref="inputMotherRemarks">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Email</label>
+                                <input type="text" class="form-control" ref="inputMotherEmail">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification Type</label>
-                            <select v-model="ddlMotherIdentificationType" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlMotherIdentificationTypeList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Nationality</label>
+                                <select ref="ddlMotherNationality"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{
+                                        item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification No</label>
-                            <input type="text" class="form-control" ref="inputMotherIdentificationNo">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Religion</label>
+                                <select v-model="ddlMotherReligion"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlMotherReligionList" v-bind:value="item.OPTvalue.trim()">{{
+                                        item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification No Expiry Date</label>
-                            <div class="date">
-                                <el-date-picker v-model="inputMotherIdentificationNoExpiryDate" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"></el-date-picker>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Remarks</label>
+                                <input type="text" class="form-control" ref="inputMotherRemarks">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Identification Type</label>
+                                <select v-model="ddlMotherIdentificationType"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlMotherIdentificationTypeList"
+                                            v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Identification No</label>
+                                <input type="text" class="form-control" ref="inputMotherIdentificationNo">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Identification No Expiry Date</label>
+                                <div class="date">
+                                    <el-date-picker v-model="inputMotherIdentificationNoExpiryDate" format="dd/MM/yyyy"
+                                                    value-format="dd/MM/yyyy" type="date"
+                                                    placeholder="Pick a date"></el-date-picker>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="motherAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Mother's Local Residential Address</h5>
+                        </div>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 1</label>
+                                <input type="text" class="form-control" ref="inputMotherAddress1">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 2</label>
+                                <input type="text" class="form-control" ref="inputMotherAddress2">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 3</label>
+                                <input type="text" class="form-control" ref="inputMotherAddress3">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>City</label>
+                                <input type="text" class="form-control" ref="inputMotherCity">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Country</label>
+                                <select ref="ddlMotherCountry" class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                        item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Postal Code</label>
+                                <input type="text" class="form-control" ref="inputMotherPostalCode">
                             </div>
                         </div>
                     </div>
 
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 motherAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Mother's Local Residential Address</h2>
+                    <div class="motherAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Mother's Company Address</h5>
                         </div>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Name</label>
+                                <input type="text" class="form-control" ref="inputMotherCompanyName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 1</label>
-                            <input type="text" class="form-control" ref="inputMotherAddress1">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Addressee Name</label>
+                                <input type="text" class="form-control" ref="inputMotherCompanyAddresseeName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 2</label>
-                            <input type="text" class="form-control" ref="inputMotherAddress2">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 1</label>
+                                <input type="text" class="form-control" ref="inputMotherCompanyAddress1">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 3</label>
-                            <input type="text" class="form-control" ref="inputMotherAddress3">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 2</label>
+                                <input type="text" class="form-control" ref="inputMotherCompanyAddress2">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>City</label>
-                            <input type="text" class="form-control" ref="inputMotherCity">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 3</label>
+                                <input type="text" class="form-control" ref="inputMotherCompanyAddress3">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Country</label>
-                            <select ref="ddlMotherCountry" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company City</label>
+                                <input type="text" class="form-control" ref="inputMotherCompanyCity">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Postal Code</label>
-                            <input type="text" class="form-control" ref="inputMotherPostalCode">
-                        </div>
-                    </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Country</label>
+                                <select ref="ddlMotherCompanyCountry"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                        item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 motherAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Mother's Company Address</h2>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Postal Code</label>
+                                <input type="text" class="form-control" ref="inputMotherCompanyPostalCode">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Name</label>
-                            <input type="text" class="form-control" ref="inputMotherCompanyName">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Addressee Name</label>
-                            <input type="text" class="form-control" ref="inputMotherCompanyAddresseeName">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 1</label>
-                            <input type="text" class="form-control" ref="inputMotherCompanyAddress1">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 2</label>
-                            <input type="text" class="form-control" ref="inputMotherCompanyAddress2">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 3</label>
-                            <input type="text" class="form-control" ref="inputMotherCompanyAddress3">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company City</label>
-                            <input type="text" class="form-control" ref="inputMotherCompanyCity">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Country</label>
-                            <select ref="ddlMotherCompanyCountry" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Postal Code</label>
-                            <input type="text" class="form-control" ref="inputMotherCompanyPostalCode">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Email</label>
-                            <input type="text" class="form-control" ref="inputMotherCompanyEmail">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Email</label>
+                                <input type="text" class="form-control" ref="inputMotherCompanyEmail">
+                            </div>
                         </div>
                     </div>
                 </div>
             </b-tab>
             <b-tab title="Guardian">
-                <div class="row">
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 guardianAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Guardian's Personal Information</h2>
+                <div class="">
+                    <div class="guardianAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Guardian's Personal Information</h5>
                         </div>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" ref="inputGuardianFirstName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>First Name</label>
-                            <input type="text" class="form-control" ref="inputGuardianFirstName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Middle Name</label>
+                                <input type="text" class="form-control" ref="inputGuardianMiddleName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Middle Name</label>
-                            <input type="text" class="form-control" ref="inputGuardianMiddleName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" ref="inputGuardianLastName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control" ref="inputGuardianLastName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Date of Birth</label>
+                                <div class="date">
+                                    <el-date-picker v-model="inputGuardianDateofBirth" format="dd/MM/yyyy"
+                                                    value-format="dd/MM/yyyy" type="date"
+                                                    placeholder="Pick a date"></el-date-picker>
+                                </div>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Date of Birth</label>
-                            <div class="date">
-                                <el-date-picker v-model="inputGuardianDateofBirth" format="dd/MM/yyyy" value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"></el-date-picker>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Employment Status</label>
+                                <select v-model="ddlGuardianEmploymentStatus"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlGuardianEmploymentStatusList"
+                                            v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Occupation</label>
+                                <input type="text" class="form-control" ref="inputGuardianOccupation">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Designation</label>
+                                <input type="text" class="form-control" ref="inputGuardianDesignation">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Home Tel No</label>
+                                <input type="text" class="form-control" ref="inputGuardianHomeTelNo">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Office Tel No</label>
+                                <input type="text" class="form-control" ref="inputGuardianOfficeTelNo">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Fax</label>
+                                <input type="text" class="form-control" ref="inputGuardianFax">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Mobile No</label>
+                                <input type="text" class="form-control" ref="inputGuardianMobileNo">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Email</label>
+                                <input type="text" class="form-control" ref="inputGuardianEmail">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Nationality</label>
+                                <select ref="ddlGuardianNationality"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{
+                                        item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Religion</label>
+                                <select v-model="ddlGuardianReligion"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlGuardianReligionList" v-bind:value="item.OPTvalue.trim()">
+                                        {{
+                                        item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Remarks</label>
+                                <input type="text" class="form-control" ref="inputGuardianRemarks">
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Identification Type</label>
+                                <select v-model="ddlGuardianIdentificationType"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in ddlGuardianIdentificationTypeList"
+                                            v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Identification No</label>
+                                <input type="text" class="form-control" ref="inputGuardianIdentificationNo">
                             </div>
                         </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Employment Status</label>
-                            <select v-model="ddlGuardianEmploymentStatus" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlGuardianEmploymentStatusList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Occupation</label>
-                            <input type="text" class="form-control" ref="inputGuardianOccupation">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Designation</label>
-                            <input type="text" class="form-control" ref="inputGuardianDesignation">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Home Tel No</label>
-                            <input type="text" class="form-control" ref="inputGuardianHomeTelNo">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Office Tel No</label>
-                            <input type="text" class="form-control" ref="inputGuardianOfficeTelNo">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Fax</label>
-                            <input type="text" class="form-control" ref="inputGuardianFax">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Mobile No</label>
-                            <input type="text" class="form-control" ref="inputGuardianMobileNo">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Email</label>
-                            <input type="text" class="form-control" ref="inputGuardianEmail">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Nationality</label>
-                            <select ref="ddlGuardianNationality" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Religion</label>
-                            <select v-model="ddlGuardianReligion" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlGuardianReligionList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Remarks</label>
-                            <input type="text" class="form-control" ref="inputGuardianRemarks">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification Type</label>
-                            <select v-model="ddlGuardianIdentificationType" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in ddlGuardianIdentificationTypeList" v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Identification No</label>
-                            <input type="text" class="form-control" ref="inputGuardianIdentificationNo">
-                        </div>
                     </div>
 
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 guardianAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Guardian's Local Residential Address</h2>
+                    <div class="guardianAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Guardian's Local Residential Address</h5>
                         </div>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 1</label>
+                                <input type="text" class="form-control" ref="inputGuardianAddress1">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 1</label>
-                            <input type="text" class="form-control" ref="inputGuardianAddress1">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 2</label>
+                                <input type="text" class="form-control" ref="inputGuardianAddress2">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 2</label>
-                            <input type="text" class="form-control" ref="inputGuardianAddress2">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 3</label>
+                                <input type="text" class="form-control" ref="inputGuardianAddress3">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 3</label>
-                            <input type="text" class="form-control" ref="inputGuardianAddress3">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>City</label>
+                                <input type="text" class="form-control" ref="inputGuardianCity">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>City</label>
-                            <input type="text" class="form-control" ref="inputGuardianCity">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Country</label>
+                                <select ref="ddlGuardianCountry"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                        item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Country</label>
-                            <select ref="ddlGuardianCountry" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Postal Code</label>
-                            <input type="text" class="form-control" ref="inputGuardianPostalCode">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Postal Code</label>
+                                <input type="text" class="form-control" ref="inputGuardianPostalCode">
+                            </div>
                         </div>
                     </div>
-
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 guardianAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Guardian's Company Address</h2>
+                    <div class="guardianAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Guardian's Company Address</h5>
                         </div>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Name</label>
+                                <input type="text" class="form-control" ref="inputGuardianCompanyName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Name</label>
-                            <input type="text" class="form-control" ref="inputGuardianCompanyName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Addressee Name</label>
+                                <input type="text" class="form-control" ref="inputGuardianCompanyAddresseeName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Addressee Name</label>
-                            <input type="text" class="form-control" ref="inputGuardianCompanyAddresseeName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 1</label>
+                                <input type="text" class="form-control" ref="inputGuardianCompanyAddress1">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 1</label>
-                            <input type="text" class="form-control" ref="inputGuardianCompanyAddress1">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 2</label>
+                                <input type="text" class="form-control" ref="inputGuardianCompanyAddress2">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 2</label>
-                            <input type="text" class="form-control" ref="inputGuardianCompanyAddress2">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Address 3</label>
+                                <input type="text" class="form-control" ref="inputGuardianCompanyAddress3">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Address 3</label>
-                            <input type="text" class="form-control" ref="inputGuardianCompanyAddress3">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company City</label>
+                                <input type="text" class="form-control" ref="inputGuardianCompanyCity">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company City</label>
-                            <input type="text" class="form-control" ref="inputGuardianCompanyCity">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Country</label>
+                                <select ref="ddlGuardianCompanyCountry"
+                                        class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                        item.CNYname.trim() }}
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Country</label>
-                            <select ref="ddlGuardianCompanyCountry" class="form-control pro-edt-select form-control-primary">
-                                <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{ item.CNYname.trim() }}</option>
-                            </select>
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Postal Code</label>
+                                <input type="text" class="form-control" ref="inputGuardianCompanyPostalCode">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Postal Code</label>
-                            <input type="text" class="form-control" ref="inputGuardianCompanyPostalCode">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Email</label>
-                            <input type="text" class="form-control" ref="inputGuardianCompanyEmail">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Email</label>
+                                <input type="text" class="form-control" ref="inputGuardianCompanyEmail">
+                            </div>
                         </div>
                     </div>
                 </div>
             </b-tab>
             <b-tab title="Thrid Party">
-                <div class="row" >
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 thirdpartyAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Third Party's Details</h2>
+                <div class="">
+                    <div class="thirdpartyAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Third Party's Details</h5>
                         </div>
+                        <div class="row form-group__wrapper">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Name</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyCompanyName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Name</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyCompanyName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Addressee Name</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyAddresseeName">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Addressee Name</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyAddresseeName">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 1</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyAddress1">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 1</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyAddress1">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 2</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyAddress2">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 2</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyAddress2">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Address 3</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyAddress3">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Address 3</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyAddress3">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>City</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyCity">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>City</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyCity">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Country</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyCountry">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Country</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyCountry">
-                        </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Postal Code</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyPostalCode">
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Postal Code</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyPostalCode">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Company Email</label>
-                            <input type="text" class="form-control" ref="inputThirdPartyCompanyEmail">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Company Email</label>
+                                <input type="text" class="form-control" ref="inputThirdPartyCompanyEmail">
+                            </div>
                         </div>
                     </div>
                 </div>
             </b-tab>
             <b-tab title="Other">
-                <div class="row">
-                    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 otherAreaDiv">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <h2>Other Details</h2>
+                <div class="">
+                    <div class="otherAreaDiv">
+                        <div class="">
+                            <h5 class="text-left student-form__title">Other Details</h5>
                         </div>
+                        <div class="form-group__wrapper row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
+                                <label>
+                                    <input type="checkbox" class="form-control" ref="cbFatherShareMyEmail">
+                                    Share My Email
+                                    <span>
+                                        <span>
+                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path" fill="none" stroke="white"
+                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
+                                        </span>
+                                    </span>
+                                </label>
+                            </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Share My Email</label>
-                            <input type="checkbox" class="form-control" ref="cbFatherShareMyEmail">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
+                                <label>
+                                    <input type="checkbox" class="form-control" ref="cbFatherShareMyMobileNumber">
+                                    Share My Mobile Number
+                                    <span>
+                                        <span>
+                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path" fill="none" stroke="white"
+                                                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
+                                        </span>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
+                                <label>
+                                    <input type="checkbox" class="form-control" ref="cbFatherEtonStaff">
+                                    Eton Staff
+                                    <span>
+                                        <span>
+                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path" fill="none" stroke="white"
+                                                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
+                                        </span>
+                                    </span>
+                                </label>
+                            </div>
+
                         </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Share My Mobile Number</label>
-                            <input type="checkbox" class="form-control" ref="cbFatherShareMyMobileNumber">
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Eton Staff</label>
-                            <input type="checkbox" class="form-control" ref="cbFatherEtonStaff">
-                        </div>
-
                     </div>
                 </div>
             </b-tab>
@@ -692,21 +805,24 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
-                    <button v-on:click="Validation" type="button" class="btn btn-primary waves-effect waves-light m-r-10" >Save</button>
+                    <button v-on:click="Validation" type="button"
+                            class="btn btn-primary waves-effect waves-light m-r-10">Save
+                    </button>
                 </div>
             </div>
         </div>
+        <div class="whitespace-30"></div>
     </div>
 </template>
 
 <script>
     import DataSource from "../data/datasource";
-    import { required } from "vuelidate/lib/validators";
+    import {required} from "vuelidate/lib/validators";
 
     export default {
         name: "Parent",
-        data(){
-            return{
+        data() {
+            return {
                 countryList: [],
                 ddlFatherReligionList: [],
                 ddlMotherReligionList: [],
@@ -741,12 +857,12 @@
             };
         },
         validations: {
-            inputFatherFirstName: { required },
-            inputFatherLastName: { required },
-            inputFatherDateofBirth: { required },
-            inputMotherFirstName: { required },
-            inputMotherLastName: { required },
-            inputMotherDateofBirth: { required },
+            inputFatherFirstName: {required},
+            inputFatherLastName: {required},
+            inputFatherDateofBirth: {required},
+            inputMotherFirstName: {required},
+            inputMotherLastName: {required},
+            inputMotherDateofBirth: {required},
 
         },
         async created() {
@@ -785,13 +901,11 @@
                                 this.ddlFatherReligionList.push(m);
                                 this.ddlMotherReligionList.push(m);
                                 this.ddlGuardianReligionList.push(m);
-                            }
-                            else if (m.OGPname.trim() === 'ParentID') {
+                            } else if (m.OGPname.trim() === 'ParentID') {
                                 this.ddlFatherIdentificationTypeList.push(m);
                                 this.ddlMotherIdentificationTypeList.push(m);
                                 this.ddlGuardianIdentificationTypeList.push(m);
-                            }
-                            else if (m.OGPname.trim() === 'EmpStatus') {
+                            } else if (m.OGPname.trim() === 'EmpStatus') {
                                 this.ddlFatherEmploymentStatusList.push(m);
                                 this.ddlMotherEmploymentStatusList.push(m);
                                 this.ddlGuardianEmploymentStatusList.push(m);
@@ -804,29 +918,20 @@
             },
             async LoadParentInfo() {
                 try {
-                    if (this.$route.query.id != null || this.$route.query.id != undefined)
-                    {
+                    if (this.$route.query.id != null || this.$route.query.id != undefined) {
                         this.lblParentID = this.$route.query.id;
 
                         const response = await DataSource.shared.getParent(this.$route.query.id, "");
-                        if (response)
-                        {
-                            if (response.code == "2")
-                            {
+                        if (response) {
+                            if (response.code == "2") {
                                 alert('No record found');
-                            }
-                            else if (response.code == "99")
-                            {
+                            } else if (response.code == "99") {
                                 alert('Please try again later');
-                            }
-                            else
-                            {
+                            } else {
                                 this.BindParentFields(response.Table);
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         alert('Error! Please search again.');
                     }
                 } catch (e) {
@@ -837,9 +942,9 @@
                 try {
                     resultTable.forEach(m => {
                         //father
-                        this.$refs.inputFatherFirstName.value = m.PAR_Father_FirstName;
+                        this.inputFatherFirstName = m.PAR_Father_FirstName;
                         this.$refs.inputFatherMiddleName.value = m.PAR_Father_MiddleName;
-                        this.$refs.inputFatherLastName.value = m.PAR_Father_LastName;
+                        this.inputFatherLastName = m.PAR_Father_LastName;
                         this.inputFatherDateofBirth = m.PAR_Father_DOB_convert;
                         this.ddlFatherEmploymentStatus = m.PAR_Fat_Emp_Status;
                         this.$refs.inputFatherOccupation.value = m.PAR_Father_Occupation;
@@ -855,9 +960,21 @@
                         this.ddlFatherIdentificationType = m.PAR_Father_IDType;
                         this.$refs.inputFatherIdentificationNo.value = m.PAR_Father_UID;
                         this.inputFatherIdentificationNoExpiryDate = m.PAR_Father_IDExpDate_convert;
-                        if (m.PAR_ShareMyContact == 'Yes') { this.$refs.cbFatherShareMyEmail.checked = true; } else { this.$refs.cbFatherShareMyEmail.checked = false; }
-                        if (m.PAR_ShareMyMobile == 'Yes') { this.$refs.cbFatherShareMyMobileNumber.checked = true; } else { this.$refs.cbFatherShareMyMobileNumber.checked = false; }
-                        if (m.PAR_Father_IsStaff == 'True') { this.$refs.cbFatherEtonStaff.checked = true; } else { this.$refs.cbFatherEtonStaff.checked = false; }
+                        if (m.PAR_ShareMyContact == 'Yes') {
+                            this.$refs.cbFatherShareMyEmail.checked = true;
+                        } else {
+                            this.$refs.cbFatherShareMyEmail.checked = false;
+                        }
+                        if (m.PAR_ShareMyMobile == 'Yes') {
+                            this.$refs.cbFatherShareMyMobileNumber.checked = true;
+                        } else {
+                            this.$refs.cbFatherShareMyMobileNumber.checked = false;
+                        }
+                        if (m.PAR_Father_IsStaff == 'True') {
+                            this.$refs.cbFatherEtonStaff.checked = true;
+                        } else {
+                            this.$refs.cbFatherEtonStaff.checked = false;
+                        }
                         this.$refs.inputFatherAddress1.value = m.PAR_Father_Loc_Residence_No;
                         this.$refs.inputFatherAddress2.value = m.PAR_Father_Loc_Address1;
                         this.$refs.inputFatherAddress3.value = m.PAR_Father_Loc_Address2;
@@ -870,15 +987,15 @@
                         this.$refs.inputFatherCompanyAddress2.value = m.PAR_Father_Address1;
                         this.$refs.inputFatherCompanyAddress3.value = m.PAR_Father_Address2;
                         this.$refs.inputFatherCompanyCity.value = m.PAR_Father_City;
-                        this.$refs.ddlFatherCompanyCountry .value = m.PAR_Father_Country;
+                        this.$refs.ddlFatherCompanyCountry.value = m.PAR_Father_Country;
                         this.$refs.inputFatherCompanyPostalCode.value = m.PAR_Father_PostalCode;
                         this.$refs.inputFatherCompanyEmail.value = m.PAR_FComp_Email;
                         //father
 
                         //mother
-                        this.$refs.inputMotherFirstName.value = m.PAR_Mother_FirstName;
+                        this.inputMotherFirstName = m.PAR_Mother_FirstName;
                         this.$refs.inputMotherMiddleName.value = m.PAR_Mother_MiddleName;
-                        this.$refs.inputMotherLastName.value = m.PAR_Mother_LastName;
+                        this.inputMotherLastName = m.PAR_Mother_LastName;
 
                         this.inputMotherDateofBirth = m.PAR_Mother_DOB_convert;
 
@@ -966,9 +1083,8 @@
             },
             async Save() {
                 try {
-                    this.lblParentID
-                    if (this.lblParentID != '')
-                    {
+                    this.lblParentID;
+                    if (this.lblParentID != '') {
                         let jsonString = '"PAR_Father_FirstName":"' + this.$refs.inputFatherFirstName.value + '"';
                         jsonString = jsonString + ',"PAR_Father_MiddleName":"' + this.$refs.inputFatherMiddleName.value + '"';
                         jsonString = jsonString + ',"PAR_Father_LastName":"' + this.$refs.inputFatherLastName.value + '"';
@@ -987,9 +1103,21 @@
                         jsonString = jsonString + ',"PAR_Father_IDType":"' + this.ddlFatherIdentificationType + '"';
                         jsonString = jsonString + ',"PAR_Father_UID":"' + this.$refs.inputFatherIdentificationNo.value + '"';
                         jsonString = jsonString + ',"PAR_Father_IDExpDate":"' + this.inputFatherIdentificationNoExpiryDate + '"';
-                        if (this.$refs.cbFatherShareMyEmail.checked == true) { jsonString = jsonString + ',"PAR_ShareMyContact":"Yes"'; } else { jsonString = jsonString + ',"PAR_ShareMyContact":"No"'; }
-                        if (this.$refs.cbFatherShareMyMobileNumber.checked == true) { jsonString = jsonString + ',"PAR_ShareMyMobile":"Yes"'; } else { jsonString = jsonString + ',"PAR_ShareMyMobile":"No"'; }
-                        if (this.$refs.cbFatherEtonStaff.checked == true) { jsonString = jsonString + ',"PAR_Father_IsStaff":"True"'; } else { jsonString = jsonString + ',"PAR_Father_IsStaff":"False"'; }
+                        if (this.$refs.cbFatherShareMyEmail.checked == true) {
+                            jsonString = jsonString + ',"PAR_ShareMyContact":"Yes"';
+                        } else {
+                            jsonString = jsonString + ',"PAR_ShareMyContact":"No"';
+                        }
+                        if (this.$refs.cbFatherShareMyMobileNumber.checked == true) {
+                            jsonString = jsonString + ',"PAR_ShareMyMobile":"Yes"';
+                        } else {
+                            jsonString = jsonString + ',"PAR_ShareMyMobile":"No"';
+                        }
+                        if (this.$refs.cbFatherEtonStaff.checked == true) {
+                            jsonString = jsonString + ',"PAR_Father_IsStaff":"True"';
+                        } else {
+                            jsonString = jsonString + ',"PAR_Father_IsStaff":"False"';
+                        }
                         jsonString = jsonString + ',"PAR_Father_Loc_Residence_No":"' + this.$refs.inputFatherAddress1.value + '"';
                         jsonString = jsonString + ',"PAR_Father_Loc_Address1":"' + this.$refs.inputFatherAddress2.value + '"';
                         jsonString = jsonString + ',"PAR_Father_Loc_Address2":"' + this.$refs.inputFatherAddress3.value + '"';
@@ -1080,35 +1208,29 @@
                         jsonString = jsonString + ',"PAR_TPPin":"' + this.$refs.inputThirdPartyPostalCode.value + '"';
                         jsonString = jsonString + ',"PAR_TPComp_Email":"' + this.$refs.inputThirdPartyCompanyEmail.value + '"';
 
-                        jsonString = '{ ' + jsonString + ' }'
+                        jsonString = '{ ' + jsonString + ' }';
 
                         const response = await DataSource.shared.updateParent(this.lblParentID, jsonString);
                         if (response) {
-                            if (response.code == "1")
-                            {
+                            if (response.code == "1") {
                                 alert('Records Successfully Edited');
                                 window.location.replace('/parent?id=' + this.lblParentID);
-                            }
-                            else
-                            {
+                            } else {
                                 alert('Update Parent Error - Please try again later');
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         alert('Error! Please search again.');
                     }
                 } catch (e) {
                     this.results = e;
                 }
             },
-            async Validation(){
+            async Validation() {
                 try {
                     this.$v.$touch();
 
-                    if(this.$v.$error)
-                    {
+                    if (this.$v.$error) {
                         alert('Please fill in all * fields');
                         return;
                     }
@@ -1119,46 +1241,44 @@
                 }
             },
         },
-    }
+    };
 </script>
 
 <style scoped>
-    .fatherAreaDiv, .motherAreaDiv, .guardianAreaDiv, .thirdpartyAreaDiv, .otherAreaDiv
-    {
-        margin-bottom:50px;
+    .fatherAreaDiv, .motherAreaDiv, .guardianAreaDiv, .thirdpartyAreaDiv, .otherAreaDiv {
+        margin-bottom: 50px;
     }
-    .el-date-editor, .el-input
-    {
-        width:100% !important;
+
+    .el-date-editor, .el-input {
+        width: 100% !important;
     }
-    .requiredFields
-    {
+
+    .requiredFields {
         border-color: #f79483;
     }
-    .requiredFieldsMsg
-    {
+
+    .requiredFieldsMsg {
         color: red;
         font-weight: bold;
     }
 </style>
 
 <style>
-    .parentPageBTabs .tab-content
-    {
-        margin-top:30px;
+    .parentPageBTabs .tab-content {
+        margin-top: 30px;
     }
-    .parentPageBTabs .nav-link
-    {
-        font-weight:bold;
+
+    .parentPageBTabs .nav-link {
+        font-weight: bold;
     }
-    .parentPageBTabs .nav-tabs .nav-link.active
-    {
-        background-color:#413f56;
-        color:white;
-        border:5px solid #dee2e6;
+
+    .parentPageBTabs .nav-tabs .nav-link.active {
+        background-color: #413f56;
+        color: white;
+        border: 5px solid #dee2e6;
     }
-    .parentPageBTabs .nav-tabs
-    {
-        border-bottom:5px solid #dee2e6;
+
+    .parentPageBTabs .nav-tabs {
+        border-bottom: 5px solid #dee2e6;
     }
 </style>

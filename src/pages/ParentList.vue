@@ -1,28 +1,27 @@
 <template>
     <div id="parent-list" class="mt-3 container">
         <div>
-            <div class="row">
-                <div class="form-group col-lg-6">
+
+            <div class="datatable-form__header">
+                <div class="datatable-form__input form-group">
                     <label>Family No</label>
                     <input class="form-control" ref="inputFamilyNo">
                 </div>
-
-                <div class="form-group col-lg-6">
+                <div class="datatable-form__input form-group">
                     <label>Parent First Name</label>
                     <input class="form-control" ref="inputParentFirstName">
                 </div>
-
-                <div class="form-group col-lg-6">
+                <div class="datatable-form__input form-group">
                     <label>Parent Last Name</label>
                     <input class="form-control" ref="inputParentLastName">
                 </div>
+
+                <div class="datatable-form__submit text-center">
+                    <button class="btn btn-success searchbtn" v-on:click="Search">Search</button>
+                </div>
             </div>
 
-            <div class="text-center">
-                <button class="btn btn-success searchbtn" v-on:click="Search" @click="openLoading">Search</button>
-            </div>
-
-            <div v-if="list.length>0">
+            <div v-if="list.length>0" class="datatable_group">
                 <data-tables :data="list" :action-col="actionCol" @selection-change="handleSelectionChange">
                     <!--<el-table-column type="selection" width="55">-->
                     <!--</el-table-column>-->

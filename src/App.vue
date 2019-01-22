@@ -47,6 +47,7 @@
                 setTimeout(this.warningLogout, 10800000); // 3 hours
             }
             this.isLoading = false;
+
         },
         methods: {
             warningLogout() {
@@ -64,7 +65,7 @@
             },
             cancelClick() {
                 DataSource.shared.logout();
-            }
+            },
         }
     };
 

@@ -1,22 +1,24 @@
 <template>
-    <div>
-        <vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active"
-                    icon-pack="fa">
+    <div class="menu-box-wrap">
+        <div class="menu-box">
+            <!--<vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active"-->
+            <!--icon-pack="fa">-->
 
-            <div class="header-sidebar" slot="header">
-                <a href="/"><img src="../assets/kagami.jpg"/></a>
-            </div>
+            <!--<div class="header-sidebar" slot="header">-->
+            <!--<a href="/"><img src="../assets/kagami.jpg"/></a>-->
+            <!--</div>-->
 
-            <div class="menu-wrap" v-for="item in primaryMenuFiltered" :key=item.MENid
-                 :class="{'menu-wrap-active':currentParentMenuId===item.MENid}">
+            <div class="menu-wrap" v-for="item in primaryMenuFiltered" :key=item.MENid>
                 <!-- if menu has submenu, click will open submenu -->
-                <div v-if="item.subMenus">
+                <div v-if="item.subMenus" class="menu-wrap__item">
                     <div class="parent-menu has-sub-menu"
                          @click="handleParentMenuClick(item.MENid)">
-                        <i :class="item.MENicon"></i>{{item.MENname}} <i class="material-icons">keyboard_arrow_down</i>
+                        <i class="big-icon" :class="item.MENicon"></i><span>{{item.MENname}}</span> <i
+                            class="material-icons">keyboard_arrow_down</i>
                     </div>
 
-                    <div class="sub-menu" v-if="item.subMenus">
+                    <div class="sub-menu" v-if="item.subMenus"
+                         :class="{'menu-wrap-active':currentParentMenuId===item.MENid}">
                         <div v-for="submenu in item.subMenus" :class="{'submenu-active':currentMenu===submenu.MENid}">
                             <a :href="submenu.MENnewurl">
                                 <i :class="submenu.MENicon"></i> {{submenu.MENname}}
@@ -25,21 +27,29 @@
                     </div>
                 </div>
                 <!-- if menu has no submenu, click will route to url (MENnewurl) -->
-                <div v-else>
+                <div v-else :class="{'null-item':item.MENnewurl===null}">
                     <div class="parent-menu" v-if="item.MENnewurl">
                         <!-- if MENnewurl has value -->
                         <router-link v-if="item.MENnewurl" :to="item.MENnewurl">
-                            <i :class="item.MENicon"></i> {{item.MENname}}
+                            <i :class="item.MENicon"></i> <span>{{item.MENname}}</span>
                         </router-link>
                         <!-- if MENnewurl is null -->
                         <div v-else class="url-null">
-                            <i :class="item.MENicon"></i> {{item.MENname}}
+                            <i :class="item.MENicon"></i> <span>{{item.MENname}}</span>
                         </div>
                     </div>
                 </div>
 
             </div>
-        </vs-sidebar>
+            <!--</vs-sidebar>-->
+        </div>
+        <div class="input-group search" v-if="isMobile()">
+            <input type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"
+                                                                     aria-hidden="true"></i></button>
+                </span>
+        </div><!-- /input-group -->
     </div>
 </template>
 
@@ -57,16 +67,24 @@
                 active: false,
                 currentMenu: null,
                 currentParentMenuId: null,
-                currentParentMenuId2: null
+                currentParentMenuId2: null,
+                isNullItem: "",
+                showMobileMenu: false
+
             };
         },
         async mounted() {
             const response = await DataSource.shared.getUserMenu();
+            console.log(this.currentParentMenuId);
             if (response) {
-                this.primaryMenu = response.PrimaryTable.Table;
+                this.primaryMenu = response.PrimaryTable && response.PrimaryTable.Table;
+                if (!this.primaryMenu) {
+                    return;
+                }
                 this.primaryMenu.forEach(m => {
                     //console.log(m);
                     this.primaryMenuFiltered.push(m);
+
                     // switch (m.MENname) {
                     //     case "Administration":
                     //     case "Dashboards":
@@ -80,11 +98,11 @@
                 this.nonPrimaryTable.map(d => {
 
                     // set current active menu based on URL pathname
-                    if (d.MENnewurl === window.location.pathname) {
-                        this.currentMenu = d.MENid;
-                        this.currentParentMenuId = d.MGPMENparentid;
-                        this.currentParentMenuId2 = d.MGPMENparentid_2;
-                    }
+                    // if (d.MENnewurl === window.location.pathname) {
+                    //     this.currentMenu = d.MENid;
+                    //     this.currentParentMenuId = d.MGPMENparentid;
+                    //     this.currentParentMenuId2 = d.MGPMENparentid_2;
+                    // }
 
                     if (d.MENnewurl != null && d.MENnewurl != "") {
                         //return null;
@@ -129,100 +147,23 @@
                     this.currentParentMenuId = menuId;
                 }
             },
+            isMobile() {
+                if (screen.width <= 760) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
     };
 </script>
 
 <style scoped>
-    .menu-wrap {
-        color: #fff;
-    }
-
-    .parent-menu {
-        cursor: pointer;
-        padding: 10px 20px 10px 30px;
-        color: #c0bed8;
-        text-align: left;
-        margin: 10px 0px;
-        background: transparent;
-        -webkit-transition: all 0.3s ease-in-out;
-        -moz-transition: all 0.3s ease-in-out;
-        -o-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
-    }
-
-    .sub-menu {
-        height: 0;
-        visibility: hidden;
-        opacity: 0;
-    }
-
-    .menu-wrap-active .sub-menu {
-        height: auto;
-        visibility: visible;
-        opacity: 1;
-    }
-
-    .vs-sidebar--items {
-        overflow-y: initial;
-    }
-
-    .parent-menu i {
-        width: 29px;
-    }
-
-    .sub-menu a {
-        color: #9796a9;
-        padding: 5px 60px;
-        display: block;
-        text-align: left;
-    }
-
-    .parent-menu:hover {
-        background: #eb4958;
-        color: white;
-    }
-
-    .sub-menu a:hover {
-        color: white;
-    }
-
-    .parent-menu i.material-icons {
-        font-size: 26px;
-        float: right;
-        position: relative;
-        top: -3px;
-    }
-
-    .menu-wrap-active .parent-menu, .parent-menu.menu-active {
-        background: #eb4958;
-        color: white;
-    }
-
-    .submenu-active a{
-        color: #fff;
-    }
-
 
 
 </style>
 
 <style>
 
-    #parentx-static {
-        overflow: hidden;
-        position: fixed;
-        width: 260px;
-        height: 100vh;
-        background: #413f56;
-        overflow-y: auto;
-    }
 
-    #parentx-static .vs-sidebar.vs-sidebar-parent {
-        height: 100vh !important;
-    }
-
-    .vs-sidebar--items {
-        height: 100vh !important;
-    }
 </style>

@@ -2,13 +2,14 @@
     <div id="staff-post" class="mt-3 container">
         <div>
             <h4 class="title">Pending Post</h4>
-            <div v-if="list && list.length>0">
+            <div v-if="list && list.length>0" class="datatable_group">
                 <el-row style="margin-bottom: 10px" class="data-top">
                     <el-dropdown @command="handleClick" class="float-right">
                         <el-button type="primary">Actions<i class="el-icon-caret-bottom el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="approve">Approve</el-dropdown-item>
+                            <el-dropdown-item command="delete">Delete</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-row>
@@ -121,7 +122,8 @@
                     <div class="post-image-wrapper">
                         <ul>
                             <li class="postFile__item col-md-4" v-for="postFile in currentFiles" :key="postFile.ID">
-                                <span @click="handleImageRemove(postFile.ID)" class="remove"><i class="fa fa-times" aria-hidden="true"></i></span>
+                                <span @click="handleImageRemove(postFile.ID)" class="remove"><i class="fa fa-times"
+                                                                                                aria-hidden="true"></i></span>
                                 <img :src="postFile.PostItemPath"
                                      :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>
                             </li>
@@ -140,6 +142,30 @@
                     </div>
                 </div>
             </form>
+        </b-modal>
+        <b-modal id="modalDelete" hide-footer title="ARE YOU SURE?" v-model="showDeleteModal">
+            Once you delete a post, you can't undo it.
+            <br/>
+            <div class="row d-flex submit-wrap">
+                <div class="col-md-6">
+                    <b-btn class="float-left" @click="cancelClick">Cancel</b-btn>
+                </div>
+                <div class="col-md-6">
+                    <b-btn class="float-right" @click="okClick">OK</b-btn>
+                </div>
+            </div>
+        </b-modal>
+        <b-modal id="modalApprove" hide-footer title="CONFIRM APPROVE?" v-model="showConfirmModal">
+            Approve post Now?
+            <br/>
+            <div class="row d-flex submit-wrap">
+                <div class="col-md-6">
+                    <b-btn class="float-left" @click="approveCancelClick">Cancel</b-btn>
+                </div>
+                <div class="col-md-6">
+                    <b-btn class="float-right" @click="approveOkClick">OK</b-btn>
+                </div>
+            </div>
         </b-modal>
     </div>
 
@@ -185,16 +211,21 @@
                         },
                         handler: async row => {
                             try {
-                                console.log("clicked row data: ", row);
+                                // console.log("clicked row data: ", row);
+                                // this will call when modal open right?
+                                // await this.getPostFile();
+
 
                                 // call approve post api
                                 const response = await DataSource.shared.approvePost(row.PostApproverID, "Approved");
-                                console.log('approve response: ', response);
+                                // console.log('approve response: ', response);
 
                                 // update pending post view on success
-                                this.getPendingPost();
+                                if (response && response.code==="1"){
+                                    this.getPendingPost();
 
-                                this.getPostFile();
+
+                                }
                             } catch (error) {
                                 // log error
                                 console.log(error);
@@ -208,11 +239,11 @@
                             icon: 'el-icon-edit'
                         },
                         handler: async row => {
-                            console.log(row, ' ss');
+                            // console.log(row, ' ss');
                             try {
 
                                 const fileRes = await DataSource.shared.getPostFile(row.PostID);
-                                console.log(fileRes);
+                                // console.log(fileRes);
                                 if (fileRes.Table) {
                                     this.currentFiles = fileRes.Table;
                                 } else {
@@ -256,15 +287,17 @@
                 tagUserID: "",
                 tagClassID: "",
                 PostItemPath: "",
+                showDeleteModal: false,
+                showConfirmModal: false,
             };
         },
         methods: {
             handleImageRemove(fileId) {
-                console.log(fileId);
+                // console.log(fileId);
                 this.currentFiles = this.currentFiles.filter(d => d.ID !== fileId);
             },
             handleSelectionChange(rows) {
-                console.log(rows);
+                // console.log(rows);
                 this.selectedRows = rows;
             },
             showModal() {
@@ -273,7 +306,7 @@
             async getPendingPost() {
                 try {
                     const response = await DataSource.shared.pendingPost();
-                    console.log(response);
+                    // console.log(response);
                     if (response) {
                         this.list = response.Table;
                         switch (response.code) {
@@ -299,12 +332,13 @@
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
-                    const saveResponse = await DataSource.shared.updatePost(this.currentFiles, this.actionStatus, this.postID, this.postContent, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID, );
-                    console.log(saveResponse);
+                    const saveResponse = await DataSource.shared.updatePost(this.currentFiles, this.actionStatus, this.postID, this.postContent, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID,);
+                    // console.log(saveResponse);
                     if (saveResponse) {
                         switch (saveResponse.code) {
                             case "1":
                                 this.results = `Post updated`;
+                                this.getPendingPost();
                                 break;
                             case "88":
                                 this.results = `Request Rejected / Post has been approved`;
@@ -329,116 +363,72 @@
                 // if clicked dropdown button is approve
                 if (command === "approve") {
                     try {
-                        // loop selected rows and call approve api one by one, lol
-                        for (const row of this.selectedRows) {
-                            const response = await DataSource.shared.approvePost(row.PostApproverID, "Approved");
+                        if (this.selectedRows.length !== 0) {
+                            this.showConfirmModal = true;
                         }
+                    } catch (error) {
+                        // log error
+                        console.log(error);
+                    }
+                }
 
-                        // update pending post view on success
-                        this.getPendingPost();
+                if (command === "delete") {
+                    try {
+                        if (this.selectedRows.length !== 0) {
+                            this.showDeleteModal = true;
+                        }
                     } catch (error) {
                         // log error
                         console.log(error);
                     }
                 }
             },
+            async cancelClick() {
+                this.showDeleteModal = false;
+            },
+            async okClick() {
+                try {
+                    let deleteResponse;
+                    for (const row of this.selectedRows) {
+                        deleteResponse = await DataSource.shared.softDeletePost(row.PostID, row.profolio);
+                    }
+                    if (deleteResponse && deleteResponse.code === "1") {
+                        this.showDeleteModal = false;
+                        this.getPendingPost();
+                    }
+                } catch (e) {
+                    console.log("error ", e);
+                }
+            },
+            async approveCancelClick() {
+                this.showConfirmModal = false;
+            },
+            async approveOkClick() {
+                try {
+                    let response;
+                    // loop selected rows and call approve api one by one, lol
+                    for (const row of this.selectedRows) {
+                        response = await DataSource.shared.approvePost(row.PostApproverID, "Approved");
+                    }
+                    // update pending post view on success
+                    if (response && response.code === "1") {
+                        this.showConfirmModal = false;
+                        this.getPendingPost();
+                    }
+                } catch (e) {
+                    console.log("error ", e);
+                }
+            },
         },
         async mounted() {
             this.getPendingPost();
-        }
-        ,
-    }
-    ;
+        },
+    };
 </script>
 
 <style scoped>
 </style>
 <style>
-    thead.vs-table--thead th {
-        width: auto;
-        text-align: center !important;
-    }
 
-    .vs-table--tbody-table .tr-table td {
-        text-align: left;
-    }
-
-    h4.title {
-        text-align: left;
-        font-weight: bold;
-    }
-
-    .el-table--enable-row-hover .el-table__body tr:hover > td {
-        background-color: #ffffff !important;
-        border-radius: 3px !important;
-    }
-
-    .el-table--enable-row-hover .el-table__body tr:hover {
-        box-shadow: 0px 0px 10px -5px #848484 !important;
-    }
-
-    .sc-table {
-        padding: 20px !important;
-    }
-
-    .pagination-bar {
-        margin: 10px 0px;
-        background: white;
-        padding: 10px 0px;
-    }
-
-
-    .modal-title:before {
-        content: "\F040 ";
-        font-family: fontawesome;
-        background: #f3415924;
-        color: #f34159;
-        border-radius: 35px;
-        width: 30px;
-        height: 30px;
-        display: inline-block;
-        font-size: 15px;
-        line-height: 30px;
-        margin-right: 10px;
-    }
-
-    .action-list button:focus {
-        color: #67c23a;
-    }
-
-    .post-image-wrapper .postFile__item img {
-        max-width: 95%;
-        background: #eee;
-        padding: 10px;
-        margin: 5px;
-    }
-
-    .post-image-wrapper .postFile__item {
-        float: left;
-        list-style: none;
-        padding: 0px;
-    }
-
-    .post-image-wrapper {
-        display: table;
-        width: 100%;
-    }
-    .post-image-wrapper .postFile__item .remove {
-        background: #f44252;
-        width: 20px;
-        height: 20px;
-        display: block;
-        text-align: center;
-        color: white;
-        border-radius: 21px;
-        float: right;
-        margin-bottom: -20px;
-        position: relative;
-        cursor: pointer;
-    }
-
-    .post-image-wrapper .postFile__item .remove:hover{
-        background: #ce3845;
-    }
 
 </style>

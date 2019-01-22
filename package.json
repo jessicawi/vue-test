@@ -22,6 +22,7 @@
     "tiptap": "^1.7.0",
     "tiptap-extensions": "^1.7.0",
     "vue": "^2.5.17",
+    "vue-at": "2.x",
     "vue-body-class": "^2.0.0-beta.2",
     "vue-chartjs": "^3.4.0",
     "vue-data-tables": "^3.4.4",

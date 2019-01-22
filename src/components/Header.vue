@@ -1,34 +1,14 @@
 <template lang="html">
-    <!--<div id="header">-->
-    <!--<div class="top-menu">-->
-    <!--<div class="top-menu__item">-->
-    <!--<router-link :to="{ name: 'Home'}">Home Page</router-link>-->
-    <!--</div>-->
-    <!--<div class="top-menu__item">-->
-    <!--<router-link :to="{ name: 'Login'}">Login Page</router-link>-->
-    <!--<div class="top-menu__subitem">-->
-    <!--<router-link :to="{ name: 'Reset Password'}">Reset Password</router-link>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="top-menu__item">-->
-    <!--<router-link :to="{ name: 'CountryList'}">Country List Page</router-link>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <div>
-        <div id="parentx-static" class="header">
-            <SideMenu/>
-        </div>
-    </div>
+    <div id="header"></div>
 
 </template>
 
 <script>
-    import SideMenu from "./SideMenu";
+    // import SideMenu from "./SideMenu";
 
     export default {
         name: 'Header',
-        components: {SideMenu},
+        // components: {SideMenu},
         data: () => ({
             active: false
         }),

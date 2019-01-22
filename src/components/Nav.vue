@@ -1,52 +1,81 @@
 <template>
-    <vs-navbar v-model="activeItem" class="nabarx topbar">
-        <vs-navbar-title>
+
+    <div class="row nabarx topbar">
+        <div class="col-md-4 text-left">
+            <a href="/"> <img src="../assets/kagami-white.png"/></a>
             {{$route.name}}
-        </vs-navbar-title>
+        </div>
+        <div class="col-md-8 info-menu">
+            <div class="input-group search"  v-if="!isMobile()">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </span>
+            </div><!-- /input-group -->
 
-        <vs-spacer></vs-spacer>
-
-        <!--<vs-input icon="search" placeholder="Search" v-model="search"/>-->
-        <vs-navbar-item index="0">
-            <a href="#"><vs-icon icon="feedback"></vs-icon><span>Feedback</span></a>
-        </vs-navbar-item>
-        <vs-navbar-item index="1">
-            <a href="#"><vs-icon icon="timeline"></vs-icon><span>Timeline</span></a>
-        </vs-navbar-item>
-        <vs-navbar-item index="2">
-            <a href="#"><vs-icon icon="calendar_today"></vs-icon><span>Calendar</span></a>
-        </vs-navbar-item>
-        <vs-navbar-item index="3">
-            <vs-dropdown >
-                <a class="a-icon" href="#">
-                    <vs-icon icon="account_circle"></vs-icon><span>Account</span>
+            <li class="info-menu__item">
+                <a href="#">
+                    <i class="fa fa-commenting" aria-hidden="true"></i>
+                    <span>Feedback</span>
                 </a>
+            </li>
 
-                <vs-dropdown-menu>
-                    <vs-dropdown-item>
-                        <span @click="logout">Logout</span>
-                    </vs-dropdown-item>
-                </vs-dropdown-menu>
-            </vs-dropdown>
-        </vs-navbar-item>
-    </vs-navbar>
+            <li class="info-menu__item">
+                <a href="#">
+                    <i class="fa fa-code-fork" aria-hidden="true"></i>
+                    <span>Timeline</span>
+                </a>
+            </li>
+
+            <li class="info-menu__item">
+                <a href="#">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span>Calendar</span>
+                </a>
+            </li>
+
+            <li class="info-menu__item">
+                <vs-dropdown>
+                    <a class="a-icon" href="#">
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                        <span>Account</span>
+                    </a>
+
+                    <vs-dropdown-menu>
+                        <vs-dropdown-item>
+                            <span @click="logout">Logout</span>
+                        </vs-dropdown-item>
+                    </vs-dropdown-menu>
+                </vs-dropdown>
+            </li>
+        </div>
+    </div>
 </template>
 
 <script>
     import DataSource from "../data/datasource";
+
     export default {
         name: 'navBar',
         data() {
             return {
-                activeItem: 0,
                 // isLoading: true,
                 // token: null,
                 // isLoggedIn: null
-            }
+            };
         },
         methods: {
             logout() {
-                    DataSource.shared.logout();
+                DataSource.shared.logout();
+            },
+
+            isMobile() {
+                if( screen.width <= 760 ) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
         }
         // mounted() {
@@ -62,54 +91,6 @@
     };
 </script>
 
-<style >
-    .login header{
-        display: none;
-    }
-    .vs-navbar--item a {
-        width: 50px;
-        overflow: hidden;
-    }
-    .vs-navbar--item i {
-        float: right;
-    }
-    .topbar {
-        background: #413f56 !important;
-        color: white;
-        padding: 5px 0px;
-        z-index: 999 !important;
-    }
-
-    .topbar a {
-        color: white !important;
-    }
-
-    .topbar h3.vs-navbar--title {
-        margin: 0px;
-    }
-
-    .topbar .vs-con-input i {
-        color: #413f56;
-    }
-
-    .topbar .vs-con-input input {
-        border-radius: 40px !important;
-        padding: 8px 0px;
-    }
-    .examplex {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .examplex .a-icon {
-        outline: none;
-        text-decoration: none !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .examplex .a-icon i {
-        font-size: 18px;
-    }
+<style>
 
 </style>

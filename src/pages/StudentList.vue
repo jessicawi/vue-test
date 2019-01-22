@@ -1,33 +1,35 @@
 <template>
     <div id="student-list" class="mt-3 container">
         <div>
-            <div class="row">
-                <div class="form-group col-lg-6">
+            <div class="datatable-form__header">
+                <div class="datatable-form__input form-group">
                     <label>Student No</label>
                     <input class="form-control" ref="stud_id">
                 </div>
 
-                <div class="form-group col-lg-6">
+                <div class="datatable-form__input form-group">
                     <label>Student First Name</label>
                     <input class="form-control" ref="stud_fname">
                 </div>
 
-                <div class="form-group col-lg-6">
+                <div class="datatable-form__input form-group">
                     <label>Student Last Name</label>
                     <input class="form-control" ref="stud_lname">
                 </div>
 
-                <div class="form-group col-lg-6">
+                <div class="datatable-form__input form-group">
                     <label>Parent Name</label>
                     <input class="form-control" ref="stud_parname">
                 </div>
+
+                <div class="datatable-form__submit text-center">
+                    <button class="btn btn-success searchbtn" v-on:click="Search">Search</button>
+                </div>
             </div>
 
-            <div class="text-center">
-                <button class="btn btn-success searchbtn" v-on:click="Search" @click="openLoading">Search</button>
-            </div>
 
-            <div v-if="list.length>0">
+
+            <div v-if="list.length>0" class="datatable_group">
                 <data-tables :data="list" :action-col="actionCol" @selection-change="handleSelectionChange">
                     <el-table-column v-for="studentListInfo in studentList" :prop="studentListInfo.prop" :label="studentListInfo.label" :key="studentListInfo.prop"
                                      sortable="custom">

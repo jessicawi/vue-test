@@ -21,8 +21,8 @@ import approvePost from "../pages/ApprovePost";
 import updatePost from "../pages/updatePost";
 import parentRegister from "../pages/ParentRegister";
 import getApproverMaster from "../pages/Approver";
-import saveApproverMaster from "../pages/saveApprover";
-import updateApproverMaster from "../pages/updateApprover";
+import getGallery from "../pages/gallery";
+import attendanceList from "../pages/AttendanceList";
 import testPage from "../pages/test";
 import  userList from "../pages/userList";
 
@@ -111,24 +111,9 @@ const router = new VueRouter({
             component: parentPost,
         },
         {
-            path: '/post/save',
-            name: 'Save Post',
-            component: savePost,
-        },
-        {
             path: '/post/pending',
             name: 'Pending Post',
             component: pendingPost,
-        },
-        {
-            path: '/post/approve',
-            name: 'Approve Post',
-            component: approvePost,
-        },
-        {
-            path: '/post/update',
-            name: 'Update Post',
-            component: updatePost,
         },
         {
             path: '/approver',
@@ -136,25 +121,19 @@ const router = new VueRouter({
             component: getApproverMaster,
         },
         {
-            path: '/approver/save',
-            name: 'Save Approver',
-            component: saveApproverMaster,
+            path: '/gallery',
+            name: 'Gallery',
+            component: getGallery,
         },
-
         {
-            path: '/approver/update',
-            name: 'Update Approver',
-            component: updateApproverMaster,
+            path: '/attendancelist',
+            name: 'Attendance List',
+            component: attendanceList,
         },
         {
             path: '/test-page',
             name: 'Test',
             component: testPage
-        },
-        {
-            path: '/user-list',
-            name: 'userList',
-            component: userList
         },
     ]
 });

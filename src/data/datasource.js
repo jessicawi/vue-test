@@ -193,13 +193,18 @@ export default class DataSource {
         return response;
     }
 
-    async checkStudentDuplication(studentFirstName, studentLastName, studentDOB, studentIDType, studentID) {
+    async checkStudentDuplication(studentFirstName, studentLastName, studentDOB, finExpire, fin, birthCert, ic, passport, passportExpire, otherID) {
         const data = {
             studentFirstName: studentFirstName,
             studentLastName: studentLastName,
             studentDOB: studentDOB,
-            studentIDType: studentIDType,
-            studentID: studentID,
+            finExpire: finExpire,
+            fin: fin,
+            birthCert: birthCert,
+            ic: ic,
+            passport: passport,
+            passportExpire: passportExpire,
+            otherID: otherID,
         };
         const response = await this.callWebService("/controller/Students.asmx/checkStudentDuplication", data, "POST");
         return response;
@@ -275,6 +280,15 @@ export default class DataSource {
     async getStudentLevel(studentID) {
         const data = {
             studentID: studentID,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getStudentLevel", data, "POST");
+        return response;
+    }
+
+    async getStudentLevelActiveOnly(studentID) {
+        const data = {
+            studentID: studentID,
+            onlyActive: 'Yes',
         };
         const response = await this.callWebService("/controller/Students.asmx/getStudentLevel", data, "POST");
         return response;
@@ -480,6 +494,55 @@ export default class DataSource {
         return response;
     }
 
+    async saveGallery(files, fileType, galFolderID, folderName) {
+
+        const formData = new FormData();
+        formData.append('token', sessionStorage.getItem('authToken'));
+        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                // console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        formData.append(`upload_${key}`, files[key]);
+                    } else {
+                        formData.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            formData.append("upload", files[0]);
+        }
+
+        formData.append("fileType", fileType);
+        formData.append("galFolderID", galFolderID);
+        formData.append("folderName", folderName);
+
+        const request = {
+            url: `${API_HOST}/controller/Gallery.asmx/saveFile`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+
+    }
+
     async pendingPost(ID, PostID, PostContent, PostStatus, PostCreatedDate, PostApproverID) {
         const data = {
             ID: ID,
@@ -508,7 +571,7 @@ export default class DataSource {
         const formData = new FormData();
         formData.append('token', sessionStorage.getItem('authToken'));
         formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
-console.log(currentFiles);
+        console.log(currentFiles);
         if (currentFiles && currentFiles.length > 1) {
             for (let key in currentFiles) {
                 // console.log(key);
@@ -554,6 +617,19 @@ console.log(currentFiles);
         }
         return response;
     }
+
+
+    async softDeletePost(postId, profolio) {
+        const data = {
+            postID: postId,
+            profolio,
+            actionStatus: "Void"
+        };
+
+        const response = await this.callWebService("/controller/Posting.asmx/updatePost", data, "POST");
+        return response;
+    }
+
 
     async getApproverMaster() {
         const data = {};
@@ -679,7 +755,7 @@ console.log(currentFiles);
         const requestBody = {
             countryID: "",
         };
-        request.body = JSON.stringify(requestBody);
+        request.body = JSON.stringify(rquestBody);
 
         let response;
         try {
@@ -691,6 +767,27 @@ console.log(currentFiles);
         return await parseResponseAndHandleErrors(response);
     }
 
+    async getAttendanceClass() {
+        const data = {};
+        const response = await this.callWebService("/controller/Attendance.asmx/getAttendanceClass", data, "POST");
+        return response;
+    }
 
+    async LoadAttendanceList(classValue) {
+        const data = {
+            classValue: classValue,
+        };
+        const response = await this.callWebService("/controller/Attendance.asmx/LoadAttendanceList", data, "POST");
+        return response;
+    }
+
+    async updateAttendanceList(attID, jsonString) {
+        const data = {
+            attID: attID,
+            jsonString: jsonString,
+        };
+        const response = await this.callWebService("/controller/Attendance.asmx/updateAttendanceList", data, "POST");
+        return response;
+    }
 }
 

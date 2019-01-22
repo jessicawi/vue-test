@@ -8310,6 +8310,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-at@2.x:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/vue-at/-/vue-at-2.3.2.tgz#31aa769d4df4c588a4e967cdc65de7141e8e688c"
+  integrity sha512-/hgWDVowuMPwektGxwOmschJ9wYTrp+6tciOhRAcku5JV0xZ88u++LTFwL9tip5wfMDIqxy72YGDsb/Cz8NcDg==
+
 vue-body-class@^2.0.0-beta.2:
   version "2.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/vue-body-class/-/vue-body-class-2.0.0-beta.2.tgz#d11bda0ef9ed2fc9dceec0325ca87c0099f17eea"

@@ -115,7 +115,7 @@
         },
         components: {
             // FileUpload: VueUploadComponent
-            vueDropzone: vue2Dropzone
+            // vueDropzone: vue2Dropzone
         },
         methods: {
             onFileChanged(event) {

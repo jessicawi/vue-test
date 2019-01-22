@@ -119,7 +119,7 @@
 </template>
 
 <script>
-    import Step from "../components/Step";
+    // import Step from "../components/Step";
     import DataSource from "../data/datasource";
     import LineChart from '../components/chart/LineChart.js';
 
@@ -137,14 +137,13 @@
             };
         },
         components: {
-            Step,
+            // Step,
             LineChart
         },
         async mounted() {
             this.showSession();
             // user menu
-            const isParent = sessionStorage.getItem('userTypeSession');
-            if (isParent !== "parent") {
+            if (isParent !== "Parent") {
                 this.results = response;
 
                 // window.location.replace("/");
@@ -207,7 +206,7 @@
 <style scoped>
 
     .Content {
-        padding: 20px;
+        padding: 30px 20px;
     }
 
     .overview__item {

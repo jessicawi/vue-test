@@ -111,11 +111,18 @@
                     this.isLoading = true;
                     const response = await DataSource.shared.login(this.usernameInput, this.passwordInput);
                     this.redirecting = true;
+
+                    const isParent = sessionStorage.getItem('userTypeSession');
                     console.log(response);
                     if (response) {
                         if (response.token) {
                             this.results = `Login Success, Welcome Back`;
-                            window.location.replace("/");
+                            if (isParent === "Parent") {
+                                window.location.replace("/post/staff");
+                            }else{
+                                window.location.replace("/");
+                            }
+
                         } else {
                             switch (response.code) {
                                 case "2":
@@ -167,189 +174,6 @@
     .header {
         display: none;
     }
-
-    .backstretch {
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        position: fixed;
-    }
-
-    .backstretch img {
-        width: 100%;
-        min-height: 100%;
-    }
-
-    .login-wrap {
-        display: flex;
-        width: 80%;
-        background: #f7f6f6;
-        position: relative;
-        margin: auto;
-        box-shadow: 0px 0px 10px 0px;
-        max-width: 1200px;
-    }
-
-    .login-img {
-        margin: 0px -15px;
-        background: url(../assets/login-img.jpg);
-        background-size: cover;
-        background-position: center;
-    }
-
-    .login-form {
-        padding: 30px;
-        margin: auto;
-    }
-
-    .login-header {
-        text-align: left;
-        color: #222 !important;
-        margin-left: -15px !important;
-        width: 100%;
-        margin-right: -15px !important;
-    }
-
-    body {
-    }
-
-    .login-header h4 {
-        text-align: left;
-        color: #222 !important;
-        margin: 0px !important;
-    }
-
-    .login-header span {
-        font-size: 0.8rem;
-    }
-
-    .login-wrap .form-control {
-        border: 0px;
-        border-bottom: 2px solid #ccc;
-        border-radius: 0px;
-        padding: 0px;
-        background: transparent;
-    }
-
-    .social-item {
-        background: #3b5798;
-        color: #fff !important;
-        padding: 6px 6px;
-        margin: 4px 0px;
-        border-radius: 4px;
-        position: relative;
-        display: block;
-        transition: all 0.3s ease-in-out;
-    }
-
-    .login-btn {
-        background: #f65151;
-        border: 2px solid white;
-        border-radius: 2rem;
-        padding: 0.2rem 1rem;
-        box-shadow: 0px 2px 3px -3px black;
-    }
-
-    .social-item i {
-        font-size: 1.3rem;
-        bottom: -2px;
-        display: inline-block;
-        left: 10px;
-        position: absolute;
-        margin-right: 4px;
-        width: 25px;
-    }
-
-    .social-item span {
-        display: inline-block;
-        padding-left: 25px;
-    }
-
-    .login-btn {
-        background: #f65151;
-        border: 2px solid white;
-        border-radius: 2rem;
-        padding: 0.2rem 1rem;
-        box-shadow: 0px 2px 3px -3px black;
-    }
-
-    .social-item.twitter {
-        background: #4ccdf7;
-    }
-
-    .social-item.linkedin {
-        background: #0a74b7;
-    }
-
-    .social-item.google {
-        background: #ce0003;
-    }
-
-    .login-btn:hover {
-        background-color: #404040;
-        border-color: #999;
-    }
-
-    a.social-item:hover {
-        background: #404040 !important;
-    }
-
-    .login-box {
-        display: flex;
-        height: 100%;
-        align-items: center;
-    }
-
-    .content {
-        height: calc(100vh - 90px);
-    }
-
-    #parentx-static {
-        display: none;
-    }
-
-    div#Login {
-        margin-left: -260px;
-    }
-
-    @media (max-width: 1025px) {
-        .backstretch img {
-            height: 100%;
-            min-width: 100%;
-            width: auto !important;
-        }
-
-        .social-item i {
-            display: inline-block;
-            padding: 0px 10px;
-        }
-
-        .social-item span {
-            display: inline-block;
-            margin: 5px 0px;
-            white-space: pre-wrap;
-        }
-
-        .social-item {
-            padding: 0px 10px;
-        }
-    }
-
-    @media (max-width: 769px) {
-
-        .login-img {
-            display: none;
-        }
-
-        .login-form {
-            max-width: 100%;
-            flex: 0 0 100%;
-        }
-    }
-
-
 </style>
 
 <style>

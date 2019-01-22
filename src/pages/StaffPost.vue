@@ -2,7 +2,109 @@
     <div id="staff-post" class="container">
         <div class="row">
             <!--<b>result:</b> {{staffPostResults}}-->
+            <vs-col vs-justify="center" vs-w="4" class="right-sideBar">
+                <div class="dashboard-logo mt-4 mb-3"><img src="../assets/kagami-long.png"/></div>
+                <div class="sideBarSection__wrapper">
+                    <div class="sideBarSection__item">
+                        <div class="subtitle">
+                            <h6>Communities</h6>
+                        </div>
+                        <div class="desc flex">
+                            <ul>
+                                <li><span class="sideBarSection__img"><img src="../assets/boy.png"></span> N2 Inquirers
+                                    Class
+                                </li>
+                                <li><span class="sideBarSection__img"><img src="../assets/boy.png"></span> K2 Explorers
+                                    Class
+                                </li>
+                                <li><span class="sideBarSection__img"><img src="../assets/boy.png"></span> PSA Group
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sideBarSection__item">
+                        <div class="subtitle">
+                            <h6>Upcoming Events</h6>
+                        </div>
+                        <div class="desc">
+                            <ul>
+                                <li>22 DEC Christmas Party</li>
+                                <li>24 DEC Half Day Closure</li>
+                                <li>25 DEC Full Day Closure</li>
+                                <li>30 DEC Celebration of learning</li>
+                                <li>31 DEC Full Day Closure</li>
+                                <li>01 JAN Full Day Closure</li>
+                                <li>07 JAN Start of Term 1</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </vs-col>
             <div class="col-md-8 mt-4">
+                <div class="notification ">
+                    <h4 class="text-left mb-3">Important Notification</h4>
+                    <div class="row">
+                        <div class=" col-md-4">
+                            <div class="notification__item">
+                                <div class="subtitle">
+                                    <h6>Parent Teacher Conference 2018</h6>
+                                </div>
+                                <div class="desc">
+                                    <span>Please sign up for a slot for the Parent Teachers Conference by 30 Nov 2018.</span>
+                                </div>
+                                <div class="notification-item__footer ">
+                                    <div class="notification__footer-item">
+                                        Ms Lisa<br/>
+                                        23 February at 19:36
+                                    </div>
+                                    <div class="notification__footer-item">
+                                        <button class="btn text-center">Mark as read</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class=" col-md-4">
+                            <div class="notification__item">
+                                <div class="subtitle">
+                                    <h6>Parent Teacher Conference 2018</h6>
+                                </div>
+                                <div class="desc">
+                                    <span>Please sign up for a slot for the Parent Teachers Conference by 30 Nov 2018.</span>
+                                </div>
+                                <div class="notification-item__footer ">
+                                    <div class="notification__footer-item">
+                                        Ms Lisa<br/>
+                                        23 February at 19:36
+                                    </div>
+                                    <div class="notification__footer-item">
+                                        <button class="btn text-center">Mark as read</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" col-md-4">
+                            <div class="notification__item">
+                                <div class="subtitle">
+                                    <h6>Parent Teacher Conference 2018</h6>
+                                </div>
+                                <div class="desc">
+                                    <span>Please sign up for a slot for the Parent Teachers Conference by 30 Nov 2018.</span>
+                                </div>
+                                <div class="notification-item__footer ">
+                                    <div class="notification__footer-item">
+                                        Ms Lisa<br/>
+                                        23 February at 19:36
+                                    </div>
+                                    <div class="notification__footer-item">
+                                        <button class="btn text-center">Mark as read</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="feed-header">
                     <h4 class="text-left">Activity</h4>
                     <div class="addPost">
@@ -23,6 +125,12 @@
                                 </small>
                             </div>
                         </div>
+                        <div class="content">
+                            <p>
+                                <!--<strong class="feed-subtitle"> ADD A NOTE</strong>-->
+                                {{object.PostContent}}
+                            </p>
+                        </div>
                         <div class="image-wrapper" v-if="object.postFiles">
                             <ul>
                                 <li class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
@@ -32,12 +140,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="content">
-                            <p>
-                                <!--<strong class="feed-subtitle"> ADD A NOTE</strong>-->
-                                {{object.PostContent}}
-                            </p>
-                        </div>
+
                         <div class="postFile" v-if="object.postFiles">
                             <div class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
                                 <!--<img :src="postFile.PostItemPath" :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>-->
@@ -61,47 +164,21 @@
                 </div>
 
             </div>
-            <vs-col vs-justify="center" vs-w="4" class="right-sideBar">
-                <div class="dashboard-title mt-4 mb-3"><h5 class="text-center">Announcement</h5></div>
-                <div class="announcement__wrapper">
-                    <div class="announcement__item">
-                        <div class="subtitle">
-                            <h6>Holidays</h6>
-                        </div>
-                        <div class="desc">
-                            we offer academic, social and personal success for every student. Through opportunities to
-                            learn from the best, experiences beyond the ordinary, and the encouragement to achieve more
-                            than what they thought possible.
-                        </div>
-                    </div>
-                    <div class="announcement__item">
-                        <div class="subtitle">
-                            <h6>Holidays</h6>
-                        </div>
-                        <div class="desc">
-                            we offer academic, social and personal success for every student. Through opportunities to
-                            learn from the best, experiences beyond the ordinary, and the encouragement to achieve more
-                            than what they thought possible.
-                        </div>
-                    </div>
-                    <div class="announcement__item">
-                        <div class="subtitle">
-                            <h6>Holidays</h6>
-                        </div>
-                        <div class="desc">
-                            we offer academic, social and personal success for every student. Through opportunities to
-                            learn from the best, experiences beyond the ordinary, and the encouragement to achieve more
-                            than what they thought possible.
-                        </div>
-                    </div>
 
-                </div>
-            </vs-col>
+        </div>
+
+        <div class="" v-for="object in academicYearTable" :key="object.PK_Class_ID">
+            {{object.PK_Semester_ID}} -- {{object.CLS_ClassName}}
         </div>
 
         <b-modal id="modal1" hide-footer title="ADD NOTE" v-model="isModalOpen">
             <form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">
-
+                <div class="form-group">
+                    <at :members="studentAt">
+                        <div class="editor" contenteditable v-html="html" @click="handleTagClick"></div>
+                    </at>
+                    <!--{{studentAt}}-->
+                </div>
                 <div class="mb-3 form-group" :class="{ 'form-group--error': $v.content.$error }">
                     <!--<label for="username">Username</label>-->
                     <textarea type="text" class="form-control" id="postContent" v-model="postContent"
@@ -126,45 +203,38 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-2">
-                        <!--<label for="password">Password</label>-->
-                        <input type="text" class="form-control" id="tagAcademicYearID" v-model="tagAcademicYearID"
-                               placeholder="Tag Academic Year ID"
-                               required>
-                        <div class="invalid-feedback" style="width: 100%;">
-                            Your Tag Academic Year ID is required.
-                        </div>
+                        <label for="tagAcademicYearID">Academic Year</label>
+                        <select class="form-control" id="tagAcademicYearID" v-model="tagAcademicYearID">
+                            <option v-for="object in academicYearTable" :key="object.PK_Class_ID"
+                                    :value="object.PK_Semester_ID">{{object.SMT_Code}}
+                            </option>
+                        </select>
                     </div>
 
                     <div class="col-md-6 mb-2">
-                        <!--<label for="password">Password</label>-->
+                        <label for="tagUserID">Student</label>
                         <input type="text" class="form-control" id="tagUserID" v-model="tagUserID"
                                placeholder="Tag User ID"
                                required>
-                        <small>separate ID by comma</small>
-                        <div class="invalid-feedback" style="width: 100%;">
-                            Your Tag User ID is required.
-                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-2">
-                        <!--<label for="password">Password</label>-->
-                        <input type="text" class="form-control" id="tagClassID" v-model="tagClassID"
-                               placeholder="Tag Class ID"
-                               required>
-                        <div class="invalid-feedback" style="width: 100%;">
-                            Your Tag Class ID is required.
-                        </div>
+                        <label for="tagClassID">Class</label>
+                        <select class="form-control" id="tagClassID" v-model="tagClassID">
+                            <option v-for="object in classesTable" :key="object.PK_Class_ID"
+                                    :value="object.PK_Class_ID">{{object.CLS_ClassName}}
+                            </option>
+                        </select>
                     </div>
 
                     <div class="col-md-6 mb-2">
-                        <!--<label for="password">Password</label>-->
-                        <input type="text" class="form-control" id="tagLevelID" v-model="tagLevelID"
-                               placeholder="Tag Level ID"
-                               required>
-                        <div class="invalid-feedback" style="width: 100%;">
-                            Your Tag Level ID is required.
-                        </div>
+                        <label for="tagLevelID">Level</label>
+                        <select class="form-control" id="tagLevelID" v-model="tagLevelID">
+                            <option v-for="object in levelsTable" :key="object.PK_Class_ID"
+                                    :value="object.SC_FK_CourseID">{{object.CRS_Course_Name}}
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="row inputFile-box">
@@ -175,7 +245,9 @@
                         <label for="inputfile" @click="inputFile()">Choose a file</label>
                         <!--<button @click.prevent="onUpload">Upload!</button>-->
 
-                        <div class="btn btn-primary" v-if="selectedFile" @click="clearPreview()"><strong>X</strong> REMOVE ALL</div>
+                        <div class="btn btn-primary" v-if="selectedFile" @click="clearPreview()"><strong>X</strong>
+                            REMOVE ALL
+                        </div>
                         <div class="uploadFile-image">
                             <div v-for="(file, key) in selectedFile" class="col-md-3 file-listing">
                                 <!--{{ file.name }}-->
@@ -212,14 +284,16 @@
     // import '@websanova/vue-upload';
     import {required, minLength} from 'vuelidate/lib/validators';
     import isImage from "is-image";
-    import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
+    import At from 'vue-at';
+    // import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
 
     export default {
         name: 'staffPost',
-        components: {RichTextEditor},
+        // components: {RichTextEditor},
         data() {
             return {
                 html: '',
+                members: ['Roxie Miles', 'grace.carroll', '小浩'],
                 files: [],
                 systemmsgError: false,
                 isModalOpen: false,
@@ -245,50 +319,98 @@
                 isLoading: true,
                 saveResponse: "",
                 PostItemPath: "",
+                tagResponseText: "123",
+
+                academicYearTable: [],
+                classesTable: [],
+                levelsTable: [],
+                studentTable: [],
+                studentAt: [],
             };
         },
+        components: {At},
         // components: {Step},
         async mounted() {
             // this.showSession()
             // user menu
             try {
                 let response = await DataSource.shared.getStaffPost();
-                for (let item of response.Table) {
-                    const fileRes = await DataSource.shared.getPostFile(item.PostID);
-                    if (fileRes.Table) {
-                        item.postFiles = fileRes.Table;
+                if (response.Table) {
+                    for (let item of response.Table) {
+                        const fileRes = await DataSource.shared.getPostFile(item.PostID);
+                        if (fileRes.Table) {
+                            item.postFiles = fileRes.Table;
+                        }
                     }
-
-                    // get name
-                    // const author = await DataSource.shared.getPostFile(item.PostCreatedBy);
-                    // console.log(author);
-                    // item.authorName = ;
+                    this.list = response.Table;
                 }
-                this.list = response.Table;
-                let saveResponse = await DataSource.shared.getPostDropdown();
-                console.log(saveResponse);
+
+                let tagResponse = await DataSource.shared.getPostDropdown();
+
+                if (tagResponse.AcademicYearTable && tagResponse.AcademicYearTable.Table) {
+                    let uniqueYears = [];
+                    tagResponse.AcademicYearTable.Table.forEach(object => {
+                        const isExist = uniqueYears.find(year => year.SMT_Code === object.SMT_Code);
+                        if (!isExist) {
+                            uniqueYears.push(object);
+                        }
+                    });
+                    this.academicYearTable = uniqueYears;
+                }
+                if (tagResponse.ClassesTable && tagResponse.ClassesTable.Table) {
+                    let uniqueClass = [];
+                    tagResponse.ClassesTable.Table.forEach(object => {
+                        const isExist = uniqueClass.find(year => year.PK_Class_ID === object.PK_Class_ID);
+                        if (!isExist) {
+                            uniqueClass.push(object);
+                        }
+                    });
+                    this.classesTable = uniqueClass;
+                }
+                if (tagResponse.LevelsTable && tagResponse.LevelsTable.Table) {
+
+                    let uniqueLevel = [];
+                    tagResponse.LevelsTable.Table.forEach(object => {
+                        const isExist = uniqueLevel.find(level => level.SC_FK_CourseID === object.SC_FK_CourseID);
+                        if (!isExist) {
+                            uniqueLevel.push(object);
+                        }
+                    });
+
+                    this.levelsTable = uniqueLevel;
+                }
+                if (tagResponse.StudentTable && tagResponse.StudentTable.Table) {
+                    // this.studentTableList = tagResponse.StudentTable.Table.PK_Class_ID;
+
+                    const studentTableList = tagResponse.StudentTable.Table.map(object => {
+                        return object.Full_Name;
+                    });
+                    this.studentAt = studentTableList;
+                    console.log(this.studentAt);
+
+                    this.studentTable = tagResponse.StudentTable.Table;
+                }
+                if (response.Table) {
+                    for (let item of response.Table) {
+                        const fileRes = await DataSource.shared.getPostFile(item.PostID);
+                        if (fileRes.Table) {
+                            item.postFiles = fileRes.Table;
+                        }
+                    }
+                    this.list = response.Table;
+                }
+
+
             } catch (e) {
                 console.log(e, '  errrr');
             }
             this.isLoading = false;
-            // if (response) {
-            //     switch (response.code) {
-            //         case "2":
-            //             this.staffPostResults = `No Record Found`;
-            //             //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
-            //             break;
-            //         case "88":
-            //             this.staffPostResults = `Please login`;
-            //             //this.results = `Invalid password - sample 2: code: ${response.code}`;
-            //             break;
-            //         case "99":
-            //             this.staffPostResults = `Please try again later`;
-            //             //this.results = `Please fill in all field - sample 3: code: ${response.code}`;
-            //             break;
-            //     }
-            // }
         },
         methods: {
+            handleTagClick(e) {
+                console.log(e);
+            },
+
             inputChange(input) {
                 this.postContent = input;
             },
@@ -399,374 +521,8 @@
 
 <style scoped>
 
-    .author {
-        text-align: left;
-        font-weight: bold;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        padding: 20px;
-    }
-
-    .feed-heading {
-        display: inline-block;
-        text-align: left;
-    }
-
-    .feed-box .content {
-        padding: 10px 0px;
-        text-align: left;
-        margin: 10px 0px 0px;
-        border-top: 1px solid #edf0f4;
-        border-left: 3px solid #f44353;
-    }
-
-    .feed-box {
-        margin: 20px 0px;
-        position: relative;
-        background: white;
-        border-radius: 3px;
-        box-shadow: 0px 0px 10px -7px;
-    }
-
-    .postFile {
-        display: block;
-        width: 100%;
-    }
-
-    .postFile__item a {
-        display: inline-block;
-        padding: 5px 20px 5px 46px;
-        /* background: #f5f9fc; */
-        border-radius: 20px;
-        margin: 10px;
-        float: left;
-        border: 1px solid #b7d3e8;
-        position: relative;
-        color: #8ca0af;
-        overflow: hidden;
-        font-weight: normal;
-    }
-
-    .postFile__item a i {
-        color: #b7d3e8;
-        background: #f5f9fc;
-        position: absolute;
-        left: 0px;
-        height: 100%;
-        width: 32px;
-        top: 0px;
-        text-align: center;
-        border-right: 1px solid #b7d3e8;
-        line-height: 28px;
-    }
-
-    .postFile__item {
-        border-top: 1px solid #eee;
-        margin-bottom: -10px;
-        display: table;
-        width: 100%;
-    }
-
-    li.postFile__item img {
-        max-width: 100%;
-        display: initial;
-        object-fit: cover;
-    }
-
-    .image-wrapper li.postFile__item {
-        display: flex;
-        width: 21%;
-        height: 100px;
-        overflow: hidden;
-        margin: 0px 2%;
-    }
-
-    .image-wrapper li.postFile__item:first-child {
-        width: 96%;
-        height: 200px;
-    }
-
-    .image-wrapper li.postFile__item:empty {
-        display: none;
-    }
-
-    .image-wrapper ul {
-        padding: 0px;
-        margin: 0px;
-    }
-
-    .profile {
-        width: 52px;
-        position: relative;
-        display: inline-block;
-        margin-right: 20px;
-    }
-
-    .profile img {
-        max-width: 100%;
-        background: #e6ecf7;
-        border-radius: 100%;
-    }
-
-    .content-icon {
-        background: #f4415421;
-        flex: 1;
-        width: 24px;
-        height: 24px;
-        border-radius: 23px;
-        text-align: center;
-        color: #e9454c;
-        font-size: 12px;
-        line-height: 23px;
-        /* display: inline-block; */
-    }
-
-    .content p {
-        margin: 0px 10px;
-        flex: 20;
-    }
-
-    small.date {
-        display: block;
-        color: #9a9a9a;
-    }
-
-    div#modal1 {
-        z-index: 99999;
-    }
-
-    .toggle {
-        position: relative;
-        display: block;
-        width: 40px;
-        height: 20px;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        transform: translate3d(0, 0, 0);
-    }
-
-    .toggle:before {
-        content: "";
-        position: relative;
-        top: 3px;
-        left: 3px;
-        width: 34px;
-        height: 14px;
-        display: block;
-        background: #9A9999;
-        border-radius: 8px;
-        transition: background 0.2s ease;
-    }
-
-    .toggle span {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 20px;
-        height: 20px;
-        display: block;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 3px 8px rgba(154, 153, 153, 0.5);
-        transition: all 0.2s ease;
-    }
-
-    .toggle span:before {
-        content: "";
-        position: absolute;
-        display: block;
-        margin: -18px;
-        width: 56px;
-        height: 56px;
-        background: rgba(79, 46, 220, 0.5);
-        border-radius: 50%;
-        transform: scale(0);
-        opacity: 1;
-        pointer-events: none;
-    }
-
-    #profolio:checked + .toggle:before {
-        background: #b9b9b9;
-    }
-
-    #profolio:checked + .toggle span {
-        background: #f44252;
-        transform: translateX(20px);
-        transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
-        box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
-    }
-
-    #profolio:checked + .toggle span:before {
-        transform: scale(1);
-        opacity: 0;
-        transition: all 0.4s ease;
-    }
-
-    input#profolio {
-        display: none;
-    }
-
-    label.toggle strong {
-        padding-left: 49px;
-        top: -12px;
-        position: relative;
-    }
-
-    label.toggle {
-        margin: 20px 10px;
-    }
-
-    .feed-header h4 {
-        margin-right: 20px;
-        display: inline-block;
-        float: left;
-        line-height: 37px;
-        margin-bottom: 0px;
-        font-size: 18px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        padding-left: 10px;
-        color: #5a6a79;
-    }
-
-    .feed-header {
-        background: #f5f9fc;
-        padding: 10px;
-        border: 1px solid #d4e4f1;
-        display: table;
-        width: 100%;
-    }
-
-    .addPost {
-        display: inline-block;
-        float: right;
-    }
-
-    .addPost button {
-        background: #3e445c;
-        border: 0px;
-        color: #ffffff;
-        border-radius: 2px;
-        position: relative;
-        font-size: 13px;
-        width: 100%;
-        padding: 10px;
-        text-align: left;
-        /* margin-top: 20px; */
-    }
-
-    strong.feed-subtitle {
-        border-bottom: 1px solid #413f5617;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-        display: block;
-    }
-
-    .success {
-        text-align: left;
-        padding: 10px;
-        background: linear-gradient(to right, #e644513b, #e6ecf7);
-        margin-top: 10px;
-        color: #3e445c;
-    }
-
-    .success:empty {
-        display: none;
-        padding: 0px;
-    }
-
-    .right-sideBar {
-        padding: 0px 20px;
-    }
-
-    .announcement__item {
-        background: #f5f9fc;
-        padding: 20px;
-        margin-bottom: 20px;
-        text-align: left;
-        border: 1px solid #d4e4f1;
-    }
-
-    .announcement__item img {
-        max-width: 80%;
-        margin: 20px 0px;
-        border-radius: 4px;
-    }
-
-    .announcement__item .subtitle h6 {
-        font-weight: bold;
-    }
-
-
 </style>
 
 <style>
-    .inputfile {
-        width: 0.1px;
-        height: 0.1px;
-        opacity: 0;
-        overflow: hidden;
-        position: absolute;
-        z-index: -1;
-    }
-
-    .inputfile + label {
-        font-size: 1.25em;
-        color: white;
-        background-color: #606266;
-        display: table !important;
-        padding: 5px 20px;
-        border-radius: 5px;
-        margin: 10px auto 20px;
-    }
-
-    .inputfile:focus + label,
-    .inputfile + label:hover {
-        background-color: #f44252;
-    }
-
-    .inputfile + label {
-        cursor: pointer; /* "hand" cursor */
-    }
-
-    .file-listing img {
-        max-width: 100%;
-        cursor: pointer;
-    }
-
-    .uploadFile-image .file-listing {
-        float: left;
-        padding: 10px;
-        background: #eee;
-        margin: 5px;
-    }
-
-    .uploadFile-image {
-        display: table;
-        width: 100%;
-        margin: 20px 0px;
-    }
-
-    .file-listing img:hover {
-        opacity: 0.5;
-    }
-
-    .inputFile-box .btn {
-        background: transparent;
-        border: 0px;
-        color: #222;
-        float: right;
-        padding: 5px 20px;
-        margin-bottom: 10px;
-        font-size: 11px;
-    }
-
-    .inputFile-box .btn:hover {
-        background: #eee;
-    }
 
 </style>
