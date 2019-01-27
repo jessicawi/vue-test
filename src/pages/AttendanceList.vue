@@ -2,7 +2,7 @@
     <div id="attendance-list" class="mt-3 container">
         <label style="display:none !important;">{{lblAttID}}</label>
         <div>
-            <div class="row" style="text-align:left;">
+            <div class="row searchingArea">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label class="lblClass">Class</label>
                     <select v-model="ddlClass" class="form-control pro-edt-select form-control-primary ddlClass" @change="Load()">
@@ -23,7 +23,22 @@
                         <tr v-for="item in studentList" ref="studentList_Update">
                             <td><label>{{item.AttDtlStudentIndexNo}}</label></td>
                             <td><label>{{item.AttDtlStudentName}}</label></td>
-                            <td><input type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList"></td>
+                            <!--<td><input type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList"></td>-->
+                            <td>
+                                <div class="form-group__wrapper row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
+                                        <label class="lblCheckBox">
+                                            <input class="form-control" type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList">
+                                            <span>
+                                        <span>
+                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path" fill="none" stroke="white"
+                                                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
+                                        </span>
+                                    </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
                             <td><input type="text" class="form-control" :value="item.AttDtlRemark" ref="studentRemark"></td>
                         </tr>
                     </table>
@@ -191,30 +206,51 @@
         width:100%;
         margin-top:20px;
     }
+
     .attTable td, .attTable th, .attTable label
     {
         text-align:center;
         padding:10px;
     }
+
     .attTable tr:nth-child(even)
     {
         background:#fff;
     }
+
     .ddlClass
     {
         display:inline;
         width:auto;
     }
+
     .lblClass
     {
         display:inline !important;
         padding:20px;
     }
-    input[type='checkbox'] {
+
+    input[type='checkbox']
+    {
         width:30px;
         height:30px;
         background:white;
         border-radius:5px;
         border:2px solid #555;
+    }
+
+    .searchingArea
+    {
+        text-align:left;
+    }
+
+    .checkbox_wrapper
+    {
+        min-width:100%;
+    }
+
+    .lblCheckBox
+    {
+        width:100%;
     }
 </style>

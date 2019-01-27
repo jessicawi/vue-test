@@ -27,8 +27,6 @@
                 </div>
             </div>
 
-
-
             <div v-if="list.length>0" class="datatable_group">
                 <data-tables :data="list" :action-col="actionCol" @selection-change="handleSelectionChange">
                     <el-table-column v-for="studentListInfo in studentList" :prop="studentListInfo.prop" :label="studentListInfo.label" :key="studentListInfo.prop"

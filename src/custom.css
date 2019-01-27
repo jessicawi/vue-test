@@ -46,13 +46,16 @@ input[type="checkbox"].form-control {
     float: left;
     margin: 0px 10px;
 }
+
 .sucess-table {
     background: #67c23a45;
     padding: 10px;
 }
+
 .sucess-table:empty {
     padding: 0px !important;
 }
+
 .checkbox_wrapper label {
     margin: 0px;
     padding: 10px 0px;
@@ -186,9 +189,24 @@ label {
 }
 
 @keyframes loadingC {
-    0 {transform: translate(0, 0);}
-    50%{transform: translate(0, 15px);}
-    100%{transform: translate(0, 0);}
+
+0
+{
+    transform: translate(0, 0)
+;
+}
+50
+%
+{
+    transform: translate(0, 15px)
+;
+}
+100
+%
+{
+    transform: translate(0, 0)
+;
+}
 }
 /*
 checkbox
@@ -290,8 +308,6 @@ label input[type="checkbox"] + span > span svg {
     position: relative;
 }
 
-
-
 @-webkit-keyframes checkdash {
     from {
         stroke-dashoffset: 30;
@@ -310,6 +326,157 @@ label input[type="checkbox"] + span > span svg {
     }
 }
 
+/*
+mention
+ */
+.mention-editor {
+    background: whitesmoke;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/*
+comment
+ */
+.addComment span.input-span-placeholder {
+    border: 0px !important;
+    width: 100%;
+}
+
+.addComment {
+    width: 100%;
+    text-align: left;
+    margin-top: 0px !important;
+}
+
+.addComment input {
+    border: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    line-height: 22px;
+}
+
+.addComment.vs-input-primary .vs-input--input:focus {
+    border-color: transparent !important;
+}
+
+.addComment .vs-input-primary.isFocus .vs-input--label, .vs-input-primary .vs-input--input:focus ~ .icon-inputx, .vs-input-primary .vs-input--input:focus ~ .vs-placeholder-label {
+    color: #ccc;
+}
+
+.comment_wrapper form {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.comment_wrapper .btn {
+    padding: 4px 10px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+.commentItem__header {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.commentItem__header div {
+    flex: 1;
+}
+
+.comment__date {
+    text-align: right;
+    color: #ccc;
+}
+
+.comment__name {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.comment__item {
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+}
+
+.comment__item:last-child {
+    border: 0px;
+}
+
+.is-collapsed .comment__item:nth-child(n+2) {
+    display: none;
+}
+
+.commentWrap {
+    background: white;
+    margin: 10px 0px;
+    border-radius: 4px;
+    text-align: left;
+    padding: 1px 10px;
+}
+
+.commentWrap.is-collapsed .comment__item {
+    border: 0px;
+}
+
+.comment_wrapper button {
+    border: 0px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+    background: none;
+    color: #007bff;
+}
+
+.comment__item:nth-last-child(2) {
+    border: 0px;
+}
+
+.comment__item textarea {
+    border: 0px;
+    display: block;
+    padding: 0px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    resize: none;
+}
+
+.comment__item textarea.editable {
+    background: #eee;
+    padding: 7px 10px;
+    border: 0px solid #ccc;
+    border-radius: 10px;
+    display: inline-block;
+    height: 100px;
+}
+.comment__item textarea.editable::-webkit-scrollbar-track {
+    background: white;
+}
+
+.comment__item textarea.editable::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+.comment__item span.save {
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.comment__item span.save:hover {
+    color: #007bff;
+}
+
+.comment__item span.edit {
+    color: #ccc;
+    cursor: pointer;
+}
+
+.comment__item span.edit:hover {
+    color: #007bff;
+}
 /*
 login
  */
@@ -953,7 +1120,7 @@ label.toggle {
 }
 
 .feed-header h4,
-.datatable-header h4{
+.datatable-header h4 {
     margin-right: 20px;
     display: inline-block;
     float: left;
@@ -975,8 +1142,8 @@ label.toggle {
     width: 100%;
 }
 
-.datatable-header{
-    background:#e2e4e8;
+.datatable-header {
+    background: #e2e4e8;
 }
 
 .addPost {

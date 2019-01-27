@@ -32,7 +32,7 @@
                     </select>
                 </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 buttonArea">
                     <button class="btn btn-primary waves-effect waves-light m-r-10" v-on:click="AddLevel">Add Level</button>
                 </div>
             </div>
@@ -320,5 +320,8 @@
 </script>
 
 <style scoped>
-
+    .buttonArea button
+    {
+        display:inline;
+    }
 </style>

@@ -13,18 +13,13 @@ import studentEditClass from "../pages/StudentEditClass";
 import parentList from "../pages/ParentList";
 import parent from "../pages/Parent";
 import manageRelationship from "../pages/ManageRelationship";
-import staffPost from "../pages/StaffPost";
-import parentPost from "../pages/ParentPost";
-import savePost from "../pages/savePost";
+import latestPost from "../pages/LatestPost";
 import pendingPost from "../pages/PendingPost";
-import approvePost from "../pages/ApprovePost";
-import updatePost from "../pages/updatePost";
 import parentRegister from "../pages/ParentRegister";
 import getApproverMaster from "../pages/Approver";
-import getGallery from "../pages/gallery";
 import attendanceList from "../pages/AttendanceList";
 import testPage from "../pages/test";
-import  userList from "../pages/userList";
+import gallery from "../pages/Gallery";
 
 Vue.use(VueRouter);
 
@@ -101,14 +96,9 @@ const router = new VueRouter({
             meta: { bodyClass: 'parent-register' }
         },
         {
-            path: '/post/staff',
-            name: 'Latest Update (Staff)',
-            component: staffPost,
-        },
-        {
-            path: '/post/parent',
-            name: 'Parent Post',
-            component: parentPost,
+            path: '/post/feed',
+            name: 'Latest Update',
+            component: latestPost,
         },
         {
             path: '/post/pending',
@@ -121,11 +111,6 @@ const router = new VueRouter({
             component: getApproverMaster,
         },
         {
-            path: '/gallery',
-            name: 'Gallery',
-            component: getGallery,
-        },
-        {
             path: '/attendancelist',
             name: 'Attendance List',
             component: attendanceList,
@@ -134,6 +119,11 @@ const router = new VueRouter({
             path: '/test-page',
             name: 'Test',
             component: testPage
+        },
+        {
+            path: '/Gallery',
+            name: 'Gallery',
+            component: gallery
         },
     ]
 });

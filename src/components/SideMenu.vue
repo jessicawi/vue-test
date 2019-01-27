@@ -17,9 +17,9 @@
                             class="material-icons">keyboard_arrow_down</i>
                     </div>
 
-                    <div class="sub-menu" v-if="item.subMenus"
+                    <div class="sub-menu" v-if="item.subMenus" @mouseleave="didClickAway"
                          :class="{'menu-wrap-active':currentParentMenuId===item.MENid}">
-                        <div v-for="submenu in item.subMenus" :class="{'submenu-active':currentMenu===submenu.MENid}">
+                        <div v-for="submenu in item.subMenus" >
                             <a :href="submenu.MENnewurl">
                                 <i :class="submenu.MENicon"></i> {{submenu.MENname}}
                             </a>
@@ -69,7 +69,8 @@
                 currentParentMenuId: null,
                 currentParentMenuId2: null,
                 isNullItem: "",
-                showMobileMenu: false
+                showMobileMenu: false,
+                mouseover: false,
 
             };
         },
@@ -137,6 +138,17 @@
 
         },
         methods: {
+            didClickAway: function(e) {
+                this.event = function(event) {
+                    if (event.target !== e.target) {
+                        this.currentParentMenuId = null;
+                        document.body.removeEventListener("click", this.event);
+                    } else {
+                        this.currentParentMenuId = menuId
+                    }
+                }.bind(this);
+                document.body.addEventListener("click", this.event);
+            },
             handleParentMenuClick(menuId) {
                 // if clicked menu already open, then make it close
                 if (this.currentParentMenuId === menuId) {

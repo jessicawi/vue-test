@@ -235,6 +235,23 @@ export default class DataSource {
         return response;
     }
 
+    async getStudentAvailableStatusAction(currentStatus) {
+        const data = {
+            currentStatus: currentStatus,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getStudentAvailableStatusAction", data, "POST");
+        return response;
+    }
+
+    async updateStudentStatus(studentID, newStatus) {
+        const data = {
+            studentID: studentID,
+            newStatus: newStatus,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/updateStudentStatus", data, "POST");
+        return response;
+    }
+
     async getParentList(familyId, parentLastName, parentFirstName) {
         const data = {
             familyID: familyId,
@@ -493,7 +510,30 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Posting.asmx/getPostFile", data, "POST");
         return response;
     }
-
+    async saveComment(PostID, postContent) {
+        const data = {
+            postID: PostID,
+            postContent: postContent,
+        };
+        const response = await this.callWebService("/controller/Posting.asmx/savePostComment", data, "POST");
+        return response;
+    }
+    async getComment(PostID) {
+        const data = {
+            postId: PostID
+        };
+        const response = await this.callWebService("/controller/Posting.asmx/getPostComment", data, "POST");
+        return response;
+    }
+    async editComment(commentPostID, postContent, actionMode) {
+        const data = {
+            commentPostID: commentPostID,
+            postContent: postContent,
+            actionMode: actionMode
+        };
+        const response = await this.callWebService("/controller/Posting.asmx/updatePostComment", data, "POST");
+        return response;
+    }
     async saveGallery(files, fileType, galFolderID, folderName) {
 
         const formData = new FormData();
@@ -789,5 +829,112 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Attendance.asmx/updateAttendanceList", data, "POST");
         return response;
     }
+
+    //#region Gallery
+    async getFiles(galFolderID, startRowNo, endRowNo) {
+        const data = {
+            galFolderID: galFolderID,
+            startRowNo: startRowNo,
+            endRowNo: endRowNo,
+            fileRetrieveMode: "File"
+        };
+
+        const response = await this.callWebService("/controller/Gallery.asmx/getFile", data, "POST");
+        return response;
+    }
+
+    async getFolders(galFolderID) {
+        const data = {
+            galFolderID: galFolderID,
+            fileRetrieveMode: "Folder"
+        };
+
+        const response = await this.callWebService("/controller/Gallery.asmx/getFile", data, "POST");
+        return response;
+    }
+
+    async downloadFile(galID) {
+        const data = {
+            galID: galID
+        };
+
+        const response = await this.callWebService("/controller/Gallery.asmx/downloadFile", data, "POST");
+        return response;
+    }
+
+    async saveFile(files, fileType, galFolderID, folderName) {
+        const formData = new FormData();
+
+        formData.append('fileType', fileType);
+        formData.append('galFolderID', galFolderID);
+        formData.append('token', sessionStorage.getItem('authToken'));
+        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        formData.append('folderName', folderName);
+
+        if (files && files.length > 1) {
+            for (let i = 0; i < files.length; i++) {
+                formData.append("files"+i, files[i]);
+                console.log(files[i])
+            }
+        } else if (files) {
+            formData.append("files", files[0]);
+        }
+
+        const request = {
+            url: `${API_HOST}/controller/Gallery.asmx/saveFile`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async removeFile(galID) {
+        const data = {
+            galID: galID,
+            updateFileMode: "Delete"
+        };
+
+        const response = await this.callWebService("/controller/Gallery.asmx/updateFile", data, "POST");
+        return response;
+    }
+
+    async renameFile(galID, folderRename) {
+        const data = {
+            galID : galID,
+            folderRename: folderRename,
+            updateFileMode: "Rename"
+        };
+
+        const response = await this.callWebService("/controller/Gallery.asmx/updateFile", data, "POST");
+        return response;
+    }
+
+    async moveFile(galID, galFolderID) {
+        const data = {
+            galID: galID,
+            galFolderID: galFolderID,
+            updateFileMode: "Move"
+        };
+
+        console.log(data)
+
+        const response = await this.callWebService("/controller/Gallery.asmx/updateFile", data, "POST");
+        return response;
+    }
+    //#endregion
 }
 

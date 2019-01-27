@@ -41,12 +41,12 @@
                         <label>Guardian Name: </label> <label>{{editGuardianName}}</label>
                     </div>
 
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 editFamilyArea">
                         <label>Edit Family Id:</label>
                         <input class="form-control" ref="editFamilyID">
                     </div>
 
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 editFamilyArea">
                         <button v-on:click="Save" type="button" class="btn btn-primary waves-effect waves-light m-r-10" >Save</button>
                     </div>
                 </div>
@@ -175,8 +175,8 @@
 </script>
 
 <style scoped>
-    label
+    .editFamilyArea
     {
-        /*display:inline !important;*/
+        margin-top:20px;
     }
 </style>

@@ -1,10 +1,26 @@
 <template>
     <div id="student" class="mt-3 container">
         <div class="row form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:left;">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modeArea">
                 <label style="display:inline !important;">Mode: </label><label style="display:inline !important;">{{lblCreateOrEdit}}</label>
                 <label style="display:none !important;">{{lblStudentID}}</label>
                 <label style="display:none !important;">{{lblParentID}}</label>
+                <label style="display:none !important;">{{lblStudentIndexNo}}</label>
+            </div>
+        </div>
+
+        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 changeStatusArea">
+            <div v-if="changeStatusAction" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <label class="lblChangeStatusTo">{{lblCurrentStatus}} Status Change To</label>
+                <select v-model="ddlChangeStatusTo"
+                        class="form-control pro-edt-select form-control-primary ddlChangeStatusTo">
+                    <option v-for="item in ddlChangeStatusToList" v-bind:value="item.StatusValue.trim()" v-bind:text="item.Status.trim()">{{
+                        item.Status.trim() }}
+                    </option>
+                </select>
+                <button v-on:click="StatusAction"
+                        class="btn btn-primary waves-effect waves-light m-r-10 btnChangeStatus">Action
+                </button>
             </div>
         </div>
 
@@ -430,13 +446,13 @@
                         <div class="row form-group__wrapper">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Major Ailments List</label>
-                                <textarea rows="3" style="width:100%;resize:none;"
+                                <textarea rows="3" class="textArea"
                                           v-model="taMajorAilmentsList"></textarea>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Medication Allergies List</label>
-                                <textarea rows="3" style="width:100%;resize:none;"
+                                <textarea rows="3" class="textArea"
                                           v-model="taMedicationAllergiesList"></textarea>
                             </div>
 
@@ -479,7 +495,7 @@
                                        style="display:none;">
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label style="width:100%;">Search Family</label>
+                                <label class="lblSearchFamily">Search Family</label>
                                 <b-btn v-b-modal.familyModal variant="primary" v-bind:disabled="editModeDisable">
                                     Search
                                 </b-btn>
@@ -773,7 +789,7 @@
                         </el-table-column>
                     </data-tables>
                 </div>
-                <div v-else>
+                <div v-else class="siblingNoRecordArea">
                     <label>No Record Found...</label>
                 </div>
             </b-tab>
@@ -781,13 +797,10 @@
 
         <div class="whitespace-30"></div>
 
-        <div class="">
+        <div class="buttonArea">
             <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
                 <button v-on:click="Validation" type="button" class="btn btn-primary waves-effect waves-light m-r-10">
                     Save
-                </button>
-                <button v-if="btnActive" v-on:click="Active" type="button"
-                        class="btn btn-primary waves-effect waves-light m-r-10" style="margin-left:10px;">Activate
                 </button>
             </div>
         </div>
@@ -868,6 +881,7 @@
                 levelList: [],
                 academicYearList: [],
                 studentIntakeYearList: [],
+                ddlChangeStatusToList: [],
 
                 inputStudentDateOfBirth: '',
                 inputFatherDateofBirth: '',
@@ -951,17 +965,20 @@
                 inputStudentPassport: '',
                 inputStudentPassportExpiryDate: '',
                 inputStudentOtherIdentification: '',
+                ddlChangeStatusTo: '',
 
                 editModeDisable: '',
                 lblCreateOrEdit: '',
                 lblStudentID: '',
                 lblParentID: '',
-                btnActive: '',
                 lblMotherNameDuplicated: '',
                 lblFatherNameDuplicated: '',
                 parentAreaDiv: '',
+                lblStudentIndexNo: '',
+                lblCurrentStatus: '',
 
                 siblingTab: '',
+                changeStatusAction: '',
                 siblingList: [],
                 siblingListAll: [{
                     prop: "Index_No",
@@ -1195,6 +1212,7 @@
                         this.lblStudentID = this.$route.query.id;
                         this.editModeDisable = true;
                         this.siblingTab = true;
+                        this.changeStatusAction = true;
                         let parentID;
 
                         const stuRes = await DataSource.shared.getStudent(this.$route.query.id, "", "", "", "");
@@ -1232,6 +1250,7 @@
                         this.editModeDisable = false;
                         this.lblCreateOrEdit = "New";
                         this.siblingTab = false;
+                        this.changeStatusAction = false;
                     }
                 } catch (e) {
                     this.results = e;
@@ -1250,15 +1269,27 @@
                     this.results = e;
                 }
             },
+            async BindStudentAvailableStatusAction(currentStatus) {
+                try {
+                    const response = await DataSource.shared.getStudentAvailableStatusAction(currentStatus);
+                    if (response) {
+                        this.ddlChangeStatusToListResponse = response.Table1;
+                        this.ddlChangeStatusToListResponse.forEach(m => {
+                            this.ddlChangeStatusToList.push(m);
+                        });
+                    }
+
+                } catch (e) {
+                    this.results = e;
+                }
+            },
             async BindStudentFields(resultTable) {
                 try {
                     resultTable.forEach(m => {
+                        this.BindStudentAvailableStatusAction(m.Status);
+                        this.lblCurrentStatus = m.Status;
+                        this.lblStudentIndexNo = m.Index_No;
                         this.inputStudentID = m.Index_No;
-                        if (m.Index_No == '' || m.Index_No == null) {
-                            this.btnActive = true;
-                        } else {
-                            this.btnActive = false;
-                        }
                         this.inputStudentFirstName = m.Full_Name;
                         this.inputStudentMiddleName = m.Middle_name;
                         this.inputStudentLastName = m.Last_name;
@@ -1629,12 +1660,52 @@
                     this.results = e;
                 }
             },
+            async StatusAction() {
+                try {
+                    if (this.ddlChangeStatusTo === '' || this.ddlChangeStatusTo === null)
+                    {
+                        alert('Please select status to change');
+                    }
+                    else if (this.ddlChangeStatusTo === 'Active')
+                    {
+                        if (this.lblStudentIndexNo === undefined || this.lblStudentIndexNo === '')
+                        {
+                            this.Active();
+                        }
+                        else
+                        {
+                            this.ChangeStatus();
+                        }
+                    }
+                    else
+                    {
+                        this.ChangeStatus();
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
             async Active() {
                 try {
                     const response = await DataSource.shared.activeStudent(this.lblStudentID);
                     if (response) {
                         if (response.code == 1) {
                             alert('Successfully activated');
+                            window.location.replace('/student?id=' + this.lblStudentID);
+                        } else {
+                            alert('Please try again later');
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+            async ChangeStatus() {
+                try {
+                    const response = await DataSource.shared.updateStudentStatus(this.lblStudentID, this.ddlChangeStatusTo);
+                    if (response) {
+                        if (response.code == 1) {
+                            alert('Successfully change status');
                             window.location.replace('/student?id=' + this.lblStudentID);
                         } else {
                             alert('Please try again later');
@@ -1692,6 +1763,61 @@
     .requiredFieldsMsg {
         color: red;
         font-weight: bold;
+    }
+
+    .buttonArea
+    {
+        margin:20px 0 0 0;
+    }
+
+    .buttonArea .btn-primary
+    {
+        margin:0 0 0 20px;
+    }
+
+    .btn-primary
+    {
+        display:inline;
+    }
+
+    .modeArea
+    {
+        text-align:left;
+    }
+
+    .textArea
+    {
+        width:100%;
+        resize:none;
+    }
+
+    ::-webkit-scrollbar-track
+    {
+        background-color:whitesmoke;
+    }
+
+    .lblSearchFamily
+    {
+        width:100%;
+    }
+
+    .siblingNoRecordArea
+    {
+        padding:20px;
+    }
+
+    .changeStatusArea
+    {
+        background-color: white;
+        text-align:left;
+        padding:0px;
+    }
+
+    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus
+    {
+        width:auto;
+        display:inline !important;
+        margin:10px;
     }
 </style>
 

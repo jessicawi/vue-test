@@ -107,7 +107,7 @@
                 </div>
                 <div class="feed-header">
                     <h4 class="text-left">Activity</h4>
-                    <div class="addPost">
+                    <div class="addPost" :class="{'d-none' :userType!=='Teacher'}">
                         <b-btn v-b-modal.modal1 @click="showModal">ADD NOTE</b-btn>
                     </div>
                 </div>
@@ -115,85 +115,110 @@
                 <div v-if="isLoading">Loading...</div>
 
                 <div class="" v-for="object in list" :key="object.PostID">
-                    <div class="feed-box" v-bind:class="[object.PostID]">
-                        <div class="author">
-                            <div class="profile"><img src="../assets/boy.png"/></div>
-                            <div class="feed-heading">
-                                <span>{{object.PostCreatedBy}}</span>
-                                <small class="date"><i class="fa fa-clock-o" aria-hidden="true"></i>
-                                    {{object.PostCreatedDate}}
-                                </small>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <p>
-                                <!--<strong class="feed-subtitle"> ADD A NOTE</strong>-->
-                                {{object.PostContent}}
-                            </p>
-                        </div>
-                        <div class="image-wrapper" v-if="object.postFiles">
-                            <ul>
-                                <li class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
-                                    <img :src="postFile.PostItemPath"
-                                         :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"
-                                         v-if="checkIfImage(postFile.PostItemPath)"/>
-                                </li>
-                            </ul>
-                        </div>
 
-                        <div class="postFile" v-if="object.postFiles">
-                            <div class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">
-                                <!--<img :src="postFile.PostItemPath" :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>-->
+                    <PostComponent :post="object" :checkIfImage="checkIfImage" @commentitemSubmit="commentitemSubmit" :commentPostContent="commentPostContent"/>
+                    <hr/>
 
-
-                                <a v-if="!checkIfImage(postFile.PostItemPath)" v-bind:href="[postFile.PostItemPath]"
-                                   :class="{'post-disabled':postFile.PostItemStatus !=='Active'}">
-                                    <i class="fa fa-file" aria-hidden="true"></i>
-                                    {{postFile.PostItemPostID}}
-                                </a>
-                                <!--{{postFile.PostItemCreatedDate}}-->
-                            </div>
-                        </div>
-                        <!--<div slot="footer">-->
-                        <!--<vs-row vs-justify="flex-end">-->
-                        <!--<vs-button color="primary" type="gradient" >View</vs-button>-->
-                        <!--<vs-button color="danger" type="gradient">Delete</vs-button>-->
-                        <!--</vs-row>-->
+                    <!--<div class="feed-box" v-bind:class="[object.PostID]">-->
+                        <!--<div class="author">-->
+                            <!--<div class="profile"><img src="../assets/boy.png"/></div>-->
+                            <!--<div class="feed-heading">-->
+                                <!--<span>{{object.PostCreatedBy}}</span>-->
+                                <!--<small class="date"><i class="fa fa-clock-o" aria-hidden="true"></i>-->
+                                    <!--{{object.PostCreatedDate}}-->
+                                <!--</small>-->
+                            <!--</div>-->
                         <!--</div>-->
-                    </div>
+                        <!--<div class="content">-->
+                            <!--<p>-->
+                                <!--&lt;!&ndash;<strong class="feed-subtitle"> ADD A NOTE</strong>&ndash;&gt;-->
+                                <!--{{object.PostContent}}-->
+                            <!--</p>-->
+                        <!--</div>-->
+                        <!--<div class="image-wrapper" v-if="object.postFiles">-->
+                            <!--<ul>-->
+                                <!--<li class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">-->
+                                    <!--<img :src="postFile.PostItemPath"-->
+                                         <!--:class="{'post-disabled':postFile.PostItemStatus !=='Active'}"-->
+                                         <!--v-if="checkIfImage(postFile.PostItemPath)"/>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+
+                        <!--<div class="postFile" v-if="object.postFiles">-->
+                            <!--<div class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">-->
+                                <!--&lt;!&ndash;<img :src="postFile.PostItemPath" :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>&ndash;&gt;-->
+
+
+                                <!--<a v-if="!checkIfImage(postFile.PostItemPath)" v-bind:href="[postFile.PostItemPath]"-->
+                                   <!--:class="{'post-disabled':postFile.PostItemStatus !=='Active'}">-->
+                                    <!--<i class="fa fa-file" aria-hidden="true"></i>-->
+                                    <!--{{postFile.PostItemPostID}}-->
+                                <!--</a>-->
+                                <!--&lt;!&ndash;{{postFile.PostItemCreatedDate}}&ndash;&gt;-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash;<div slot="footer">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<vs-row vs-justify="flex-end">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<vs-button color="primary" type="gradient" >View</vs-button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<vs-button color="danger" type="gradient">Delete</vs-button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</vs-row>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--</div>-->
+
+                    <!--<div class="comment_wrapper">-->
+                        <!--{{commentPostID}}-->
+                        <!--<form class="form-style">-->
+                            <!--<input type="text" class="form-control d-none" id="commentPostID" v-model="commentPostID">-->
+                            <!--<vs-input label-placeholder="Write a comment" v-model="commentPostContent"-->
+                                      <!--class="addComment"/>-->
+                            <!--<div class="btn btn-primary" @click="commentitemSubmit(object.commentPostID)"><i-->
+                                    <!--class="fa fa-paper-plane"-->
+                                    <!--aria-hidden="true"></i></div>-->
+                        <!--</form>-->
+
+                        <!--<div class="commentWrap" v-if="object.commentItems"-->
+                             <!--:class="{'is-collapsed' : object.collapsed }">-->
+                            <!--<div class="comment__item" v-for="commentItem in object.commentItems"-->
+                                 <!--:key="commentItem.PoCmID">-->
+                                <!--<div class="commentItem__header">-->
+                                    <!--<div class="comment__name">{{commentItem.CONname}}</div>-->
+                                    <!--<div class="comment__date">{{commentItem.CONcreationdate}}</div>-->
+                                <!--</div>-->
+                                <!--<div class="commentPostContent_show"-->
+                                     <!--v-if="readonly === true || readonly === false && checkidcomment !== commentItem.PoCmID">-->
+                                    <!--{{commentItem.PoCmContent}}-->
+                                <!--</div>-->
+                                <!--<textarea v-if="readonly === false && checkidcomment === commentItem.PoCmID" type="text"-->
+                                          <!--class="comment__content" id="commentPostContent"-->
+                                          <!--v-model="commentItem.PoCmContent" v-bind:readonly="readonly"-->
+                                          <!--:class="{'editable' : readonly === false && checkidcomment === commentItem.PoCmID }"></textarea>-->
+                                <!--<span class="edit" @click="disableReadonly(commentItem.PoCmID)"-->
+                                      <!--:class="{'d-none' : readonly === false && checkidcomment === commentItem.PoCmID}">Edit</span>-->
+                                <!--<span class="save" @click="commentEdit(commentItem.PoCmID, commentItem.PoCmContent)"-->
+                                      <!--:class="{'d-none' : readonly === true || readonly === false && checkidcomment !== commentItem.PoCmID}">Save</span>-->
+                            <!--</div>-->
+
+                            <!--<button v-on:click=" object.collapsed = !object.collapsed "-->
+                                    <!--:class="{'d-none' : !object.collapsed }">Display more comments-->
+                            <!--</button>-->
+                        <!--</div>-->
+
+                    <!--</div>-->
                 </div>
 
             </div>
 
         </div>
 
-        <div class="" v-for="object in academicYearTable" :key="object.PK_Class_ID">
-            {{object.PK_Semester_ID}} -- {{object.CLS_ClassName}}
-        </div>
 
         <b-modal id="modal1" hide-footer title="ADD NOTE" v-model="isModalOpen">
             <form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">
-                <div class="form-group">
-                    <at :members="studentAt">
-                        <div class="editor" contenteditable v-html="html" @click="handleTagClick"></div>
-                    </at>
-                    <!--{{studentAt}}-->
-                </div>
-                <div class="mb-3 form-group" :class="{ 'form-group--error': $v.content.$error }">
-                    <!--<label for="username">Username</label>-->
-                    <textarea type="text" class="form-control" id="postContent" v-model="postContent"
-                              placeholder="CONTENT"
-                              required v-model.trim="$v.content.$model"></textarea>
-                    <!--<RichTextEditor @inputChange="inputChange"/>-->
-                    <!--<div>-->
-                    <!--<p>Output:</p>-->
-                    <!--{{postContent}}-->
-                    <!--</div>-->
-                </div>
 
-                <div class="error" v-if="!$v.content.required">Field is required</div>
-                <div class="error" v-if="!$v.content.minLength">Name must have at least
-                    {{$v.content.$params.minLength.min}} letters.
+                <div class="mb-3 form-group">
+                    <!--<label for="username">Username</label>-->
+                    <textarea type="text" class="form-control" id="postContent" v-model="addPostContent"
+                              placeholder="CONTENT"></textarea>
                 </div>
 
                 <div class="mb-2">
@@ -202,39 +227,48 @@
                     <label for="profolio" class="toggle"><strong>PROFOLIO</strong><span></span></label>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <label for="tagAcademicYearID">Academic Year</label>
+                    <div class="col-md-6 ">
+                        <label :for="tagAcademicYearID">Academic Year</label>
                         <select class="form-control" id="tagAcademicYearID" v-model="tagAcademicYearID">
                             <option v-for="object in academicYearTable" :key="object.PK_Class_ID"
                                     :value="object.PK_Semester_ID">{{object.SMT_Code}}
                             </option>
                         </select>
                     </div>
-
-                    <div class="col-md-6 mb-2">
-                        <label for="tagUserID">Student</label>
-                        <input type="text" class="form-control" id="tagUserID" v-model="tagUserID"
-                               placeholder="Tag User ID"
-                               required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <label for="tagClassID">Class</label>
+                    <div class="col-md-6 ">
+                        <label :for="tagClassID">Class</label>
                         <select class="form-control" id="tagClassID" v-model="tagClassID">
                             <option v-for="object in classesTable" :key="object.PK_Class_ID"
                                     :value="object.PK_Class_ID">{{object.CLS_ClassName}}
                             </option>
                         </select>
                     </div>
+                </div>
+                <div class="row">
 
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-6">
                         <label for="tagLevelID">Level</label>
                         <select class="form-control" id="tagLevelID" v-model="tagLevelID">
                             <option v-for="object in levelsTable" :key="object.PK_Class_ID"
                                     :value="object.SC_FK_CourseID">{{object.CRS_Course_Name}}
                             </option>
                         </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Student</label>
+                        <at :members="studentTable" name-key="Full_Name">
+                            <template slot="item" slot-scope="s">
+
+                                <span v-text="s.item.Full_Name" @click="handleTagClick(s.item)"></span>
+
+                            </template>
+                            <div class="mention-editor" contenteditable v-html="html"></div>
+                        </at>
+                        <!--<input type="text" class="form-control" id="tagUserID" v-model="tagUserID"-->
+                        <!--placeholder="Tag User ID"-->
+                        <!--required>-->
                     </div>
                 </div>
                 <div class="row inputFile-box">
@@ -278,32 +312,33 @@
 </template>
 
 <script>
+    import At from 'vue-at';
     import DataSource from "../data/datasource";
-    // import vue2Dropzone from 'vue2-dropzone';
-    // import 'vue2-dropzone/dist/vue2Dropzone.min.css';
-    // import '@websanova/vue-upload';
     import {required, minLength} from 'vuelidate/lib/validators';
     import isImage from "is-image";
-    import At from 'vue-at';
+    import PostComponent from "../components/postCompnent";
     // import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
 
     export default {
         name: 'staffPost',
-        // components: {RichTextEditor},
+        components: {
+            PostComponent,
+            At,
+        },
         data() {
             return {
-                html: '',
-                members: ['Roxie Miles', 'grace.carroll', '小浩'],
+                html: "@John Doe",
                 files: [],
                 systemmsgError: false,
                 isModalOpen: false,
                 token: null,
-                userType: null,
+                userType: "",
                 list: [],
                 error: "",
                 staffPostResults: "",
                 results: "",
                 postContent: "",
+                addPostContent: "",
                 tagAcademicYearID: "",
                 profolio: "No",
                 tagUserID: "",
@@ -313,23 +348,24 @@
                 content: '',
                 selectedFile: null,
                 success: null,
-                dropzoneOptions: {
-                    url: 'http://local.emsv2/controller/Upload_File.asmx/uploadFile',
-                },
                 isLoading: true,
                 saveResponse: "",
                 PostItemPath: "",
                 tagResponseText: "123",
-
                 academicYearTable: [],
                 classesTable: [],
                 levelsTable: [],
                 studentTable: [],
                 studentAt: [],
+                tagStudents: [],
+                PostID: "",
+                commentPostContent: "",
+                commentPostID: "",
+                actionMode: "",
+                readonly: true,
+                checkidcomment: ""
             };
         },
-        components: {At},
-        // components: {Step},
         async mounted() {
             // this.showSession()
             // user menu
@@ -338,12 +374,19 @@
                 if (response.Table) {
                     for (let item of response.Table) {
                         const fileRes = await DataSource.shared.getPostFile(item.PostID);
+                        const getCommentResponse = await DataSource.shared.getComment(item.PostID);
+                        if (getCommentResponse.Table) {
+                            item.commentItems = getCommentResponse.Table;
+                            item.collapsed = true;
+                        }
                         if (fileRes.Table) {
                             item.postFiles = fileRes.Table;
                         }
+                        item.commentPostID = item.PostID;
                     }
                     this.list = response.Table;
                 }
+
 
                 let tagResponse = await DataSource.shared.getPostDropdown();
 
@@ -381,24 +424,17 @@
                 }
                 if (tagResponse.StudentTable && tagResponse.StudentTable.Table) {
                     // this.studentTableList = tagResponse.StudentTable.Table.PK_Class_ID;
-
-                    const studentTableList = tagResponse.StudentTable.Table.map(object => {
-                        return object.Full_Name;
-                    });
-                    this.studentAt = studentTableList;
-                    console.log(this.studentAt);
+                    //
+                    // const studentTableList = tagResponse.StudentTable.Table.map(object => {
+                    //     return object.Full_Name;
+                    // });
+                    // this.studentAt = studentTableList;
+                    // console.log(this.studentAt);
 
                     this.studentTable = tagResponse.StudentTable.Table;
                 }
-                if (response.Table) {
-                    for (let item of response.Table) {
-                        const fileRes = await DataSource.shared.getPostFile(item.PostID);
-                        if (fileRes.Table) {
-                            item.postFiles = fileRes.Table;
-                        }
-                    }
-                    this.list = response.Table;
-                }
+
+                this.userType = sessionStorage.getItem('userTypeSession');
 
 
             } catch (e) {
@@ -409,6 +445,8 @@
         methods: {
             handleTagClick(e) {
                 console.log(e);
+                this.tagStudents.push(e.Student_ID);
+                this.tagUserID = this.tagStudents;
             },
 
             inputChange(input) {
@@ -438,20 +476,22 @@
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
-                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.postContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID);
+                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.addPostContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID);
 
                     if (saveResponse) {
                         switch (saveResponse.code) {
                             case "1":
                                 this.isModalOpen = false;
-                                console.log('success');
                                 // reset all input filed to blank
                                 this.selectedFile = null;
                                 this.$refs.fileupload.value = "";
-                                this.postContent = null;
+                                this.addPostContent = "";
                                 this.tagAcademicYearID = null;
                                 this.profolio = null;
-                                this.tagUserID = null;
+                                this.tagStudents = "";
+                                this.tagUserID = "";
+                                this.html = "";
+                                this.tagLevelID = null;
                                 this.tagClassID = null;
                                 this.results = `Post Submitted`;
                                 this.success = 'Post Submitted, activity will be active in a while';
@@ -474,6 +514,110 @@
                     this.error = e;
                 }
 
+            },
+            async commentitemSubmit(commentPostID, comment) {
+                console.log(commentPostID);
+
+                console.log(comment)
+
+                this.error = "";
+                //this.results = "<< Requesting.. >>";
+                try {
+
+                    this.commentPostID = commentPostID;
+                    const commentResponse = await DataSource.shared.saveComment(this.commentPostID, comment);
+
+                    console.log(commentResponse)
+
+                    if (commentResponse) {
+                        switch (commentResponse.code) {
+                            case "1":
+                                // reset all input filed to blank
+                                this.commentPostID = null;
+                                this.commentPostContent = "";
+
+                                const newComment = await DataSource.shared.getComment(commentPostID);
+                                this.list.find(item => {
+                                    console.log(item.PostID);
+
+                                    if (item.PostID === commentPostID) {
+                                        console.log(item, 'wad');
+                                        item.commentItems = newComment.Table;
+                                        return item;
+                                    }
+
+                                    console.log(item);
+                                });
+
+
+                                // this.results = `Post Submitted`;
+                                // this.success = 'Post Submitted, activity will be active in a while';
+                                break;
+                            case "88":
+                                this.results = `Please Login to submit post`;
+                                this.systemmsgError = true;
+                                break;
+                            case "99":
+                                this.results = `Please fill in content`;
+                                this.systemmsgError = true;
+                                break;
+                            // default:
+                            //     alert("Please try again later");
+                            //     this.results = JSON.stringify(response);
+                        }
+                    }
+                } catch (e) {
+                    console.log(e);
+                    this.error = e;
+                }
+            },
+            async commentEdit(PoCmID, PoCmContent) {
+                this.error = "";
+                //this.results = "<< Requesting.. >>";
+                try {
+
+                    this.commentPostID = PoCmID;
+                    this.commentPostContent = PoCmContent;
+                    console.log(this.commentPostContent);
+                    this.actionMode = "Edit";
+                    const commentResponse = await DataSource.shared.editComment(this.commentPostID, this.commentPostContent, this.actionMode);
+                    if (commentResponse) {
+                        switch (commentResponse.code) {
+                            case "1":
+                                // reset all input filed to blank
+                                this.commentPostID = null;
+                                this.commentPostContent = "";
+                                this.readonly = true;
+                                // this.results = `Post Submitted`;
+                                // this.success = 'Post Submitted, activity will be active in a while';
+                                break;
+                            case "88":
+                                this.results = `Please Login to submit post`;
+                                this.systemmsgError = true;
+                                break;
+                            case "99":
+                                this.results = `Please fill in content`;
+                                this.systemmsgError = true;
+                                break;
+                            // default:
+                            //     alert("Please try again later");
+                            //     this.results = JSON.stringify(response);
+                        }
+                    }
+                } catch (e) {
+                    console.log(e);
+                    this.error = e;
+                }
+            },
+            async disableReadonly(PoCmID) {
+                this.error = "";
+                try {
+                    this.readonly = false;
+                    this.checkidcomment = PoCmID;
+                } catch (e) {
+                    console.log(e);
+                    this.error = e;
+                }
             },
             getImagePreviews() {
                 /*
@@ -508,7 +652,7 @@
             },
             clearPreview() {
                 this.selectedFile = null;
-            }
+            },
         },
         validations: {
             content: {
