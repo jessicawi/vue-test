@@ -534,6 +534,15 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Posting.asmx/updatePostComment", data, "POST");
         return response;
     }
+    async deleteComment(commentPostID, postContent, actionMode) {
+        const data = {
+            commentPostID: commentPostID,
+            postContent: postContent,
+            actionMode: actionMode
+        };
+        const response = await this.callWebService("/controller/Posting.asmx/updatePostComment", data, "POST");
+        return response;
+    }
     async saveGallery(files, fileType, galFolderID, folderName) {
 
         const formData = new FormData();

@@ -116,93 +116,100 @@
 
                 <div class="" v-for="object in list" :key="object.PostID">
 
-                    <PostComponent :post="object" :checkIfImage="checkIfImage" @commentitemSubmit="commentitemSubmit" :commentPostContent="commentPostContent"/>
+                    <PostComponent
+                            :post="object"
+                            :checkIfImage="checkIfImage"
+                            @commentitemSubmit="commentitemSubmit"
+                            @commentEdit="commentEdit"
+                            @commentDelete="commentDelete"
+                            :commentPostContent="commentPostContent"
+                    />
                     <hr/>
 
                     <!--<div class="feed-box" v-bind:class="[object.PostID]">-->
-                        <!--<div class="author">-->
-                            <!--<div class="profile"><img src="../assets/boy.png"/></div>-->
-                            <!--<div class="feed-heading">-->
-                                <!--<span>{{object.PostCreatedBy}}</span>-->
-                                <!--<small class="date"><i class="fa fa-clock-o" aria-hidden="true"></i>-->
-                                    <!--{{object.PostCreatedDate}}-->
-                                <!--</small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="content">-->
-                            <!--<p>-->
-                                <!--&lt;!&ndash;<strong class="feed-subtitle"> ADD A NOTE</strong>&ndash;&gt;-->
-                                <!--{{object.PostContent}}-->
-                            <!--</p>-->
-                        <!--</div>-->
-                        <!--<div class="image-wrapper" v-if="object.postFiles">-->
-                            <!--<ul>-->
-                                <!--<li class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">-->
-                                    <!--<img :src="postFile.PostItemPath"-->
-                                         <!--:class="{'post-disabled':postFile.PostItemStatus !=='Active'}"-->
-                                         <!--v-if="checkIfImage(postFile.PostItemPath)"/>-->
-                                <!--</li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
+                    <!--<div class="author">-->
+                    <!--<div class="profile"><img src="../assets/boy.png"/></div>-->
+                    <!--<div class="feed-heading">-->
+                    <!--<span>{{object.PostCreatedBy}}</span>-->
+                    <!--<small class="date"><i class="fa fa-clock-o" aria-hidden="true"></i>-->
+                    <!--{{object.PostCreatedDate}}-->
+                    <!--</small>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="content">-->
+                    <!--<p>-->
+                    <!--&lt;!&ndash;<strong class="feed-subtitle"> ADD A NOTE</strong>&ndash;&gt;-->
+                    <!--{{object.PostContent}}-->
+                    <!--</p>-->
+                    <!--</div>-->
+                    <!--<div class="image-wrapper" v-if="object.postFiles">-->
+                    <!--<ul>-->
+                    <!--<li class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">-->
+                    <!--<img :src="postFile.PostItemPath"-->
+                    <!--:class="{'post-disabled':postFile.PostItemStatus !=='Active'}"-->
+                    <!--v-if="checkIfImage(postFile.PostItemPath)"/>-->
+                    <!--</li>-->
+                    <!--</ul>-->
+                    <!--</div>-->
 
-                        <!--<div class="postFile" v-if="object.postFiles">-->
-                            <!--<div class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">-->
-                                <!--&lt;!&ndash;<img :src="postFile.PostItemPath" :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>&ndash;&gt;-->
+                    <!--<div class="postFile" v-if="object.postFiles">-->
+                    <!--<div class="postFile__item" v-for="postFile in object.postFiles" :key="postFile.ID">-->
+                    <!--&lt;!&ndash;<img :src="postFile.PostItemPath" :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>&ndash;&gt;-->
 
 
-                                <!--<a v-if="!checkIfImage(postFile.PostItemPath)" v-bind:href="[postFile.PostItemPath]"-->
-                                   <!--:class="{'post-disabled':postFile.PostItemStatus !=='Active'}">-->
-                                    <!--<i class="fa fa-file" aria-hidden="true"></i>-->
-                                    <!--{{postFile.PostItemPostID}}-->
-                                <!--</a>-->
-                                <!--&lt;!&ndash;{{postFile.PostItemCreatedDate}}&ndash;&gt;-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--&lt;!&ndash;<div slot="footer">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<vs-row vs-justify="flex-end">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<vs-button color="primary" type="gradient" >View</vs-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<vs-button color="danger" type="gradient">Delete</vs-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</vs-row>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--<a v-if="!checkIfImage(postFile.PostItemPath)" v-bind:href="[postFile.PostItemPath]"-->
+                    <!--:class="{'post-disabled':postFile.PostItemStatus !=='Active'}">-->
+                    <!--<i class="fa fa-file" aria-hidden="true"></i>-->
+                    <!--{{postFile.PostItemPostID}}-->
+                    <!--</a>-->
+                    <!--&lt;!&ndash;{{postFile.PostItemCreatedDate}}&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;<div slot="footer">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<vs-row vs-justify="flex-end">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<vs-button color="primary" type="gradient" >View</vs-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<vs-button color="danger" type="gradient">Delete</vs-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</vs-row>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
                     <!--</div>-->
 
                     <!--<div class="comment_wrapper">-->
-                        <!--{{commentPostID}}-->
-                        <!--<form class="form-style">-->
-                            <!--<input type="text" class="form-control d-none" id="commentPostID" v-model="commentPostID">-->
-                            <!--<vs-input label-placeholder="Write a comment" v-model="commentPostContent"-->
-                                      <!--class="addComment"/>-->
-                            <!--<div class="btn btn-primary" @click="commentitemSubmit(object.commentPostID)"><i-->
-                                    <!--class="fa fa-paper-plane"-->
-                                    <!--aria-hidden="true"></i></div>-->
-                        <!--</form>-->
+                    <!--{{commentPostID}}-->
+                    <!--<form class="form-style">-->
+                    <!--<input type="text" class="form-control d-none" id="commentPostID" v-model="commentPostID">-->
+                    <!--<vs-input label-placeholder="Write a comment" v-model="commentPostContent"-->
+                    <!--class="addComment"/>-->
+                    <!--<div class="btn btn-primary" @click="commentitemSubmit(object.commentPostID)"><i-->
+                    <!--class="fa fa-paper-plane"-->
+                    <!--aria-hidden="true"></i></div>-->
+                    <!--</form>-->
 
-                        <!--<div class="commentWrap" v-if="object.commentItems"-->
-                             <!--:class="{'is-collapsed' : object.collapsed }">-->
-                            <!--<div class="comment__item" v-for="commentItem in object.commentItems"-->
-                                 <!--:key="commentItem.PoCmID">-->
-                                <!--<div class="commentItem__header">-->
-                                    <!--<div class="comment__name">{{commentItem.CONname}}</div>-->
-                                    <!--<div class="comment__date">{{commentItem.CONcreationdate}}</div>-->
-                                <!--</div>-->
-                                <!--<div class="commentPostContent_show"-->
-                                     <!--v-if="readonly === true || readonly === false && checkidcomment !== commentItem.PoCmID">-->
-                                    <!--{{commentItem.PoCmContent}}-->
-                                <!--</div>-->
-                                <!--<textarea v-if="readonly === false && checkidcomment === commentItem.PoCmID" type="text"-->
-                                          <!--class="comment__content" id="commentPostContent"-->
-                                          <!--v-model="commentItem.PoCmContent" v-bind:readonly="readonly"-->
-                                          <!--:class="{'editable' : readonly === false && checkidcomment === commentItem.PoCmID }"></textarea>-->
-                                <!--<span class="edit" @click="disableReadonly(commentItem.PoCmID)"-->
-                                      <!--:class="{'d-none' : readonly === false && checkidcomment === commentItem.PoCmID}">Edit</span>-->
-                                <!--<span class="save" @click="commentEdit(commentItem.PoCmID, commentItem.PoCmContent)"-->
-                                      <!--:class="{'d-none' : readonly === true || readonly === false && checkidcomment !== commentItem.PoCmID}">Save</span>-->
-                            <!--</div>-->
+                    <!--<div class="commentWrap" v-if="object.commentItems"-->
+                    <!--:class="{'is-collapsed' : object.collapsed }">-->
+                    <!--<div class="comment__item" v-for="commentItem in object.commentItems"-->
+                    <!--:key="commentItem.PoCmID">-->
+                    <!--<div class="commentItem__header">-->
+                    <!--<div class="comment__name">{{commentItem.CONname}}</div>-->
+                    <!--<div class="comment__date">{{commentItem.CONcreationdate}}</div>-->
+                    <!--</div>-->
+                    <!--<div class="commentPostContent_show"-->
+                    <!--v-if="readonly === true || readonly === false && checkidcomment !== commentItem.PoCmID">-->
+                    <!--{{commentItem.PoCmContent}}-->
+                    <!--</div>-->
+                    <!--<textarea v-if="readonly === false && checkidcomment === commentItem.PoCmID" type="text"-->
+                    <!--class="comment__content" id="commentPostContent"-->
+                    <!--v-model="commentItem.PoCmContent" v-bind:readonly="readonly"-->
+                    <!--:class="{'editable' : readonly === false && checkidcomment === commentItem.PoCmID }"></textarea>-->
+                    <!--<span class="edit" @click="disableReadonly(commentItem.PoCmID)"-->
+                    <!--:class="{'d-none' : readonly === false && checkidcomment === commentItem.PoCmID}">Edit</span>-->
+                    <!--<span class="save" @click="commentEdit(commentItem.PoCmID, commentItem.PoCmContent)"-->
+                    <!--:class="{'d-none' : readonly === true || readonly === false && checkidcomment !== commentItem.PoCmID}">Save</span>-->
+                    <!--</div>-->
 
-                            <!--<button v-on:click=" object.collapsed = !object.collapsed "-->
-                                    <!--:class="{'d-none' : !object.collapsed }">Display more comments-->
-                            <!--</button>-->
-                        <!--</div>-->
+                    <!--<button v-on:click=" object.collapsed = !object.collapsed "-->
+                    <!--:class="{'d-none' : !object.collapsed }">Display more comments-->
+                    <!--</button>-->
+                    <!--</div>-->
 
                     <!--</div>-->
                 </div>
@@ -516,9 +523,6 @@
 
             },
             async commentitemSubmit(commentPostID, comment) {
-                console.log(commentPostID);
-
-                console.log(comment)
 
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
@@ -527,7 +531,6 @@
                     this.commentPostID = commentPostID;
                     const commentResponse = await DataSource.shared.saveComment(this.commentPostID, comment);
 
-                    console.log(commentResponse)
 
                     if (commentResponse) {
                         switch (commentResponse.code) {
@@ -538,15 +541,12 @@
 
                                 const newComment = await DataSource.shared.getComment(commentPostID);
                                 this.list.find(item => {
-                                    console.log(item.PostID);
 
                                     if (item.PostID === commentPostID) {
-                                        console.log(item, 'wad');
                                         item.commentItems = newComment.Table;
                                         return item;
                                     }
 
-                                    console.log(item);
                                 });
 
 
@@ -576,11 +576,11 @@
                 //this.results = "<< Requesting.. >>";
                 try {
 
-                    this.commentPostID = PoCmID;
-                    this.commentPostContent = PoCmContent;
-                    console.log(this.commentPostContent);
+                    // this.commentPostID = PoCmID;
+                    // this.commentPostContent = PoCmContent;
+                    // console.log(this.commentPostContent);
                     this.actionMode = "Edit";
-                    const commentResponse = await DataSource.shared.editComment(this.commentPostID, this.commentPostContent, this.actionMode);
+                    const commentResponse = await DataSource.shared.editComment(PoCmID, PoCmContent, this.actionMode);
                     if (commentResponse) {
                         switch (commentResponse.code) {
                             case "1":
@@ -588,6 +588,17 @@
                                 this.commentPostID = null;
                                 this.commentPostContent = "";
                                 this.readonly = true;
+
+                                const newComment = await DataSource.shared.getComment(PoCmID);
+                                this.list.find(item => {
+
+                                    if (item.PostID === PoCmID) {
+                                        item.commentItems = newComment.Table;
+                                        return item;
+                                    }
+
+                                });
+
                                 // this.results = `Post Submitted`;
                                 // this.success = 'Post Submitted, activity will be active in a while';
                                 break;
@@ -602,6 +613,46 @@
                             // default:
                             //     alert("Please try again later");
                             //     this.results = JSON.stringify(response);
+                        }
+                    }
+                } catch (e) {
+                    console.log(e);
+                    this.error = e;
+                }
+            },
+            async commentDelete(PoCmID, PoCmContent, postId) {
+                this.error = "";
+                try {
+                    this.actionMode = "Delete";
+                    const deleteCommentResponse = await DataSource.shared.deleteComment(PoCmID, PoCmContent, this.actionMode);
+                    if (deleteCommentResponse) {
+                        switch (deleteCommentResponse.code) {
+                            case "1":
+                                // reset all input filed to blank
+                                this.commentPostID = null;
+                                this.commentPostContent = "";
+
+                                const newComment = await DataSource.shared.getComment(PoCmID);
+
+                                console.log(newComment);
+                                this.list.find(item => {
+
+                                    if (item.PostID === postId) {
+                                        console.log('hey', postId);
+                                        item.commentItems = item.commentItems.filter(comment => comment.PoCmID !== PoCmID);
+                                        return item;
+                                    }
+
+                                });
+                                break;
+                            case "88":
+                                this.results = `Please Login to submit post`;
+                                this.systemmsgError = true;
+                                break;
+                            case "99":
+                                this.results = `Please fill in content`;
+                                this.systemmsgError = true;
+                                break;
                         }
                     }
                 } catch (e) {

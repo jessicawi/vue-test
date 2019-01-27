@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="aaaa">
         <div class="feed-box" v-bind:class="[post.PostID]">
             <div class="author">
                 <div class="profile"><img src="../assets/boy.png"/></div>
@@ -60,22 +60,26 @@
             <div class="commentWrap" v-if="post.commentItems"
                  :class="{'is-collapsed' : post.collapsed }">
                 <div class="comment__item" v-for="commentItem in post.commentItems"
-                     :key="commentItem.PoCmID">
+                     :key="commentItem.PoCmID" v-if="">
                     <div class="commentItem__header">
                         <div class="comment__name">{{commentItem.CONname}}</div>
                         <div class="comment__date">{{commentItem.CONcreationdate}}</div>
                     </div>
-                    <div class="commentPostContent_show"  v-if="readonly === false">
+                    <div class="commentPostContent_show"
+                         v-if="readonly === true || checkidcomment !== commentItem.PoCmID">
                         {{commentItem.PoCmContent}}
                     </div>
                     <textarea v-if="readonly === false && checkidcomment === commentItem.PoCmID" type="text"
                               class="comment__content" id="commentPostContent"
                               v-model="commentItem.PoCmContent" v-bind:readonly="readonly"
                               :class="{'editable' : readonly === false && checkidcomment === commentItem.PoCmID }"></textarea>
+                    <!--{{checkidcomment}} ==== {{commentItem.PoCmID}} === {{readonly}}<br/>-->
                     <span class="edit" @click="disableReadonly(commentItem.PoCmID)"
                           :class="{'d-none' : readonly === false && checkidcomment === commentItem.PoCmID}">Edit</span>
-                    <span class="save" @click="commentEdit(commentItem.PoCmID, commentItem.PoCmContent)"
-                          :class="{'d-none' : readonly === true || readonly === false && checkidcomment !== commentItem.PoCmID}">Save</span>
+                    <span class="save" @click="editComment(commentItem.PoCmID, commentItem.PoCmContent)"
+                          :class="{'d-none' : readonly === true || checkidcomment !== commentItem.PoCmID}">Save</span>
+                    <span class="delete"
+                          @click="deleteComment(commentItem.PoCmID, commentItem.PoCmContent, post.PostID)">Delete</span>
                 </div>
 
                 <button v-on:click=" post.collapsed = !post.collapsed "
@@ -88,6 +92,7 @@
 
 <script>
     import isImage from "is-image";
+    import DataSource from "../data/datasource";
 
 
     export default {
@@ -101,14 +106,60 @@
                 commentPostID: ''
             };
         },
-        props: ["post", "checkIfImage", "commentEdit", "commentitemSubmit"],
+        props: ["post", "checkIfImage", "commentitemSubmit"],
         methods: {
             // checkIfImage(file) {
             //     return isImage(file);
             // },
             submitComment(postId) {
                 this.$emit('commentitemSubmit', postId, this.commentPostContent);
+                this.commentPostContent = "";
             },
+            editComment(PoCmID, PoCmContent) {
+                this.readonly = true;
+                this.$emit("commentEdit", PoCmID, PoCmContent);
+            },
+            deleteComment(PoCmID, PoCmContent, postId) {
+                this.$emit("commentDelete", PoCmID, PoCmContent, postId);
+            },
+            // async commentEdit(PoCmID, PoCmContent) {
+            //     this.error = "";
+            //     //this.results = "<< Requesting.. >>";
+            //     try {
+            //
+            //         this.commentPostID = PoCmID;
+            //         this.commentPostContent = PoCmContent;
+            //         console.log(this.commentPostContent);
+            //         this.actionMode = "Edit";
+            //         const commentResponse = await DataSource.shared.editComment(this.commentPostID, this.commentPostContent, this.actionMode);
+            //         if (commentResponse) {
+            //             switch (commentResponse.code) {
+            //                 case "1":
+            //                     // reset all input filed to blank
+            //                     this.commentPostID = null;
+            //                     this.commentPostContent = "";
+            //                     this.readonly = true;
+            //                     // this.results = `Post Submitted`;
+            //                     // this.success = 'Post Submitted, activity will be active in a while';
+            //                     break;
+            //                 case "88":
+            //                     this.results = `Please Login to submit post`;
+            //                     this.systemmsgError = true;
+            //                     break;
+            //                 case "99":
+            //                     this.results = `Please fill in content`;
+            //                     this.systemmsgError = true;
+            //                     break;
+            //                 // default:
+            //                 //     alert("Please try again later");
+            //                 //     this.results = JSON.stringify(response);
+            //             }
+            //         }
+            //     } catch (e) {
+            //         console.log(e);
+            //         this.error = e;
+            //     }
+            // },
 
             async disableReadonly(PoCmID) {
                 this.error = "";
