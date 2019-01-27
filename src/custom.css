@@ -469,13 +469,28 @@ comment
     color: #007bff;
 }
 
-.comment__item span.edit {
+.comment__item span.edit ,
+.comment__item span.delete{
     color: #ccc;
     cursor: pointer;
 }
 
-.comment__item span.edit:hover {
+.comment__item span.edit:hover,
+.comment__item span.delete:hover{
     color: #007bff;
+}
+
+/*
+modal
+ */
+
+.modal .submit-wrap button {
+    color: #fff;
+    border-radius: 4px;
+}
+
+.modal .submit-wrap {
+    margin-top: 10px;
 }
 /*
 login

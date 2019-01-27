@@ -118,7 +118,7 @@
                         if (response.token) {
                             this.results = `Login Success, Welcome Back`;
                             if (isParent === "Parent") {
-                                window.location.replace("/post/feed");
+                                window.location.replace("/post/staff");
                             }else{
                                 window.location.replace("/");
                             }

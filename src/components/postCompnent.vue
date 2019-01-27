@@ -75,16 +75,22 @@
                               :class="{'editable' : readonly === false && checkidcomment === commentItem.PoCmID }"></textarea>
                     <!--{{checkidcomment}} ==== {{commentItem.PoCmID}} === {{readonly}}<br/>-->
                     <span class="edit" @click="disableReadonly(commentItem.PoCmID)"
-                          :class="{'d-none' : readonly === false && checkidcomment === commentItem.PoCmID}">Edit</span>
+                          :class="{'d-none' : readonly === false && checkidcomment === commentItem.PoCmID}">Edit . </span>
                     <span class="save" @click="editComment(commentItem.PoCmID, commentItem.PoCmContent)"
-                          :class="{'d-none' : readonly === true || checkidcomment !== commentItem.PoCmID}">Save</span>
+                          :class="{'d-none' : readonly === true || checkidcomment !== commentItem.PoCmID}">Save . </span>
+                    <!--<span class="delete"-->
+                    <!--@click="deleteComment(commentItem.PoCmID, commentItem.PoCmContent, post.PostID)">Delete</span>-->
                     <span class="delete"
-                          @click="deleteComment(commentItem.PoCmID, commentItem.PoCmContent, post.PostID)">Delete</span>
+                          @click="showDeleteModal">Delete</span>
+                    <AlertComponent :showModal="deleteModalShow" @cancelClick="closeDeleteModal"
+                                    @okClick="deleteComment(commentItem.PoCmID, commentItem.PoCmContent, post.PostID)"/>
                 </div>
 
                 <button v-on:click=" post.collapsed = !post.collapsed "
-                        :class="{'d-none' : !post.collapsed }">Display more comments
+                        :class="{'d-none' : !post.collapsed }" v-if="post.commentItems.length !== 1">Display more comments
                 </button>
+
+
             </div>
         </div>
     </div>
@@ -93,17 +99,20 @@
 <script>
     import isImage from "is-image";
     import DataSource from "../data/datasource";
+    import AlertComponent from "./alertComponent";
 
 
     export default {
         name: 'postComponent',
+        components: {AlertComponent},
         data() {
             return {
                 commentPostContent: "",
                 readonly: "",
                 checkidcomment: null,
                 systemmsgError: null,
-                commentPostID: ''
+                commentPostID: '',
+                deleteModalShow: false
             };
         },
         props: ["post", "checkIfImage", "commentitemSubmit"],
@@ -119,8 +128,16 @@
                 this.readonly = true;
                 this.$emit("commentEdit", PoCmID, PoCmContent);
             },
+            showDeleteModal() {
+                this.deleteModalShow = true;
+            },
+            closeDeleteModal() {
+                this.deleteModalShow = false;
+            },
             deleteComment(PoCmID, PoCmContent, postId) {
+                console.log("haha, ", PoCmID, PoCmContent, postId)
                 this.$emit("commentDelete", PoCmID, PoCmContent, postId);
+                this.closeDeleteModal()
             },
             // async commentEdit(PoCmID, PoCmContent) {
             //     this.error = "";

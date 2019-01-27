@@ -13,7 +13,7 @@ import studentEditClass from "../pages/StudentEditClass";
 import parentList from "../pages/ParentList";
 import parent from "../pages/Parent";
 import manageRelationship from "../pages/ManageRelationship";
-import latestPost from "../pages/LatestPost";
+import staffPost from "../pages/StaffPost";
 import pendingPost from "../pages/PendingPost";
 import parentRegister from "../pages/ParentRegister";
 import getApproverMaster from "../pages/Approver";
@@ -96,9 +96,9 @@ const router = new VueRouter({
             meta: { bodyClass: 'parent-register' }
         },
         {
-            path: '/post/feed',
-            name: 'Latest Update',
-            component: latestPost,
+            path: '/post/staff',
+            name: 'Latest Update (Staff)',
+            component: staffPost,
         },
         {
             path: '/post/pending',
