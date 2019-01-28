@@ -18,6 +18,7 @@ import {Modal} from 'bootstrap-vue/es/components';
 import VueUploadComponent from "vue-upload-component";
 import Vuelidate from 'vuelidate';
 import VueCharts from 'vue-chartjs';
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead';
 Vue.component('file-upload', VueUploadComponent);
 
 
@@ -33,7 +34,7 @@ Vue.use(vbclass, router);
 Vue.use(Modal);
 Vue.use(Vuelidate);
 Vue.use(VueCharts);
-
+Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead);
 new Vue({
     router,
     render: h => h(App),

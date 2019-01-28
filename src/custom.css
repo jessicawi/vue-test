@@ -926,7 +926,7 @@ StaffPost
 }
 
 .feed-box {
-    margin: 20px 0px;
+    margin: 20px 0px 10px;
     position: relative;
     background: white;
     border-radius: 3px;
@@ -974,7 +974,7 @@ StaffPost
 
 .postFile__item {
     /*border-top: 1px solid #eee;*/
-    margin-bottom: -10px;
+    /*margin-bottom: -10px;*/
     display: table;
     width: 100%;
 }

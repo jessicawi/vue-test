@@ -148,20 +148,27 @@
                 this.$vs.loading.close()
             },
             async AddClass() {
-                try {
-                    const response = await DataSource.shared.setClass(this.lblStudentID, this.$refs.ddlEditClass.value, this.lblCourseID);
-                    if (response) {
-                        if (response.code == 1)
-                        {
-                            alert('Class added');
-                            window.location.replace('/student-edit-class?courseid=' + this.lblCourseID + '&id=' + this.lblStudentID + '&semid=' + this.lblSemID + '&subjectcourseid=' + this.lblSubjectCourseID);
+                if (this.$refs.ddlEditClass.value === '' || this.$refs.ddlEditClass.value === null)
+                {
+                    alert('Please choose class');
+                }
+                else
+                {
+                    try {
+                        const response = await DataSource.shared.setClass(this.lblStudentID, this.$refs.ddlEditClass.value, this.lblCourseID);
+                        if (response) {
+                            if (response.code == 1)
+                            {
+                                alert('Class added');
+                                window.location.replace('/student-edit-class?courseid=' + this.lblCourseID + '&id=' + this.lblStudentID + '&semid=' + this.lblSemID + '&subjectcourseid=' + this.lblSubjectCourseID);
+                            }
+                            else if (response.code == 99) {
+                                alert('Please try again later');
+                            }
                         }
-                        else if (response.code == 99) {
-                            alert('Please try again later');
-                        }
+                    } catch (e) {
+                        this.results = e;
                     }
-                } catch (e) {
-                    this.results = e;
                 }
             },
         },

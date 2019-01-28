@@ -210,20 +210,109 @@ export default class DataSource {
         return response;
     }
 
-    async saveStudent(jsonString) {
+    async getStudentProfilePicture(studentID) {
         const data = {
-            jsonString: jsonString,
+            studentID: studentID,
         };
-        const response = await this.callWebService("/controller/Students.asmx/saveStudent", data, "POST");
+        const response = await this.callWebService("/controller/Students.asmx/getStudentProfilePicture", data, "POST");
         return response;
     }
 
-    async updateStudent(studentID, jsonString) {
-        const data = {
-            studentID: studentID,
-            jsonString: jsonString,
+    async saveStudent(files, jsonString, jsonString2, academicYearID, intakeYear, levelID, familyID, parentID) {
+        const data = new FormData();
+        data.append('token', sessionStorage.getItem('authToken'));
+        data.append('UserSchool_Session', sessionStorage.getItem('schoolSession'));
+        data.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        data.append('UserUniversity_Session', sessionStorage.getItem('userUniversitySession'));
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                 //console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        data.append(`upload_${key}`, files[key]);
+                    } else {
+                        data.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            data.append("upload", files[0]);
+        }
+
+        data.append("jsonString", jsonString);
+        data.append("jsonString2", jsonString2);
+        data.append("academicYearID", academicYearID);
+        data.append("intakeYear", intakeYear);
+        data.append("levelID", levelID);
+        data.append("familyID", familyID);
+        data.append("parentID", parentID);
+
+        const request = {
+            url: `${API_HOST}/controller/Students.asmx/saveStudent`,
+            cache: false,
+            type: 'POST',
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
         };
-        const response = await this.callWebService("/controller/Students.asmx/updateStudent", data, "POST");
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async updateStudent(files, studentID, jsonString) {
+        const data = new FormData();
+        data.append('token', sessionStorage.getItem('authToken'));
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                //console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        data.append(`upload_${key}`, files[key]);
+                    } else {
+                        data.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            data.append("upload", files[0]);
+        }
+
+        data.append("studentID", studentID);
+        data.append("jsonString", jsonString);
+
+        const request = {
+            url: `${API_HOST}/controller/Students.asmx/updateStudent`,
+            cache: false,
+            type: 'POST',
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
         return response;
     }
 
@@ -356,24 +445,6 @@ export default class DataSource {
             studentID: studentID,
         };
         const response = await this.callWebService("/controller/Students.asmx/getSibling", data, "POST");
-        return response;
-    }
-
-    async saveParent(jsonString, studentID) {
-        const data = {
-            jsonString: jsonString,
-            studentID: studentID,
-        };
-        const response = await this.callWebService("/controller/Parents.asmx/saveParent", data, "POST");
-        return response;
-    }
-
-    async saveParentWithFamilyID(parentID, studentID) {
-        const data = {
-            parentID: parentID,
-            studentID: studentID,
-        };
-        const response = await this.callWebService("/controller/Parents.asmx/saveParentWithFamilyID", data, "POST");
         return response;
     }
 

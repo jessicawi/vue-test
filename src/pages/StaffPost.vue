@@ -178,14 +178,27 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label>Student</label>
-                        <at :members="studentTable" name-key="Full_Name">
-                            <template slot="item" slot-scope="s">
+                        <!--<at :members="studentTable" name-key="Student_ID" v-model="html">-->
+                        <!--<template slot="item" slot-scope="s">-->
 
-                                <span v-text="s.item.Full_Name" @click="handleTagClick(s.item)"></span>
+                        <!--<span v-text="s.item.Full_Name""></span>-->
 
-                            </template>
-                            <div class="mention-editor" contenteditable v-html="html"></div>
-                        </at>
+                        <!--</template>-->
+
+                        <!--<div class="mention-editor" contenteditable></div>-->
+                        <!--</at>-->
+                        <div>
+                            <vue-bootstrap-typeahead
+                                    class="mb-4"
+                                    v-model="query"
+                                    :data="studentTable"
+                                    :serializer="item => item.Full_Name"
+                                    @hit="selectedUser = $event"
+                                    placeholder="Search GitHub Users"
+                            />
+                            <h3>Selected User JSON</h3>
+                            <pre>{{ selectedUser | stringify }}</pre>
+                        </div>
                         <!--<input type="text" class="form-control" id="tagUserID" v-model="tagUserID"-->
                         <!--placeholder="Tag User ID"-->
                         <!--required>-->
@@ -232,7 +245,7 @@
 </template>
 
 <script>
-    import At from 'vue-at';
+    // import At from 'vue-at';
     import DataSource from "../data/datasource";
     import {required, minLength} from 'vuelidate/lib/validators';
     import isImage from "is-image";
@@ -243,11 +256,11 @@
         name: 'staffPost',
         components: {
             PostComponent,
-            At,
+            // At,
         },
         data() {
             return {
-                html: "@John Doe",
+                html: "",
                 files: [],
                 systemmsgError: false,
                 isModalOpen: false,
@@ -284,8 +297,15 @@
                 actionMode: "",
                 readonly: true,
                 checkidcomment: "",
-                showDeleteModal: false
+                showDeleteModal: false,
+                query: '',
+                selectedUser: null,
             };
+        },
+        filters: {
+            stringify(value) {
+                return JSON.stringify(value, null, 2)
+            }
         },
         async mounted() {
             // this.showSession()
@@ -344,15 +364,16 @@
                     this.levelsTable = uniqueLevel;
                 }
                 if (tagResponse.StudentTable && tagResponse.StudentTable.Table) {
-                    // this.studentTableList = tagResponse.StudentTable.Table.PK_Class_ID;
-                    //
-                    // const studentTableList = tagResponse.StudentTable.Table.map(object => {
-                    //     return object.Full_Name;
-                    // });
-                    // this.studentAt = studentTableList;
-                    // console.log(this.studentAt);
-
-                    this.studentTable = tagResponse.StudentTable.Table;
+                    let uniqueStudent = [];
+                    tagResponse.StudentTable.Table.forEach(object => {
+                        const isExist = uniqueStudent.find(student => student.Student_ID === object.Student_ID);
+                        if (!isExist) {
+                            uniqueStudent.push(object);
+                        }
+                    });
+                    // this.studentTable = tagResponse.StudentTable.Table;
+                    this.studentTable = uniqueStudent;
+                    console.log(this.studentTable);
                 }
 
                 this.userType = sessionStorage.getItem('userTypeSession');
@@ -366,10 +387,10 @@
         methods: {
             handleTagClick(e) {
                 console.log(e);
-                this.tagStudents.push(e.Student_ID);
-                this.tagUserID = this.tagStudents;
+                // // console.log(this.html)
+                // this.tagStudents.push({Student_ID: e.Student_ID, Full_Name: e.Full_Name});
+                // console.log(this.tagStudents);
             },
-
             inputChange(input) {
                 this.postContent = input;
             },
@@ -397,7 +418,18 @@
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
-                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.addPostContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID);
+                    console.log(this.html);
+                    const aa = this.html;
+                    const tagUserID = aa.split("@");
+                    const tagStudentIds = tagUserID.map(d => {
+                        if (d !== "") {
+                            return d.trim();
+                        }
+                    }).filter(a => a);
+                    console.log(tagStudentIds);
+                    const tagStudentIDs = this.selectedUser.Student_ID;
+                    console.log(tagStudentIDs);
+                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.addPostContent, this.tagAcademicYearID, this.profolio, tagStudentIds, this.tagClassID, this.tagLevelID);
 
                     if (saveResponse) {
                         switch (saveResponse.code) {
@@ -622,7 +654,45 @@
 </script>
 
 <style scoped>
-
+    .Typeahead {
+        position: relative;
+    }
+    .Typeahead__input {
+        width: 100%;
+        font-size: 14px;
+        color: #2c3e50;
+        line-height: 1.42857143;
+        box-shadow: inset 0 1px 4px rgba(0,0,0,.4);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        font-weight: 300;
+        padding: 12px 26px;
+        border: none;
+        border-radius: 22px;
+        letter-spacing: 1px;
+        box-sizing: border-box;
+    }
+    .Typeahead__input:focus {
+        border-color: #4fc08d;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px #4fc08d;
+    }
+    .fa-times {
+        cursor: pointer;
+    }
+    .active {
+        background-color: #3aa373;
+    }
+    .active span {
+        color: white;
+    }
+    .name {
+        font-weight: 700;
+        font-size: 18px;
+    }
+    .screen-name {
+        font-style: italic;
+    }
 </style>
 
 <style>

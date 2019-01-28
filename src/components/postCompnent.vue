@@ -63,7 +63,7 @@
                      :key="commentItem.PoCmID" v-if="">
                     <div class="commentItem__header">
                         <div class="comment__name">{{commentItem.CONname}}</div>
-                        <div class="comment__date">{{commentItem.CONcreationdate}}</div>
+                        <div class="comment__date">{{commentItem.PoCmCreatedDate}}</div>
                     </div>
                     <div class="commentPostContent_show"
                          v-if="readonly === true || checkidcomment !== commentItem.PoCmID">
@@ -87,7 +87,7 @@
                 </div>
 
                 <button v-on:click=" post.collapsed = !post.collapsed "
-                        :class="{'d-none' : !post.collapsed }" v-if="post.commentItems.length !== 1">Display more comments
+                        :class="{'d-none' : !post.collapsed }" v-if="post.commentItems.length !== 2">Display more comments
                 </button>
 
 
