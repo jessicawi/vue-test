@@ -1,5 +1,12 @@
 <template>
-    <div id="parent" class="mt-3 container  pt-5">
+    <div id="parent">
+        <div class="datatable-edit__header">
+            <div class="container">
+                <h3>Parent Details</h3>
+                <a href="ParentList.vue">Parent List</a> > Edit
+            </div>
+        </div>
+        <div  class="mt-3 container  pt-5">
         <label style="display:none !important;">{{lblParentID}}</label>
 
         <b-tabs class="parentPageBTabs">
@@ -801,16 +808,24 @@
                 </div>
             </b-tab>
         </b-tabs>
-
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
-                    <button v-on:click="Validation" type="button"
-                            class="btn btn-primary waves-effect waves-light m-r-10">Save
-                    </button>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
+                        <button v-on:click="backToPrevious" type="button"
+                                class="btn btn-primary waves-effect waves-light m-r-10 float-left">Cancel
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
+                        <button v-on:click="Validation" type="button"
+                                class="btn btn-primary waves-effect waves-light m-r-10">Save
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+
         <div class="whitespace-30"></div>
     </div>
 </template>
@@ -873,6 +888,9 @@
             await this.LoadParentInfo();
         },
         methods: {
+            backToPrevious(){
+                window.location.replace("/parent-list");
+            },
             async BindCountryList() {
                 try {
                     const response = await DataSource.shared.getCountryList();
@@ -943,23 +961,23 @@
                     resultTable.forEach(m => {
                         //father
                         this.inputFatherFirstName = m.PAR_Father_FirstName;
-                        this.$refs.inputFatherMiddleName.value = m.PAR_Father_MiddleName;
+                        if (m.PAR_Father_MiddleName !== undefined) { this.$refs.inputFatherMiddleName.value = m.PAR_Father_MiddleName; };
                         this.inputFatherLastName = m.PAR_Father_LastName;
-                        this.inputFatherDateofBirth = m.PAR_Father_DOB_convert;
+                        if (m.PAR_Father_DOB_convert !== '01/01/1901') { this.inputFatherDateofBirth = m.PAR_Father_DOB_convert; };
                         this.ddlFatherEmploymentStatus = m.PAR_Fat_Emp_Status;
-                        this.$refs.inputFatherOccupation.value = m.PAR_Father_Occupation;
-                        this.$refs.inputFatherDesignation.value = m.PAR_Father_Designation;
-                        this.$refs.inputFatherHomeTelNo.value = m.PAR_FatResContact;
-                        this.$refs.inputFatherOfficeTelNo.value = m.PAR_FatOffContact;
-                        this.$refs.inputFatherFax.value = m.PAR_Father_Fax;
-                        this.$refs.inputFatherMobileNo.value = m.PAR_Father_Phone;
-                        this.$refs.inputFatherEmail.value = m.PAR_Father_Email;
-                        this.$refs.ddlFatherNationality.value = m.PAR_Fat_Nationality;
+                        if (m.PAR_Father_Occupation !== undefined) { this.$refs.inputFatherOccupation.value = m.PAR_Father_Occupation; };
+                        if (m.PAR_Father_Designation !== undefined) { this.$refs.inputFatherDesignation.value = m.PAR_Father_Designation; };
+                        if (m.PAR_FatResContact !== undefined) { this.$refs.inputFatherHomeTelNo.value = m.PAR_FatResContact; };
+                        if (m.PAR_FatOffContact !== undefined) { this.$refs.inputFatherOfficeTelNo.value = m.PAR_FatOffContact; };
+                        if (m.PAR_Father_Fax !== undefined) { this.$refs.inputFatherFax.value = m.PAR_Father_Fax; };
+                        if (m.PAR_Father_Phone !== undefined) { this.$refs.inputFatherMobileNo.value = m.PAR_Father_Phone; };
+                        if (m.PAR_Father_Email !== undefined) { this.$refs.inputFatherEmail.value = m.PAR_Father_Email; };
+                        if (m.PAR_Fat_Nationality !== undefined) { this.$refs.ddlFatherNationality.value = m.PAR_Fat_Nationality; };
                         this.ddlFatherReligion = m.PAR_FatReligion;
-                        this.$refs.inputFatherRemarks.value = m.PAR_FatRemarks;
+                        if (m.PAR_Father_Occupation !== undefined) {this.$refs.inputFatherRemarks.value = m.PAR_FatRemarks; };
                         this.ddlFatherIdentificationType = m.PAR_Father_IDType;
-                        this.$refs.inputFatherIdentificationNo.value = m.PAR_Father_UID;
-                        this.inputFatherIdentificationNoExpiryDate = m.PAR_Father_IDExpDate_convert;
+                        if (m.PAR_Father_Occupation !== undefined) {this.$refs.inputFatherIdentificationNo.value = m.PAR_Father_UID; };
+                        if (m.PAR_Father_IDExpDate_convert !== '01/01/1901') { this.inputFatherIdentificationNoExpiryDate = m.PAR_Father_IDExpDate_convert; };
                         if (m.PAR_ShareMyContact == 'Yes') {
                             this.$refs.cbFatherShareMyEmail.checked = true;
                         } else {
@@ -975,106 +993,104 @@
                         } else {
                             this.$refs.cbFatherEtonStaff.checked = false;
                         }
-                        this.$refs.inputFatherAddress1.value = m.PAR_Father_Loc_Residence_No;
-                        this.$refs.inputFatherAddress2.value = m.PAR_Father_Loc_Address1;
-                        this.$refs.inputFatherAddress3.value = m.PAR_Father_Loc_Address2;
-                        this.$refs.inputFatherCity.value = m.PAR_Father_Loc_City;
-                        this.$refs.ddlFatherCountry.value = m.PAR_Father_Loc_Country;
-                        this.$refs.inputFatherPostalCode.value = m.PAR_Father_Loc_Postalcode;
-                        this.$refs.inputFatherCompanyName.value = m.PAR_Father_CompanyName;
-                        this.$refs.inputFatherCompanyAddresseeName.value = m.PAR_Fat_Comp_Addressee;
-                        this.$refs.inputFatherCompanyAddress1.value = m.PAR_Father_Residence_No;
-                        this.$refs.inputFatherCompanyAddress2.value = m.PAR_Father_Address1;
-                        this.$refs.inputFatherCompanyAddress3.value = m.PAR_Father_Address2;
-                        this.$refs.inputFatherCompanyCity.value = m.PAR_Father_City;
-                        this.$refs.ddlFatherCompanyCountry.value = m.PAR_Father_Country;
-                        this.$refs.inputFatherCompanyPostalCode.value = m.PAR_Father_PostalCode;
-                        this.$refs.inputFatherCompanyEmail.value = m.PAR_FComp_Email;
+                        if (m.PAR_Father_Loc_Residence_No !== undefined) { this.$refs.inputFatherAddress1.value = m.PAR_Father_Loc_Residence_No; };
+                        if (m.PAR_Father_Loc_Address1 !== undefined) { this.$refs.inputFatherAddress2.value = m.PAR_Father_Loc_Address1; };
+                        if (m.PAR_Father_Loc_Address2 !== undefined) { this.$refs.inputFatherAddress3.value = m.PAR_Father_Loc_Address2; };
+                        if (m.PAR_Father_Loc_City !== undefined) { this.$refs.inputFatherCity.value = m.PAR_Father_Loc_City; };
+                        if (m.PAR_Father_Loc_Country !== undefined) { this.$refs.ddlFatherCountry.value = m.PAR_Father_Loc_Country; };
+                        if (m.PAR_Father_Loc_Postalcode !== undefined) { this.$refs.inputFatherPostalCode.value = m.PAR_Father_Loc_Postalcode; };
+                        if (m.PAR_Father_CompanyName !== undefined) { this.$refs.inputFatherCompanyName.value = m.PAR_Father_CompanyName; };
+                        if (m.PAR_Fat_Comp_Addressee !== undefined) { this.$refs.inputFatherCompanyAddresseeName.value = m.PAR_Fat_Comp_Addressee; };
+                        if (m.PAR_Father_Residence_No !== undefined) { this.$refs.inputFatherCompanyAddress1.value = m.PAR_Father_Residence_No; };
+                        if (m.PAR_Father_Address1 !== undefined) { this.$refs.inputFatherCompanyAddress2.value = m.PAR_Father_Address1; };
+                        if (m.PAR_Father_Address2 !== undefined) { this.$refs.inputFatherCompanyAddress3.value = m.PAR_Father_Address2; };
+                        if (m.PAR_Father_City !== undefined) { this.$refs.inputFatherCompanyCity.value = m.PAR_Father_City; };
+                        if (m.PAR_Father_Country !== undefined) { this.$refs.ddlFatherCompanyCountry.value = m.PAR_Father_Country; };
+                        if (m.PAR_Father_PostalCode !== undefined) { this.$refs.inputFatherCompanyPostalCode.value = m.PAR_Father_PostalCode; };
+                        if (m.PAR_FComp_Email !== undefined) { this.$refs.inputFatherCompanyEmail.value = m.PAR_FComp_Email; };
                         //father
 
                         //mother
                         this.inputMotherFirstName = m.PAR_Mother_FirstName;
-                        this.$refs.inputMotherMiddleName.value = m.PAR_Mother_MiddleName;
+                        if (m.PAR_Mother_MiddleName !== undefined) { this.$refs.inputMotherMiddleName.value = m.PAR_Mother_MiddleName; };
                         this.inputMotherLastName = m.PAR_Mother_LastName;
-
-                        this.inputMotherDateofBirth = m.PAR_Mother_DOB_convert;
-
+                        if (m.PAR_Mother_DOB_convert !== '01/01/1901') { this.inputMotherDateofBirth = m.PAR_Mother_DOB_convert; };
                         this.ddlMotherEmploymentStatus = m.PAR_Mot_Emp_Status;
-                        this.$refs.inputMotherOccupation.value = m.PAR_Mother_Occupation;
-                        this.$refs.inputMotherDesignation.value = m.PAR_Mother_Designation;
-                        this.$refs.inputMotherHomeTelNo.value = m.PAR_MotResContact;
-                        this.$refs.inputMotherOfficeTelNo.value = m.PAR_MotOffContact;
-                        this.$refs.inputMotherFax.value = m.PAR_Mother_Fax;
-                        this.$refs.inputMotherMobileNo.value = m.PAR_Mother_Phone;
-                        this.$refs.inputMotherEmail.value = m.PAR_Mother_Email;
-                        this.$refs.ddlMotherNationality.value = m.PAR_Mot_Nationality;
-                        this.$refs.ddlMotherReligion = m.PAR_MotReligion;
-                        this.$refs.inputMotherRemarks.value = m.PAR_MotRemarks;
-                        this.$refs.ddlMotherIdentificationType = m.PAR_Mother_IDType;
-                        this.$refs.inputMotherIdentificationNo.value = m.PAR_Mother_UID;
-                        this.inputMotherIdentificationNoExpiryDate = m.PAR_Mother_IDExpDate_convert;
-                        this.$refs.inputMotherAddress1.value = m.PAR_Mother_Loc_Residence_No;
-                        this.$refs.inputMotherAddress2.value = m.PAR_Mother_Loc_Address1;
-                        this.$refs.inputMotherAddress3.value = m.PAR_Mother_Loc_Address2;
-                        this.$refs.inputMotherCity.value = m.PAR_Mother_Loc_City;
-                        this.$refs.ddlMotherCountry.value = m.PAR_Mother_Loc_Country;
-                        this.$refs.inputMotherPostalCode.value = m.PAR_Mother_Loc_Postalcode;
-                        this.$refs.inputMotherCompanyName.value = m.PAR_Mother_CompanyName;
-                        this.$refs.inputMotherCompanyAddresseeName.value = m.PAR_Mot_Comp_Addressee;
-                        this.$refs.inputMotherCompanyAddress1.value = m.PAR_Mother_Residence_No;
-                        this.$refs.inputMotherCompanyAddress2.value = m.PAR_Mother_Address1;
-                        this.$refs.inputMotherCompanyAddress3.value = m.PAR_Mother_Address2;
-                        this.$refs.inputMotherCompanyCity.value = m.PAR_Mother_City;
-                        this.$refs.ddlMotherCompanyCountry.value = m.PAR_Mother_Country;
-                        this.$refs.inputMotherCompanyPostalCode.value = m.PAR_Mother_PostalCode;
-                        this.$refs.inputMotherCompanyEmail.value = m.PAR_MComp_Email;
+                        if (m.PAR_Mother_Occupation !== undefined) { this.$refs.inputMotherOccupation.value = m.PAR_Mother_Occupation; };
+                        if (m.PAR_Mother_Designation !== undefined) { this.$refs.inputMotherDesignation.value = m.PAR_Mother_Designation; };
+                        if (m.PAR_MotResContact !== undefined) { this.$refs.inputMotherHomeTelNo.value = m.PAR_MotResContact; };
+                        if (m.PAR_MotOffContact !== undefined) { this.$refs.inputMotherOfficeTelNo.value = m.PAR_MotOffContact; };
+                        if (m.PAR_Mother_Fax !== undefined) { this.$refs.inputMotherFax.value = m.PAR_Mother_Fax; };
+                        if (m.PAR_Mother_Phone !== undefined) { this.$refs.inputMotherMobileNo.value = m.PAR_Mother_Phone; };
+                        if (m.PAR_Mother_Email !== undefined) { this.$refs.inputMotherEmail.value = m.PAR_Mother_Email; };
+                        if (m.PAR_Mot_Nationality !== undefined) { this.$refs.ddlMotherNationality.value = m.PAR_Mot_Nationality; };
+                        if (m.PAR_MotReligion !== undefined) { this.$refs.ddlMotherReligion = m.PAR_MotReligion; };
+                        if (m.PAR_MotRemarks !== undefined) { this.$refs.inputMotherRemarks.value = m.PAR_MotRemarks; };
+                        if (m.PAR_Mother_IDType !== undefined) { this.$refs.ddlMotherIdentificationType = m.PAR_Mother_IDType; };
+                        if (m.PAR_Mother_UID !== undefined) { this.$refs.inputMotherIdentificationNo.value = m.PAR_Mother_UID; };
+                        if (m.PAR_Mother_IDExpDate_convert !== '01/01/1901') { this.inputMotherIdentificationNoExpiryDate = m.PAR_Mother_IDExpDate_convert; };
+                        if (m.PAR_Mother_Loc_Residence_No !== undefined) { this.$refs.inputMotherAddress1.value = m.PAR_Mother_Loc_Residence_No; };
+                        if (m.PAR_Mother_Loc_Address1 !== undefined) { this.$refs.inputMotherAddress2.value = m.PAR_Mother_Loc_Address1; };
+                        if (m.PAR_Mother_Loc_Address2 !== undefined) { this.$refs.inputMotherAddress3.value = m.PAR_Mother_Loc_Address2; };
+                        if (m.PAR_Mother_Loc_City !== undefined) { this.$refs.inputMotherCity.value = m.PAR_Mother_Loc_City; };
+                        if (m.PAR_Mother_Loc_Country !== undefined) { this.$refs.ddlMotherCountry.value = m.PAR_Mother_Loc_Country; };
+                        if (m.PAR_Mother_Loc_Postalcode !== undefined) { this.$refs.inputMotherPostalCode.value = m.PAR_Mother_Loc_Postalcode; };
+                        if (m.PAR_Mother_CompanyName !== undefined) { this.$refs.inputMotherCompanyName.value = m.PAR_Mother_CompanyName; };
+                        if (m.PAR_Mot_Comp_Addressee !== undefined) { this.$refs.inputMotherCompanyAddresseeName.value = m.PAR_Mot_Comp_Addressee; };
+                        if (m.PAR_Mother_Residence_No !== undefined) { this.$refs.inputMotherCompanyAddress1.value = m.PAR_Mother_Residence_No; };
+                        if (m.PAR_Mother_Address1 !== undefined) { this.$refs.inputMotherCompanyAddress2.value = m.PAR_Mother_Address1; };
+                        if (m.PAR_Mother_Address2 !== undefined) { this.$refs.inputMotherCompanyAddress3.value = m.PAR_Mother_Address2; };
+                        if (m.PAR_Mother_City !== undefined) { this.$refs.inputMotherCompanyCity.value = m.PAR_Mother_City; };
+                        if (m.PAR_Mother_Country !== undefined) { this.$refs.ddlMotherCompanyCountry.value = m.PAR_Mother_Country; };
+                        if (m.PAR_Mother_PostalCode !== undefined) { this.$refs.inputMotherCompanyPostalCode.value = m.PAR_Mother_PostalCode; };
+                        if (m.PAR_MComp_Email !== undefined) { this.$refs.inputMotherCompanyEmail.value = m.PAR_MComp_Email; };
                         //mother
 
                         //guardian
-                        this.$refs.inputGuardianFirstName.value = m.PAR_Guardian_FirstName;
-                        this.$refs.inputGuardianMiddleName.value = m.PAR_Guardian_MiddleName;
-                        this.$refs.inputGuardianLastName.value = m.PAR_Guardian_LastName;
-                        this.inputGuardianDateofBirth = m.PAR_Guardian_DOB_convert;
+                        if (m.PAR_Guardian_FirstName !== undefined) { this.$refs.inputGuardianFirstName.value = m.PAR_Guardian_FirstName; };
+                        if (m.PAR_Guardian_MiddleName !== undefined) { this.$refs.inputGuardianMiddleName.value = m.PAR_Guardian_MiddleName; };
+                        if (m.PAR_Guardian_LastName !== undefined) { this.$refs.inputGuardianLastName.value = m.PAR_Guardian_LastName; };
+                        if (m.PAR_Guardian_DOB_convert !== '01/01/1901') { this.inputGuardianDateofBirth = m.PAR_Guardian_DOB_convert; };
                         this.ddlGuardianEmploymentStatus = m.PAR_Gar_Emp_Status;
-                        this.$refs.inputGuardianOccupation.value = m.PAR_Guardian_Occupation;
-                        this.$refs.inputGuardianDesignation.value = m.PAR_Guardian_Designation;
-                        this.$refs.inputGuardianHomeTelNo.value = m.PAR_GarResContact;
-                        this.$refs.inputGuardianOfficeTelNo.value = m.PAR_GarOffContact;
-                        this.$refs.inputGuardianFax.value = m.PAR_Guardian_Fax;
-                        this.$refs.inputGuardianMobileNo.value = m.PAR_Guardian_Phone;
-                        this.$refs.inputGuardianEmail.value = m.PAR_Guardian_Email;
-                        this.$refs.ddlGuardianNationality.value = m.PAR_Gar_Nationality;
+                        if (m.PAR_Guardian_Occupation !== undefined) { this.$refs.inputGuardianOccupation.value = m.PAR_Guardian_Occupation; };
+                        if (m.PAR_Guardian_Designation !== undefined) { this.$refs.inputGuardianDesignation.value = m.PAR_Guardian_Designation; };
+                        if (m.PAR_GarResContact !== undefined) { this.$refs.inputGuardianHomeTelNo.value = m.PAR_GarResContact; };
+                        if (m.PAR_GarOffContact !== undefined) { this.$refs.inputGuardianOfficeTelNo.value = m.PAR_GarOffContact; };
+                        if (m.PAR_Guardian_Fax !== undefined) { this.$refs.inputGuardianFax.value = m.PAR_Guardian_Fax; };
+                        if (m.PAR_Guardian_Phone !== undefined) { this.$refs.inputGuardianMobileNo.value = m.PAR_Guardian_Phone; };
+                        if (m.PAR_Guardian_Email !== undefined) { this.$refs.inputGuardianEmail.value = m.PAR_Guardian_Email; };
+                        if (m.PAR_Gar_Nationality !== undefined) { this.$refs.ddlGuardianNationality.value = m.PAR_Gar_Nationality; };
                         this.ddlGuardianReligion = m.PAR_GarReligion;
-                        this.$refs.inputGuardianRemarks.value = m.PAR_GarRemarks;
+                        if (m.PAR_GarRemarks !== undefined) { this.$refs.inputGuardianRemarks.value = m.PAR_GarRemarks; };
                         this.ddlGuardianIdentificationType = m.PAR_Guardian_IDType;
-                        this.$refs.inputGuardianIdentificationNo.value = m.PAR_Guardian_UID;
-                        this.$refs.inputGuardianAddress1.value = m.PAR_Guardian_Loc_Residence_No;
-                        this.$refs.inputGuardianAddress2.value = m.PAR_Guardian_Loc_Address1;
-                        this.$refs.inputGuardianAddress3.value = m.PAR_Guardian_Loc_Address2;
-                        this.$refs.inputGuardianCity.value = m.PAR_Guardian_Loc_City;
-                        this.$refs.ddlGuardianCountry.value = m.PAR_Guardian_Loc_Country;
-                        this.$refs.inputGuardianPostalCode.value = m.PAR_Guardian_Loc_PostalCode;
-                        this.$refs.inputGuardianCompanyName.value = m.PAR_Guardian_CompanyName;
-                        this.$refs.inputGuardianCompanyAddresseeName.value = m.PAR_Gar_Comp_Addressee;
-                        this.$refs.inputGuardianCompanyAddress1.value = m.PAR_Guardian_Residence_No;
-                        this.$refs.inputGuardianCompanyAddress2.value = m.PAR_Guardian_Address1;
-                        this.$refs.inputGuardianCompanyAddress3.value = m.PAR_Guardian_Address2;
-                        this.$refs.inputGuardianCompanyCity.value = m.PAR_Guardian_City;
-                        this.$refs.ddlGuardianCompanyCountry.value = m.PAR_Guardian_Country;
-                        this.$refs.inputGuardianCompanyPostalCode.value = m.PAR_Guardian_Postalcode;
-                        this.$refs.inputGuardianCompanyEmail.value = m.PAR_GComp_Email;
+                        if (m.PAR_Guardian_UID !== undefined) { this.$refs.inputGuardianIdentificationNo.value = m.PAR_Guardian_UID; };
+                        if (m.PAR_Guardian_Loc_Residence_No !== undefined) { this.$refs.inputGuardianAddress1.value = m.PAR_Guardian_Loc_Residence_No; };
+                        if (m.PAR_Guardian_Loc_Address1 !== undefined) { this.$refs.inputGuardianAddress2.value = m.PAR_Guardian_Loc_Address1; };
+                        if (m.PAR_Guardian_Loc_Address2 !== undefined) { this.$refs.inputGuardianAddress3.value = m.PAR_Guardian_Loc_Address2; };
+                        if (m.PAR_Guardian_Loc_City !== undefined) { this.$refs.inputGuardianCity.value = m.PAR_Guardian_Loc_City; };
+                        if (m.PAR_Guardian_Loc_Country !== undefined) { this.$refs.ddlGuardianCountry.value = m.PAR_Guardian_Loc_Country; };
+                        if (m.PAR_Guardian_Loc_PostalCode !== undefined) { this.$refs.inputGuardianPostalCode.value = m.PAR_Guardian_Loc_PostalCode; };
+                        if (m.PAR_Guardian_CompanyName !== undefined) { this.$refs.inputGuardianCompanyName.value = m.PAR_Guardian_CompanyName; };
+                        if (m.PAR_Gar_Comp_Addressee !== undefined) { this.$refs.inputGuardianCompanyAddresseeName.value = m.PAR_Gar_Comp_Addressee; };
+                        if (m.PAR_Guardian_Residence_No !== undefined) { this.$refs.inputGuardianCompanyAddress1.value = m.PAR_Guardian_Residence_No; };
+                        if (m.PAR_Guardian_Address1 !== undefined) { this.$refs.inputGuardianCompanyAddress2.value = m.PAR_Guardian_Address1; };
+                        if (m.PAR_Guardian_Address2 !== undefined) { this.$refs.inputGuardianCompanyAddress3.value = m.PAR_Guardian_Address2; };
+                        if (m.PAR_Guardian_City !== undefined) { this.$refs.inputGuardianCompanyCity.value = m.PAR_Guardian_City; };
+                        if (m.PAR_Guardian_Country !== undefined) { this.$refs.ddlGuardianCompanyCountry.value = m.PAR_Guardian_Country; };
+                        if (m.PAR_Guardian_Postalcode !== undefined) { this.$refs.inputGuardianCompanyPostalCode.value = m.PAR_Guardian_Postalcode; };
+                        if (m.PAR_GComp_Email !== undefined) { this.$refs.inputGuardianCompanyEmail.value = m.PAR_GComp_Email; };
                         //guardian
 
                         //third party
-                        this.$refs.inputThirdPartyCompanyName.value = m.PAR_TPComp;
-                        this.$refs.inputThirdPartyAddresseeName.value = m.PAR_Fat_TP_Addressee;
-                        this.$refs.inputThirdPartyAddress1.value = m.PAR_TPAddr1;
-                        this.$refs.inputThirdPartyAddress2.value = m.PAR_TPAddr2;
-                        this.$refs.inputThirdPartyAddress3.value = m.PAR_TPAddr3;
-                        this.$refs.inputThirdPartyCity.value = m.PAR_TPCity;
-                        this.$refs.inputThirdPartyCountry.value = m.PAR_TPCountry;
-                        this.$refs.inputThirdPartyPostalCode.value = m.PAR_TPPin;
-                        this.$refs.inputThirdPartyCompanyEmail.value = m.PAR_TPComp_Email;
+                        if (m.PAR_TPComp !== undefined) { this.$refs.inputThirdPartyCompanyName.value = m.PAR_TPComp; };
+                        if (m.PAR_Fat_TP_Addressee !== undefined) { this.$refs.inputThirdPartyAddresseeName.value = m.PAR_Fat_TP_Addressee; };
+                        if (m.PAR_TPAddr1 !== undefined) { this.$refs.inputThirdPartyAddress1.value = m.PAR_TPAddr1; };
+                        if (m.PAR_TPAddr2 !== undefined) { this.$refs.inputThirdPartyAddress2.value = m.PAR_TPAddr2; };
+                        if (m.PAR_TPAddr3 !== undefined) { this.$refs.inputThirdPartyAddress3.value = m.PAR_TPAddr3; };
+                        if (m.PAR_TPCity !== undefined) { this.$refs.inputThirdPartyCity.value = m.PAR_TPCity; };
+                        if (m.PAR_TPCountry !== undefined) { this.$refs.inputThirdPartyCountry.value = m.PAR_TPCountry; };
+                        if (m.PAR_TPPin !== undefined) { this.$refs.inputThirdPartyPostalCode.value = m.PAR_TPPin; };
+                        if (m.PAR_TPComp_Email !== undefined) { this.$refs.inputThirdPartyCompanyEmail.value = m.PAR_TPComp_Email; };
                         //third party
                     });
                 } catch (e) {

@@ -1,31 +1,36 @@
 <template>
-    <div id="parent-list" class="mt-3 container">
-        <div>
-
-            <div class="datatable-form__header">
-                <div class="datatable-form__input form-group">
-                    <label>Family No</label>
-                    <input class="form-control" ref="inputFamilyNo">
-                </div>
-                <div class="datatable-form__input form-group">
-                    <label>Parent First Name</label>
-                    <input class="form-control" ref="inputParentFirstName">
-                </div>
-                <div class="datatable-form__input form-group">
-                    <label>Parent Last Name</label>
-                    <input class="form-control" ref="inputParentLastName">
-                </div>
-
-                <div class="datatable-form__submit text-center">
-                    <button class="btn btn-success searchbtn" v-on:click="Search">Search</button>
-                </div>
+    <div id="parent-list">
+        <div class="datatable-form__header">
+            <div class="datatable-form__input form-group">
+                <label>Family No</label>
+                <input class="form-control" ref="inputFamilyNo">
+            </div>
+            <div class="datatable-form__input form-group">
+                <label>Parent First Name</label>
+                <input class="form-control" ref="inputParentFirstName">
+            </div>
+            <div class="datatable-form__input form-group">
+                <label>Parent Last Name</label>
+                <input class="form-control" ref="inputParentLastName">
             </div>
 
+            <div class="datatable-form__submit text-center">
+                <button class="btn btn-success searchbtn" v-on:click="Search">Search</button>
+            </div>
+        </div>
+        <div class="mt-3 container">
+            <div class="emptylist-info" v-if="list.length===0" >
+                <span>PLEASE SEARCH TO VIEW LIST...</span>
+                <div class="emptylist__img">
+                    <img src="../assets/table-loading.png"/>
+                </div>
+            </div>
             <div v-if="list.length>0" class="datatable_group">
                 <data-tables :data="list" :action-col="actionCol" @selection-change="handleSelectionChange">
                     <!--<el-table-column type="selection" width="55">-->
                     <!--</el-table-column>-->
-                    <el-table-column v-for="parentListInfo in parentList" :prop="parentListInfo.prop" :label="parentListInfo.label" :key="parentListInfo.prop"
+                    <el-table-column v-for="parentListInfo in parentList" :prop="parentListInfo.prop"
+                                     :label="parentListInfo.label" :key="parentListInfo.prop"
                                      sortable="custom">
                     </el-table-column>
                 </data-tables>
@@ -93,7 +98,7 @@
                 } catch (e) {
                     this.results = e;
                 }
-                this.$vs.loading.close()
+                this.$vs.loading.close();
             },
         },
     };

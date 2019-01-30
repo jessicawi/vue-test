@@ -1,31 +1,38 @@
 <template>
-    <div id="student-list" class="mt-3 container">
-        <div>
-            <div class="datatable-form__header">
-                <div class="datatable-form__input form-group">
-                    <label>Student No</label>
-                    <input class="form-control" ref="stud_id">
-                </div>
+    <div id="student-list">
+        <div class="datatable-form__header">
+            <div class="datatable-form__input form-group">
+                <label>Student No</label>
+                <input class="form-control" ref="stud_id">
+            </div>
 
-                <div class="datatable-form__input form-group">
-                    <label>Student First Name</label>
-                    <input class="form-control" ref="stud_fname">
-                </div>
+            <div class="datatable-form__input form-group">
+                <label>Student First Name</label>
+                <input class="form-control" ref="stud_fname">
+            </div>
 
-                <div class="datatable-form__input form-group">
-                    <label>Student Last Name</label>
-                    <input class="form-control" ref="stud_lname">
-                </div>
+            <div class="datatable-form__input form-group">
+                <label>Student Last Name</label>
+                <input class="form-control" ref="stud_lname">
+            </div>
 
-                <div class="datatable-form__input form-group">
-                    <label>Parent Name</label>
-                    <input class="form-control" ref="stud_parname">
-                </div>
+            <div class="datatable-form__input form-group">
+                <label>Parent Name</label>
+                <input class="form-control" ref="stud_parname">
+            </div>
 
-                <div class="datatable-form__submit text-center">
-                    <button class="btn btn-success searchbtn" v-on:click="Search">Search</button>
+            <div class="datatable-form__submit text-center">
+                <button class="btn btn-success searchbtn" v-on:click="Search">Search</button>
+            </div>
+        </div>
+        <div class="mt-3 container">
+            <div class="emptylist-info" v-if="list.length===0" >
+                <span>PLEASE SEARCH TO VIEW LIST...</span>
+                <div class="emptylist__img">
+                    <img src="../assets/table-loading.png"/>
                 </div>
             </div>
+
 
             <div v-if="list.length>0" class="datatable_group">
                 <data-tables :data="list" :action-col="actionCol" @selection-change="handleSelectionChange">

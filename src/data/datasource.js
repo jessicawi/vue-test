@@ -4,6 +4,8 @@ import axios from "axios";
 import jQuery from 'jquery';
 
 const API_HOST = process.env.VUE_APP_ROOT_API || "http://local.emsv2";
+let GoogleGeocodeAPIKey = 'AIzaSyBSjzdBEO1Akg0aZfKpglWYBtdqLMHJLzM';
+
 export default class DataSource {
     static get shared() {
         if (DataSource.instance == null || DataSource.instance === undefined) {
@@ -60,6 +62,7 @@ export default class DataSource {
             data.UserID_Session = sessionStorage.getItem('userIDSession');
             data.UserType_Session = sessionStorage.getItem('userTypeSession');
             data.UserUniversity_Session = sessionStorage.getItem('userUniversitySession');
+            data.UserEmail_Session = sessionStorage.getItem('userEmailSession');
         }
 
         // this is just testing, remove this if savePost not working
@@ -128,6 +131,7 @@ export default class DataSource {
         sessionStorage.setItem('userTypeSession', response.UserType_Session);
         sessionStorage.setItem('userUniversitySession', response.UserUniversity_Session);
         sessionStorage.setItem('usRidSession', response.USRid_Session);
+        sessionStorage.setItem('userEmailSession', response.UserEmail_Session);
         return response;
     }
 
@@ -138,6 +142,7 @@ export default class DataSource {
         sessionStorage.removeItem('userTypeSession');
         sessionStorage.removeItem('userUniversitySession');
         sessionStorage.removeItem('usRidSession');
+        sessionStorage.removeItem('userEmailSession');
         window.location.replace("/login");
 
     }
@@ -218,7 +223,85 @@ export default class DataSource {
         return response;
     }
 
-    async saveStudent(files, jsonString, jsonString2, academicYearID, intakeYear, levelID, familyID, parentID) {
+    async getStudentAddressGoogleAPI(postcode, country) {
+        let result = '';
+
+        if (country === '' || country === 'Singapore'){
+            country = 'Singapore';
+
+            //to take out S in front of postcode
+            if (postcode.substring(0,1).toUpperCase() === 'S') {
+                postcode = postcode.substring(1,postcode.length);
+            }
+            //to take out S in front of postcode
+        }
+
+        //search by address / postcode
+        const request = {
+            url: 'https://maps.googleapis.com/maps/api/geocode/json?address=' + postcode + '+' + country + '&result_type=street_address&key=' + GoogleGeocodeAPIKey,
+            cache: false,
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        //search by address / postcode
+
+        //get lat lng
+        let lat = '';
+        let lng = '';
+
+        this.resultResponse = response.results;
+        this.resultResponse.forEach(m => {
+            lat = m.geometry.location.lat;
+            lng = m.geometry.location.lng;
+        });
+        //get lat lng
+
+        //search by lat lng
+        if (response.status === 'OK') {
+            const request2 = {
+                url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&key=' + GoogleGeocodeAPIKey,
+                cache: false,
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                async: false,
+                json: false,
+                success: function (response2) {
+                    return response2;
+                }
+            };
+
+            let response2 = await jQuery.ajax(request2);
+            if (typeof response2 === "string") {
+                response2 = JSON.parse(response2);
+            }
+
+            result = response2.results[0].formatted_address;
+
+            // const resultResponse2 = response2.results[0].address_components;
+            // resultResponse2.forEach(m => {
+            //     console.log(m);
+            // });
+        }
+        //search by lat lng
+
+        return result;
+    }
+
+    async saveStudent(files, jsonString, jsonString2, familyID, parentID) {
         const data = new FormData();
         data.append('token', sessionStorage.getItem('authToken'));
         data.append('UserSchool_Session', sessionStorage.getItem('schoolSession'));
@@ -243,9 +326,6 @@ export default class DataSource {
 
         data.append("jsonString", jsonString);
         data.append("jsonString2", jsonString2);
-        data.append("academicYearID", academicYearID);
-        data.append("intakeYear", intakeYear);
-        data.append("levelID", levelID);
         data.append("familyID", familyID);
         data.append("parentID", parentID);
 
@@ -497,6 +577,18 @@ export default class DataSource {
         }
 
         const response = await this.callWebService("/controller/User.asmx/getUserMenu", data, "POST");
+        return response;
+    }
+
+    async getUserSch() {
+        const data = {};
+
+        const userEmail = sessionStorage.getItem('userEmailSession');
+        if (userEmail !== "" || userEmail !== null) {
+            data.UserEmail_Session = sessionStorage.getItem('userEmailSession');
+        }
+
+        const response = await this.callWebService("/controller/User.asmx/getUserSch", data, "POST");
         return response;
     }
 
@@ -942,23 +1034,55 @@ export default class DataSource {
         return response;
     }
 
-    async saveFile(files, fileType, galFolderID, folderName) {
+    async saveFile(files, galFolderID) {
         const formData = new FormData();
 
-        formData.append('fileType', fileType);
+        formData.append('fileType', "File");
         formData.append('galFolderID', galFolderID);
         formData.append('token', sessionStorage.getItem('authToken'));
         formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
-        formData.append('folderName', folderName);
+        formData.append('folderName', "");
 
         if (files && files.length > 1) {
             for (let i = 0; i < files.length; i++) {
-                formData.append("files"+i, files[i]);
+                formData.append("files" + i, files[i]);
                 console.log(files[i])
             }
         } else if (files) {
             formData.append("files", files[0]);
         }
+
+        const request = {
+            url: `${API_HOST}/controller/Gallery.asmx/saveFile`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async createFolder(galFolderID, folderName) {
+        const formData = new FormData();
+
+        formData.append('fileType', "Folder");
+        formData.append('galFolderID', galFolderID);
+        formData.append('token', sessionStorage.getItem('authToken'));
+        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        formData.append('folderName', folderName);
+        formData.append("files", null);
 
         const request = {
             url: `${API_HOST}/controller/Gallery.asmx/saveFile`,
@@ -994,7 +1118,7 @@ export default class DataSource {
 
     async renameFile(galID, folderRename) {
         const data = {
-            galID : galID,
+            galID: galID,
             folderRename: folderRename,
             updateFileMode: "Rename"
         };
@@ -1015,6 +1139,7 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Gallery.asmx/updateFile", data, "POST");
         return response;
     }
+
     //#endregion
 }
 

@@ -37,6 +37,21 @@
             <li class="info-menu__item">
                 <vs-dropdown>
                     <a class="a-icon" href="#">
+                        <i class="fa fa-university" aria-hidden="true"></i>
+                        <span>School List</span>
+                    </a>
+
+                    <vs-dropdown-menu v-model="schListCurrent">
+                        <vs-dropdown-item v-for="(key, value) in schList">
+                            <span v-on:click="ChangeSchool(value)" v-bind:value=value>{{ key }} <i v-if="value === schSession" class="fa fa-check-square" aria-hidden="true"></i></span>
+                        </vs-dropdown-item>
+                    </vs-dropdown-menu>
+                </vs-dropdown>
+            </li>
+
+            <li class="info-menu__item">
+                <vs-dropdown>
+                    <a class="a-icon" href="#">
                         <i class="fa fa-user-circle" aria-hidden="true"></i>
                         <span>Account</span>
                     </a>
@@ -62,7 +77,15 @@
                 // isLoading: true,
                 // token: null,
                 // isLoggedIn: null
+
+                schList:[],
+                schListCurrent: '',
+
+                schSession: sessionStorage.getItem('schoolSession'),
             };
+        },
+        async created() {
+            await this.BindSchoolList();
         },
         methods: {
             logout() {
@@ -76,7 +99,33 @@
                 else {
                     return false;
                 }
-            }
+            },
+
+            async BindSchoolList() {
+                try {
+                    const response = await DataSource.shared.getUserSch();
+                    if (response) {
+                        this.schList = response;
+
+                        // for (const item in response) {
+                        //     // console.log(item);
+                        //     // console.log(response[item]);
+                        //     this.schList.push(item);
+                        // }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+
+            async ChangeSchool(value) {
+                try {
+                    sessionStorage.setItem('schoolSession', value);
+                    window.location.replace('/');
+                } catch (e) {
+                    this.results = e;
+                }
+            },
         }
         // mounted() {
         //     const isLogin = sessionStorage.getItem('authToken');
