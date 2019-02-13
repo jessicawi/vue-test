@@ -52,6 +52,13 @@
                             <span class="custom-tooltiptext">Remove</span>
                         </button>
                     </div>
+                    <div class="menu-item" v-if="arrobj_SelectedItem.length > 0">
+                        <button @click="showPortfolioModal" class="custom-tooltip btn btn-secondary"
+                                title="Remove"><i
+                                class="fa fa-eye"></i>
+                            <span class="custom-tooltiptext">Post as portfolio</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,10 +131,14 @@
                         class="fa fa-arrows"></i><span
                         class="menu-text">Move</span>
                 </li>
-                <li class="li_MenuOption"
-                    @click="showRemoveModal" v-if="obj_ContextTarget != null || arrobj_SelectedItem.length > 0"><i
+                <li class="li_MenuOption" @click="showRemoveModal"
+                    v-if="obj_ContextTarget != null || arrobj_SelectedItem.length > 0"><i
                         class="fa fa-trash-o"></i><span
                         class="menu-text">Remove</span></li>
+                <li class="li_MenuOption" @click="showPortfolioModal" v-if="arrobj_SelectedItem.length > 0">
+                    <i class="fa fa-eye"></i>
+                    <span class="menu-text">Portfolio</span>
+                </li>
             </ul>
         </div>
         <b-modal id="modal_ViewItem" title="View" ref="modal_ViewItem" centered ok-only ok-title="Close">
@@ -208,6 +219,9 @@
                 </div>
             </div>
         </b-modal>
+        <b-modal id="modal_Portfolio" hide-footer size="lg" title="Portfolio" ref="modal_Portfolio">
+            <portfolio :images="arrobj_SelectedItem"></portfolio>
+        </b-modal>
         <div id="div_DropZone" class="hideDropZone">
             <h1>Drop file(s) here to upload</h1>
         </div>
@@ -218,12 +232,11 @@
     "use strict";
     import DataSource from "../data/datasource";
     import $ from 'jquery';
+    import portfolio from "../components/Post_Portfolio_Component"
 
-
-    // TODO: CHECK FOR WHITELIST
 
     export default {
-        name: "Gallery_New",
+        name: "Gallery",
         data() {
             return {
                 arrobj_Folders: [],
@@ -238,9 +251,23 @@
                 slide: 0,
                 sliding: null,
                 str_NewFolderName: "",
+                arrstr_Whitelist: []
             }
         },
         methods: {
+            loadWhitelist() {
+                DataSource.shared.getWhitelist().then((result) => {
+                    this.arrstr_Whitelist = result;
+                });
+            },
+            isWhitelist(file) {
+                let temparrstr = file.name.split(".");
+                let str_Ext = ("." + temparrstr[temparrstr.length - 1]).toUpperCase();
+                let isWhitelisted = this.arrstr_Whitelist.findIndex(x => x.ext.toUpperCase() === str_Ext) !== -1;
+                let isValidFile = file.size > 0;
+
+                return (isWhitelisted && isValidFile);
+            },
             initFolder(obj_Folder) {
                 this.arrobj_Files = [];
                 this.arrobj_Folders = [];
@@ -341,6 +368,9 @@
                     return "";
             }
             ,
+            showPortfolioModal() {
+                this.$refs.modal_Portfolio.show();
+            },
 
             /*#region Download Item Functions*/
             downloadItem() {
@@ -368,7 +398,6 @@
 
                     arr_Promises.push(downloadPromise);
                 }
-                ;
 
                 Promise.all(arr_Promises).then((result) => {
                     this.hideLoading();
@@ -473,12 +502,6 @@
             ,
             /*#endregion*/
 
-            /*#region Download Item Functions*/
-            downloadSelectedItem() {
-            }
-            ,
-            /*#endregion*/
-
             /*#region Upload Item Functions*/
             /*#region Drop Zone Functions*/
             showDropZone() {
@@ -497,11 +520,18 @@
             ,
             /*#endregion*/
 
-            uploadFiles(f) {
+            uploadFiles(filesUploaded) {
                 this.showLoading();
                 let obj_CurrentFolder = this.arrobj_FolderPath[this.arrobj_FolderPath.length - 1];
 
-                DataSource.shared.saveFile(f, obj_CurrentFolder.GalID).then((result) => {
+                let arrobj_AcceptedFiles = [];
+
+                for (let file of filesUploaded) {
+                    if (this.isWhitelist(file))
+                        arrobj_AcceptedFiles.push(file);
+                }
+
+                DataSource.shared.saveFile(arrobj_AcceptedFiles, obj_CurrentFolder.GalID).then((result) => {
                     this.hideLoading();
                     this.initFolder(obj_CurrentFolder);
                 });
@@ -734,9 +764,9 @@
             restArguments(func, startIndex) {
                 // Some functions take a variable number of arguments, or a few expected
                 // arguments at the beginning and then a variable number of values to operate
-                // on. This helper accumulates all remaining arguments past the function’s
+                // on. This helper accumulates all remaining arguments past the function?s
                 // argument length (or an explicit `startIndex`), into an array that becomes
-                // the last argument. Similar to ES6’s "rest parameter".
+                // the last argument. Similar to ES6?s "rest parameter".
                 startIndex = startIndex == null ? func.length - 1 : +startIndex;
                 return function () {
                     let length = Math.max(arguments.length - startIndex, 0),
@@ -768,6 +798,7 @@
         mounted() {
             const self = this;
             self.initFolder(this.arrobj_FolderPath[0]);
+            self.loadWhitelist();
 
             /*#region Menu Functions*/
             $(document).on("click", ".create-item", () => {
@@ -892,6 +923,9 @@
             filteredSelectedItem: function () {
                 return this.arrobj_SelectedItem.filter(x => this.isImage(x));
             }
+        },
+        components: {
+            portfolio
         }
     }
 </script>
@@ -1041,5 +1075,11 @@
 
     .div_ItemContainer {
         padding: 0 15px;
+    }
+
+</style>
+<style>
+    #modal_Portfolio .modal-lg {
+        max-width: 95% !important;
     }
 </style>

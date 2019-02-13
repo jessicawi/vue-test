@@ -19,9 +19,14 @@
             <div class="image-wrapper" v-if="post.postFiles">
                 <ul>
                     <li class="postFile__item" v-for="postFile in post.postFiles" :key="postFile.ID">
+
+                        <img :src="`data:image/jpg;base64, ${postFile.PostItemFile}`"
+                             :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"
+                             v-if="postFile.PostItemFile"/>
+
                         <img :src="postFile.PostItemPath"
                              :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"
-                             v-if="checkIfImage(postFile.PostItemPath)"/>
+                             v-else-if="checkIfImage(postFile.PostItemPath)"/>
                     </li>
                 </ul>
             </div>
@@ -30,8 +35,7 @@
                 <div class="postFile__item" v-for="postFile in post.postFiles" :key="postFile.ID">
                     <!--<img :src="postFile.PostItemPath" :class="{'post-disabled':postFile.PostItemStatus !=='Active'}"/>-->
 
-
-                    <a v-if="!checkIfImage(postFile.PostItemPath)" v-bind:href="[postFile.PostItemPath]"
+                    <a v-if="!postFile.PostItemFileLow && !checkIfImage(postFile.PostItemPath)" v-bind:href="[postFile.PostItemPath]"
                        :class="{'post-disabled':postFile.PostItemStatus !=='Active'}">
                         <i class="fa fa-file" aria-hidden="true"></i>
                         {{postFile.PostItemPostID}}
@@ -60,13 +64,12 @@
             <div class="commentWrap" v-if="post.commentItems"
                  :class="{'is-collapsed' : post.collapsed }">
                 <div class="comment__item" v-for="commentItem in post.commentItems"
-                     :key="commentItem.PoCmID" v-if="">
+                     :key="commentItem.PoCmID">
                     <div class="commentItem__header">
                         <div class="comment__name">{{commentItem.CONname}}</div>
                         <div class="comment__date">{{commentItem.PoCmCreatedDate}}</div>
                     </div>
-                    <div class="commentPostContent_show"
-                         v-if="readonly === true || checkidcomment !== commentItem.PoCmID">
+                    <div class="commentPostContent_show" v-if="checkidcomment !== commentItem.PoCmID">
                         {{commentItem.PoCmContent}}
                     </div>
                     <textarea v-if="readonly === false && checkidcomment === commentItem.PoCmID" type="text"
@@ -74,20 +77,26 @@
                               v-model="commentItem.PoCmContent" v-bind:readonly="readonly"
                               :class="{'editable' : readonly === false && checkidcomment === commentItem.PoCmID }"></textarea>
                     <!--{{checkidcomment}} ==== {{commentItem.PoCmID}} === {{readonly}}<br/>-->
-                    <span class="edit" @click="disableReadonly(commentItem.PoCmID)"
-                          :class="{'d-none' : readonly === false && checkidcomment === commentItem.PoCmID}">Edit . </span>
-                    <span class="save" @click="editComment(commentItem.PoCmID, commentItem.PoCmContent)"
+
+                    <span class="edit" @click="editClick(commentItem.PoCmID)" v-if="showEdit">
+                        Edit .
+                    </span>
+
+                    <span class="save" @click="saveClick(commentItem.PoCmID, commentItem.PoCmContent)"
                           :class="{'d-none' : readonly === true || checkidcomment !== commentItem.PoCmID}">Save . </span>
                     <!--<span class="delete"-->
                     <!--@click="deleteComment(commentItem.PoCmID, commentItem.PoCmContent, post.PostID)">Delete</span>-->
                     <span class="delete"
-                          @click="showDeleteModal">Delete</span>
+                          @click="showDeleteModal(commentItem.PoCmID, commentItem.PoCmContent, post.PostID)">
+                        Delete
+                    </span>
                     <AlertComponent :showModal="deleteModalShow" @cancelClick="closeDeleteModal"
-                                    @okClick="deleteComment(commentItem.PoCmID, commentItem.PoCmContent, post.PostID)"/>
+                                    @okClick="deleteComment"/>
                 </div>
 
                 <button v-on:click=" post.collapsed = !post.collapsed "
-                        :class="{'d-none' : !post.collapsed }" v-if="post.commentItems.length !== 2">Display more comments
+                        :class="{'d-none' : !post.collapsed }" v-if="post.commentItems.length !== 2">Display more
+                    comments
                 </button>
 
 
@@ -101,7 +110,6 @@
     import DataSource from "../data/datasource";
     import AlertComponent from "./alertComponent";
 
-
     export default {
         name: 'postComponent',
         components: {AlertComponent},
@@ -112,7 +120,11 @@
                 checkidcomment: null,
                 systemmsgError: null,
                 commentPostID: '',
-                deleteModalShow: false
+                deleteModalShow: false,
+                showEdit: true,
+                deleteCmId: null,
+                deleteCmContent: null,
+                deleteCmPostId: null
             };
         },
         props: ["post", "checkIfImage", "commentitemSubmit"],
@@ -124,20 +136,24 @@
                 this.$emit('commentitemSubmit', postId, this.commentPostContent);
                 this.commentPostContent = "";
             },
-            editComment(PoCmID, PoCmContent) {
+            saveClick(PoCmID, PoCmContent) {
                 this.readonly = true;
+                this.showEdit = true;
+                this.checkidcomment = null;
                 this.$emit("commentEdit", PoCmID, PoCmContent);
             },
-            showDeleteModal() {
+            showDeleteModal(deleteCmId, deleteCmContent, deleteCmPostId) {
                 this.deleteModalShow = true;
+                this.deleteCmId = deleteCmId;
+                this.deleteCmContent = deleteCmContent;
+                this.deleteCmPostId = deleteCmPostId;
             },
             closeDeleteModal() {
                 this.deleteModalShow = false;
             },
-            deleteComment(PoCmID, PoCmContent, postId) {
-                console.log("haha, ", PoCmID, PoCmContent, postId)
-                this.$emit("commentDelete", PoCmID, PoCmContent, postId);
-                this.closeDeleteModal()
+            deleteComment() {
+                this.$emit("commentDelete", this.deleteCmId, this.deleteCmContent, this.deleteCmPostId);
+                this.closeDeleteModal();
             },
             // async commentEdit(PoCmID, PoCmContent) {
             //     this.error = "";
@@ -148,7 +164,7 @@
             //         this.commentPostContent = PoCmContent;
             //         console.log(this.commentPostContent);
             //         this.actionMode = "Edit";
-            //         const commentResponse = await DataSource.shared.editComment(this.commentPostID, this.commentPostContent, this.actionMode);
+            //         const commentResponse = await DataSource.shared.saveClick(this.commentPostID, this.commentPostContent, this.actionMode);
             //         if (commentResponse) {
             //             switch (commentResponse.code) {
             //                 case "1":
@@ -178,15 +194,10 @@
             //     }
             // },
 
-            async disableReadonly(PoCmID) {
-                this.error = "";
-                try {
-                    this.readonly = false;
-                    this.checkidcomment = PoCmID;
-                } catch (e) {
-                    console.log(e);
-                    this.error = e;
-                }
+            editClick(PoCmID) {
+                this.showEdit = false;
+                this.readonly = false;
+                this.checkidcomment = PoCmID;
             },
             // async commentEdit(PoCmID, PoCmContent) {
             //     this.error = "";
@@ -197,7 +208,7 @@
             //         this.commentPostContent = PoCmContent;
             //         console.log(this.commentPostContent);
             //         this.actionMode = "Edit";
-            //         const commentResponse = await DataSource.shared.editComment(this.commentPostID, this.commentPostContent, this.actionMode);
+            //         const commentResponse = await DataSource.shared.saveClick(this.commentPostID, this.commentPostContent, this.actionMode);
             //         if (commentResponse) {
             //             switch (commentResponse.code) {
             //                 case "1":

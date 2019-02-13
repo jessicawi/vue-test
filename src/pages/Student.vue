@@ -46,566 +46,7 @@
             </div>
 
             <b-tabs class="studentPageBTabs">
-                <b-tab title="Student" active>
-                    <div class=" form-group ">
-                        <div class="studentAreaDiv">
-                            <div class="">
-                                <h5 class="text-left student-form__title">Student's Personal Information</h5>
-                            </div>
-                            <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* First Name</label>
-                                    <input type="text" class="form-control form__input" v-model="inputStudentFirstName"
-                                           :class="{ 'requiredFields': $v.inputStudentFirstName.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentFirstName.$error">First Name
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Middle Name</label>
-                                    <input type="text" class="form-control" v-model="inputStudentMiddleName">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Last Name</label>
-                                    <input type="text" class="form-control" v-model="inputStudentLastName"
-                                           :class="{ 'requiredFields': $v.inputStudentLastName.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentLastName.$error">Last Name
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Preferred Name</label>
-                                    <input type="text" class="form-control" v-model="inputStudentPreferredName">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Nationality</label>
-                                    <select v-model="ddlStudentNationality"
-                                            class="form-control pro-edt-select form-control-primary"
-                                            :class="{ 'requiredFields': $v.ddlStudentNationality.$error }"
-                                            @change="onChangeNationalityBirthPlace()">
-                                        <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{
-                                            item.CNYnationality.trim() }}
-                                        </option>
-                                    </select>
-                                    <div class="requiredFieldsMsg" v-if="$v.ddlStudentNationality.$error">Nationality
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Gender</label>
-                                    <select v-model="ddlStudentGender"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Date of Birth</label>
-                                    <div class="date">
-                                        <el-date-picker v-model="inputStudentDateOfBirth" format="dd/MM/yyyy"
-                                                        value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"
-                                                        :class="{ 'requiredFields': $v.inputStudentDateOfBirth.$error }"></el-date-picker>
-                                    </div>
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentDateOfBirth.$error">Date of
-                                        Birth
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Birth Place</label>
-                                    <select v-model="ddlStudentBirthPlace"
-                                            class="form-control pro-edt-select form-control-primary"
-                                            @change="onChangeNationalityBirthPlace()">
-                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
-                                            item.CNYname.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div v-if="finShowHide" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>** Fin</label>
-                                    <input type="text" class="form-control" v-model="inputStudentIdentificationNo"
-                                           :class="{ 'requiredFields': $v.inputStudentIdentificationNo.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentIdentificationNo.$error">Fin
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div v-if="finShowHide" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>** Fin Expiry Date</label>
-                                    <div class="date">
-                                        <el-date-picker v-model="inputStudentIdentificationExpiryDate"
-                                                        format="dd/MM/yyyy"
-                                                        value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"
-                                                        :class="{ 'requiredFields': $v.inputStudentIdentificationExpiryDate.$error }"></el-date-picker>
-                                    </div>
-                                    <div class="requiredFieldsMsg"
-                                         v-if="$v.inputStudentIdentificationExpiryDate.$error">Fin
-                                        Expiry Date Require
-                                    </div>
-                                </div>
-
-                                <div v-if="birthcertShowHide" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>** Birth Certificate</label>
-                                    <input type="text" class="form-control" v-model="inputStudentBirthCertificate"
-                                           :class="{ 'requiredFields': $v.inputStudentBirthCertificate.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentBirthCertificate.$error">Birth
-                                        Certificate Require
-                                    </div>
-                                </div>
-
-                                <div v-if="icShowHide" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>** IC</label>
-                                    <input type="text" class="form-control" v-model="inputStudentIC"
-                                           :class="{ 'requiredFields': $v.inputStudentIC.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentIC.$error">IC Require</div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>** Passport</label>
-                                    <input type="text" class="form-control" v-model="inputStudentPassport"
-                                           :class="{ 'requiredFields': $v.inputStudentPassport.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentPassport.$error">Passport
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>** Passport Expiry Date</label>
-                                    <div class="date">
-                                        <el-date-picker v-model="inputStudentPassportExpiryDate" format="dd/MM/yyyy"
-                                                        value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"
-                                                        :class="{ 'requiredFields': $v.inputStudentPassportExpiryDate.$error }"></el-date-picker>
-                                    </div>
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentPassportExpiryDate.$error">
-                                        Passport
-                                        Expiry Date Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>** Other Identification</label>
-                                    <input type="text" class="form-control" v-model="inputStudentOtherIdentification"
-                                           :class="{ 'requiredFields': $v.inputStudentOtherIdentification.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentOtherIdentification.$error">
-                                        Other
-                                        Identification Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Religion</label>
-                                    <select v-model="ddlStudentReligion"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <!--<option v-for="item in ddlStudentReligionList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>-->
-                                        <option v-for="item in ddlStudentReligionList"
-                                                v-bind:value="item.OPTvalue.trim()">
-                                            {{ item.OPTvalue.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Additional Language</label>
-                                    <select v-model="ddlStudentAdditionalLanguage"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in ddlStudentAdditionalLanguageList"
-                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Meal Preferences</label>
-                                    <select v-model="ddlStudentMealPreferences"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in ddlStudentMealPreferencesList"
-                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>First Language Spoken</label>
-                                    <input type="text" class="form-control" v-model="inputStudentFirstLanguageSpoken">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Second Language Spoken</label>
-                                    <input type="text" class="form-control" v-model="inputSecondLanguageSpoken">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Membership</label>
-                                    <select v-model="ddlStudentMembership"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in ddlStudentMembershipList"
-                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="studentAreaDiv">
-                            <div class="">
-                                <h5 class="text-left student-form__title">Student's Registration Details</h5>
-                            </div>
-
-                            <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* First Commencement Date</label>
-                                    <div class="date">
-                                        <el-date-picker v-model="inputFirstCommencementDate" type="date"
-                                                        format="dd/MM/yyyy"
-                                                        value-format="dd/MM/yyyy" placeholder="Pick a day"
-                                                        :class="{ 'requiredFields': $v.inputFirstCommencementDate.$error }"></el-date-picker>
-                                    </div>
-                                    <div class="requiredFieldsMsg" v-if="$v.inputFirstCommencementDate.$error">First
-                                        Commencement Date Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Residency Status</label>
-                                    <select v-model="ddlStudentResidencyStatus"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in ddlStudentResidencyStatusList"
-                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Payer</label>
-                                    <select v-model="ddlStudentPayer"
-                                            class="form-control pro-edt-select form-control-primary"
-                                            :class="{ 'requiredFields': $v.ddlStudentPayer.$error }">
-                                        <option v-for="item in ddlStudentPayerList" v-bind:value="item.OPTvalue.trim()">
-                                            {{
-                                            item.OPTvalue.trim() }}
-                                        </option>
-                                    </select>
-                                    <div class="requiredFieldsMsg" v-if="$v.ddlStudentPayer.$error">Payer Require</div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Student ID</label>
-                                    <input type="text" class="form-control" v-model="inputStudentID"
-                                           readonly="readonly">
-                                </div>
-
-                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
-                                <!--<label>* Select Level</label>-->
-                                <!--<select v-model="ddlStudentSelectLevel"-->
-                                <!--class="form-control pro-edt-select form-control-primary"-->
-                                <!--:class="{ 'requiredFields': $v.ddlStudentSelectLevel.$error }">-->
-                                <!--<option v-for="item in levelList" v-bind:value="item.PK_Course_ID.trim()">{{-->
-                                <!--item.CRS_Course_Name.trim() }}-->
-                                <!--</option>-->
-                                <!--</select>-->
-                                <!--<div class="requiredFieldsMsg" v-if="$v.ddlStudentSelectLevel.$error">Level Require-->
-                                <!--</div>-->
-                                <!--</div>-->
-
-                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
-                                <!--<label>* First Academic Year</label>-->
-                                <!--<select v-model="ddlStudentFirstAcademicYear"-->
-                                <!--class="form-control pro-edt-select form-control-primary"-->
-                                <!--:class="{ 'requiredFields': $v.ddlStudentFirstAcademicYear.$error }">-->
-                                <!--<option v-for="item in academicYearList" v-bind:value="item.PK_Semester_ID.trim()">-->
-                                <!--{{ item.SMT_Code.trim() }}-->
-                                <!--</option>-->
-                                <!--</select>-->
-                                <!--<div class="requiredFieldsMsg" v-if="$v.ddlStudentFirstAcademicYear.$error">First-->
-                                <!--Academic Year Require-->
-                                <!--</div>-->
-                                <!--</div>-->
-
-                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
-                                <!--<label>* Intake Year</label>-->
-                                <!--<select v-model="ddlStudentIntakeYear"-->
-                                <!--class="form-control pro-edt-select form-control-primary"-->
-                                <!--:class="{ 'requiredFields': $v.ddlStudentIntakeYear.$error }"-->
-                                <!--v-bind:disabled="editModeDisable">-->
-                                <!--<option v-for="item in studentIntakeYearList" v-bind:value="item.PK_PAI_ID.trim()">-->
-                                <!--{{ item.PAI_Intake_No.trim() }}-->
-                                <!--</option>-->
-                                <!--</select>-->
-                                <!--<div class="requiredFieldsMsg" v-if="$v.ddlStudentIntakeYear.$error">Intake Year-->
-                                <!--Require-->
-                                <!--</div>-->
-                                <!--</div>-->
-                            </div>
-                        </div>
-                    </div>
-                </b-tab>
-                <b-tab title="Emergency Contact">
-                    <div class=" form-group ">
-                        <div class="ecAreaDiv">
-                            <div class="">
-                                <h5 class="text-left student-form__title">Emergency Contact</h5>
-                            </div>
-                            <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>1st Emergency Contact No</label>
-                                    <input type="text" class="form-control" v-model="inputStudent1stEmergencyContactNo">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>2nd Emergency Contact No</label>
-                                    <input type="text" class="form-control" v-model="inputStudent2ndEmergencyContactNo">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </b-tab>
-                <b-tab title="Addresses">
-                    <div class=" form-group ">
-                        <div class="addAreaDiv">
-                            <div class="">
-                                <h5 class="text-left student-form__title">Student's Permanent Address</h5>
-                            </div>
-
-                            <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Country</label>
-                                    <select v-model="ddlStudentAddressCountry"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
-                                            item.CNYname.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Postal Code</label>
-                                    <input type="text" class="form-control" v-model="inputStudentPostalCode"
-                                           :class="{ 'requiredFields': $v.inputStudentPostalCode.$error }"
-                                           v-on:blur="GetGoogleAPI('inputStudentPostalCode')">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentPostalCode.$error">Postal Code
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Address 1</label>
-                                    <input type="text" class="form-control" v-model="inputStudentAddress1"
-                                           :class="{ 'requiredFields': $v.inputStudentAddress1.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentAddress1.$error">Address 1
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Address 2</label>
-                                    <input type="text" class="form-control" v-model="inputStudentAddress2">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Address 3</label>
-                                    <input type="text" class="form-control" v-model="inputStudentAddress3">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>City</label>
-                                    <input type="text" class="form-control" v-model="inputStudentCity">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="addAreaDiv">
-                            <div class="">
-                                <h5 class="text-left student-form__title">Student's Correspondance Address</h5>
-                            </div>
-
-                            <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Country</label>
-                                    <select v-model="ddlStudentAddressCorrespondanceCountry"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
-                                            item.CNYname.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Postal Code</label>
-                                    <input type="text" class="form-control"
-                                           v-model="inputStudentCorrespondancePostalCode"
-                                           :class="{ 'requiredFields': $v.inputStudentCorrespondancePostalCode.$error }"
-                                           v-on:blur="GetGoogleAPI('inputStudentCorrespondancePostalCode')">
-                                    <div class="requiredFieldsMsg"
-                                         v-if="$v.inputStudentCorrespondancePostalCode.$error">
-                                        Postal Code Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Address 1</label>
-                                    <input type="text" class="form-control" v-model="inputStudentCorrespondanceAddress1"
-                                           :class="{ 'requiredFields': $v.inputStudentCorrespondanceAddress1.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentCorrespondanceAddress1.$error">
-                                        Address 1 Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Address 2</label>
-                                    <input type="text" class="form-control"
-                                           v-model="inputStudentCorrespondanceAddress2">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Address 3</label>
-                                    <input type="text" class="form-control"
-                                           v-model="inputStudentCorrespondanceAddress3">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>City</label>
-                                    <input type="text" class="form-control" v-model="inputStudentCorrespondanceCity">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Mobile No</label>
-                                    <input type="text" class="form-control" v-model="inputStudentMobileNo">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Home Tel No</label>
-                                    <input type="text" class="form-control" v-model="inputStudentOfficeTelNo">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control" v-model="inputStudentEmail">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div v-if="divParent" class="addAreaDiv">
-                            <div class="">
-                                <h5 class="text-left student-form__title">Residential/Billing Address</h5>
-                            </div>
-                            <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Country</label>
-                                    <select v-model="ddlParentCountry" v-bind:disabled="editModeDisable"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">
-                                            {{
-                                            item.CNYname.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Postal Code</label>
-                                    <input type="text" class="form-control" v-model="inputParentPostalCode"
-                                           v-bind:disabled="editModeDisable"
-                                           :class="{ 'requiredFields': $v.inputParentPostalCode.$error }"
-                                           v-on:blur="GetGoogleAPI('inputParentPostalCode')">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputParentPostalCode.$error">Postal
-                                        Code Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Address 1</label>
-                                    <input type="text" class="form-control" v-model="inputParentAddress1"
-                                           v-bind:disabled="editModeDisable"
-                                           :class="{ 'requiredFields': $v.inputParentAddress1.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputParentAddress1.$error">Address
-                                        1
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Address 2</label>
-                                    <input type="text" class="form-control" v-model="inputParentAddress2"
-                                           v-bind:disabled="editModeDisable">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Address 3</label>
-                                    <input type="text" class="form-control" v-model="inputParentAddress3"
-                                           v-bind:disabled="editModeDisable">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>City</label>
-                                    <input type="text" class="form-control" v-model="inputParentCity"
-                                           v-bind:disabled="editModeDisable">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Landline No</label>
-                                    <input type="text" class="form-control" v-model="inputParentLandlineNo"
-                                           v-bind:disabled="editModeDisable">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </b-tab>
-                <b-tab title="Medical">
-                    <div class=" form-group ">
-                        <div class="medAreaDiv">
-                            <div class="">
-                                <h5 class="text-left student-form__title">Student's Medical Details</h5>
-                            </div>
-
-                            <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Major Ailments List</label>
-                                    <textarea rows="3" class="textArea"
-                                              v-model="taMajorAilmentsList"></textarea>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Medication Allergies List</label>
-                                    <textarea rows="3" class="textArea"
-                                              v-model="taMedicationAllergiesList"></textarea>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Blood Group</label>
-                                    <input type="text" class="form-control" v-model="inputBloodGroup">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Blood Donor No</label>
-                                    <input type="text" class="form-control" v-model="inputBloodDonorNo">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Name of Family Doctor</label>
-                                    <input type="text" class="form-control" v-model="inputNameofFamilyDoctor">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Clinic Address</label>
-                                    <input type="text" class="form-control" v-model="inputClinicAddress">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Clinic Phone No</label>
-                                    <input type="text" class="form-control" v-model="inputClinicPhoneNo">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </b-tab>
-                <b-tab title="Parents">
+                <b-tab title="Parents" active>
                     <div class="">
                         <div class="review-content-section">
                             <div v-if="divFamilySearch" class="row familyIDAreaDiv">
@@ -857,6 +298,593 @@
                         </div>
                     </div>
                 </b-tab>
+                <b-tab title="Student">
+                    <div class=" form-group ">
+                        <div class="studentAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Student's Personal Information</h5>
+                            </div>
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* First Name</label>
+                                    <input type="text" class="form-control form__input" v-model="inputStudentFirstName"
+                                           :class="{ 'requiredFields': $v.inputStudentFirstName.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentFirstName.$error">First Name
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Middle Name</label>
+                                    <input type="text" class="form-control" v-model="inputStudentMiddleName">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Last Name</label>
+                                    <input type="text" class="form-control" v-model="inputStudentLastName"
+                                           :class="{ 'requiredFields': $v.inputStudentLastName.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentLastName.$error">Last Name
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Preferred Name</label>
+                                    <input type="text" class="form-control" v-model="inputStudentPreferredName">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Nationality</label>
+                                    <select v-model="ddlStudentNationality"
+                                            class="form-control pro-edt-select form-control-primary"
+                                            :class="{ 'requiredFields': $v.ddlStudentNationality.$error }"
+                                            @change="onChangeNationalityBirthPlace()">
+                                        <option v-for="item in countryList" v-bind:value="item.CNYnationality.trim()">{{
+                                            item.CNYnationality.trim() }}
+                                        </option>
+                                    </select>
+                                    <div class="requiredFieldsMsg" v-if="$v.ddlStudentNationality.$error">Nationality
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Gender</label>
+                                    <select v-model="ddlStudentGender"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Date of Birth</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputStudentDateOfBirth" format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"
+                                                        :class="{ 'requiredFields': $v.inputStudentDateOfBirth.$error }"></el-date-picker>
+                                    </div>
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentDateOfBirth.$error">Date of
+                                        Birth
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Birth Place</label>
+                                    <select v-model="ddlStudentBirthPlace"
+                                            class="form-control pro-edt-select form-control-primary"
+                                            @change="onChangeNationalityBirthPlace()">
+                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                            item.CNYname.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div v-if="finShowHide" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>** Fin</label>
+                                    <input type="text" class="form-control" v-model="inputStudentIdentificationNo"
+                                           :class="{ 'requiredFields': $v.inputStudentIdentificationNo.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentIdentificationNo.$error">Fin
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div v-if="finShowHide" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>** Fin Expiry Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputStudentIdentificationExpiryDate"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"
+                                                        :class="{ 'requiredFields': $v.inputStudentIdentificationExpiryDate.$error }"></el-date-picker>
+                                    </div>
+                                    <div class="requiredFieldsMsg"
+                                         v-if="$v.inputStudentIdentificationExpiryDate.$error">Fin
+                                        Expiry Date Require
+                                    </div>
+                                </div>
+
+                                <div v-if="birthcertShowHide" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>** Birth Certificate</label>
+                                    <input type="text" class="form-control" v-model="inputStudentBirthCertificate"
+                                           :class="{ 'requiredFields': $v.inputStudentBirthCertificate.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentBirthCertificate.$error">Birth
+                                        Certificate Require
+                                    </div>
+                                </div>
+
+                                <div v-if="icShowHide" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>** IC</label>
+                                    <input type="text" class="form-control" v-model="inputStudentIC"
+                                           :class="{ 'requiredFields': $v.inputStudentIC.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentIC.$error">IC Require</div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>** Passport</label>
+                                    <input type="text" class="form-control" v-model="inputStudentPassport"
+                                           :class="{ 'requiredFields': $v.inputStudentPassport.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentPassport.$error">Passport
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>** Passport Expiry Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputStudentPassportExpiryDate" format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"
+                                                        :class="{ 'requiredFields': $v.inputStudentPassportExpiryDate.$error }"></el-date-picker>
+                                    </div>
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentPassportExpiryDate.$error">
+                                        Passport
+                                        Expiry Date Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>** Other Identification</label>
+                                    <input type="text" class="form-control" v-model="inputStudentOtherIdentification"
+                                           :class="{ 'requiredFields': $v.inputStudentOtherIdentification.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentOtherIdentification.$error">
+                                        Other
+                                        Identification Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Religion</label>
+                                    <select v-model="ddlStudentReligion"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <!--<option v-for="item in ddlStudentReligionList" v-bind:value="{ id: item.OPTvalue.trim(), text: item.OPTvalue.trim() }">{{ item.OPTvalue.trim() }}</option>-->
+                                        <option v-for="item in ddlStudentReligionList"
+                                                v-bind:value="item.OPTvalue.trim()">
+                                            {{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Additional Language</label>
+                                    <select v-model="ddlStudentAdditionalLanguage"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlStudentAdditionalLanguageList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Meal Preferences</label>
+                                    <select v-model="ddlStudentMealPreferences"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlStudentMealPreferencesList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>First Language Spoken</label>
+                                    <input type="text" class="form-control" v-model="inputStudentFirstLanguageSpoken">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Second Language Spoken</label>
+                                    <input type="text" class="form-control" v-model="inputSecondLanguageSpoken">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                    <label>Membership</label>
+                                    <select v-model="ddlStudentMembership"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlStudentMembershipList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="studentAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Student's Registration Details</h5>
+                            </div>
+
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* First Commencement Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputFirstCommencementDate" type="date"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" placeholder="Pick a day"
+                                                        :class="{ 'requiredFields': $v.inputFirstCommencementDate.$error }"></el-date-picker>
+                                    </div>
+                                    <div class="requiredFieldsMsg" v-if="$v.inputFirstCommencementDate.$error">First
+                                        Commencement Date Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Residency Status</label>
+                                    <select v-model="ddlStudentResidencyStatus"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlStudentResidencyStatusList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Payer</label>
+                                    <select v-model="ddlStudentPayer"
+                                            class="form-control pro-edt-select form-control-primary"
+                                            :class="{ 'requiredFields': $v.ddlStudentPayer.$error }">
+                                        <option v-for="item in ddlStudentPayerList" v-bind:value="item.OPTvalue.trim()">
+                                            {{
+                                            item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                    <div class="requiredFieldsMsg" v-if="$v.ddlStudentPayer.$error">Payer Require</div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Student ID</label>
+                                    <input type="text" class="form-control" v-model="inputStudentID"
+                                           readonly="readonly">
+                                </div>
+
+                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                <!--<label>* Select Level</label>-->
+                                <!--<select v-model="ddlStudentSelectLevel"-->
+                                <!--class="form-control pro-edt-select form-control-primary"-->
+                                <!--:class="{ 'requiredFields': $v.ddlStudentSelectLevel.$error }">-->
+                                <!--<option v-for="item in levelList" v-bind:value="item.PK_Course_ID.trim()">{{-->
+                                <!--item.CRS_Course_Name.trim() }}-->
+                                <!--</option>-->
+                                <!--</select>-->
+                                <!--<div class="requiredFieldsMsg" v-if="$v.ddlStudentSelectLevel.$error">Level Require-->
+                                <!--</div>-->
+                                <!--</div>-->
+
+                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                <!--<label>* First Academic Year</label>-->
+                                <!--<select v-model="ddlStudentFirstAcademicYear"-->
+                                <!--class="form-control pro-edt-select form-control-primary"-->
+                                <!--:class="{ 'requiredFields': $v.ddlStudentFirstAcademicYear.$error }">-->
+                                <!--<option v-for="item in academicYearList" v-bind:value="item.PK_Semester_ID.trim()">-->
+                                <!--{{ item.SMT_Code.trim() }}-->
+                                <!--</option>-->
+                                <!--</select>-->
+                                <!--<div class="requiredFieldsMsg" v-if="$v.ddlStudentFirstAcademicYear.$error">First-->
+                                <!--Academic Year Require-->
+                                <!--</div>-->
+                                <!--</div>-->
+
+                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                <!--<label>* Intake Year</label>-->
+                                <!--<select v-model="ddlStudentIntakeYear"-->
+                                <!--class="form-control pro-edt-select form-control-primary"-->
+                                <!--:class="{ 'requiredFields': $v.ddlStudentIntakeYear.$error }"-->
+                                <!--v-bind:disabled="editModeDisable">-->
+                                <!--<option v-for="item in studentIntakeYearList" v-bind:value="item.PK_PAI_ID.trim()">-->
+                                <!--{{ item.PAI_Intake_No.trim() }}-->
+                                <!--</option>-->
+                                <!--</select>-->
+                                <!--<div class="requiredFieldsMsg" v-if="$v.ddlStudentIntakeYear.$error">Intake Year-->
+                                <!--Require-->
+                                <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
+                <b-tab title="Emergency Contact">
+                    <div class=" form-group ">
+                        <div class="ecAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Emergency Contact</h5>
+                            </div>
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>1st Emergency Contact No</label>
+                                    <input type="text" class="form-control" v-model="inputStudent1stEmergencyContactNo">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>2nd Emergency Contact No</label>
+                                    <input type="text" class="form-control" v-model="inputStudent2ndEmergencyContactNo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
+                <b-tab title="Addresses">
+                    <div class=" form-group ">
+                        <div class="addAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Student's Permanent Address</h5>
+                            </div>
+
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Country</label>
+                                    <select v-model="ddlStudentAddressCountry" @change="onchangeCopyAdd()"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                            item.CNYname.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Postal Code</label>
+                                    <input type="text" class="form-control" v-model="inputStudentPostalCode"
+                                           :class="{ 'requiredFields': $v.inputStudentPostalCode.$error }"
+                                           v-on:blur="GetGoogleAPI('inputStudentPostalCode')" @change="onchangeCopyAdd()">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentPostalCode.$error">Postal Code
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Address 1</label>
+                                    <input type="text" class="form-control" v-model="inputStudentAddress1" @change="onchangeCopyAdd()"
+                                           :class="{ 'requiredFields': $v.inputStudentAddress1.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentAddress1.$error">Address 1
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Address 2</label>
+                                    <input type="text" class="form-control" v-model="inputStudentAddress2" @change="onchangeCopyAdd()">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Address 3</label>
+                                    <input type="text" class="form-control" v-model="inputStudentAddress3" @change="onchangeCopyAdd()">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>City</label>
+                                    <input type="text" class="form-control" v-model="inputStudentCity" @change="onchangeCopyAdd()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="addAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Student's Correspondance Address</h5>
+                            </div>
+
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Copy Address From Student's Permanent Address</label>
+                                    <!--<div v-on:click="StuCorAddCopyStuPermAdd" class="ttStuCorAddCopy"><i class="fa fa-clone" aria-hidden="true"></i>-->
+                                        <!--<span class="ttnStuCorAddCopy">Copy Address From Student's Correspondance Address</span>-->
+                                    <!--</div>-->
+                                    <!--<input type="checkbox" class="form-control" ref="cbStuCorAddCopy" @change="StuCorAddCopyStuPermAdd()">-->
+
+                                    <select v-model="ddlCopyAddToStuCorAdd" class="form-control pro-edt-select form-control-primary" @change="onchangeCopyAdd()">
+                                        <option value="manuallyInput">Manually Input</option>
+                                        <option value="stuPerAdd">Student's Permanent Address</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Country</label>
+                                    <select v-model="ddlStudentAddressCorrespondanceCountry" @change="onchangeCopyAdd()"
+                                            v-bind:disabled="stuCorAddCopy"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                            item.CNYname.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Postal Code</label>
+                                    <input type="text" class="form-control"
+                                           v-model="inputStudentCorrespondancePostalCode"
+                                           :class="{ 'requiredFields': $v.inputStudentCorrespondancePostalCode.$error }"
+                                           v-bind:disabled="stuCorAddCopy"
+                                           v-on:blur="GetGoogleAPI('inputStudentCorrespondancePostalCode')" @change="onchangeCopyAdd()">
+                                    <div class="requiredFieldsMsg"
+                                         v-if="$v.inputStudentCorrespondancePostalCode.$error">
+                                        Postal Code Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Address 1</label>
+                                    <input type="text" class="form-control" v-model="inputStudentCorrespondanceAddress1" @change="onchangeCopyAdd()"
+                                           v-bind:disabled="stuCorAddCopy"
+                                           :class="{ 'requiredFields': $v.inputStudentCorrespondanceAddress1.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputStudentCorrespondanceAddress1.$error">
+                                        Address 1 Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Address 2</label>
+                                    <input type="text" class="form-control"
+                                           v-bind:disabled="stuCorAddCopy"
+                                           v-model="inputStudentCorrespondanceAddress2" @change="onchangeCopyAdd()">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Address 3</label>
+                                    <input type="text" class="form-control"
+                                           v-bind:disabled="stuCorAddCopy"
+                                           v-model="inputStudentCorrespondanceAddress3" @change="onchangeCopyAdd()">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>City</label>
+                                    <input type="text" class="form-control" v-model="inputStudentCorrespondanceCity" @change="onchangeCopyAdd()" v-bind:disabled="stuCorAddCopy">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Mobile No</label>
+                                    <input type="text" class="form-control" v-model="inputStudentMobileNo">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Home Tel No</label>
+                                    <input type="text" class="form-control" v-model="inputStudentOfficeTelNo">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control" v-model="inputStudentEmail">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="divParent" class="addAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Residential/Billing Address</h5>
+                            </div>
+
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Copy Address From</label>
+                                    <select v-model="ddlCopyAddToResBil" v-bind:disabled="editModeDisable" class="form-control pro-edt-select form-control-primary" @change="onchangeCopyAdd()">
+                                        <option value=""></option>
+                                        <option value="stuPerAdd">Student's Permanent Address</option>
+                                        <option value="stuCorAdd">Student's Correspondance Address</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Country</label>
+                                    <select v-model="ddlParentCountry" v-bind:disabled="editModeDisable || resBilAddCopy"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">
+                                            {{
+                                            item.CNYname.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Postal Code</label>
+                                    <input type="text" class="form-control" v-model="inputParentPostalCode"
+                                           v-bind:disabled="editModeDisable || resBilAddCopy"
+                                           :class="{ 'requiredFields': $v.inputParentPostalCode.$error }"
+                                           v-on:blur="GetGoogleAPI('inputParentPostalCode')">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputParentPostalCode.$error">Postal
+                                        Code Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>* Address 1</label>
+                                    <input type="text" class="form-control" v-model="inputParentAddress1"
+                                           v-bind:disabled="editModeDisable || resBilAddCopy"
+                                           :class="{ 'requiredFields': $v.inputParentAddress1.$error }">
+                                    <div class="requiredFieldsMsg" v-if="$v.inputParentAddress1.$error">Address
+                                        1
+                                        Require
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Address 2</label>
+                                    <input type="text" class="form-control" v-model="inputParentAddress2"
+                                           v-bind:disabled="editModeDisable || resBilAddCopy">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Address 3</label>
+                                    <input type="text" class="form-control" v-model="inputParentAddress3"
+                                           v-bind:disabled="editModeDisable || resBilAddCopy">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>City</label>
+                                    <input type="text" class="form-control" v-model="inputParentCity"
+                                           v-bind:disabled="editModeDisable">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Landline No</label>
+                                    <input type="text" class="form-control" v-model="inputParentLandlineNo"
+                                           v-bind:disabled="editModeDisable">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
+                <b-tab title="Medical">
+                    <div class=" form-group ">
+                        <div class="medAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Student's Medical Details</h5>
+                            </div>
+
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Major Ailments List</label>
+                                    <textarea rows="3" class="textArea"
+                                              v-model="taMajorAilmentsList"></textarea>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Medication Allergies List</label>
+                                    <textarea rows="3" class="textArea"
+                                              v-model="taMedicationAllergiesList"></textarea>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Blood Group</label>
+                                    <input type="text" class="form-control" v-model="inputBloodGroup">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Blood Donor No</label>
+                                    <input type="text" class="form-control" v-model="inputBloodDonorNo">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Name of Family Doctor</label>
+                                    <input type="text" class="form-control" v-model="inputNameofFamilyDoctor">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Clinic Address</label>
+                                    <input type="text" class="form-control" v-model="inputClinicAddress">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Clinic Phone No</label>
+                                    <input type="text" class="form-control" v-model="inputClinicPhoneNo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
                 <b-tab title="Siblings" v-if="siblingTab">
                     <div v-if="siblingList.length>0">
                         <data-tables :data="siblingList" :action-col="actionCol_Sibling">
@@ -877,41 +905,44 @@
                                 <h5 class="text-left student-form__title">Level</h5>
                             </div>
                             <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Select Level</label>
-                                    <select v-model="ddlStudentSelectLevel_Level"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in levelList_Level" v-bind:value="item.PK_Course_ID.trim()">
-                                            {{ item.CRS_Course_Name.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
+                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                    <!--<label>Select Level</label>-->
+                                    <!--<select v-model="ddlStudentSelectLevel_Level"-->
+                                            <!--class="form-control pro-edt-select form-control-primary">-->
+                                        <!--<option v-for="item in levelList_Level" v-bind:value="item.PK_Course_ID.trim()">-->
+                                            <!--{{ item.CRS_Course_Name.trim() }}-->
+                                        <!--</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
 
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>First Academic Year</label>
-                                    <select v-model="ddlStudentFirstAcademicYear_Level"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in academicYearList_Level"
-                                                v-bind:value="item.PK_Semester_ID.trim()">{{ item.SMT_Code.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
+                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                    <!--<label>First Academic Year</label>-->
+                                    <!--<select v-model="ddlStudentFirstAcademicYear_Level"-->
+                                            <!--class="form-control pro-edt-select form-control-primary">-->
+                                        <!--<option v-for="item in academicYearList_Level"-->
+                                                <!--v-bind:value="item.PK_Semester_ID.trim()">{{ item.SMT_Code.trim() }}-->
+                                        <!--</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
 
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Intake Year</label>
-                                    <select v-model="ddlStudentIntakeYear_Level"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in studentIntakeYearList_Level"
-                                                v-bind:value="item.PK_PAI_ID.trim()">{{ item.PAI_Intake_No.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
+                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                    <!--<label>Intake Year</label>-->
+                                    <!--<select v-model="ddlStudentIntakeYear_Level"-->
+                                            <!--class="form-control pro-edt-select form-control-primary">-->
+                                        <!--<option v-for="item in studentIntakeYearList_Level"-->
+                                                <!--v-bind:value="item.PAI_Intake_No.trim()">{{ item.PAI_Intake_No.trim() }}-->
+                                        <!--</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
 
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary waves-effect waves-light m-r-10"
-                                            v-on:click="AddLevel">Add Level
-                                    </button>
-                                </div>
+                                <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+                                    <!--<button class="btn btn-primary waves-effect waves-light m-r-10"-->
+                                            <!--v-on:click="AddLevel">Add Level-->
+                                    <!--</button>-->
+                                <!--</div>-->
+
+                                <promotion-component @result="promotionResult" v-bind:selected-students="arrayStudentIDLevelComponent"
+                                v-bind:course-id="strClassIDLevelComponent"></promotion-component>
                             </div>
 
                             <div v-if="lvlLevelList_Level.length>0">
@@ -924,27 +955,27 @@
                                                      sortable="custom">
                                     </el-table-column>
 
-                                    <el-table-column label="Activate" min-width="100px">
-                                        <template slot-scope="scope">
-                                            <el-button
-                                                    v-for="studentLevelListActivateButton in studentLevelListActivate(scope.row)"
-                                                    :key="studentLevelListActivateButton.name" type="primary"
-                                                    @click="studentLevelListActivateButton.handler">
-                                                {{studentLevelListActivateButton.name}}
-                                            </el-button>
-                                        </template>
-                                    </el-table-column>
+                                    <!--<el-table-column label="Promote" min-width="100px">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--<el-button-->
+                                                    <!--v-for="studentLevelListActivateButton in studentLevelListActivate(scope.row)"-->
+                                                    <!--:key="studentLevelListActivateButton.name" type="primary"-->
+                                                    <!--@click="studentLevelListActivateButton.handler">-->
+                                                <!--{{studentLevelListActivateButton.name}}-->
+                                            <!--</el-button>-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
 
-                                    <el-table-column label="Deactivate" min-width="100px">
-                                        <template slot-scope="scope">
-                                            <el-button
-                                                    v-for="studentLevelListDeactivateButton in studentLevelListDeactivate(scope.row)"
-                                                    :key="studentLevelListDeactivateButton.name" type="primary"
-                                                    @click="studentLevelListDeactivateButton.handler">
-                                                {{studentLevelListDeactivateButton.name}}
-                                            </el-button>
-                                        </template>
-                                    </el-table-column>
+                                    <!--<el-table-column label="Demote" min-width="100px">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--<el-button-->
+                                                    <!--v-for="studentLevelListDeactivateButton in studentLevelListDeactivate(scope.row)"-->
+                                                    <!--:key="studentLevelListDeactivateButton.name" type="primary"-->
+                                                    <!--@click="studentLevelListDeactivateButton.handler">-->
+                                                <!--{{studentLevelListDeactivateButton.name}}-->
+                                            <!--</el-button>-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
                                 </data-tables>
                             </div>
                         </div>
@@ -966,8 +997,6 @@
                     </button>
                 </div>
             </div>
-
-
         </div>
         <div class="whitespace-30"></div>
 
@@ -1017,6 +1046,7 @@
     import DataSource from "../data/datasource";
     import ProfileImg from "../assets/boy.png";
     import {required, requiredIf, requiredUnless} from "vuelidate/lib/validators";
+    import promotionComponent from "../components/Promotion_Component";
 
     const API_HOST = process.env.VUE_APP_ROOT_API;
 
@@ -1029,6 +1059,8 @@
             this.finShowHide = true;
             this.birthcertShowHide = true;
             this.icShowHide = true;
+            this.stuCorAddCopy = false;
+            this.resBilAddCopy = false;
             await this.BindCountryList();
             await this.BindStudentDropdown();
             //await this.BindStudentLevel();
@@ -1058,6 +1090,9 @@
                 levelList_Level: [],
                 academicYearList_Level: [],
                 studentIntakeYearList_Level: [],
+
+                arrayStudentIDLevelComponent:[],
+                strClassIDLevelComponent: '',
 
                 inputStudentDateOfBirth: '',
                 inputFatherDateofBirth: '',
@@ -1146,6 +1181,8 @@
                 ddlStudentSelectLevel_Level: '',
                 ddlStudentFirstAcademicYear_Level: '',
                 ddlStudentIntakeYear_Level: '',
+                ddlCopyAddToResBil: '',
+                ddlCopyAddToStuCorAdd: '',
 
                 editModeDisable: '',
                 lblCreateOrEdit: '',
@@ -1160,6 +1197,8 @@
                 finShowHide: '',
                 birthcertShowHide: '',
                 icShowHide: '',
+                stuCorAddCopy: '',
+                resBilAddCopy: '',
 
                 siblingTab: '',
                 changeStatusAction: '',
@@ -1237,6 +1276,7 @@
                             this.inputFamilyParentID = row.PAR_ID;
                             this.divParent = false;
                             this.$refs.familyModalShowModal.hide();
+                            this.ReferSiblingReligionLanguage(row.PAR_ID);
                         },
                         label: 'Select'
                     }]
@@ -1350,6 +1390,7 @@
             inputParentAddress1: {requiredIf: requiredIf('isdivParent')},
             inputParentPostalCode: {requiredIf: requiredIf('isdivParent')},
         },
+        components: {promotionComponent},
         methods: {
             backToPrevious(){
                 window.location.replace("/student-list?mode=Search");
@@ -1358,10 +1399,15 @@
                 try {
                     const response = await DataSource.shared.getCountryList();
                     if (response) {
-                        this.countryListResponse = response.Table;
-                        this.countryListResponse.forEach(m => {
-                            this.countryList.push(m);
-                        });
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.countryListResponse = response.Table;
+                            this.countryListResponse.forEach(m => {
+                                this.countryList.push(m);
+                            });
+                        }
                     }
                 } catch (e) {
                     this.results = e;
@@ -1381,27 +1427,32 @@
 
                     const response = await DataSource.shared.getStudentDropDownList(jsonString);
                     if (response) {
-                        this.studentDropDownListResponse = response.Table;
-                        this.studentDropDownListResponse.forEach(m => {
-                            if (m.OGPname.trim() === 'Religion') {
-                                this.ddlStudentReligionList.push(m);
-                            } else if (m.OGPname.trim() === 'Mother Tongue') {
-                                this.ddlStudentAdditionalLanguageList.push(m);
-                            } else if (m.OGPname.trim() === 'Meal Preferences') {
-                                this.ddlStudentMealPreferencesList.push(m);
-                            } else if (m.OGPname.trim() === 'Student Membership') {
-                                this.ddlStudentMembershipList.push(m);
-                            } else if (m.OGPname.trim() === 'Residency Status') {
-                                this.ddlStudentResidencyStatusList.push(m);
-                            } else if (m.OGPname.trim() === 'Sponsorship Type') {
-                                this.ddlStudentPayerList.push(m);
-                            } else if (m.OGPname.trim() === 'ParentID') {
-                                this.ddlFatherIdentificationTypeList.push(m);
-                                this.ddlMotherIdentificationTypeList.push(m);
-                            } else if (m.OGPname.trim() === 'Parent Mode') {
-                                this.ddlParentModeList.push(m);
-                            }
-                        });
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.studentDropDownListResponse = response.Table;
+                            this.studentDropDownListResponse.forEach(m => {
+                                if (m.OGPname.trim() === 'Religion') {
+                                    this.ddlStudentReligionList.push(m);
+                                } else if (m.OGPname.trim() === 'Mother Tongue') {
+                                    this.ddlStudentAdditionalLanguageList.push(m);
+                                } else if (m.OGPname.trim() === 'Meal Preferences') {
+                                    this.ddlStudentMealPreferencesList.push(m);
+                                } else if (m.OGPname.trim() === 'Student Membership') {
+                                    this.ddlStudentMembershipList.push(m);
+                                } else if (m.OGPname.trim() === 'Residency Status') {
+                                    this.ddlStudentResidencyStatusList.push(m);
+                                } else if (m.OGPname.trim() === 'Sponsorship Type') {
+                                    this.ddlStudentPayerList.push(m);
+                                } else if (m.OGPname.trim() === 'ParentID') {
+                                    this.ddlFatherIdentificationTypeList.push(m);
+                                    this.ddlMotherIdentificationTypeList.push(m);
+                                } else if (m.OGPname.trim() === 'Parent Mode') {
+                                    this.ddlParentModeList.push(m);
+                                }
+                            });
+                        }
                     }
                 } catch (e) {
                     this.results = e;
@@ -1411,10 +1462,15 @@
                 try {
                     const response = await DataSource.shared.getLevel('');
                     if (response) {
-                        this.levelListResponse = response.Table;
-                        this.levelListResponse.forEach(m => {
-                            this.levelList.push(m);
-                        });
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.levelListResponse = response.Table;
+                            this.levelListResponse.forEach(m => {
+                                this.levelList.push(m);
+                            });
+                        }
                     }
                 } catch (e) {
                     this.results = e;
@@ -1424,10 +1480,15 @@
                 try {
                     const response = await DataSource.shared.getLevel(customLevelNotEqual);
                     if (response) {
-                        this.levelListResponse = response.Table;
-                        this.levelListResponse.forEach(m => {
-                            this.levelList_Level.push(m);
-                        });
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.levelListResponse = response.Table;
+                            this.levelListResponse.forEach(m => {
+                                this.levelList_Level.push(m);
+                            });
+                        }
                     }
                 } catch (e) {
                     this.results = e;
@@ -1437,11 +1498,16 @@
                 try {
                     const response = await DataSource.shared.getAcademicYear();
                     if (response) {
-                        this.academicYearListResponse = response.Table;
-                        this.academicYearListResponse.forEach(m => {
-                            //this.academicYearList.push(m);
-                            this.academicYearList_Level.push(m);
-                        });
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.academicYearListResponse = response.Table;
+                            this.academicYearListResponse.forEach(m => {
+                                //this.academicYearList.push(m);
+                                this.academicYearList_Level.push(m);
+                            });
+                        }
                     }
                 } catch (e) {
                     this.results = e;
@@ -1451,11 +1517,16 @@
                 try {
                     const response = await DataSource.shared.getIntakeYear();
                     if (response) {
-                        this.studentIntakeYearListResponse = response.Table;
-                        this.studentIntakeYearListResponse.forEach(m => {
-                            //this.studentIntakeYearList.push(m);
-                            this.studentIntakeYearList_Level.push(m);
-                        });
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.studentIntakeYearListResponse = response.Table;
+                            this.studentIntakeYearListResponse.forEach(m => {
+                                //this.studentIntakeYearList.push(m);
+                                this.studentIntakeYearList_Level.push(m);
+                            });
+                        }
                     }
                 } catch (e) {
                     this.results = e;
@@ -1463,7 +1534,7 @@
             },
             async LoadStudentParentInfo() {
                 try {
-                    if (this.$route.query.id != null || this.$route.query.id != undefined) {
+                    if (this.$route.query.id != null || this.$route.query.id !== undefined) {
                         this.lblCreateOrEdit = "Edit";
                         this.lblStudentID = this.$route.query.id;
                         this.editModeDisable = true;
@@ -1473,36 +1544,38 @@
                         this.divEditParentLink = true;
                         this.changeStatusAction = true;
                         let parentID;
+                        let courseID;
 
                         const stuRes = await DataSource.shared.getStudent(this.$route.query.id, "", "", "", "");
                         if (stuRes) {
-                            if (stuRes.code == "2") {
-                                alert('No record found');
-                            } else if (stuRes.code == "99") {
-                                alert('Please try again later');
+                            if (stuRes.code === '88') {
+                                window.location.replace('/');
                             } else {
                                 this.BindActiveIntakeYear();
                                 this.BindStudentFields(stuRes.Table);
                                 this.BindStudentSibling();
+                                this.arrayStudentIDLevelComponent.push(stuRes.Table[0].Student_ID);
                             }
                         }
 
                         const stuProPic = await DataSource.shared.getStudentProfilePicture(this.$route.query.id);
                         if (stuProPic) {
-                            if (stuProPic.code !== "2" && stuProPic.code !== "99") {
-                                this.stuProPicLoop = stuProPic.Table;
-                                this.stuProPicLoop.forEach(m => {
-                                    this.imgStudentProfile = API_HOST + '/db/Files/' + m.SF_File_Name;
-                                });
+                            if (stuProPic.code === '88') {
+                                window.location.replace('/');
+                            } else {
+                                if (stuProPic.code !== "2" && stuProPic.code !== "99") {
+                                    this.stuProPicLoop = stuProPic.Table;
+                                    this.stuProPicLoop.forEach(m => {
+                                        this.imgStudentProfile = API_HOST + '/db/Files/' + m.SF_File_Name;
+                                    });
+                                }
                             }
                         }
 
                         const relRes = await DataSource.shared.getRelationship("", this.$route.query.id, "", "", "");
                         if (relRes) {
-                            if (relRes.code == "2") {
-                                alert('No record found');
-                            } else if (relRes.code == "99") {
-                                alert('Please try again later');
+                            if (relRes.code === '88') {
+                                window.location.replace('/');
                             } else {
                                 this.relResLoop = relRes.Table;
                                 this.relResLoop.forEach(m => {
@@ -1518,10 +1591,8 @@
 
                         const response = await DataSource.shared.getStudentLevel(this.$route.query.id);
                         if (response) {
-                            if (response.code == 2) {
-                                alert('No record found');
-                            } else if (response.code == 99) {
-                                alert('Please try again later');
+                            if (response.code === '88') {
+                                window.location.replace('/');
                             } else {
                                 this.lvlLevelList_Level = response.Table;
 
@@ -1534,12 +1605,32 @@
                                     } else {
                                         customLevelNotEqual = customLevelNotEqual + "," + m.PK_Course_ID;
                                     }
+
+                                    if (m.SCRS_Status === 'Active') {
+                                        courseID = m.SCRS_FK_Course_ID;
+                                        this.strClassIDLevelComponent = courseID;
+                                    }
                                 });
 
                                 this.BindStudentLevel_Level(customLevelNotEqual);
                                 //filter the added level to BindStudentLevel
                             }
                         }
+
+                        // const resStuClass = await DataSource.shared.getStudentClass(this.$route.query.id, courseID);
+                        // if (resStuClass) {
+                        //     if (resStuClass.code === '88') {
+                        //         window.location.replace('/');
+                        //     }
+                        //     else if (resStuClass.code === 2)
+                        //     {
+                        //         alert('No record found');
+                        //     }
+                        //     else
+                        //     {
+                        //         this.strClassIDLevelComponent = resStuClass.Table[0].PK_Class_ID;
+                        //     }
+                        // }
                     } else {
                         this.editModeDisable = false;
                         this.lblCreateOrEdit = "New";
@@ -1561,9 +1652,13 @@
                 try {
                     const response = await DataSource.shared.getStudentLevelActiveOnly(this.$route.query.id);
                     if (response) {
-                        response.Table.forEach(m => {
-                            this.ddlStudentIntakeYear = m.SCRS_Course_Year;
-                        });
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        } else {
+                            response.Table.forEach(m => {
+                                this.ddlStudentIntakeYear = m.SCRS_Course_Year;
+                            });
+                        }
                     }
 
                 } catch (e) {
@@ -1574,10 +1669,14 @@
                 try {
                     const response = await DataSource.shared.getStudentAvailableStatusAction(currentStatus);
                     if (response) {
-                        this.ddlChangeStatusToListResponse = response.Table1;
-                        this.ddlChangeStatusToListResponse.forEach(m => {
-                            this.ddlChangeStatusToList.push(m);
-                        });
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        } else {
+                            this.ddlChangeStatusToListResponse = response.Table1;
+                            this.ddlChangeStatusToListResponse.forEach(m => {
+                                this.ddlChangeStatusToList.push(m);
+                            });
+                        }
                     }
 
                 } catch (e) {
@@ -1736,8 +1835,12 @@
                 try {
                     const response = await DataSource.shared.getSibling('', this.$route.query.id);
                     if (response) {
-                        if (response.Table.length > 0) {
-                            this.siblingList = response.Table;
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        } else {
+                            if (response.Table.length > 0) {
+                                this.siblingList = response.Table;
+                            }
                         }
                     }
                 } catch (e) {
@@ -1857,30 +1960,39 @@
                     jsonString = '{ ' + jsonString + ' }';
                     jsonString2 = '{ ' + jsonString2 + ' }';
 
-                    if (this.lblCreateOrEdit == "New") {
+                    if (this.lblCreateOrEdit === "New") {
                         const chkStuRes = await DataSource.shared.checkStudentDuplication(this.inputStudentFirstName, this.inputStudentLastName, this.inputStudentDateOfBirth, this.inputStudentIdentificationExpiryDate, this.inputStudentIdentificationNo, this.inputStudentBirthCertificate, this.inputStudentIC, this.inputStudentPassport, this.inputStudentPassportExpiryDate, this.inputStudentOtherIdentification);
                         if (chkStuRes) {
-                            if (chkStuRes.code == "1") {
+                            if (chkStuRes.code === '88') {
+                                window.location.replace('/');
+                            }
+                            else if (chkStuRes.code === "1") {
                                 const saveStuRes = await DataSource.shared.saveStudent(this.selectedFile, jsonString, jsonString2, this.inputFamilyID, this.inputFamilyParentID);
                                 if (saveStuRes) {
-                                    if (saveStuRes.code == "1") {
+                                    if (saveStuRes.code === '88') {
+                                        window.location.replace('/');
+                                    }
+                                    else if (saveStuRes.code === "1") {
                                         alert('Records Successfully Saved');
                                         window.location.replace('/student?id=' + saveStuRes.studentID);
                                     } else {
                                         alert("Save Student Error - Please try again later");
                                     }
                                 }
-                            } else if (chkStuRes.code == "2") {
+                            } else if (chkStuRes.code === "2") {
                                 alert("This student is existing");
                             } else {
                                 alert("Check Student Error - Please try again later");
                             }
                         }
-                    } else if (this.lblCreateOrEdit == "Edit") {
+                    } else if (this.lblCreateOrEdit === "Edit") {
                         try {
                             const response = await DataSource.shared.updateStudent(this.selectedFile, this.lblStudentID, jsonString);
                             if (response) {
-                                if (response.code == 1) {
+                                if (response.code === '88') {
+                                    window.location.replace('/');
+                                }
+                                else if (response.code === '1') {
                                     alert('Records Successfully Edited');
                                     window.location.replace('/student?id=' + this.lblStudentID);
                                 } else {
@@ -1902,7 +2014,12 @@
                 try {
                     const response = await DataSource.shared.getRelationship(this.$refs.familyIDFamilyNo.value, '', this.$refs.familyParentFirstName.value, this.$refs.familyParentLastName.value, this.$refs.familyIDStudentName.value);
                     if (response) {
-                        this.familyIDList = response.Table;
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.familyIDList = response.Table;
+                        }
                     }
                 } catch (e) {
                     this.results = e;
@@ -1913,9 +2030,12 @@
                     if (this.inputMotherFirstName !== '' && this.inputMotherLastName !== '') {
                         const response = await DataSource.shared.checkParentDuplication(this.inputMotherFirstName, this.inputMotherLastName, 'Mother');
                         if (response) {
-                            if (response.code == 1) {
+                            if (response.code === '88') {
+                                window.location.replace('/');
+                            }
+                            else if (response.code === '1') {
                                 this.lblMotherNameDuplicated = false;
-                            } else if (response.code == 2) {
+                            } else if (response.code === '2') {
                                 this.lblMotherNameDuplicated = true;
                             }
                         }
@@ -1924,9 +2044,12 @@
                     if (this.inputFatherFirstName !== '' && this.inputFatherLastName !== '') {
                         const response = await DataSource.shared.checkParentDuplication(this.inputFatherFirstName, this.inputFatherLastName, 'Father');
                         if (response) {
-                            if (response.code == 1) {
+                            if (response.code === '88') {
+                                window.location.replace('/');
+                            }
+                            else if (response.code === '1') {
                                 this.lblFatherNameDuplicated = false;
-                            } else if (response.code == 2) {
+                            } else if (response.code === '2') {
                                 this.lblFatherNameDuplicated = true;
                             }
                         }
@@ -1956,7 +2079,10 @@
                 try {
                     const response = await DataSource.shared.activeStudent(this.lblStudentID);
                     if (response) {
-                        if (response.code == 1) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else if (response.code === '1') {
                             alert('Successfully activated');
                             window.location.replace('/student?id=' + this.lblStudentID);
                         } else {
@@ -1971,7 +2097,10 @@
                 try {
                     const response = await DataSource.shared.updateStudentStatus(this.lblStudentID, this.ddlChangeStatusTo);
                     if (response) {
-                        if (response.code == 1) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else if (response.code === '1') {
                             alert('Successfully change status');
                             window.location.replace('/student?id=' + this.lblStudentID);
                         } else {
@@ -2085,7 +2214,7 @@
             },
             studentLevelListActivate(row) {
                 return [{
-                    name: 'Activate',
+                    name: 'Promote',
                     handler: _ => {
                         this.updateLevel(row.PK_Student_Course_ID, "Activate");
                     }
@@ -2093,7 +2222,7 @@
             },
             studentLevelListDeactivate(row) {
                 return [{
-                    name: 'Deactivate',
+                    name: 'Demote',
                     handler: _ => {
                         this.updateLevel(row.PK_Student_Course_ID, "Deactivate");
                     }
@@ -2103,13 +2232,16 @@
                 try {
                     const response = await DataSource.shared.updateLevel(this.lblStudentID, courseID, mode);
                     if (response) {
-                        if (response.code == 1) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else if (response.code === '1') {
                             alert('Edit Successfully!');
                             window.location.replace('/student?id=' + this.lblStudentID);
-                        } else if (response.code == 2) {
+                        } else if (response.code === '2') {
                             alert('Cannot have multiple active level');
                         } else {
-                            alert('Error! Please try again later.');
+                            alert('updateLevel Error! Please try again later.');
                         }
                     }
                 } catch (e) {
@@ -2122,8 +2254,11 @@
                         const getAcaYearRes = await DataSource.shared.getAcademicYearDateRange(this.ddlStudentFirstAcademicYear_Level);
 
                         if (getAcaYearRes) {
-                            if (getAcaYearRes.code == "99") {
-                                alert('Get Academic Year Error - Please try again later');
+                            if (getAcaYearRes.code === '88') {
+                                window.location.replace('/');
+                            }
+                            if (getAcaYearRes.code === "99") {
+
                             } else {
                                 let academicYearFromDate, academicYearToDate;
 
@@ -2136,10 +2271,13 @@
                                 const getSetLvlRes = await DataSource.shared.setLevel(this.lblStudentID, this.ddlStudentSelectLevel_Level, academicYearFromDate, academicYearToDate, this.ddlStudentFirstAcademicYear_Level, this.ddlStudentIntakeYear_Level);
 
                                 if (getSetLvlRes) {
-                                    if (getSetLvlRes.code == "1") {
+                                    if (getSetLvlRes.code === '88') {
+                                        window.location.replace('/');
+                                    }
+                                    else if (getSetLvlRes.code === "1") {
                                         alert('Records Successfully Saved');
                                         window.location.replace('/student?id=' + this.lblStudentID);
-                                    } else if (getSetLvlRes.code == "2") {
+                                    } else if (getSetLvlRes.code === "2") {
                                         alert('cannot have multiple active level');
                                     } else {
                                         alert('Save Student Level Error - Please try again later');
@@ -2173,8 +2311,75 @@
                             this.inputParentAddress1 = response;
                         }
                     }
+
+                    this.onchangeCopyAdd();
                 } catch (e) {
                     this.results = e;
+                }
+            },
+            async ReferSiblingReligionLanguage(parentID) {
+                try {
+                    const response = await DataSource.shared.getStudentSiblingReligionLanguages(parentID);
+                    if (response) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.ddlStudentReligion = response.Table[0].St_Religion;
+                            this.ddlStudentAdditionalLanguage = response.Table[0].St_Mother_Tongue;
+                            this.inputStudentFirstLanguageSpoken = response.Table[0].St_AdditionalLanguage;
+                            this.inputSecondLanguageSpoken = response.Table[0].St_SecondLanguageSpoken;
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+            async onchangeCopyAdd(){
+                if (this.ddlCopyAddToStuCorAdd === 'stuPerAdd') {
+                    this.stuCorAddCopy = true;
+
+                    this.ddlStudentAddressCorrespondanceCountry = this.ddlStudentAddressCountry;
+                    this.inputStudentCorrespondancePostalCode = this.inputStudentPostalCode;
+                    this.inputStudentCorrespondanceAddress1 = this.inputStudentAddress1;
+                    this.inputStudentCorrespondanceAddress2 = this.inputStudentAddress2;
+                    this.inputStudentCorrespondanceAddress3 = this.inputStudentAddress3;
+                    this.inputStudentCorrespondanceCity = this.inputStudentCity;
+                } else {
+                    this.stuCorAddCopy = false;
+                }
+
+                if (this.ddlCopyAddToResBil === 'stuPerAdd') {
+                    this.resBilAddCopy = true;
+
+                    this.ddlParentCountry = this.ddlStudentAddressCountry;
+                    this.inputParentPostalCode = this.inputStudentPostalCode;
+                    this.inputParentAddress1 = this.inputStudentAddress1;
+                    this.inputParentAddress2 = this.inputStudentAddress2;
+                    this.inputParentAddress3 = this.inputStudentAddress3;
+                    this.inputParentCity = this.inputStudentCity;
+                }
+                else if (this.ddlCopyAddToResBil === 'stuCorAdd') {
+                    this.resBilAddCopy = true;
+
+                    this.ddlParentCountry = this.ddlStudentAddressCorrespondanceCountry;
+                    this.inputParentPostalCode = this.inputStudentCorrespondancePostalCode;
+                    this.inputParentAddress1 = this.inputStudentCorrespondanceAddress1;
+                    this.inputParentAddress2 = this.inputStudentCorrespondanceAddress2;
+                    this.inputParentAddress3 = this.inputStudentCorrespondanceAddress3;
+                    this.inputParentCity = this.inputStudentCorrespondanceCity;
+                }
+                else {
+                    this.resBilAddCopy = false;
+                }
+            },
+            promotionResult(result){
+                if (result === 'true'){
+                    alert('Records Successfully Saved');
+                    window.location.replace('/student?id=' + this.lblStudentID);
+                }
+                else {
+                    alert('Error promotion');
                 }
             },
         },
@@ -2268,6 +2473,7 @@
     .familyIDAreaDiv button {
         margin-bottom: 20px;
     }
+
     .profile_wrap span {
         font-size: 20px;
         margin-left: auto;
@@ -2287,6 +2493,40 @@
         position: absolute;
         width: 100%;
         top: -10px;
+    }
+
+    .fa-clone {
+        font-size: 30px;
+        border-radius: 40%;
+        padding: 10px;
+        background-color: #4CAF50;
+        cursor: pointer;
+    }
+
+    .fa-clone:hover {
+        background-color: #5fb962;
+    }
+
+    .ttStuCorAddCopy{
+        text-align: left;
+    }
+
+    .ttStuCorAddCopy .ttnStuCorAddCopy{
+        visibility: hidden;
+        width: auto;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 5px;
+
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+    }
+
+    .ttStuCorAddCopy:hover .ttnStuCorAddCopy{
+        visibility: visible;
     }
 </style>
 

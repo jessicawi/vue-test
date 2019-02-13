@@ -107,6 +107,9 @@
         methods: {
             async onSubmit() {
                 //this.results = "<< Requesting.. >>";
+
+                //this.usernameInput = 'cheeseng.goh';
+                //this.passwordInput = 'ems121';
                 try{
                     this.isLoading = true;
                     const response = await DataSource.shared.login(this.usernameInput, this.passwordInput);

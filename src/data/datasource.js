@@ -226,12 +226,12 @@ export default class DataSource {
     async getStudentAddressGoogleAPI(postcode, country) {
         let result = '';
 
-        if (country === '' || country === 'Singapore'){
+        if (country === '' || country === 'Singapore') {
             country = 'Singapore';
 
             //to take out S in front of postcode
-            if (postcode.substring(0,1).toUpperCase() === 'S') {
-                postcode = postcode.substring(1,postcode.length);
+            if (postcode.substring(0, 1).toUpperCase() === 'S') {
+                postcode = postcode.substring(1, postcode.length);
             }
             //to take out S in front of postcode
         }
@@ -310,7 +310,7 @@ export default class DataSource {
 
         if (files && files.length > 1) {
             for (let key in files) {
-                 //console.log(key);
+                //console.log(key);
                 if (files.hasOwnProperty(key)) {
                     // console.log(files[key]);
                     if (key > 0) {
@@ -451,6 +451,14 @@ export default class DataSource {
             studentName: studentName,
         };
         const response = await this.callWebService("/controller/Parents.asmx/getRelationship", data, "POST");
+        return response;
+    }
+
+    async getStudentSiblingReligionLanguages(parentID) {
+        const data = {
+            parentID: parentID,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/getStudentSiblingReligionLanguages", data, "POST");
         return response;
     }
 
@@ -596,6 +604,7 @@ export default class DataSource {
         const data = {};
 
         data.UserID_Session = sessionStorage.getItem('userIDSession');
+        data.numberOfPost = 30;
 
         const response = await this.callWebService("/controller/Posting.asmx/getPostStaff", data, "POST");
         return response;
@@ -616,10 +625,11 @@ export default class DataSource {
         return response;
     }
 
-    async savePost(files, postContent, tagAcademicYearID, profolio, tagUserID, tagClassID, tagLevelID) {
+    async savePost(files, postContent, profolio = "No", tagUserID, tagClassID, tagLevelID) {
         const formData = new FormData();
         formData.append('token', sessionStorage.getItem('authToken'));
         formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        formData.append('UserSchool_Session', sessionStorage.getItem('schoolSession'));
 
         if (files && files.length > 1) {
             for (let key in files) {
@@ -638,11 +648,16 @@ export default class DataSource {
         }
 
         formData.append("postContent", postContent);
-        formData.append("tagAcademicYearID", tagAcademicYearID);
+        // formData.append("tagAcademicYearID", tagAcademicYearID);
         formData.append("profolio", profolio);
-        formData.append("tagUserID", tagUserID);
-        formData.append("tagClassID", tagClassID);
-        formData.append("tagLevelID", tagLevelID);
+
+        if (tagUserID && tagUserID.length > 0) {
+            formData.append("tagUserID", tagUserID);
+        } else if (tagLevelID) {
+            formData.append("tagLevelID", tagLevelID);
+        } else if (tagClassID) {
+            formData.append("tagClassID", tagClassID);
+        }
 
         const request = {
             url: `${API_HOST}/controller/Posting.asmx/savePost`,
@@ -673,6 +688,7 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Posting.asmx/getPostFile", data, "POST");
         return response;
     }
+
     async saveComment(PostID, postContent) {
         const data = {
             postID: PostID,
@@ -681,6 +697,7 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Posting.asmx/savePostComment", data, "POST");
         return response;
     }
+
     async getComment(PostID) {
         const data = {
             postId: PostID
@@ -688,6 +705,7 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Posting.asmx/getPostComment", data, "POST");
         return response;
     }
+
     async editComment(commentPostID, postContent, actionMode) {
         const data = {
             commentPostID: commentPostID,
@@ -697,6 +715,7 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Posting.asmx/updatePostComment", data, "POST");
         return response;
     }
+
     async deleteComment(commentPostID, postContent, actionMode) {
         const data = {
             commentPostID: commentPostID,
@@ -706,6 +725,7 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Posting.asmx/updatePostComment", data, "POST");
         return response;
     }
+
     async saveGallery(files, fileType, galFolderID, folderName) {
 
         const formData = new FormData();
@@ -1046,7 +1066,7 @@ export default class DataSource {
         if (files && files.length > 1) {
             for (let i = 0; i < files.length; i++) {
                 formData.append("files" + i, files[i]);
-                console.log(files[i])
+                console.log(files[i]);
             }
         } else if (files) {
             formData.append("files", files[0]);
@@ -1134,12 +1154,127 @@ export default class DataSource {
             updateFileMode: "Move"
         };
 
-        console.log(data)
-
         const response = await this.callWebService("/controller/Gallery.asmx/updateFile", data, "POST");
         return response;
     }
 
+    async getWhitelist() {
+        const data = {};
+        const response = await this.callWebService("/controller/Gallery.asmx/getWhitelistFileExt", data, "POST");
+
+        return response.Table1;
+    }
+
     //#endregion
+
+    /*#region Portfolio*/
+    /**
+     * Get portfolio list like student's name
+     * @function
+     * @param {string} str_StudentName - Student's Name
+     */
+    async getPortfolioListByStudentName(str_StudentName) {
+        const data = {studentName: str_StudentName};
+
+        return await this.callWebService("/controller/Portfolio.asmx/getPortfolioList", data, "POST");
+    }
+
+    /**
+     * Get all the post tagged under a portfolio ID
+     * @function
+     * @param {string} str_PortfolioID - Portfolio ID
+     */
+    async getPostByPortfolioID(str_PortfolioID) {
+        const data = {portfolioID: str_PortfolioID};
+
+        return await this.callWebService("/controller/Portfolio.asmx/getPortfolio", data, "POST");
+    }
+
+    /**
+     * Get all post tagged as portfolio by student ID
+     * @function
+     * @param {string} str_StudentID - Student's ID
+     */
+    async getStudentPortfolio(str_StudentID) {
+        const data = {studentID: str_StudentID};
+
+        return await this.callWebService("/controller/Portfolio.asmx/getStudentPortfolio", data, "POST");
+    }
+
+    /**
+     * Save portfolio
+     * @function
+     * @param {string} str_PortfolioDesc - Portfolio description
+     * @param {string} str_StudentID - Student's ID
+     * @param {string} str_PostID - Post ID tagged to portfolio, concat with "," commas
+     */
+    async savePortfolio(str_PortfolioDesc, str_StudentID, str_PostID) {
+        const data = {
+            portfolioDesc: str_PortfolioDesc,
+            studentID: str_StudentID,
+            postID: str_PostID
+        };
+
+        return await this.callWebService("/controller/Portfolio.asmx/savePortfolio", data, "POST");
+    }
+
+    async getPortfolioStudentClass() {
+        const data = {};
+        let result = await this.callWebService("/controller/Portfolio.asmx/getPortfolioStudentClass", data, "POST");
+        return result.Table;
+    }
+
+    /*#endregion*/
+
+    /*#region Promotion*/
+    async getAcademicYear() {
+        const data = {};
+
+        const response = await this.callWebService("/controller/Operations.asmx/getMassPromotionsAcademicYear", data, "POST");
+        return response;
+    }
+
+    async getLevel() {
+        const data = {};
+
+        const response = await this.callWebService("/controller/Operations.asmx/getMassPromotionsLevel", data, "POST");
+        return response;
+    }
+
+    async getClassByLevelClassID(str_LevelID, str_ClassID) {
+        const data = {levelID: str_LevelID, classID: str_ClassID};
+
+        const response = await this.callWebService("/controller/Operations.asmx/getMassPromotionsStudentListByClassLevel", data, "POST");
+        return response;
+    }
+
+    async getClassByAcademicYear(str_AcademicYearID) {
+        const data = {academicYearID: str_AcademicYearID};
+
+        const response = await this.callWebService("/controller/Operations.asmx/getMassPromotionsClassLevelByAcademicYear", data, "POST");
+        return response;
+    }
+
+    async getNextLevel(str_LevelID) {
+        const data = {levelID: str_LevelID};
+
+        const response = await this.callWebService("/controller/Operations.asmx/getMassPromotionsNextLevel", data, "POST");
+        return response;
+    }
+
+    // studentIDArray (student id split by comma ",") & levelID & academicYearID & classID
+    async saveStudentPromotions(arrstr_StudentID, str_AcademicYearID, str_LevelID, str_ClassID) {
+        const data = {
+            studentIDArray: arrstr_StudentID,
+            academicYearID: str_AcademicYearID,
+            levelID: str_LevelID,
+            classID: str_ClassID
+        };
+
+        const response = await this.callWebService("/controller/Operations.asmx/saveMassPromotions", data, "POST");
+        return response;
+    }
+
+    /*#endregion*/
 }
 

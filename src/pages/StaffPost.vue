@@ -114,8 +114,7 @@
                 <div class="success">{{success}}</div>
                 <div v-if="isLoading">Loading...</div>
 
-                <div class="" v-for="object in list" :key="object.PostID">
-
+                <div class="" v-for="object in list" :key="`${object.PostID}${object.commentItems ? object.commentItems.length : ''}`">
                     <PostComponent
                             :post="object"
                             :checkIfImage="checkIfImage"
@@ -141,20 +140,20 @@
                               placeholder="CONTENT"></textarea>
                 </div>
 
-                <div class="mb-2">
-                    <input type="checkbox" name="profolio" id="profolio" value="1" true-value="Yes" false-value="No"
-                           v-model="profolio">
-                    <label for="profolio" class="toggle"><strong>PROFOLIO</strong><span></span></label>
-                </div>
+                <!--<div class="mb-2">-->
+                    <!--<input type="checkbox" name="profolio" id="profolio" value="1" true-value="Yes" false-value="No"-->
+                           <!--v-model="profolio">-->
+                    <!--<label for="profolio" class="toggle"><strong>PROFOLIO</strong><span></span></label>-->
+                <!--</div>-->
                 <div class="row">
-                    <div class="col-md-6 ">
-                        <label :for="tagAcademicYearID">Academic Year</label>
-                        <select class="form-control" id="tagAcademicYearID" v-model="tagAcademicYearID">
-                            <option v-for="object in academicYearTable" :key="object.PK_Class_ID"
-                                    :value="object.PK_Semester_ID">{{object.SMT_Code}}
-                            </option>
-                        </select>
-                    </div>
+                    <!--<div class="col-md-6 ">-->
+                        <!--<label :for="tagAcademicYearID">Academic Year</label>-->
+                        <!--<select class="form-control" id="tagAcademicYearID" v-model="tagAcademicYearID">-->
+                            <!--<option v-for="object in academicYearTable" :key="object.PK_Class_ID"-->
+                                    <!--:value="object.PK_Semester_ID">{{object.SMT_Code}}-->
+                            <!--</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
                     <div class="col-md-6 ">
                         <label :for="tagClassID">Class</label>
                         <select class="form-control" id="tagClassID" v-model="tagClassID">
@@ -163,9 +162,6 @@
                             </option>
                         </select>
                     </div>
-                </div>
-                <div class="row">
-
                     <div class="col-md-6">
                         <label for="tagLevelID">Level</label>
                         <select class="form-control" id="tagLevelID" v-model="tagLevelID">
@@ -178,30 +174,17 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label>Student</label>
-                        <!--<at :members="studentTable" name-key="Student_ID" v-model="html">-->
-                        <!--<template slot="item" slot-scope="s">-->
-
-                        <!--<span v-text="s.item.Full_Name""></span>-->
-
-                        <!--</template>-->
-
-                        <!--<div class="mention-editor" contenteditable></div>-->
-                        <!--</at>-->
-                        <div>
-                            <vue-bootstrap-typeahead
-                                    class="mb-4"
-                                    v-model="query"
-                                    :data="studentTable"
-                                    :serializer="item => item.Full_Name"
-                                    @hit="selectedUser = $event"
-                                    placeholder="Search GitHub Users"
-                            />
-                            <h3>Selected User JSON</h3>
-                            <pre>{{ selectedUser | stringify }}</pre>
-                        </div>
-                        <!--<input type="text" class="form-control" id="tagUserID" v-model="tagUserID"-->
-                        <!--placeholder="Tag User ID"-->
-                        <!--required>-->
+                        <vue-tags-input
+                                v-model="tag"
+                                :tags="tags"
+                                :allow-edit-tags="true"
+                                :autocomplete-items="items"
+                                :add-only-from-autocomplete="true"
+                                :autocomplete-min-length="3"
+                                placeholder="Min 3 Character"
+                                class="tags-input"
+                                @tags-changed="newTags => tags = newTags"
+                        />
                     </div>
                 </div>
                 <div class="row inputFile-box">
@@ -240,27 +223,26 @@
             </form>
         </b-modal>
 
-
     </div>
 </template>
 
 <script>
-    // import At from 'vue-at';
     import DataSource from "../data/datasource";
     import {required, minLength} from 'vuelidate/lib/validators';
     import isImage from "is-image";
     import PostComponent from "../components/postCompnent";
+    import VueTagsInput from '@johmun/vue-tags-input';
     // import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
 
     export default {
         name: 'staffPost',
         components: {
             PostComponent,
+            VueTagsInput,
             // At,
         },
         data() {
             return {
-                html: "",
                 files: [],
                 systemmsgError: false,
                 isModalOpen: false,
@@ -274,7 +256,7 @@
                 addPostContent: "",
                 tagAcademicYearID: "",
                 profolio: "No",
-                tagUserID: "",
+
                 tagClassID: "",
                 tagLevelID: "",
                 // files: [],
@@ -289,8 +271,7 @@
                 classesTable: [],
                 levelsTable: [],
                 studentTable: [],
-                studentAt: [],
-                tagStudents: [],
+
                 PostID: "",
                 commentPostContent: "",
                 commentPostID: "",
@@ -299,13 +280,21 @@
                 checkidcomment: "",
                 showDeleteModal: false,
                 query: '',
-                selectedUser: null,
+                tag: '',
+                tags: [],
             };
         },
         filters: {
             stringify(value) {
-                return JSON.stringify(value, null, 2)
+                return JSON.stringify(value, null, 2);
             }
+        },
+        computed: {
+            items() {
+                return this.studentTable.filter(i => {
+                    return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+                });
+            },
         },
         async mounted() {
             // this.showSession()
@@ -327,7 +316,6 @@
                     }
                     this.list = response.Table;
                 }
-
 
                 let tagResponse = await DataSource.shared.getPostDropdown();
 
@@ -368,12 +356,19 @@
                     tagResponse.StudentTable.Table.forEach(object => {
                         const isExist = uniqueStudent.find(student => student.Student_ID === object.Student_ID);
                         if (!isExist) {
-                            uniqueStudent.push(object);
+                            const selectedValue = {
+                                Student_ID: object.Student_ID,
+                                text: object.Full_Name,
+                                Sex: object.Sex,
+                                // email: object.email,
+                                Status: object.Status
+                            };
+                            uniqueStudent.push(selectedValue);
                         }
                     });
                     // this.studentTable = tagResponse.StudentTable.Table;
                     this.studentTable = uniqueStudent;
-                    console.log(this.studentTable);
+                    // console.log("a ", this.studentTable);
                 }
 
                 this.userType = sessionStorage.getItem('userTypeSession');
@@ -385,12 +380,6 @@
             this.isLoading = false;
         },
         methods: {
-            handleTagClick(e) {
-                console.log(e);
-                // // console.log(this.html)
-                // this.tagStudents.push({Student_ID: e.Student_ID, Full_Name: e.Full_Name});
-                // console.log(this.tagStudents);
-            },
             inputChange(input) {
                 this.postContent = input;
             },
@@ -418,18 +407,8 @@
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
-                    console.log(this.html);
-                    const aa = this.html;
-                    const tagUserID = aa.split("@");
-                    const tagStudentIds = tagUserID.map(d => {
-                        if (d !== "") {
-                            return d.trim();
-                        }
-                    }).filter(a => a);
-                    console.log(tagStudentIds);
-                    const tagStudentIDs = this.selectedUser.Student_ID;
-                    console.log(tagStudentIDs);
-                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.addPostContent, this.tagAcademicYearID, this.profolio, tagStudentIds, this.tagClassID, this.tagLevelID);
+                    const studentsIds = this.tags.map(d => d.Student_ID);
+                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.addPostContent, this.profolio, studentsIds, this.tagClassID, this.tagLevelID);
 
                     if (saveResponse) {
                         switch (saveResponse.code) {
@@ -441,9 +420,7 @@
                                 this.addPostContent = "";
                                 this.tagAcademicYearID = null;
                                 this.profolio = null;
-                                this.tagStudents = "";
-                                this.tagUserID = "";
-                                this.html = "";
+
                                 this.tagLevelID = null;
                                 this.tagClassID = null;
                                 this.results = `Post Submitted`;
@@ -489,12 +466,18 @@
 
                                 this.list.find(item => {
 
+                                    console.log("item ", item);
+                                    console.log("postid ", newComment);
+
                                     if (item.PostID === commentPostID) {
                                         item.commentItems = newComment.Table;
+                                        console.log(item)
                                         return item;
                                     }
 
                                 });
+
+                                this.$forceUpdate()
 
 
                                 // this.results = `Post Submitted`;
@@ -583,6 +566,7 @@
                                     }
 
                                 });
+                                this.$forceUpdate()
                                 break;
                             case "88":
                                 this.results = `Please Login to submit post`;
@@ -654,47 +638,64 @@
 </script>
 
 <style scoped>
-    .Typeahead {
-        position: relative;
-    }
-    .Typeahead__input {
-        width: 100%;
-        font-size: 14px;
-        color: #2c3e50;
-        line-height: 1.42857143;
-        box-shadow: inset 0 1px 4px rgba(0,0,0,.4);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        font-weight: 300;
-        padding: 12px 26px;
-        border: none;
-        border-radius: 22px;
-        letter-spacing: 1px;
-        box-sizing: border-box;
-    }
-    .Typeahead__input:focus {
-        border-color: #4fc08d;
-        outline: 0;
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px #4fc08d;
-    }
-    .fa-times {
-        cursor: pointer;
-    }
-    .active {
-        background-color: #3aa373;
-    }
-    .active span {
-        color: white;
-    }
-    .name {
-        font-weight: 700;
-        font-size: 18px;
-    }
-    .screen-name {
-        font-style: italic;
-    }
 </style>
 
 <style>
+    .vue-tags-input {
+        max-width: 100% !important;
+    }
 
+    .ti-input {
+        border: 0px !important;
+        background: whitesmoke;
+        border-radius: 4px;
+        padding: 0px !important;
+    }
+
+    input.ti-new-tag-input {
+        background: transparent;
+        font-size: 1rem;
+    }
+
+    li.ti-new-tag-input-wrapper {
+        padding: 10px !important;
+        margin: 0px !important;
+    }
+
+    .tags-input {
+        margin-top: 15px;
+    }
+
+    .ti-input {
+        min-height: 46px;
+    }
+
+    li.ti-tag {
+        background-color: #E6E6E6;
+        color: #000;
+        border-radius: 12px;
+        padding: 4px 8px;
+    }
+
+    .ti-tag input {
+        color: #000;
+    }
+
+    .ti-tag-left {
+        margin-right: 2px;
+        width: 24px;
+    }
+
+    .my-item, .my-tag-left {
+        display: flex;
+        align-items: center;
+    }
+
+    .my-item i {
+        margin-right: 5px;
+    }
+
+    .ti-deletion-mark {
+        background-color: $ error;
+    }
 </style>

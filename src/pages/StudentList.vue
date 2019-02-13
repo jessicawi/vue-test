@@ -2,23 +2,27 @@
     <div id="student-list">
         <div class="datatable-form__header">
             <div class="datatable-form__input form-group">
-                <label>Student No</label>
-                <input class="form-control" ref="stud_id">
+                <!--<label>Student No</label>-->
+                <!--<input class="form-control" ref="stud_id">-->
+                <vs-input label-placeholder="Student No" v-model="stud_id"/>
             </div>
 
             <div class="datatable-form__input form-group">
-                <label>Student First Name</label>
-                <input class="form-control" ref="stud_fname">
+                <!--<label>Student First Name</label>-->
+                <!--<input class="form-control" ref="stud_fname">-->
+                <vs-input label-placeholder="Student First Name" v-model="stud_fname"/>
             </div>
 
             <div class="datatable-form__input form-group">
-                <label>Student Last Name</label>
-                <input class="form-control" ref="stud_lname">
+                <!--<label>Student Last Name</label>-->
+                <!--<input class="form-control" ref="stud_lname">-->
+                <vs-input label-placeholder="Student Last Name" v-model="stud_lname"/>
             </div>
 
             <div class="datatable-form__input form-group">
-                <label>Parent Name</label>
-                <input class="form-control" ref="stud_parname">
+                <!--<label>Parent Name</label>-->
+                <!--<input class="form-control" ref="stud_parname">-->
+                <vs-input label-placeholder="Parent Name" v-model="stud_parname"/>
             </div>
 
             <div class="datatable-form__submit text-center">
@@ -26,7 +30,7 @@
             </div>
         </div>
         <div class="mt-3 container">
-            <div class="emptylist-info" v-if="list.length===0" >
+            <div class="emptylist-info" v-if="list.length===0">
                 <span>PLEASE SEARCH TO VIEW LIST...</span>
                 <div class="emptylist__img">
                     <img src="../assets/table-loading.png"/>
@@ -36,7 +40,8 @@
 
             <div v-if="list.length>0" class="datatable_group">
                 <data-tables :data="list" :action-col="actionCol" @selection-change="handleSelectionChange">
-                    <el-table-column v-for="studentListInfo in studentList" :prop="studentListInfo.prop" :label="studentListInfo.label" :key="studentListInfo.prop"
+                    <el-table-column v-for="studentListInfo in studentList" :prop="studentListInfo.prop"
+                                     :label="studentListInfo.label" :key="studentListInfo.prop"
                                      sortable="custom">
                     </el-table-column>
                 </data-tables>
@@ -77,16 +82,11 @@
                             icon: 'el-icon-edit'
                         },
                         handler: row => {
-                            if (this.$route.query.mode == "Search")
-                            {
+                            if (this.$route.query.mode == "Search") {
                                 this.$router.push('student?id=' + row.Student_ID);
-                            }
-                            else if (this.$route.query.mode == "Course")
-                            {
+                            } else if (this.$route.query.mode == "Course") {
                                 this.$router.push('student-edit-level?id=' + row.Student_ID);
-                            }
-                            else
-                            {
+                            } else {
                                 alert('Error! Please try again later');
                             }
                         },
@@ -94,6 +94,10 @@
                     }]
                 },
                 selectedRow: null,
+                stud_id: "",
+                stud_fname: "",
+                stud_lname: "",
+                stud_parname: "",
             };
         },
         async mounted() {
@@ -105,18 +109,29 @@
             async Search() {
                 this.$vs.loading();
                 try {
-                    const response = await DataSource.shared.getStudent('', this.$refs.stud_id.value, this.$refs.stud_fname.value, this.$refs.stud_lname.value, this.$refs.stud_parname.value);
+                    const response = await DataSource.shared.getStudent('', this.stud_id, this.stud_fname, this.stud_lname, this.stud_parname);
                     if (response) {
                         this.list = response.Table;
                     }
                 } catch (e) {
                     this.results = e;
                 }
-                this.$vs.loading.close()
+                this.$vs.loading.close();
             },
         },
     };
 </script>
 
-<style scoped>
+<style>
+    #student-list .vs-con-input {
+        text-align: left;
+    }
+
+    #student-list .vs-input--placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    #student-list .isFocus .vs-placeholder-label {
+        color: #fff;
+    }
 </style>

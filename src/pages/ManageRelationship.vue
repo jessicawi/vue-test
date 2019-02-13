@@ -1,17 +1,16 @@
 <template>
-    <div id="manage-relationship" class="mt-3 container">
-        <div>
-
-            <div class="datatable-form__header">
-                <div class="datatable-form__input form-group">
-                    <label>Family No</label>
-                    <input class="form-control" ref="familyID">
-                </div>
-
-                <div class="datatable-form__submit text-center">
-                    <button class="btn btn-success searchbtn" v-on:click="Search" @click="openLoading">Search</button>
-                </div>
+    <div id="manage-relationship">
+        <div class="datatable-form__header">
+            <div class="datatable-form__input form-group">
+                <label>Family No</label>
+                <input class="form-control" ref="familyID">
             </div>
+
+            <div class="datatable-form__submit text-center">
+                <button class="btn btn-success searchbtn" v-on:click="Search" @click="openLoading">Search</button>
+            </div>
+        </div>
+        <div class="mt-3 container">
 
             <div v-if="list.length>0">
                 <data-tables :data="list" :actionCol="actionCol" @selection-change="handleSelectionChange">
