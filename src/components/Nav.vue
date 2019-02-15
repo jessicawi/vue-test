@@ -6,10 +6,11 @@
             {{$route.name}}
         </div>
         <div class="col-md-8 info-menu">
-            <div class="input-group search"  v-if="!isMobile()">
+            <div class="input-group search" v-if="!isMobile()">
                 <input type="text" class="form-control" placeholder="Search for...">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"
+                                                                     aria-hidden="true"></i></button>
                 </span>
             </div><!-- /input-group -->
 
@@ -42,8 +43,13 @@
                     </a>
 
                     <vs-dropdown-menu v-model="schListCurrent">
-                        <vs-dropdown-item v-for="(key, value) in schList">
-                            <span v-on:click="ChangeSchool(value)" v-bind:value=value>{{ key }} <i v-if="value === schSession" class="fa fa-check-square" aria-hidden="true"></i></span>
+                        <!--<vs-dropdown-item v-for="(key, value) in schList">-->
+                        <!--<span v-on:click="ChangeSchool(value)" v-bind:value=value>{{ key }} <i v-if="value === schSession" class="fa fa-check-square" aria-hidden="true"></i></span>-->
+                        <!--</vs-dropdown-item>-->
+                        <vs-dropdown-item v-for="item in schList">
+                            <span v-on:click="ChangeSchool(item.CONSchool.trim())" v-bind:value="item.CONSchool.trim()">{{ item.SCH_Name.trim() }} <i
+                                    v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"
+                                    aria-hidden="true"></i></span>
                         </vs-dropdown-item>
                     </vs-dropdown-menu>
                 </vs-dropdown>
@@ -78,7 +84,7 @@
                 // token: null,
                 // isLoggedIn: null
 
-                schList:[],
+                schList: [],
                 schListCurrent: '',
 
                 schSession: sessionStorage.getItem('schoolSession'),
@@ -93,10 +99,9 @@
             },
 
             isMobile() {
-                if( screen.width <= 760 ) {
+                if (screen.width <= 760) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             },
@@ -105,13 +110,20 @@
                 try {
                     const response = await DataSource.shared.getUserSch();
                     if (response) {
-                        this.schList = response;
+                        //this.schList = response;
 
                         // for (const item in response) {
                         //     // console.log(item);
                         //     // console.log(response[item]);
                         //     this.schList.push(item);
                         // }
+
+                        this.schListResponse = response.Table;
+                        this.schListResponse.forEach(m => {
+                            this.schList.push(m);
+                        });
+
+                        //console.log(sessionStorage.getItem('schoolSession') + ' - ' + sessionStorage.getItem('userIDSession') + ' - ' + sessionStorage.getItem('userTypeSession') + ' - ' + sessionStorage.getItem('usRidSession'))
                     }
                 } catch (e) {
                     this.results = e;
@@ -120,8 +132,19 @@
 
             async ChangeSchool(value) {
                 try {
-                    sessionStorage.setItem('schoolSession', value);
-                    window.location.replace('/');
+                    //sessionStorage.setItem('schoolSession', value);
+                    //window.location.replace('/');
+
+                    this.schList.forEach(m => {
+                        if (m.CONSchool === value) {
+                            sessionStorage.setItem('schoolSession', m.CONSchool);
+                            sessionStorage.setItem('userIDSession', m.CONid);
+                            sessionStorage.setItem('userTypeSession', m.CONType);
+                            sessionStorage.setItem('userUniversitySession', m.CONUniversity);
+                            sessionStorage.setItem('usRidSession', m.USRid);
+                            window.location.replace('/');
+                        }
+                    });
                 } catch (e) {
                     this.results = e;
                 }

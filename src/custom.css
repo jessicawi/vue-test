@@ -73,6 +73,7 @@ input[type="checkbox"].form-control {
     min-width: 100px;
 }
 
+.whitespace-10 {display: block; height: 10px;}
 .whitespace-30 {display: block; height: 30px;}
 
 #main-content {
@@ -648,7 +649,93 @@ login
 .resetEmail .content {
     height: calc(100vh - 90px);
 }
+/*register parent*/
 
+
+.parent-register .el-date-editor {
+    width: 100% !important;
+}
+
+.parent-register .el-date-editor i, .el-date-editor input::placeholder {
+    color: #666 !important;
+}
+
+
+
+
+.parent-register .vs-con-input-label.is-label-placeholder {
+    width: 100%;
+}
+
+.parent-register .vs-input--placeholder {
+    color: #666;
+    font-size: 1rem;
+}
+
+.parent-register .vs-con-input {
+    width: 100% !important;
+}
+
+.parent-register .vs-con-input-label.is-label-placeholder {
+    width: 100%;
+    border-bottom: 0px;
+}
+
+.parent-register .vs-con-input input::placeholder {
+    color: #666 !important;
+}
+
+.parent-register .vs-input--placeholder {
+    color: #666;
+    font-size: 1rem;
+}
+
+.parent-register .vs-input-primary .vs-input--input:focus {
+    border-color: #409eff00 !important;
+    border-width: 2px !important;
+    box-shadow: none;
+    background: white;
+}
+
+.parent-register .vs-con-input input {
+    border: 0px !important;
+    background: transparent;
+    color: #666 !important;
+}
+.parent-register .vs-con-input input {
+    border: 0px !important;
+    background: transparent;
+    color: #666 !important;
+    border-bottom: 2px solid #ccc !important;
+    border-radius: 0px;
+}
+.parent-register .el-date-editor input {
+    border: 0px;
+    background: transparent;
+    color: #666 !important;
+    border-bottom: 2px solid #ccc !important;
+    border-radius: 0px;
+}
+
+.parent-register .input-select-con input {
+    background: transparent;
+    border: 0px;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0px;
+}
+
+.parent-register .form-control.con-select {
+    border-bottom: 0px !important;
+    width: 100%;
+}
+
+.parent-register .input-select-label-primary--active {
+    color: #222;
+}
+
+.parent-register .vs-select--label {
+    font-weight: normal;
+}
 /*
 reset password
  */
@@ -899,10 +986,113 @@ form
 .inputFile-box .btn:hover {
     background: #eee;
 }
+/*
+Home
+ */
+.dashboard-subtitle {
+    text-align: left;
+}
 
+.dashboard-studentList li {
+    list-style: none;
+    text-align: left;
+    padding: 0px 10px 10px;
+    margin: 10px 0px;
+    color: #a2a2a2;
+    display: flex;
+}
+
+.dashboard-studentList li strong {
+    color: #2c3e50ad;
+}
+
+.chartBox {
+    background: #ffffff;
+    padding: 20px;
+}
+
+.dashboard-studentList li img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.homeBg{
+    background: url(assets/home-bg.jpg) no-repeat;
+    position: absolute;
+    top: -30px;
+    left: 0px;
+    right: 0;
+    display: block;
+    width: 100%;
+    height: 200px;
+    box-shadow: 0px 6px 10px -5px #00000059;    background-size: cover;
+    background-position: center;
+}
+
+a.home-addStudent:hover {
+    /* text-shadow: 1px 1px 5px #c8c8c8; */
+    transform: scale(1.5);
+}
+
+a.home-addStudent {
+    transition: all 0.3s ease-in-out;
+}
+
+.overview__item .quicklink {
+    position: absolute;
+    bottom: -100%;
+    background: #3270ff;
+    width: 100%;
+    left: 0;
+    display: flex;
+    /* overflow: hidden; */
+    transition: all 0.3s ease-in-out;
+}
+
+.overview__item .quicklink a {
+    flex: 1;
+    padding: 10px;
+    color: white;
+}
+
+.overview__item .quicklink a:nth-child(even) {
+    background: #00000026;
+}
+
+.overview__item:hover .quicklink {
+    bottom: 0px;
+}
 /*
 StaffPost
  */
+.profile-student{
+    background: url(assets/parent-feed-bg.jpg) no-repeat;
+    background-size: cover;
+    background-position: 0 80%;
+    /* display: flex; */
+    padding-top: 200px;
+}
+.profile-student img {
+    width: 120px;
+    height: 120px;
+    margin: -39px 20px 21px;
+    background: #edf0f4;
+    border-radius: 4px;
+}
+
+.profile-student__wrapper {
+    display: flex;
+    width: 100%;
+    background: #413f56;
+    align-items: center;
+}
+
+.profile-student span {
+    flex: 1;
+    padding: 20px 0px;
+    color: white;
+}
 .author {
     text-align: left;
     font-weight: bold;
@@ -1716,7 +1906,8 @@ mobile
     }
     .login-wrap .form-control::placeholder,
     .reset-content .form-control::placeholder,
-    .resetlink-wrap .form-control::placeholder {
+    .resetlink-wrap .form-control::placeholder,
+    .parent-register .form-control::placeholder{
         color: #222;
     }
     .login-wrap form {

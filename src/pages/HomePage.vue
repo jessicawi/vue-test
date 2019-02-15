@@ -1,5 +1,6 @@
 <template>
     <div class="Content">
+        <div class="homeBg"></div>
         <!--<Step/>-->
         <!--<div>-->
         <!--<b>session token:</b> {{token}}<br/><br/>{{userType}}<br/><br/>-->
@@ -10,35 +11,50 @@
         <!--<div style="height: 100px;overflow-y: scroll;width:80%;margin: auto;border:1px solid;">{{usermenu}}</div>-->
         <!--</div>-->
         <div class="container">
-            <div class="dashboard-title"><h4 class="text-left">Overview</h4></div>
+            <div class="dashboard-title"><h4 class="text-left" style="color: white;">Overview</h4></div>
             <div class="row mb-3">
                 <div class="col-md-3 student">
                     <div class="overview__item">
-                        <div class="overview__icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i></div>
+                        <div class="overview__icon"><img src="../assets/home-student.png"/> </div>
                         <div class="overview__desc"><span class="large">58888</span><span>Students</span></div>
+                        <div class="quicklink" v-if="isParent !== 'Teacher'">
+                            <a href="/student">NEW STUDENT</a>
+                            <a href="/student-list?mode=Search">VIEW ALL</a>
+                        </div>
+                        <div class="quicklink" v-if="isParent === 'Teacher'">
+                            <a href="#">CLASSES</a>
+                            <a href="#">STUDENT LIST</a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3 teacher">
                     <div class="overview__item">
-                        <div class="overview__icon"><i class="fa fa-users" aria-hidden="true"></i></div>
-                        <div class="overview__desc"><span class="large">5684</span><span>Teachers</span></div>
+                        <div class="overview__icon"><img src="../assets/home-teacher.png"/> </div>
+                        <div class="overview__desc"><span class="large">5684</span><span>Parents</span></div>
+                        <div class="quicklink" v-if="isParent !== 'Teacher'">
+                            <a href="/parent-list">VIEW / EDIT PARENT</a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3 course">
                     <div class="overview__item">
-                        <div class="overview__icon"><i class="fa fa-file" aria-hidden="true"></i></div>
+                        <div class="overview__icon"><img src="../assets/home-course.png"/> </div>
                         <div class="overview__desc"><span class="large">300</span><span>Courses</span></div>
+                        <div class="quicklink" v-if="isParent !== 'Teacher'">
+                            <a href="#">NEW COURSE</a>
+                            <a href="#">VIEW ALL</a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3 attendance">
                     <div class="overview__item">
-                        <div class="overview__icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+                        <div class="overview__icon"><img src="../assets/home-attendance.png"/> </div>
                         <div class="overview__desc"><span class="large">52365</span><span>Attendance</span></div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-5">
-                <div class="col-md-9">
+            <div class="row mb-5" style="padding: 0 10px;">
+                <div class="col-md-9 chartBox">
                     <div class="dashboard-title"><h4 class="text-left">Statistic</h4></div>
                     <div class="small">
                         <line-chart></line-chart>
@@ -46,26 +62,42 @@
                 </div>
 
                 <div class="col-md-3 custom-wrapper">
-                    <div class="dashboard-title"><h4 class="text-left">Search Information</h4></div>
-                    <form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">
-                        <div class="form-group">
-                            <label for="userID">ID</label>
-                            <input type="text" class="form-control" id="userID" v-model="userID"
-                                   required>
-                        </div>
-                        <div class="form-group">
-                            <label for="userType">User Type</label>
-                            <select class="form-control" id="userType" v-model="userType">
-                                <option selected value="">Parent</option>
-                                <option value="">Student</option>
-                                <option value="">Teacher</option>
-                            </select>
-                        </div>
-                        <div class="">
-                            <button class="custom-btn btn btn-primary col-md-12" type="submit">Submit
-                            </button>
-                        </div>
-                    </form>
+                    <div class="dashboard-title"><h5 class="text-left">Recent Feed</h5> </div>
+                    <div class="dashboard-subtitle">
+                        <el-tooltip class="item" effect="dark" content="View All Activities" placement="top-start">
+                            <a href="/post/staff"><small>VIEW ALL</small></a>
+                        </el-tooltip>
+                    </div>
+                    <hr/>
+                    <div class="dashboard-studentList">
+                        <ul>
+                            <li><img src="../assets/thumb1.jpg"/> <span>when an unknown printer took a galley of type </span></li>
+                            <li><img src="../assets/thumb2.jpg"/> <span>when an unknown printer took a galley of type </span></li>
+                            <li><img src="../assets/thumb3.jpg"/> <span>when an unknown printer took a galley of type </span></li>
+                            <li><img src="../assets/thumb1.jpg"/> <span>when an unknown printer took a galley of type </span></li>
+                            <li><img src="../assets/thumb2.jpg"/> <span>when an unknown printer took a galley of type </span></li>
+                            <li><img src="../assets/thumb3.jpg"/> <span>when an unknown printer took a galley of type </span></li>
+                        </ul>
+                    </div>
+                    <!--<form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="userID">ID</label>-->
+                            <!--<input type="text" class="form-control" id="userID" v-model="userID"-->
+                                   <!--required>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="userType">User Type</label>-->
+                            <!--<select class="form-control" id="userType" v-model="userType">-->
+                                <!--<option selected value="">Parent</option>-->
+                                <!--<option value="">Student</option>-->
+                                <!--<option value="">Teacher</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                        <!--<div class="">-->
+                            <!--<button class="custom-btn btn btn-primary col-md-12" type="submit">Submit-->
+                            <!--</button>-->
+                        <!--</div>-->
+                    <!--</form>-->
                 </div>
             </div>
 
@@ -133,7 +165,8 @@
                 results: "",
                 usermenu: "",
                 dataPoints: null,
-                height: 200
+                height: 200,
+                isParent:""
             };
         },
         components: {
@@ -141,9 +174,10 @@
             LineChart
         },
         async mounted() {
+            this.isParent = sessionStorage.getItem('userTypeSession');
             this.showSession();
             // user menu
-            if (isParent !== "Parent") {
+            if (this.isParent !== "Parent") {
                 this.results = response;
 
                 // window.location.replace("/");
@@ -207,6 +241,7 @@
 
     .Content {
         padding: 30px 20px;
+        position: relative;
     }
 
     .overview__item {
@@ -217,7 +252,9 @@
         display: -ms-flexbox;
         display: flex;
         border-radius: 5px;
-        box-shadow: 0px 0px 10px -5px;
+        align-items: center;
+        position:relative;
+        overflow: hidden;
     }
 
     .overview__item div {
@@ -233,7 +270,9 @@
         font-size: 22px;
         color: white;
     }
-
+    .student,.teacher,.course,.attendance {
+        padding: 0px;
+    }
     .student .overview__icon i {
         background: #eb4052;
     }
@@ -261,9 +300,8 @@
     }
 
     .custom-wrapper {
-        background: #e7e8ec;
+        background: #fff;
         padding: 20px;
-        border-radius: 4px;
     }
 
     .custom-btn {
@@ -301,6 +339,6 @@
 
     .dashboard-title {
         display: table;
-        width: 100%;
+        width: 100%;    position: relative;
     }
 </style>

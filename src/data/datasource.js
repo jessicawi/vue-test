@@ -2,6 +2,7 @@ import {URLForEndpoint, NewRequest, parseResponseAndHandleErrors, parseObject} f
 import {ERROR_SERVER_UNREACHABLE} from "../data/datasourceConst";
 import axios from "axios";
 import jQuery from 'jquery';
+import moment from "moment";
 
 const API_HOST = process.env.VUE_APP_ROOT_API || "http://local.emsv2";
 let GoogleGeocodeAPIKey = 'AIzaSyBSjzdBEO1Akg0aZfKpglWYBtdqLMHJLzM';
@@ -135,16 +136,69 @@ export default class DataSource {
         return response;
     }
 
-    logout() {
-        sessionStorage.removeItem('authToken');
-        sessionStorage.removeItem('schoolSession');
-        sessionStorage.removeItem('userIDSession');
-        sessionStorage.removeItem('userTypeSession');
-        sessionStorage.removeItem('userUniversitySession');
-        sessionStorage.removeItem('usRidSession');
-        sessionStorage.removeItem('userEmailSession');
-        window.location.replace("/login");
+    async externalLogin(userId, tokenId) {
+        const data = {
+            userID: userId,
+            externalLoginToken: tokenId
+        };
 
+        const response = await this.callWebService("/controller/Login.asmx/checkLogin", data, "POST", false);
+        sessionStorage.setItem('authToken', response.token);
+        sessionStorage.setItem('schoolSession', response.UserSchool_Session);
+        sessionStorage.setItem('userIDSession', response.UserID_Session);
+        sessionStorage.setItem('userTypeSession', response.UserType_Session);
+        sessionStorage.setItem('userUniversitySession', response.UserUniversity_Session);
+        sessionStorage.setItem('usRidSession', response.USRid_Session);
+        sessionStorage.setItem('userEmailSession', response.UserEmail_Session);
+        return response;
+    }
+
+    logout() {
+
+        let $ = require("jquery");
+
+
+        let sessionSignout = new Promise((resolve, reject) => {
+            sessionStorage.removeItem('authToken');
+            sessionStorage.removeItem('schoolSession');
+            sessionStorage.removeItem('userIDSession');
+            sessionStorage.removeItem('userTypeSession');
+            sessionStorage.removeItem('userUniversitySession');
+            sessionStorage.removeItem('usRidSession');
+            sessionStorage.removeItem('userEmailSession');
+            resolve(true);
+        });
+
+        let googleSignout = new Promise((resolve, reject) => {
+            $.getScript('https://apis.google.com/js/platform.js', function () {
+                gapi.load("auth2", () => {
+                    gapi.auth2.init({
+                        client_id: "646978523324-lcudp248dvuuk0rda4q6kf2bti9qkk3b.apps.googleusercontent.com"
+                    }).then((auth2) => {
+                        auth2.signOut();
+                        resolve(true)
+                    });
+                });
+            });
+        });
+
+        let fbSignout = new Promise((resolve, reject) => {
+            $.getScript('https://connect.facebook.net/en_US/sdk.js', function () {
+                FB.init({
+                    appId: '255792542012990',
+                    version: 'v2.7' // or v2.1, v2.2, v2.3, ...
+                });
+
+                FB.getLoginStatus(() => {
+                    FB.logout();
+                    resolve(true)
+                });
+            });
+        });
+
+        Promise.all([sessionSignout, googleSignout, fbSignout]).then((result) => {
+            window.location.replace("/login");
+        });
     }
 
     async resetEmailPassword(userEmail) {
@@ -165,14 +219,18 @@ export default class DataSource {
         return response;
     }
 
-    async parentRegister(userEmail, userPassword, studentIDNo, studentID_Index, studentDOB, studentIDType) {
+    async parentRegister(userEmail, userPassword, studentIDNo, studentID_Index, studentDOB, studentIDType, externalLoginType, externalLoginToken) {
+        const date = moment(studentDOB).format('Y-MM-DD HH:mm:ss');
+        console.log(date);
         const data = {
             userEmail: userEmail,
             userPassword: userPassword,
             studentID_Index: studentID_Index,
-            studentDOB: studentDOB,
+            studentDOB: date,
             studentIDType: studentIDType,
-            studentIDNo: studentIDNo
+            studentIDNo: studentIDNo,
+            externalLoginType: externalLoginType,
+            externalLoginToken: externalLoginToken
         };
         let response = await this.callWebService("/controller/Register.asmx/parentRegistration", data, "POST", false);
 
@@ -620,6 +678,7 @@ export default class DataSource {
         const data = {};
 
         data.UserID_Session = sessionStorage.getItem('userIDSession');
+        data.numberOfPost = 30;
 
         const response = await this.callWebService("/controller/Posting.asmx/getPostParent", data, "POST");
         return response;
@@ -960,7 +1019,7 @@ export default class DataSource {
         return response;
     }
 
-    // SAMPLE 2 using axios
+// SAMPLE 2 using axios
     async PostToGetDataWEIRD() {
         const options = {
             countryID: "",
@@ -976,7 +1035,7 @@ export default class DataSource {
         return response.data;
     }
 
-    // POST SAMPLE
+// POST SAMPLE
     async createStudent() {
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
@@ -1022,7 +1081,7 @@ export default class DataSource {
         return response;
     }
 
-    //#region Gallery
+//#region Gallery
     async getFiles(galFolderID, startRowNo, endRowNo) {
         const data = {
             galFolderID: galFolderID,
@@ -1165,7 +1224,7 @@ export default class DataSource {
         return response.Table1;
     }
 
-    //#endregion
+//#endregion
 
     /*#region Portfolio*/
     /**
@@ -1262,7 +1321,7 @@ export default class DataSource {
         return response;
     }
 
-    // studentIDArray (student id split by comma ",") & levelID & academicYearID & classID
+// studentIDArray (student id split by comma ",") & levelID & academicYearID & classID
     async saveStudentPromotions(arrstr_StudentID, str_AcademicYearID, str_LevelID, str_ClassID) {
         const data = {
             studentIDArray: arrstr_StudentID,
@@ -1276,5 +1335,7 @@ export default class DataSource {
     }
 
     /*#endregion*/
+
+
 }
 

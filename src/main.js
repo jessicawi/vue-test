@@ -19,6 +19,7 @@ import VueUploadComponent from "vue-upload-component";
 import Vuelidate from 'vuelidate';
 import VueCharts from 'vue-chartjs';
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead';
+
 Vue.component('file-upload', VueUploadComponent);
 
 

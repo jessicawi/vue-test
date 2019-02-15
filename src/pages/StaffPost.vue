@@ -1,5 +1,16 @@
 <template>
     <div id="staff-post" class="container">
+        <div class="profile-student" v-if="isParent === 'Parent' ">
+            <div class="profile-student__wrapper">
+                <img src="../assets/boy.png">
+                <span class="studentName"><strong>Alexander</strong><br/>Student Name</span>
+                <span class="teacherName"><strong>Alice</strong><br/>Teacher Name</span>
+                <span class=""><strong>SG-016-16-0038</strong><br/>Student ID</span>
+                <span class=""><strong>Year 2018: 01/01/2018 - 31/12/2018</strong><br/>Academic Year</span>
+                <span class=""><strong>Class One</strong><br/>Class</span>
+            </div>
+        </div>
+        <div class="whitespace-30"></div>
         <div class="row">
             <!--<b>result:</b> {{staffPostResults}}-->
             <vs-col vs-justify="center" vs-w="4" class="right-sideBar">
@@ -139,21 +150,7 @@
                     <textarea type="text" class="form-control" id="postContent" v-model="addPostContent"
                               placeholder="CONTENT"></textarea>
                 </div>
-
-                <!--<div class="mb-2">-->
-                    <!--<input type="checkbox" name="profolio" id="profolio" value="1" true-value="Yes" false-value="No"-->
-                           <!--v-model="profolio">-->
-                    <!--<label for="profolio" class="toggle"><strong>PROFOLIO</strong><span></span></label>-->
-                <!--</div>-->
                 <div class="row">
-                    <!--<div class="col-md-6 ">-->
-                        <!--<label :for="tagAcademicYearID">Academic Year</label>-->
-                        <!--<select class="form-control" id="tagAcademicYearID" v-model="tagAcademicYearID">-->
-                            <!--<option v-for="object in academicYearTable" :key="object.PK_Class_ID"-->
-                                    <!--:value="object.PK_Semester_ID">{{object.SMT_Code}}-->
-                            <!--</option>-->
-                        <!--</select>-->
-                    <!--</div>-->
                     <div class="col-md-6 ">
                         <label :for="tagClassID">Class</label>
                         <select class="form-control" id="tagClassID" v-model="tagClassID">
@@ -282,6 +279,7 @@
                 query: '',
                 tag: '',
                 tags: [],
+                isParent:"",
             };
         },
         filters: {
@@ -300,22 +298,46 @@
             // this.showSession()
             // user menu
             try {
-                let response = await DataSource.shared.getStaffPost();
-                if (response.Table) {
-                    for (let item of response.Table) {
-                        const fileRes = await DataSource.shared.getPostFile(item.PostID);
-                        const getCommentResponse = await DataSource.shared.getComment(item.PostID);
-                        if (getCommentResponse.Table) {
-                            item.commentItems = getCommentResponse.Table;
-                            item.collapsed = true;
+                this.isParent = sessionStorage.getItem('userTypeSession');
+                const isParent = sessionStorage.getItem('userTypeSession');
+                if (isParent === "Parent") {
+                    let response = await DataSource.shared.getParentPost();
+                    console.log(response);
+                    if (response.Table) {
+                        for (let item of response.Table) {
+                            const fileRes = await DataSource.shared.getPostFile(item.PostID);
+                            const getCommentResponse = await DataSource.shared.getComment(item.PostID);
+                            if (getCommentResponse.Table) {
+                                item.commentItems = getCommentResponse.Table;
+                                item.collapsed = true;
+                            }
+                            if (fileRes.Table) {
+                                item.postFiles = fileRes.Table;
+                            }
+                            item.commentPostID = item.PostID;
                         }
-                        if (fileRes.Table) {
-                            item.postFiles = fileRes.Table;
-                        }
-                        item.commentPostID = item.PostID;
+                        this.list = response.Table;
                     }
-                    this.list = response.Table;
+                } else {
+                    let response = await DataSource.shared.getStaffPost();
+                    console.log(response);
+                    if (response.Table) {
+                        for (let item of response.Table) {
+                            const fileRes = await DataSource.shared.getPostFile(item.PostID);
+                            const getCommentResponse = await DataSource.shared.getComment(item.PostID);
+                            if (getCommentResponse.Table) {
+                                item.commentItems = getCommentResponse.Table;
+                                item.collapsed = true;
+                            }
+                            if (fileRes.Table) {
+                                item.postFiles = fileRes.Table;
+                            }
+                            item.commentPostID = item.PostID;
+                        }
+                        this.list = response.Table;
+                    }
                 }
+
 
                 let tagResponse = await DataSource.shared.getPostDropdown();
 

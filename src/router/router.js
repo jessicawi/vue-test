@@ -13,13 +13,15 @@ import studentEditClass from "../pages/StudentEditClass";
 import parentList from "../pages/ParentList";
 import parent from "../pages/Parent";
 import manageRelationship from "../pages/ManageRelationship";
-import staffPost from "../pages/StaffPost";
+import staffNewsfeed from "../pages/StaffNewsfeed";
 import pendingPost from "../pages/PendingPost";
 import parentRegister from "../pages/ParentRegister";
 import getApproverMaster from "../pages/Approver";
 import attendanceList from "../pages/AttendanceList";
-import testPage from "../pages/test";
+import portfolio from "../pages/Portfolio";
 import gallery from "../pages/Gallery";
+import promotion from "../pages/Promotion";
+
 
 Vue.use(VueRouter);
 
@@ -35,7 +37,7 @@ const router = new VueRouter({
             path: '/login',
             name: 'Login',
             component: loginPage,
-            meta: { bodyClass: 'login' }
+            meta: {bodyClass: 'login'}
         },
         {
             path: '/forgot-password',
@@ -46,13 +48,13 @@ const router = new VueRouter({
             path: '/reset-email',
             name: 'resetEmail',
             component: resetEmail,
-            meta: { bodyClass: 'resetEmail' }
+            meta: {bodyClass: 'resetEmail'}
         },
         {
             path: '/reset-password',
             name: 'ResetPassword',
             component: resetPassword,
-            meta: { bodyClass: 'resetPassword' }
+            meta: {bodyClass: 'resetPassword'}
         },
         {
             path: '/student-list',
@@ -93,12 +95,12 @@ const router = new VueRouter({
             path: '/register/parent',
             name: 'Parent Registration',
             component: parentRegister,
-            meta: { bodyClass: 'parent-register' }
+            meta: {bodyClass: 'parent-register'}
         },
         {
             path: '/post/staff',
             name: 'Latest Update (Staff)',
-            component: staffPost,
+            component: staffNewsfeed,
         },
         {
             path: '/post/pending',
@@ -114,17 +116,20 @@ const router = new VueRouter({
             path: '/attendancelist',
             name: 'Attendance List',
             component: attendanceList,
-        },
-        {
-            path: '/test-page',
-            name: 'Test',
-            component: testPage
+        }, {
+            path: '/Portfolio',
+            name: 'Portfolio',
+            component: portfolio
         },
         {
             path: '/Gallery',
             name: 'Gallery',
             component: gallery
-        },
+        }, {
+            path: '/promotion',
+            name: 'promotion',
+            component: promotion
+        }
     ]
 });
 
