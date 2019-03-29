@@ -123,7 +123,6 @@
 
                 temparrobj_Classes.then((result) => {
                     DataSource.shared.getNextLevel(this.obj_SelectedClass.PK_Course_ID).then((result) => {
-                        console.log(result.Table[0].CRS_Course_Name)
                         console.log(result);
                     });
                 });*/

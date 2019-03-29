@@ -26,7 +26,6 @@
                 this.$emit("cancelClick")
             },
             onOkClick(){
-                console.log('hahhah')
                 this.$emit("okClick")
             }
         }

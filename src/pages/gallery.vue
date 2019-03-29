@@ -1,145 +1,158 @@
 <template>
     <div class="container-fluid">
-        <div class="row">
-            <button id="btn_SelectAll" class="btn btn-primary">Select All</button>
-            <button id="btn_UnselectAll" class="btn btn-secondary">Unselect All</button>
-        </div>
-        <div class="row">
-            <div class="col-">
-                <div class="menu">
-                    <div class="menu-item show-menu">
-                        <button class="custom-tooltip btn btn-secondary" title="Show Menu"><i
-                                class="fa fa-bars"></i>
-                            <span class="custom-tooltiptext">Show Menu</span>
-                        </button>
-                    </div>
-                    <div class="menu-item">
-                        <button @click="showCreateModal" class="custom-tooltip btn btn-secondary"
-                                title="Create new folder"><i
-                                class="fa fa-folder-open-o"></i>
-                            <span class="custom-tooltiptext">Create new folder</span>
-                        </button>
-                    </div>
-                    <div class="menu-item" v-if="arrobj_SelectedItem.length > 0">
-                        <button class="download-item custom-tooltip btn btn-secondary" title="Download">
-                            <i class="fa fa-download"></i>
-                            <span class="custom-tooltiptext">Download</span>
-                        </button>
-                    </div>
-                    <div class="menu-item">
-                        <button class="upload-item custom-tooltip btn btn-secondary" title="Upload">
-                            <i class="fa fa-upload"></i>
-                            <span class="custom-tooltiptext">Upload</span>
-                        </button>
-                    </div>
-                    <div class="menu-item" v-if="arrobj_SelectedItem.length > 0">
-                        <button @click="showViewModal" class="custom-tooltip btn btn-secondary"
-                                title="View"><i class="fa fa-eye"></i>
-                            <span class="custom-tooltiptext">View</span>
-                        </button>
-                    </div>
-                    <div class="menu-item" v-if="arrobj_SelectedItem.length > 0">
-                        <button @click="showMoveModal" class="custom-tooltip btn btn-secondary"
-                                title="Move"><i
-                                class="fa fa-arrows"></i>
-                            <span class="custom-tooltiptext">Move</span>
-                        </button>
-                    </div>
-                    <div class="menu-item" v-if="obj_ContextTarget != null || arrobj_SelectedItem.length > 0">
-                        <button @click="showRemoveModal" class="custom-tooltip btn btn-secondary"
-                                title="Remove"><i
-                                class="fa fa-trash-o"></i>
-                            <span class="custom-tooltiptext">Remove</span>
-                        </button>
-                    </div>
-                    <div class="menu-item" v-if="arrobj_SelectedItem.length > 0">
-                        <button @click="showPortfolioModal" class="custom-tooltip btn btn-secondary"
-                                title="Remove"><i
-                                class="fa fa-eye"></i>
-                            <span class="custom-tooltiptext">Post as portfolio</span>
-                        </button>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="system-msg">
+                    <p v-if="str_Result" style="color: red">{{str_Result}}</p></div>
+            </div>
+            <div class="row gallery-action">
+                <div class="col-md-4 ">
+                    <button @click="showCreateModal" class="gallery-createFolder btn btn-secondary"
+                            title="Create new folder"><i
+                            class="fa fa-folder-open-o"></i>
+                        <span class="ml-2">Create new folder</span>
+                    </button>
+
+                    <button class="upload-item btn btn-secondary" title="Upload">
+                        <i class="fa fa-upload"></i>
+                        <span class="ml-2">Upload</span>
+                    </button>
+                </div>
+                <div class="col-md-8">
+
+                    <el-button-group>
+                        <el-button id="btn_SelectAll" type="primary" icon="el-icon-arrow-left"
+                                   :class="{'d-none':selectall===true}">Select All
+                        </el-button>
+                        <el-button id="btn_UnselectAll" type="primary" :class="{'d-none':arrobj_SelectedItem.length === 0}">Unselect
+                            All<i class="el-icon-arrow-right el-icon-right"></i></el-button>
+                    </el-button-group>
+                    <el-button-group class="gallery-action__item">
+                        <el-button type="primary" icon="el-icon-download" class="download-item"
+                                   v-if="arrobj_SelectedItem.length > 0">Download
+                        </el-button>
+                        <el-button type="primary" icon="el-icon-view" v-if="arrobj_SelectedItem.length > 0"
+                                   @click="showViewModal">View
+                        </el-button>
+                        <el-button type="primary" icon="el-icon-rank" @click="showMoveModal"
+                                   v-if="arrobj_SelectedItem.length > 0">Move
+                        </el-button>
+                        <el-button type="primary" icon="el-icon-picture" @click="showPortfolioModal"
+                                   v-if="arrobj_SelectedItem.length > 0">Post as portfolio
+                        </el-button>
+                        <el-button type="primary" icon="el-icon-edit" @click="showUpdateModal"
+                                   v-if="arrobj_SelectedItem.length > 0">Post as Updates
+                        </el-button>
+                        <el-button type="primary" icon="el-icon-delete" @click="showRemoveModal"
+                                   v-if="obj_ContextTarget != null || arrobj_SelectedItem.length > 0">Remove
+                        </el-button>
+                    </el-button-group>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-" v-for="obj_Folder of arrobj_FolderPath" :key="obj_Folder.GalID">
-                <h5>
-                    <i class="fa fa-folder" aria-hidden="true"></i>
-                    {{obj_Folder.GalFolder}} >
-                </h5>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 bg-white div_ItemContainer">
-                <div class="row border-bottom">
-                    <div class="col-">
-                        <button class="btn btn-light" id="btn_Previous">
-                            <i class="fa fa-folder" aria-hidden="true"></i>Go Back
-                        </button>
-                    </div>
-                    <div class="col-" v-for="obj_Folder of arrobj_Folders" :key="obj_Folder.GalID"
-                         :data-type="obj_Folder.GalType">
-                        <button class="btn btn-light" :id="obj_Folder.GalID" @click="changeDirectory(obj_Folder)">
-                            <i class="fa fa-folder" aria-hidden="true"></i>
-                            {{obj_Folder.GalFolder}}
-                        </button>
-                    </div>
+            <div class="row gallery-folder__top mt-4 ">
+                <div class="col-md-9 text-left">
+                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                        <el-breadcrumb-item :to="{ path: '/' }" v-for="obj_Folder of arrobj_FolderPath"
+                                            :key="obj_Folder.GalID"> {{obj_Folder.GalFolder}}
+                        </el-breadcrumb-item>
+                    </el-breadcrumb>
                 </div>
-                <div class="row">
-                    <div class="col-" v-for="obj_File of arrobj_Files" :key="obj_File.GalID"
-                    >
-                        <div v-if="isImage(obj_File)" :data-type="obj_File.GalType">
-                            <label :for="obj_File.GalID">
-                                <img :src="getLowSource(obj_File)" :alt="obj_File.GalFileName" draggable="false"/>
-                            </label>
-                            <input type="checkbox" :id="obj_File.GalID" :value="obj_File"
-                                   v-model="arrobj_SelectedItem"/>
-                        </div>
-                        <div v-else :data-type="obj_File.GalType">
-                            <label :for="obj_File.GalID">
-                                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                            </label>
-                            <input type="checkbox" :id="obj_File.GalID" :value="obj_File"
-                                   v-model="arrobj_SelectedItem"/>
+                <div class="col-md-3">
+
+                    <el-button type="primary" size="mini" icon="el-icon-download" class="float-right" id="btn_Previous">
+                        Back
+                    </el-button>
+                    <!--<h5>-->
+                    <!--<i class="fa fa-folder" aria-hidden="true"></i>-->
+                    <!--{{obj_Folder.GalFolder}} >-->
+                    <!--</h5>-->
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-3  div_ItemContainer gallery-folder__bottom">
+                    <div class="">
+                        <div class="" v-for="obj_Folder of arrobj_Folders" :key="obj_Folder.GalID"
+                             :data-type="obj_Folder.GalType">
+                            <button class="btn btn-light" :id="obj_Folder.GalID" @click="changeDirectory(obj_Folder)">
+                                <i class="material-icons">
+                                    perm_media
+                                </i>
+                                {{obj_Folder.GalFolder}}
+                            </button>
                         </div>
                     </div>
                 </div>
+                <div class="col-md-9 bg-white div_ItemContainer">
+                    <div class=" gallery-album">
+                        <div class="" v-for="obj_File of arrobj_Files" :key="obj_File.GalID"
+                        >
+                            <label :for="obj_File.GalID" class="gallery-album__image">
+                                <img v-if="isImage(obj_File)" :src="getLowSource(obj_File)" :alt="obj_File.GalFileName"
+                                     draggable="false"/>
+                            </label>
+                            <input class="limited" type="checkbox" :id="obj_File.GalID" :value="obj_File"
+                                   v-model="arrobj_SelectedItem"
+                                   :disabled="isNull(arrobj_SelectedItem.find(x=>x.GalID === obj_File.GalID)) && arrobj_SelectedItem.length >= int_SelectLimit"/>
+                            <label for="obj_File.GalID"></label>
+                            <!--<div v-if="isImage(obj_File)" :data-type="obj_File.GalType">
+                                <label :for="obj_File.GalID">
+                                    <img :src="getLowSource(obj_File)" :alt="obj_File.GalFileName" draggable="false"/>
+                                </label>
+                                <input type="checkbox" :id="obj_File.GalID" :value="obj_File"
+                                       v-model="arrobj_SelectedItem"/>
+                            </div>
+                            <div v-else :data-type="obj_File.GalType">
+                                <label :for="obj_File.GalID">
+                                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                </label>
+                                <input type="checkbox" :id="obj_File.GalID" :value="obj_File"
+                                       v-model="arrobj_SelectedItem"/>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <input type="file" id="fileUpload" multiple/>
-        <div id="div_ContextMenu" class="border border-secondary bg-white rounded-right rounded-bottom text-left">
-            <ul id="ul_ContextMenuOptions">
-                <li class="li_MenuOption" @click="showCreateModal"><i class="fa fa-folder-open-o"></i><span
-                        class="menu-text">Create New folder</span></li>
-                <li class="li_MenuOption" @click="showRenameModal" v-if="obj_ContextTarget != null"><i
-                        class="fa fa-pencil-square-o"></i><span
-                        class="menu-text">Rename folder</span></li>
-                <li class="li_MenuOption download-item" v-if="arrobj_SelectedItem.length > 0">
-                    <i class="fa fa-download"></i>
-                    <span class="menu-text">Download</span>
-                </li>
-                <li class="li_MenuOption upload-item">
-                    <i class="fa fa-upload"></i>
-                    <span class="menu-text">Upload</span>
-                </li>
-                <li class="li_MenuOption" @click="showViewModal" v-if="arrobj_SelectedItem.length > 0">
-                    <i
-                            class="fa fa-eye"></i><span
-                        class="menu-text">View</span></li>
-                <li class="li_MenuOption" @click="showMoveModal" v-if="arrobj_SelectedItem.length > 0"><i
-                        class="fa fa-arrows"></i><span
-                        class="menu-text">Move</span>
-                </li>
-                <li class="li_MenuOption" @click="showRemoveModal"
-                    v-if="obj_ContextTarget != null || arrobj_SelectedItem.length > 0"><i
-                        class="fa fa-trash-o"></i><span
-                        class="menu-text">Remove</span></li>
-                <li class="li_MenuOption" @click="showPortfolioModal" v-if="arrobj_SelectedItem.length > 0">
-                    <i class="fa fa-eye"></i>
-                    <span class="menu-text">Portfolio</span>
-                </li>
-            </ul>
+            <input type="file" id="fileUpload" multiple/>
+
+            <div id="div_ContextMenu" class="border border-secondary bg-white rounded-right rounded-bottom text-left">
+                <ul id="ul_ContextMenuOptions">
+                    <li class="li_MenuOption" @click="showCreateModal"><i class="fa fa-folder-open-o"></i><span
+                            class="menu-text">Create New folder</span></li>
+                    <li class="li_MenuOption" @click="showRenameModal" v-if="obj_ContextTarget != null"><i
+                            class="fa fa-pencil-square-o"></i><span
+                            class="menu-text">Rename folder</span></li>
+                    <li class="li_MenuOption download-item" v-if="arrobj_SelectedItem.length > 0">
+                        <i class="fa fa-download"></i>
+                        <span class="menu-text">Download</span>
+                    </li>
+                    <li class="li_MenuOption upload-item">
+                        <i class="fa fa-upload"></i>
+                        <span class="menu-text">Upload</span>
+                    </li>
+                    <li class="li_MenuOption" @click="showViewModal" v-if="arrobj_SelectedItem.length > 0">
+                        <i
+                                class="fa fa-eye"></i><span
+                            class="menu-text">View</span></li>
+                    <li class="li_MenuOption" @click="showMoveModal" v-if="arrobj_SelectedItem.length > 0"><i
+                            class="fa fa-arrows"></i><span
+                            class="menu-text">Move</span>
+                    </li>
+                    <li class="li_MenuOption" @click="showRemoveModal"
+                        v-if="obj_ContextTarget != null || arrobj_SelectedItem.length > 0"><i
+                            class="fa fa-trash-o"></i><span
+                            class="menu-text">Remove</span></li>
+                    <li class="li_MenuOption" @click="showPortfolioModal" v-if="arrobj_SelectedItem.length > 0">
+                        <i class="fa fa-eye"></i>
+                        <span class="menu-text">Portfolio</span>
+                    </li>
+                    <li class="li_MenuOption" @click="showUpdateModal" v-if="arrobj_SelectedItem.length > 0">
+                        <i class="fa fa-eye"></i>
+                        <span class="menu-text">Updates</span>
+                    </li>
+                </ul>
+            </div>
+
         </div>
         <b-modal id="modal_ViewItem" title="View" ref="modal_ViewItem" centered ok-only ok-title="Close">
             <b-carousel id="carousel1"
@@ -155,6 +168,7 @@
                 <b-carousel-slide v-for="obj_Item of filteredSelectedItem" :key="obj_Item.FileID">
                     <img slot="img" class="d-block img-fluid w-100" :src="getMidSource(obj_Item)"
                          :alt="obj_Item.GalFileName"/>
+                    <span>{{obj_Item.GalFileName}}</span>
                 </b-carousel-slide>
             </b-carousel>
         </b-modal>
@@ -219,8 +233,9 @@
                 </div>
             </div>
         </b-modal>
-        <b-modal id="modal_Portfolio" hide-footer size="lg" title="Portfolio" ref="modal_Portfolio">
-            <portfolio :images="arrobj_SelectedItem"></portfolio>
+        <b-modal id="modal_PostComponents" hide-footer size="lg" @hidden="hideComponentModal"
+                 :title="str_PostComponentTitle" ref="modal_PostComponent">
+            <component @result="displayResult" :is="obj_SelectedComponent" :images="arrobj_SelectedItem"></component>
         </b-modal>
         <div id="div_DropZone" class="hideDropZone">
             <h1>Drop file(s) here to upload</h1>
@@ -232,8 +247,8 @@
     "use strict";
     import DataSource from "../data/datasource";
     import $ from 'jquery';
-    import portfolio from "../components/Post_Portfolio_Component"
-
+    import portfolio from "../components/Post_Portfolio_Component";
+    import updates from "../components/Post_Updates_Component.vue";
 
     export default {
         name: "Gallery",
@@ -245,25 +260,32 @@
                 arrobj_SelectedItem: [],
                 arrobj_MoveModalFolders: [],
                 arrobj_MoveModalFolderPath: [],
+                arrstr_Whitelist: [],
                 int_StartRowNo: 1,
                 int_EndRowNo: 10,
                 obj_ContextTarget: {},
+                obj_SelectedComponent: "",
+                obj_ComponentProperties: {},
                 slide: 0,
                 sliding: null,
                 str_NewFolderName: "",
-                arrstr_Whitelist: []
+                str_PostComponentTitle: "",
+                str_Result: "",
+                systemmsgError: false,
+                int_SelectLimit: 30,
+                selectall: false,
             }
         },
         methods: {
             loadWhitelist() {
                 DataSource.shared.getWhitelist().then((result) => {
-                    this.arrstr_Whitelist = result;
+                    this.arrstr_Whitelist = result.Table;
                 });
             },
             isWhitelist(file) {
                 let temparrstr = file.name.split(".");
                 let str_Ext = ("." + temparrstr[temparrstr.length - 1]).toUpperCase();
-                let isWhitelisted = this.arrstr_Whitelist.findIndex(x => x.ext.toUpperCase() === str_Ext) !== -1;
+                let isWhitelisted = this.arrstr_Whitelist.findIndex(x => x.type.toUpperCase() === str_Ext) !== -1;
                 let isValidFile = file.size > 0;
 
                 return (isWhitelisted && isValidFile);
@@ -324,8 +346,7 @@
                         resolve(arr_Result);
                     });
                 });
-            }
-            ,
+            },
             goBack() {
                 if (this.arrobj_FolderPath.length >= 1)
                     this.arrobj_FolderPath.pop();
@@ -333,8 +354,7 @@
                 let obj_PreviousFolder = this.arrobj_FolderPath[this.arrobj_FolderPath.length - 1];
 
                 this.initFolder(obj_PreviousFolder);
-            }
-            ,
+            },
             isImage(obj_File) {
                 let ext = String(obj_File.GalFileExt).toUpperCase();
                 let isImage = false;
@@ -352,24 +372,60 @@
                 }
 
                 return isImage;
-            }
-            ,
+            },
             getLowSource(file) {
                 if (this.isImage(file))
                     return "data:" + file.GalFileType + ";base64," + file.GalFileLow;
                 else
                     return "";
-            }
-            ,
+            },
             getMidSource(file) {
                 if (this.isImage(file))
                     return "data:" + file.GalFileType + ";base64," + file.GalFileMedium;
                 else
                     return "";
-            }
-            ,
+            },
             showPortfolioModal() {
-                this.$refs.modal_Portfolio.show();
+                this.obj_SelectedComponent = portfolio;
+                this.str_PostComponentTitle = "Portfolio";
+                this.showComponentModal();
+            },
+            showUpdateModal() {
+                this.obj_SelectedComponent = updates;
+                this.str_PostComponentTitle = "Updates";
+                this.showComponentModal();
+            },
+            displayResult(value) {
+                switch (value) {
+                    case "TRUE":
+                        this.$notify({
+                            title: 'Success',
+                            message: 'Successfully posted!',
+                            type: 'success'
+                        });
+                        // this.str_Result = "Successfully posted!";
+                        break;
+                    case "FALSE":
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Whoops. Something went wrong. Please check your fields and try again.'
+                        });
+                        // this.str_Result = "Whoops. Something went wrong. Please check your fields and try again.";
+                        break;
+                }
+
+                this.hideComponentModal();
+            },
+            showComponentModal() {
+                this.obj_ComponentProperties = {images: this.arrobj_SelectedItem};
+                this.$refs.modal_PostComponent.show();
+            },
+            hideComponentModal() {
+                this.obj_SelectedComponent = false;
+                this.$refs.modal_PostComponent.hide();
+            },
+            isNull(obj) {
+                return (obj === null || obj === undefined || obj === "undefined" || obj.length === 0 || obj === "");
             },
 
             /*#region Download Item Functions*/
@@ -650,10 +706,24 @@
                 this.obj_ContextTarget = null;
                 let div_ContextMenu = $("#div_ContextMenu");
 
-
                 div_ContextMenu.css("display", "block");
-                div_ContextMenu.css("left", e.clientX + "px");
-                div_ContextMenu.css("top", e.clientY + "px");
+
+                console.log(e.clientY)
+                console.log(e)
+                console.log(e.screenY)
+                console.log(div_ContextMenu.outerHeight())
+
+                if((e.clientX + div_ContextMenu.outerWidth()) >= $(document).innerWidth())
+                    div_ContextMenu.css("left", (e.clientX - div_ContextMenu.outerWidth()) + "px");
+                else
+                    div_ContextMenu.css("left", e.clientX + "px");
+
+                if((e.screenY + div_ContextMenu.outerHeight()) >= $(document).innerHeight())
+                    div_ContextMenu.css("top", (e.clientY - div_ContextMenu.outerHeight()) + "px");
+                else if (e.screenY < div_ContextMenu.outerHeight())
+                    div_ContextMenu.css("top", 0 + "px");
+                else
+                    div_ContextMenu.css("top", e.clientY + "px");
 
                 if ($(e.target).closest("div").data("type") != null && $(e.target).closest("div").data("type").toUpperCase() === "FOLDER")
                     this.obj_ContextTarget = e.target.closest("button");
@@ -793,8 +863,24 @@
             }
             ,
             /*#endregion*/
-        }
-        ,
+
+            /*#region Custom check functions*/
+            isCheck(id) {
+                if (this.isNull(id))
+                    return;
+
+                let checkbox = $("#" + id);
+                if (checkbox.prop("checked")) {
+                    checkbox.closest("div").addClass("check");
+                    checkbox.closest("div").removeClass("uncheck");
+                } else {
+                    checkbox.closest("div").addClass("uncheck");
+                    checkbox.closest("div").removeClass("check");
+                }
+            }
+            ,
+            /*#endregion*/
+        },
         mounted() {
             const self = this;
             self.initFolder(this.arrobj_FolderPath[0]);
@@ -900,33 +986,47 @@
 
             /*#region Select/Unselect All Functions*/
             $("#btn_SelectAll").click(() => {
+                this.selectall = true;
                 let cb_All = $("input[type='checkbox']");
 
                 cb_All.each(function () {
-                    if (!$(this).prop("checked"))
-                        $(this).click();
+                    $(this).prop("checked", true);
+
+                    self.isCheck($(this).attr("id"));
+                    $(this)[0].dispatchEvent(new Event('change'));
                 });
             });
 
             $("#btn_UnselectAll").click(() => {
+                this.selectall = false;
                 let cb_All = $("input[type='checkbox']");
 
                 cb_All.each(function () {
                     if ($(this).prop("checked"))
-                        $(this).click();
+                        $(this).prop("checked", false);
+
+                    self.isCheck($(this).attr("id"));
+                    $(this)[0].dispatchEvent(new Event('change'));
                 });
             });
             /*#endregion*/
-        }
-        ,
+        },
+        updated() {
+            const self = this;
+
+            $("input[type='checkbox']").each(function () {
+                self.isCheck($(this).attr("id"));
+            });
+        },
         computed: {
             filteredSelectedItem: function () {
                 return this.arrobj_SelectedItem.filter(x => this.isImage(x));
             }
         },
         components: {
-            portfolio
-        }
+            portfolio,
+            updates
+        },
     }
 </script>
 
@@ -966,22 +1066,28 @@
 
     /*#region Custom context menu*/
     #div_ContextMenu {
-        width: 200px;
-        box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+        width: auto;
+        -webkit-box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0px 10px -1px rgba(0, 0, 0, 0.2);
         position: fixed;
         display: none;
+        border-color: #ccc0 !important;
+        border-radius: 4px !important;
     }
 
     #div_ContextMenu #ul_ContextMenuOptions {
-        padding: 5px 0;
+        padding: 0;
         list-style: none;
+        margin: 0px;
     }
 
     #div_ContextMenu .li_MenuOption {
         font-weight: 500;
-        font-size: 14px;
-        padding: 10px 40px 10px 10px;
+        font-size: 12px;
+        padding: 10px 20px 10px 17px;
         cursor: pointer;
+        border-bottom: 1px solid #eee;
+
     }
 
     #div_ContextMenu .li_MenuOption .menu-text {
@@ -989,7 +1095,29 @@
     }
 
     #div_ContextMenu .li_MenuOption:hover {
-        background: rgba(0, 0, 0, 0.2);
+        background: rgb(237, 240, 244);
+    }
+
+    div#div_ContextMenu:before {
+        content: "";
+        background: transparent;
+        width: 20px;
+        height: 20px;
+        width: 0;
+        height: 0;
+        border-top: 10px solid white;
+        border-left: 10px solid transparent;
+        position: absolute;
+        left: -22px;
+        top: 13px;
+        /* box-shadow: 0 0px 11px -5px rgba(0, 0, 0, 0.9); */
+        border-top: 8px solid transparent;
+        border-right: 11px solid white;
+        border-bottom: 8px solid transparent;
+    }
+
+    #div_ContextMenu .li_MenuOption:last-child {
+        border: 0px;
     }
 
     /*#endregion*/
@@ -1002,21 +1130,21 @@
 
     /* Tooltip text */
     .custom-tooltip .custom-tooltiptext {
-        visibility: hidden;
+        /*visibility: hidden;*/
         /*default width:120px*/
         width: auto;
-        background-color: black;
-        color: #fff;
-        text-align: center;
-        padding: 5px 12px;
-        border-radius: 6px;
-        /* Position the tooltip text - see examples below! */
-        position: absolute;
-        z-index: 1;
-        top: 6px;
-        right: 115%;
-        opacity: 0;
-        transition: opacity 0.5s;
+        /*background-color: black;*/
+        /*color: #fff;*/
+        /*text-align: center;*/
+        /*padding: 5px 12px;*/
+        /*border-radius: 6px;*/
+        /* Position the tooltip text */
+        /*position: absolute;*/
+        /*z-index: 1;*/
+        /*top: 6px;*/
+        /*right: 115%;*/
+        /*opacity: 0;*/
+        /*transition: opacity 0.5s;*/
     }
 
     /* Show the tooltip text when you mouse over the tooltip container */
@@ -1027,10 +1155,10 @@
     }
 
     .custom-tooltip .custom-tooltiptext::after {
-        content: " ";
+        /*content: " ";*/
         position: absolute;
         top: 50%;
-        left: 100%; /* To the right of the tooltip */
+        left: 100%; /* point to the right of the tooltip */
         margin-top: -5px;
         border-width: 5px;
         border-style: solid;
@@ -1040,26 +1168,34 @@
     /*#endregion*/
 
     /*#region Menu*/
-    .menu:hover .menu-item:not(.show-menu), .show-menu {
+    /*.menu:hover .menu-item:not(.show-menu), .show-menu {
         margin-top: 10px;
         max-height: 232px;
         overflow: visible;
         opacity: 1;
         transition: max-height 1s, opacity 1s;
-    }
+    }*/
 
     .menu .menu-item:not(.show-menu) {
         margin-top: 0px;
-        max-height: 0px;
+        /* max-height: 0px; */
         overflow: hidden;
-        opacity: 0;
+        opacity: 1;
+        -webkit-transition: max-height 1s, opacity 0.5s, margin-top 2.0s;
         transition: max-height 1s, opacity 0.5s, margin-top 2.0s;
+        display: inline-block;
+        float: right;
+        margin: 0px;
     }
 
     .menu button {
-        width: 50px;
-        height: 50px;
+        width: 35px;
+        height: 35px;
         display: block;
+        border-width: 1px 1px 1px 0px;
+        border-style: solid;
+        border-color: #cdd3d8;
+        padding: 6px;
     }
 
     .menu i {
@@ -1077,9 +1213,39 @@
         padding: 0 15px;
     }
 
+    .div_ItemContainer
+        /*#region On checkbox check transition*/
+    label {
+        cursor: pointer;
+    }
+
+    .check {
+        -webkit-transform: scale(0.8);
+        -moz-transform: scale(0.8);
+        -ms-transform: scale(0.8);
+        -o-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 0.5;
+        background-color: lightgray;
+        transition: all 0.3s;
+        /*border: 2px solid black;*/
+    }
+
+    .uncheck {
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        -o-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+        background-color: revert;
+        transition: all 0.3s;
+    }
+
+    /*#endregion*/
 </style>
 <style>
-    #modal_Portfolio .modal-lg {
-        max-width: 95% !important;
+    #modal_PostComponents .modal-lg {
+        /*max-width: 95% !important;*/
     }
 </style>

@@ -36,23 +36,22 @@
             </li>
 
             <li class="info-menu__item">
-                <vs-dropdown>
-                    <a class="a-icon" href="#">
-                        <i class="fa fa-university" aria-hidden="true"></i>
-                        <span>School List</span>
-                    </a>
-
-                    <vs-dropdown-menu v-model="schListCurrent">
-                        <!--<vs-dropdown-item v-for="(key, value) in schList">-->
-                        <!--<span v-on:click="ChangeSchool(value)" v-bind:value=value>{{ key }} <i v-if="value === schSession" class="fa fa-check-square" aria-hidden="true"></i></span>-->
-                        <!--</vs-dropdown-item>-->
-                        <vs-dropdown-item v-for="item in schList">
-                            <span v-on:click="ChangeSchool(item.CONSchool.trim())" v-bind:value="item.CONSchool.trim()">{{ item.SCH_Name.trim() }} <i
-                                    v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"
-                                    aria-hidden="true"></i></span>
-                        </vs-dropdown-item>
-                    </vs-dropdown-menu>
-                </vs-dropdown>
+                <a class="a-icon" href="#" @click="showSchoolList()">
+                    <i class="fa fa-university" aria-hidden="true"></i>
+                    <span>School List</span>
+                </a>
+                <!--<vs-dropdown>-->
+                <!--<vs-dropdown-menu v-model="schListCurrent">-->
+                <!--&lt;!&ndash;<vs-dropdown-item v-for="(key, value) in schList">&ndash;&gt;-->
+                <!--&lt;!&ndash;<span v-on:click="ChangeSchool(value)" v-bind:value=value>{{ key }} <i v-if="value === schSession" class="fa fa-check-square" aria-hidden="true"></i></span>&ndash;&gt;-->
+                <!--&lt;!&ndash;</vs-dropdown-item>&ndash;&gt;-->
+                <!--<vs-dropdown-item v-for="item in schList">-->
+                <!--<span v-on:click="ChangeSchool(item.CONSchool.trim())" v-bind:value="item.CONSchool.trim()">{{ item.SCH_Name.trim() }} <i-->
+                <!--v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"-->
+                <!--aria-hidden="true"></i></span>-->
+                <!--</vs-dropdown-item>-->
+                <!--</vs-dropdown-menu>-->
+                <!--</vs-dropdown>-->
             </li>
 
             <li class="info-menu__item">
@@ -70,11 +69,31 @@
                 </vs-dropdown>
             </li>
         </div>
+        <!--<b-modal id="schoolListModal" hide-footer title="Select School " v-model="schoolListOpen">-->
+        <!--<ul v-model="schListCurrent">-->
+        <!--<li v-for="item in schList">-->
+        <!--<span v-on:click="ChangeSchool(item.CONSchool.trim())" v-bind:value="item.CONSchool.trim()">{{ item.SCH_Name.trim() }} <i-->
+        <!--v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"-->
+        <!--aria-hidden="true"></i></span>-->
+        <!--</li>-->
+        <!--</ul>-->
+        <!--</b-modal>-->
+        <vs-popup id="schoolListModal" class="holamundo" title="Select School " :active.sync="schoolListOpen">
+            <ul v-model="schListCurrent">
+                <li v-for="item in schList">
+                            <span v-on:click="ChangeSchool(item.CONSchool.trim())" v-bind:value="item.CONSchool.trim()">{{ item.SCH_Name.trim() }} <i
+                                    v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"
+                                    aria-hidden="true"></i></span>
+                </li>
+            </ul>
+        </vs-popup>
     </div>
 </template>
 
 <script>
     import DataSource from "../data/datasource";
+    import Cookies from "js-cookie";
+
 
     export default {
         name: 'navBar',
@@ -87,15 +106,21 @@
                 schList: [],
                 schListCurrent: '',
 
-                schSession: sessionStorage.getItem('schoolSession'),
+                schSession: Cookies.get('schoolSession'),
+                schoolListOpen: false,
+                isToken: Cookies.get('authToken'),
             };
         },
         async created() {
             await this.BindSchoolList();
         },
         methods: {
+            showSchoolList() {
+                this.schoolListOpen = true;
+            },
             logout() {
                 DataSource.shared.logout();
+                window.location.replace("/login");
             },
 
             isMobile() {
@@ -113,8 +138,6 @@
                         //this.schList = response;
 
                         // for (const item in response) {
-                        //     // console.log(item);
-                        //     // console.log(response[item]);
                         //     this.schList.push(item);
                         // }
 
@@ -123,7 +146,6 @@
                             this.schList.push(m);
                         });
 
-                        //console.log(sessionStorage.getItem('schoolSession') + ' - ' + sessionStorage.getItem('userIDSession') + ' - ' + sessionStorage.getItem('userTypeSession') + ' - ' + sessionStorage.getItem('usRidSession'))
                     }
                 } catch (e) {
                     this.results = e;
@@ -132,16 +154,16 @@
 
             async ChangeSchool(value) {
                 try {
-                    //sessionStorage.setItem('schoolSession', value);
+                    //Cookies.set('schoolSession', value);
                     //window.location.replace('/');
 
                     this.schList.forEach(m => {
                         if (m.CONSchool === value) {
-                            sessionStorage.setItem('schoolSession', m.CONSchool);
-                            sessionStorage.setItem('userIDSession', m.CONid);
-                            sessionStorage.setItem('userTypeSession', m.CONType);
-                            sessionStorage.setItem('userUniversitySession', m.CONUniversity);
-                            sessionStorage.setItem('usRidSession', m.USRid);
+                            Cookies.set('schoolSession', m.CONSchool, { expires: 1/48 }); //expire in 30 min
+                            Cookies.set('userIDSession', m.CONid,  { expires: 1/48 }); //expire in 30 min
+                            Cookies.set('userTypeSession', m.CONType,  { expires: 1/48 }); //expire in 30 min
+                            Cookies.set('userUniversitySession', m.CONUniversity,  { expires: 1/48 }); //expire in 30 min
+                            Cookies.set('usRidSession', m.USRid,  { expires: 1/48 }); //expire in 30 min
                             window.location.replace('/');
                         }
                     });
@@ -151,7 +173,7 @@
             },
         }
         // mounted() {
-        //     const isLogin = sessionStorage.getItem('authToken');
+        //     const isLogin = Cookies.get('authToken');
         //     if (this.$route.path !== "/login" && (!isLogin || isLogin === "null")) {
         //         this.$router.push('/login');
         //     } else if (isLogin) {

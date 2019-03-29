@@ -1,5 +1,5 @@
 <template>
-    <div class="menu-box-wrap">
+    <div class="menu-box-wrap" :class="{'fixed-header':scrollPosition>120}">
         <div class="menu-box">
             <!--<vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active"-->
             <!--icon-pack="fa">-->
@@ -19,7 +19,7 @@
 
                     <div class="sub-menu" v-if="item.subMenus" @mouseleave="didClickAway"
                          :class="{'menu-wrap-active':currentParentMenuId===item.MENid}">
-                        <div v-for="submenu in item.subMenus" >
+                        <div v-for="submenu in item.subMenus">
                             <a :href="submenu.MENnewurl">
                                 <i :class="submenu.MENicon"></i> {{submenu.MENname}}
                             </a>
@@ -43,6 +43,7 @@
             </div>
             <!--</vs-sidebar>-->
         </div>
+
         <div class="input-group search" v-if="isMobile()">
             <input type="text" class="form-control" placeholder="Search for...">
             <span class="input-group-btn">
@@ -71,19 +72,21 @@
                 isNullItem: "",
                 showMobileMenu: false,
                 mouseover: false,
-
+                scrollPosition: null,
             };
         },
+        destroy() {
+            window.removeEventListener('scroll', this.updateScroll)
+        },
         async mounted() {
+            window.addEventListener('scroll', this.updateScroll);
             const response = await DataSource.shared.getUserMenu();
-            console.log(this.currentParentMenuId);
             if (response) {
                 this.primaryMenu = response.PrimaryTable && response.PrimaryTable.Table;
                 if (!this.primaryMenu) {
                     return;
                 }
                 this.primaryMenu.forEach(m => {
-                    //console.log(m);
                     this.primaryMenuFiltered.push(m);
 
                     // switch (m.MENname) {
@@ -93,7 +96,6 @@
                     //         this.primaryMenuFiltered.push(m);
                     // }
                 });
-                //console.log(this.primaryMenuFiltered);
 
                 this.nonPrimaryTable = response.NonPrimaryTable.Table;
                 this.nonPrimaryTable.map(d => {
@@ -138,8 +140,11 @@
 
         },
         methods: {
-            didClickAway: function(e) {
-                this.event = function(event) {
+            updateScroll() {
+                this.scrollPosition = window.scrollY
+            },
+            didClickAway: function (e) {
+                this.event = function (event) {
                     if (event.target !== e.target) {
                         this.currentParentMenuId = null;
                         document.body.removeEventListener("click", this.event);
@@ -171,7 +176,12 @@
 </script>
 
 <style scoped>
-
+    .fixed-header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 99;
+    }
 
 </style>
 

@@ -1,80 +1,382 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <button id="btn_SelectAll" class="btn btn-primary">Select All</button>
-            <button id="btn_UnselectAll" class="btn btn-secondary">Unselect All</button>
-        </div>
-        <draggable v-model="arrobj_SelectedItem" :options="draggableOptions" class="row draggable flex-row flex-nowrap">
-            <div v-for="obj_SelectedItem in arrobj_SelectedItem" :key="obj_SelectedItem.id" class="item">
-                <i class="fa fa-arrows-h" aria-hidden="true"></i>
-                {{obj_SelectedItem.Str_ID}}:
-                {{obj_SelectedItem.Str_Title}}
+    <div class=" ">
+        <div class="portfolio_wrap">
+            <div class="portfolioClass">
+                <h5 class="text-left">Select a class</h5>
+                <hr/>
+                <ul class="" v-model="obj_Class" id="ddl_Class">
+                    <li class="portfolioClass_item" v-for="classes of arrobj_Classes" :key="classes.id"
+                        :class="{'active':activeClass === classes.PK_Class_ID}"
+                        @click="loadStudents(classes.PK_Class_ID)">
+                        <span>{{classes.CLS_ClassName}}</span>
+                    </li>
+                </ul>
             </div>
-        </draggable>
+            <div class="portfolioStudent">
+                <h5 class="text-left pl-3">Select a student</h5>
+                <hr/>
+                <!--{{arrobj_Student}}..{{}}-->
+                <ul class="" v-model="obj_Student" id="ddl_Students">
+                    <li class="portfolioClass_item" v-for="student of arrobj_Student" :key="student.Student_ID"
+                        :class="{'active':activeStudent === student.Student_ID}" @click="loadPortfolio(student)">
+                        <span>{{student.First_Name}}</span>
+                    </li>
+                </ul>
+                <span> {{StudentResult}}</span>
 
-        <div class="row">
-            <div class="col-sm-3">
-                <img class="student-image" :src="getSource(obj_Student)" :bind="obj_Student"
-                     :alt="obj_Student.Student_Name"/>
             </div>
-            <div class="col-sm-6">
-                <b-form-select v-model="obj_Student" class="mb-3" @change="loadPosts">
-                    <optgroup v-for="classes of arrobj_Students" :label="classes.Str_SortBy" :key="classes.id">
-                        <option v-for="student of classes.ArrObj_Items" :value="student" :key="student.id">
-                            {{student.Student_Name}}
-                        </option>
-                    </optgroup>
-                </b-form-select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-" v-for="obj_Post of arrobj_Posts" :key="obj_Post.id">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="text-left float-left">
-                            <p class="mb-0">{{obj_Post.Dt_PostCreatedDate}}</p>
-                            <p class="mb-0">{{obj_Post.Str_Title}}</p>
-                        </div>
-                        <div class="text-right float-right">
-                            <label class="label-checkbox">
-                                <input type="checkbox" :value="obj_Post" v-model="arrobj_SelectedItem"/>
-                                <span class="span-checkbox"></span>
-                            </label>
+            <div class="portfolio_Content">
+                <div class="header mb-4">
+                    <div class="student-name-wrap">
+                        <h4 class="student-name text-left">{{selectedStudentsName}}</h4>
+                        <h4 class="student-name text-left" v-if="isNull(selectedStudentsName)">Select a student..</h4>
+                        <el-button size="mini" type="primary" v-if="!isNull(arrobj_Posts)"
+                                   @click="initCreatePortfolioModal" class="float-left">Generate Portfolio <i
+                                class="el-icon-circle-plus-outline el-icon-right"></i></el-button>
+                        <el-button size="mini" type="primary"
+                                   v-if="!isNull(arrobj_Posts) && !isNull(arrobj_SelectedPortfolios)"
+                                   @click="showDeleteModal" class="float-left">Delete Selected Portfolio <i
+                                class="el-icon-delete el-icon-right"></i></el-button>
+                    </div>
+                    <div class="student-image-wrap">
+                        <img class="student-image float-right" :src="getSource(obj_Student)" :bind="obj_Student"
+                             :alt="obj_Student.Student_Name"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="">
+                            <h5 v-if="isNull(arrobj_Portfolios)">NO PORTFOLIO</h5>
+                            <h5 v-if="!isNull(arrobj_Portfolios)" class="text-left pl-3">Portfolio List</h5>
+                            <hr v-if="!isNull(arrobj_Portfolios)"/>
+                            <table id="tbl_Portfolios" class="table table-light table-hover">
+                                <tbody>
+                                <tr v-for="tempobj_Portfolio of arrobj_Portfolios"
+                                    :key="tempobj_Portfolio.id" @click="arrobj_SelectedPortfolios.checked === true">
+                                    <td><label class="label-checkbox">
+                                        <input type="checkbox" :value="tempobj_Portfolio"
+                                               v-model="arrobj_SelectedPortfolios"
+                                               :disabled="isNull(arrobj_SelectedPortfolios.find(x=>x.PortfolioID === tempobj_Portfolio.PortfolioID))
+                                       && arrobj_SelectedPortfolios.length >= int_SelectLimit"/>
+                                        <span class="span-checkbox"></span>
+                                    </label></td>
+                                    <th scope="row">
+                                        <div>
+                                            {{tempobj_Portfolio.PortfolioDesc}}
+                                        </div>
+                                    </th>
+                                    <td>
+                                        {{tempobj_Portfolio.PortfolioCreatedDate}}
+                                    </td>
+                                    <td>
+                                        {{tempobj_Portfolio.PortfolioStatus}}
+                                    </td>
+
+                                    <td>
+                                        <!--<el-button size="mini" type="primary"-->
+                                                   <!--@click="initSavedPortfolioPostModal(tempobj_Portfolio)">VIEW-->
+                                        <!--</el-button>-->
+                                        <el-button size="mini" type="primary"
+                                                   @click="editPortfolio(tempobj_Portfolio)">VIEW
+                                        </el-button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                    <div class="col-2">
 
-                    <b-carousel id="carousel1"
-                                style="text-shadow: 1px 1px 2px #333;"
-                                controls
-                                indicators
-                                background="#ababab"
-                                :interval="0"
-                    >
-                        <div>
-                            <b-carousel-slide v-for="obj_PostItem of obj_Post.ArrObj_PostItems" :key="obj_PostItem.id">
-                                <img slot="img" class="card-img-top d-block img-fluid w-100"
-                                     :src="obj_PostItem.Str_Src"
-                                     :alt="obj_PostItem.Str_Alt"/>
-                            </b-carousel-slide>
-                        </div>
-                    </b-carousel>
-                    <div class="card-body">
-                        <h5 class="card-title">Placeholder</h5>
-                        <p class="card-text">{{obj_Post.Str_Content}}</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
             </div>
         </div>
+        <b-modal id="modal_CreatePortfolio" hide-footer size="lg" title="Create Portfolio"
+                 ref="modal_CreatePortfolio"
+                 centered>
+            <el-steps :active="stepActive" class="mb-4">
+                <el-step title="Select Content"></el-step>
+                <el-step title="Fill in description">
+                </el-step>
+            </el-steps>
+            <div class="portfolio-step1" v-if="stepActive === 0">
+                <div class="d-table w-100 mb-2">
+                    <el-button class="float-right ml-2" icon="el-icon-circle-check-outline" id="btn_SelectAll"
+                               size="small" type="primary">Select All
+                    </el-button>
+                    <el-button class="float-right" icon="el-icon-circle-close-outline" id="btn_UnselectAll" size="small"
+                               type="primary">Unselect All
+                    </el-button>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row div_PortfolioPosts">
+                            <div class="col-4" v-for="tempobj_Post of arrobj_Posts" :key="tempobj_Post.id">
+                                <div class="card portfolio-view">
+                                    <!--<div class="card-header">-->
+                                    <!--<div class="text-left float-left">-->
+                                    <!--<p class="mb-0"></p>-->
+                                    <!--<p class="mb-0">{{tempobj_Post.PostPorDtlTitle}}</p>-->
+                                    <!--</div>-->
+                                    <!--<div class="text-right float-right">-->
+                                    <!---->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <label class="label-checkbox">
+                                        <input class="limited" type="checkbox" :value="tempobj_Post"
+                                               v-model="obj_PortFolio.arrobj_SelectedPortfolioPosts"
+                                        />
+                                        <span class="span-checkbox"></span>
+                                    </label>
+                                    <b-carousel id="portfolioPostCarousel"
+                                                style="text-shadow: 1px 1px 2px #333;"
+                                                :controls="!isNull(tempobj_Post) && !isNull(tempobj_Post.ArrObj_Images) && tempobj_Post.ArrObj_Images.length > 1"
+                                                indicators
+                                                background="#ababab"
+                                                :interval="0"
+                                    >
+                                        <div>
+                                            <b-carousel-slide v-for="tempobj_Images of tempobj_Post.ArrObj_Images"
+                                                              :key="tempobj_Images.id">
+                                                <img slot="img" class="card-img-top d-block img-fluid w-100"
+                                                     :src="getLowSource(tempobj_Images)"
+                                                     :alt="tempobj_Post.PostPorDtlTitle"/>
+                                            </b-carousel-slide>
+                                        </div>
+                                    </b-carousel>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{tempobj_Post.PostPorDtlTitle}}</h5>
+                                        <p class="card-text">Observation: {{tempobj_Post.PostPorDtlObservation}}</p>
+                                        <p class="card-text">{{tempobj_Post.PostCreatedDate}}</p>
+                                        <!--<p class="card-text">Analysis & Reflection:-->
+                                        <!--{{obj_Post.PostPorDtlAnalysisReflection}}</p>-->
+                                        <!--<p class="card-text">Developmental Goals:-->
+                                        <!--{{obj_Post.PostPorDtlDevelopmentGoals}}</p>-->
+
+                                        <el-button class="mt-2" href="#" size="mini" type="text" icon="el-icon-view"
+                                                   @click="showViewPostModal(tempobj_Post, showCreatePortfolioModal)">
+                                            View
+                                        </el-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <span class="portfolio-selected__count">{{obj_PortFolio.arrobj_SelectedPortfolioPosts.length}} files selected</span>
+
+                        <draggable v-model="obj_PortFolio.arrobj_SelectedPortfolioPosts" :options="draggableOptions"
+                                   class="row overflow-x-scroll flex-row flex-nowrap portfolio-selected__item">
+                            <div v-for="obj_SelectedItem in obj_PortFolio.arrobj_SelectedPortfolioPosts"
+                                 :key="obj_SelectedItem.id" class="item">
+                                {{obj_SelectedItem.PostPorDtlTitle}}
+                            </div>
+                        </draggable>
+                        <hr/>
+                    </div>
+                    <!--<button id="btn_Next"-->
+                    <!--class="btn btn-secondary" @click="showPortfolioDescriptionModal">Next-->
+                    <!--</button>-->
+                </div>
+                <div class="create-porfolio__footer">
+                    <el-button id="btn_Cancel" style="margin-top: 12px;" @click="hideGeneratePortfolioModal">
+                        Cancel
+                    </el-button>
+                    <el-button style="margin-top: 12px;"
+                               :disabled="obj_PortFolio.arrobj_SelectedPortfolioPosts.length === 0"
+                               @click="stepNext">
+                        Next step
+                    </el-button>
+
+                </div>
+            </div>
+            <div class="portfolio-step2" v-if="stepActive === 1">
+                <div class="portfolio-desc__input">
+                    <strong>Portfolio Description</strong>
+                    <textarea v-model="obj_PortFolio.PortfolioDesc" type="text" class="form-control"
+                              id="tb_PortfolioDescription"
+                              placeholder="Please enter your Portfolio Description" required></textarea>
+                </div>
+                <div class=" create-porfolio__footer">
+                    <el-button id="btn_Back" style="margin-top: 12px;" @click="stepActive = 0">
+                        Back
+                    </el-button>
+                    <el-button id="btn_Submit" style="margin-top: 12px;" @click="generatePortfolio">
+                        Submit
+                    </el-button>
+                </div>
+            </div>
+        </b-modal>
+        <b-modal id="modal_PortfolioDescription" hide-footer size="lg" title="Portfolio Description"
+                 ref="modal_PortfolioDescription"
+                 centered>
+
+        </b-modal>
+        <b-modal id="modal_SavedPortfolioPost" hide-footer size="lg" title="View Portfolio"
+                 ref="modal_SavedPortfolioPost"
+                 centered>
+            <div class="d-table w-100">
+                <el-button class="float-right" type="primary" icon="el-icon-edit" id="btn_EdtPortfolio"
+                           @click="showCreatePortfolioModal" size="mini">Rearrange Content
+                </el-button>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-11">
+                    <p style="white-space: pre-line;" class="text-left">{{obj_PortFolio.PortfolioDesc}}</p>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-12">
+                    <div class="row overflow-x-scroll flex-row flex-nowrap div_PortfolioPosts">
+                        <div class="col-4" v-for="tempobj_Post of obj_PortFolio.arrobj_SelectedPortfolioPosts"
+                             :key="tempobj_Post.id">
+                            <div class="card portfolio-view">
+                                <label class="label-checkbox">
+                                    <input class="limited" type="checkbox" :value="tempobj_Post"
+                                           v-model="obj_PortFolio.arrobj_SelectedPortfolioPosts"
+                                    />
+                                    <span class="span-checkbox"></span>
+                                </label>
+                                <b-carousel id="portfolioSavedPostCarousel"
+                                            style="text-shadow: 1px 1px 2px #333;"
+                                            :controls="!isNull(tempobj_Post) && !isNull(tempobj_Post.ArrObj_Images) && tempobj_Post.ArrObj_Images.length > 1"
+                                            indicators
+                                            background="#ababab"
+                                            :interval="0"
+                                >
+                                    <div>
+                                        <b-carousel-slide v-for="tempobj_Images of tempobj_Post.ArrObj_Images"
+                                                          :key="tempobj_Images.id">
+                                            <img slot="img" class="card-img-top d-block img-fluid w-100"
+                                                 :src="getLowSource(tempobj_Images)"
+                                                 :alt="tempobj_Post.PostPorDtlTitle"/>
+                                        </b-carousel-slide>
+                                    </div>
+                                </b-carousel>
+                                <div class="card-body">
+                                    <div class="card-desc">
+                                        <h5 class="card-title">{{tempobj_Post.PostPorDtlTitle}}</h5>
+                                        <p class="card-text">Observation: {{tempobj_Post.PostPorDtlObservation}}</p>
+                                        <p class="card-text">{{tempobj_Post.PostCreatedDate}}</p>
+                                    </div>
+                                    <!--<p class="card-text">Analysis & Reflection:-->
+                                    <!--{{obj_Post.PostPorDtlAnalysisReflection}}</p>-->
+                                    <!--<p class="card-text">Developmental Goals:-->
+                                    <!--{{obj_Post.PostPorDtlDevelopmentGoals}}</p>-->
+                                    <el-button class="mt-2" href="#" size="mini" type="text" icon="el-icon-view"
+                                               @click="showViewPostModal(tempobj_Post, showSavedPortfolioPostModal)">
+                                        View
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </b-modal>
+        <b-modal id="modal_ViewPost" hide-footer size="lg" title="View Post"
+                 ref="modal_ViewPost"
+                 centered
+                 @hidden="hideViewPostModal">
+            <div class="row">
+                <div class="col-6 viewpost-carousel">
+                    <b-carousel id="postImages"
+                                style="text-shadow: 1px 1px 2px #333;"
+                                :controls="!isNull(obj_Post.ArrObj_Images) && obj_Post.ArrObj_Images.length > 1"
+                                indicators
+                                background="#ababab"
+                                :interval="0"
+                    >
+                        <div v-for="tempobj_Images of obj_Post.ArrObj_Images" :key="tempobj_Images.id">
+                            <b-carousel-slide>
+                                <img slot="img" class="card-img-top d-block img-fluid w-100"
+                                     :src="getHighSource(tempobj_Images)"
+                                     :alt="obj_Post.PostPorDtlTitle"/>
+                            </b-carousel-slide>
+                        </div>
+                    </b-carousel>
+                </div>
+                <div class="col-6 ">
+                    <div class="viewpost-desc__box ">
+                        <div class="">
+                            <span>Date:</span>
+                            {{obj_Post.PostCreatedDate}}
+                        </div>
+                        <div class="">
+                            <span>Title:</span>
+                            {{obj_Post.PostPorDtlTitle}}
+                        </div>
+                        <div class="">
+                            <span>Observation:</span>
+                            {{obj_Post.PostPorDtlObservation}}
+                        </div>
+                        <div class="">
+                            <span>Development Goals:</span>
+                            {{obj_Post.PostPorDtlDevelopmentGoals}}
+                        </div>
+                        <div class="">
+                            <span>Analysis & Reflection:</span>
+                            {{obj_Post.PostPorDtlAnalysisReflection}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </b-modal>
+        <b-modal class="alert-modal" title="ARE YOU SURE?" ref="modal_DeletePost" @ok="deletePortfolio">
+            Once you delete a post, you can't undo it.
+        </b-modal>
+        <!--<b-modal id="modal_SavedPortfolioPost" hide-footer size="lg" title="Portfolio saved post"
+                 ref="modal_SavedPortfolioPost"
+                 centered>
+            <div class="row">
+                <div class="col-" v-for="tempobj_SavedPortfolioPost of arrobj_SavedPortfolioPosts"
+                     :key="tempobj_SavedPortfolioPost.id">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="text-left float-left">
+                                <p class="mb-0">{{tempobj_SavedPortfolioPost.PostCreatedDate}}</p>
+                                <p class="mb-0">{{tempobj_SavedPortfolioPost.PostPorDtlTitle}}</p>
+                            </div>
+                        </div>
+                        &lt;!&ndash;<b-carousel id="savedPortfolioPostCarousel"
+                                    style="text-shadow: 1px 1px 2px #333;"
+                                    :controls="!isNull(tempobj_Post) && !isNull(tempobj_SavedPortfolioPost.ArrObj_Images) && tempobj_SavedPortfolioPost.ArrObj_Images.length > 1"
+                                    indicators
+                                    background="#ababab"
+                                    :interval="0"
+                        >
+                            <div>
+                                <b-carousel-slide v-for="tempobj_Images of tempobj_Post.ArrObj_Images"
+                                                  :key="tempobj_Images.id">
+                                    <img slot="img" class="card-img-top d-block img-fluid w-100"
+                                         :src="getLowSource(tempobj_Images)"
+                                         :alt="tempobj_Post.PostPorDtlTitle"/>
+                                </b-carousel-slide>
+                            </div>
+                        </b-carousel>&ndash;&gt;
+                        <div class="card-body">
+                            <h5 class="card-title">{{tempobj_SavedPortfolioPost.PostPorDtlTitle}}</h5>
+                            <p class="card-text">Observation: {{tempobj_SavedPortfolioPost.PostPorDtlObservation}}</p>
+                            &lt;!&ndash;<p class="card-text">Analysis & Reflection:&ndash;&gt;
+                            &lt;!&ndash;{{obj_Post.PostPorDtlAnalysisReflection}}</p>&ndash;&gt;
+                            &lt;!&ndash;<p class="card-text">Developmental Goals:&ndash;&gt;
+                            &lt;!&ndash;{{obj_Post.PostPorDtlDevelopmentGoals}}</p>&ndash;&gt;
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </b-modal>-->
     </div>
 </template>
-
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
 <script>
     "use strict";
     import DataSource from "../data/datasource";
-    import $ from 'jquery';
-    import draggable from 'vuedraggable'
+    import $ from "jquery";
+    import draggable from 'vuedraggable';
+    import * as vm from "vue";
 
     export default {
         name: "Portfolio",
@@ -86,14 +388,267 @@
                     easing: "cubic-bezier(1, 0, 0, 1)",
                     handle: ".fa-arrows-h"
                 },
-                arrobj_SelectedItem: [],
                 arrobj_Posts: [],
-                // CLS_CLassName, Profile_Img, Student_ID, Student_Name
-                arrobj_Students: [],
-                obj_Student: {}
-            }
+                obj_Post: {
+                    ArrObj_Images: [{}],
+                    CONname: "",
+                    PostContent: "",
+                    PostCreatedBy: "",
+                    PostCreatedDate: "",
+                    PostID: "",
+                    PostLinkPostID: "",
+                    PostPorDtlAnalysisReflection: "",
+                    PostPorDtlDevelopmentGoals: "",
+                    PostPorDtlObservation: "",
+                    PostPorDtlTitle: "",
+                    PostTagUserID: "",
+                    PostType: "",
+                    ProfileImage: "",
+                    RowNumber: "",
+                }, // For showing single post
+                arrobj_Classes: [{
+                    CLS_Batch: "",
+                    CLS_ClassName: "",
+                    CLS_Class_Admin_Staff: "",
+                    CLS_Class_Incharge_Staff: "",
+                    CLS_Class_Max_Students: "",
+                    CLS_Created_On: "",
+                    CLS_Description: "",
+                    CLS_FK_Course_ID: "",
+                    CLS_FK_Created_by: "",
+                    CLS_FK_School_ID: "",
+                    CLS_FK_Semester_ID: "",
+                    CLS_FK_Subject_ID: "",
+                    CLS_Status: "",
+                    CLS_TeacherCount: "",
+                    PK_Class_ID: "",
+                    PK_SchoolCourse_ID: "",
+                    PK_Semester_ID: "",
+                    SC_FK_CourseID: "",
+                    SC_FK_SchoolID: "",
+                    SMT_Code: "",
+                    SMT_From: "",
+                    SMT_School: "",
+                    SMT_Status: "",
+                    SMT_To: "",
+                    SMT_Year: "",
+                    // arrobj_Student: [],
+                    smt_course: "",
+                }],
+                arrobj_Student: [],
+                arrobj_Portfolios: [], // For storing all created portfolios
+                arrobj_SelectedPortfolios: [],
+                selectedPortfolios: [],
+                obj_PortFolio: {
+                    PortfolioID: "",
+                    PortfolioDesc: "",
+                    arrobj_SelectedPortfolioPosts: []
+                }, // For any single portfolio
+                obj_Student: {},
+                obj_Class: {},
+
+                int_NumberOfPost: 10,
+                int_SelectLimit: 30,
+
+                returnPage: null, // For callback when click to view single post
+
+                str_PostType: "PORTFOLIO",
+
+                fileStudent: "",
+                StudentResult: "No Student Yet...",
+                selectedStudentsName: "",
+                activeClass: "",
+                activeStudent: "",
+                stepActive: 0
+            };
         },
         methods: {
+            stepNext() {
+                if (this.active++ > 2) this.active = 0;
+                this.stepActive = 1;
+            },
+            clear_obj_Portfolio() {
+                this.obj_PortFolio = {
+                    PortfolioID: "",
+                    PortfolioDesc: "",
+                    arrobj_SelectedPortfolioPosts: []
+                };
+            },
+
+            initCreatePortfolioModal() {
+                this.clear_obj_Portfolio();
+                this.showCreatePortfolioModal();
+            },
+
+            showCreatePortfolioModal() {
+                this.$refs.modal_CreatePortfolio.show();
+            },
+
+            showPortfolioDescriptionModal() {
+                this.$refs.modal_PortfolioDescription.show();
+            },
+
+            async initSavedPortfolioPostModal(tempobj_Portfolio) {
+                const PortPostResponse = await DataSource.shared.getPostByPortfolioID(tempobj_Portfolio.PortfolioID);
+                DataSource.shared.getPostByPortfolioID(tempobj_Portfolio.PortfolioID).then((result) => {
+                    this.obj_PortFolio = {
+                        PortfolioID: tempobj_Portfolio.PortfolioID,
+                        PortfolioDesc: tempobj_Portfolio.PortfolioDesc,
+                        arrobj_SelectedPortfolioPosts: [],
+                    };
+
+                    for (let tempobj of result.Table)
+                        this.obj_PortFolio.arrobj_SelectedPortfolioPosts.push.apply(this.obj_PortFolio.arrobj_SelectedPortfolioPosts, this.arrobj_Posts.filter(x => x.PostID === tempobj.PostID));
+
+                    this.showSavedPortfolioPostModal();
+                });
+
+                if (PortPostResponse) {
+                    switch (PortPostResponse.code) {
+                        case "88":
+                            this.$notify.error({
+                                title: 'Error',
+                                message: 'Please Login'
+                            });
+                            this.results = `Please Login to submit post`;
+                            this.systemmsgError = true;
+                            break;
+                        case "99":
+                            this.$notify.error({
+                                title: 'Error',
+                                message: 'Please Try Again'
+                            });
+                            this.results = `Please fill in content`;
+                            this.systemmsgError = true;
+                            break;
+                    }
+                }
+            },
+
+            showSavedPortfolioPostModal() {
+                this.$refs.modal_SavedPortfolioPost.show();
+            },
+
+            showViewPostModal(tempobj_Post, next) {
+                this.obj_Post = tempobj_Post;
+                this.returnPage = next;
+                this.$refs.modal_ViewPost.show();
+            },
+
+            showDeleteModal() {
+                this.$refs.modal_DeletePost.show();
+            },
+
+            hideGeneratePortfolioModal() {
+                this.$refs.modal_CreatePortfolio.hide();
+            },
+
+            hidePortfolioDescriptionModal() {
+                this.$refs.modal_PortfolioDescription.hide();
+            },
+
+            hideSavedPortfolioPostModal() {
+                this.$refs.modal_SavedPortfolioPost.hide();
+                if (!this.isNull(this.returnPage))
+                    this.returnPage();
+            },
+
+            hideDeleteModal() {
+                this.$refs.modal_DeletePost.hide();
+            },
+
+            hideViewPostModal() {
+                this.$refs.modal_ViewPost.hide();
+                this.returnPage();
+            },
+
+            generatePortfolio() {
+                // let arrstr_PostIDs = JSON.stringify(this.obj_PortFolio.arrobj_SelectedPortfolioPosts.map(x => x.PostID));
+                // DataSource.shared.savePortfolio(this.obj_PortFolio.PortfolioDesc, this.obj_Student.Student_ID, arrstr_PostIDs, this.obj_PortFolio.PortfolioID).then((result) => {
+                //     DataSource.shared.softDeletePortfolio(JSON.stringify([this.obj_PortFolio.PortfolioID])).then(() => {
+                //         this.hideGeneratePortfolioModal();
+                //         this.hidePortfolioDescriptionModal();
+                //         this.loadPortfolio();
+                //         this.clear_obj_Portfolio();
+                //     });
+                // });
+                this.stepActive = 2;
+                this.$router.push({
+                    name: 'Portfolio Preview',
+                    params: {
+                        stringifyPostIDs: JSON.stringify(this.obj_PortFolio.arrobj_SelectedPortfolioPosts.map(x => x.PostID)),
+                        portfolioDesc: this.obj_PortFolio.PortfolioDesc,
+                        portfolioID: '',
+                        studentID: this.activeStudent,
+                        mode: 'NEW'
+                    }
+                });
+            },
+
+            editPortfolio(tempobj_Portfolio) {
+                this.$router.push({
+                    name: 'Portfolio Preview',
+                    params: {
+                        stringifyPostIDs: '',
+                        portfolioDesc: '',
+                        portfolioID: tempobj_Portfolio.PortfolioID,
+                        studentID: '',
+                        mode: 'EDIT'
+                    }
+                });
+            },
+
+            deletePortfolio() {
+                DataSource.shared.softDeletePortfolio(JSON.stringify(this.arrobj_SelectedPortfolios.map(x => x.PortfolioID))).then((result) => {
+                    this.arrobj_SelectedPortfolios = [];
+                    this.$router.go(0);
+                });
+            },
+
+            /*#region Loader Functions*/
+            showLoading() {
+                this.$vs.loading();
+            }
+            ,
+            hideLoading() {
+                this.$vs.loading.close();
+            }
+            ,
+            /*#endregion*/
+
+            isNull(obj) {
+                return (obj === null || obj === undefined || obj === "undefined" || obj.length === 0 || obj === "");
+            },
+            isImage(obj_File) {
+                let ext = String(obj_File.PostItemFileExt).toUpperCase();
+                let isImage = false;
+
+                switch (ext) {
+                    case ".PNG":
+                    case ".JPG":
+                    case ".BMP":
+                    case ".GIF":
+                        isImage = true;
+                        break;
+                    default:
+                        isImage = false;
+                        break;
+                }
+
+                return isImage;
+            },
+            getLowSource(file) {
+                if (this.isImage(file))
+                    return "data:" + file.PostItemFileType + ";base64," + file.PostItemFileLow;
+                else
+                    return "";
+            },
+            getHighSource(file) {
+                if (this.isImage(file))
+                    return "data:" + file.PostItemFileType + ";base64," + file.PostItemFile;
+                else
+                    return "";
+            },
             getSource(obj) {
                 let imgsrc = "";
                 if (obj.Profile_Img == null || obj.Profile_Img == "")
@@ -102,95 +657,90 @@
                     imgsrc = "data:" + obj.Profile_ImgType + ";base64," + obj.Profile_Img;
                 return imgsrc;
             },
-
-            loadStudents() {
-                DataSource.shared.getPortfolioStudentClass().then((result) => {
-                    this.arrobj_Students = this.groupBy(result, "CLS_ClassName");
-                });
+            async loadClass() {
+                const classResponse = await DataSource.shared.getAttendanceClass();
+                this.arrobj_Classes = classResponse.Table;
+                this.activeClass = this.arrobj_Classes[0].PK_Class_ID;
             },
+            async loadStudents(classID) {
+                try {
+                    if (classID === undefined) {
+                        this.fileStudent = this.arrobj_Classes[0].PK_Class_ID;
+                    } else {
+                        this.fileStudent = classID;
+                        this.activeClass = classID;
+                    }
+                    const studentResponse = await DataSource.shared.getAllActiveStudentsByClass(this.fileStudent);
 
-            loadPosts() {
-                this.arrobj_Posts = [{
-                    Str_ID: "1",
-                    Str_Title: "Lorem ipsum dolor sit amet",
-                    Str_Content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non porttitor eros. Ut molestie, tellus vitae ultrices tincidunt, dui tortor mollis nisl, sed ultrices ex enim rutrum dolor. Sed ut ultrices est, id fermentum odio. In luctus vel turpis at convallis. Ut hendrerit sapien turpis, vitae mollis massa placerat non. In diam sem, pulvinar vel volutpat eget, sagittis quis libero. Donec eu lacinia neque. Praesent hendrerit sollicitudin maximus. ",
-                    Dt_PostModifiedDate: "22 Jan 2019",
-                    Dt_PostCreatedDate: "22 Jan 2019",
-                    ArrObj_PostItems: [{
-                        Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                        Str_Alt: "Item 1"
-                    },
-                        {
-                            Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                            Str_Alt: "Item 2"
-                        },
-                        {
-                            Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                            Str_Alt: "Item 3"
-                        }]
-                },
-                    {
-                        Str_ID: "2",
-                        Str_Title: "Lorem ipsum dolor sit amet",
-                        Str_Content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non porttitor eros. Ut molestie, tellus vitae ultrices tincidunt, dui tortor mollis nisl, sed ultrices ex enim rutrum dolor. Sed ut ultrices est, id fermentum odio. In luctus vel turpis at convallis. Ut hendrerit sapien turpis, vitae mollis massa placerat non. In diam sem, pulvinar vel volutpat eget, sagittis quis libero. Donec eu lacinia neque. Praesent hendrerit sollicitudin maximus. ",
-                        Dt_PostModifiedDate: "22 Jan 2019",
-                        Dt_PostCreatedDate: "22 Jan 2019",
-                        ArrObj_PostItems: [{
-                            Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                            Str_Alt: "Item 1"
-                        },
-                            {
-                                Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                                Str_Alt: "Item 2"
-                            },
-                            {
-                                Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                                Str_Alt: "Item 3"
-                            }]
-                    },
-                    {
-                        Str_ID: "3",
-                        Str_Title: "Lorem ipsum dolor sit amet",
-                        Str_Content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non porttitor eros. Ut molestie, tellus vitae ultrices tincidunt, dui tortor mollis nisl, sed ultrices ex enim rutrum dolor. Sed ut ultrices est, id fermentum odio. In luctus vel turpis at convallis. Ut hendrerit sapien turpis, vitae mollis massa placerat non. In diam sem, pulvinar vel volutpat eget, sagittis quis libero. Donec eu lacinia neque. Praesent hendrerit sollicitudin maximus. ",
-                        Dt_PostModifiedDate: "22 Jan 2019",
-                        Dt_PostCreatedDate: "22 Jan 2019",
-                        ArrObj_PostItems: [{
-                            Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                            Str_Alt: "Item 1"
-                        },
-                            {
-                                Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                                Str_Alt: "Item 2"
-                            },
-                            {
-                                Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                                Str_Alt: "Item 3"
-                            }]
-                    },
-                    {
-                        Str_ID: "4",
-                        Str_Title: "Lorem ipsum dolor sit amet",
-                        Str_Content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non porttitor eros. Ut molestie, tellus vitae ultrices tincidunt, dui tortor mollis nisl, sed ultrices ex enim rutrum dolor. Sed ut ultrices est, id fermentum odio. In luctus vel turpis at convallis. Ut hendrerit sapien turpis, vitae mollis massa placerat non. In diam sem, pulvinar vel volutpat eget, sagittis quis libero. Donec eu lacinia neque. Praesent hendrerit sollicitudin maximus. ",
-                        Dt_PostModifiedDate: "22 Jan 2019",
-                        Dt_PostCreatedDate: "22 Jan 2019",
-                        ArrObj_PostItems: [{
-                            Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                            Str_Alt: "Item 1"
-                        },
-                            {
-                                Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                                Str_Alt: "Item 2"
-                            },
-                            {
-                                Str_Src: "https://vignette.wikia.nocookie.net/mytimeatportia/images/2/28/Emily.png/revision/latest?cb=20171017091855",
-                                Str_Alt: "Item 3"
-                            }]
-                    }];
+
+                    if (studentResponse) {
+
+                        this.arrobj_Student = studentResponse.Table;
+                        this.StudentResult = "";
+                        switch (studentResponse.code) {
+                            case "1":
+                                break;
+                            case "2":
+                                this.StudentResult = `No Student Yet...`;
+                                break;
+                        }
+                    }
+                } catch (e) {
+                    console.log(e);
+                    this.error = e;
+                }
+
+
+            },
+            async loadPortfolio(student) {
+                const {Student_ID} = student;
+                // DataSource.shared.getPortfolioListByStudentID(Student_ID).then((result) => {
+                //     this.arrobj_Portfolios = result.Table;
+                // });
+
+                this.selectedStudentsName = student.First_Name;
+                this.activeStudent = Student_ID;
+
+                const result = await DataSource.shared.getPortfolioListByStudentID(Student_ID);
+                if (result) {
+                    this.arrobj_Portfolios = result.Table;
+
+
+                    const studentSelected = this.arrobj_Student.find(d => d.PortfolioStudentID === Student_ID);
+                }
+
+                this.loadPortfolioPosts(Student_ID);
+            },
+            loadPortfolioPosts(Student_ID) {
+                this.arrobj_Posts = [];
+                this.showLoading();
+
+                DataSource.shared.getStudentPostByType(Student_ID, this.str_PostType, this.int_NumberOfPost).then((result) => {
+                    return result.Table;
+                }).then((arrobj_Portfolio) => {
+                    if (this.isNull(arrobj_Portfolio))
+                        return;
+
+                    let temparr_Promise = [];
+
+                    for (let obj of arrobj_Portfolio)
+                        temparr_Promise.push(DataSource.shared.getPostFile(obj.PostID));
+
+                    Promise.all(temparr_Promise).then((result) => {
+                        for (let [index, obj_Portfolio] of arrobj_Portfolio.entries())
+                            obj_Portfolio.ArrObj_Images = result[index].Table;
+
+                        this.arrobj_Posts = arrobj_Portfolio;
+                    });
+                }).finally(() => {
+                    setTimeout(this.hideLoading, 2050);
+                    // this.hideLoading();
+                });
 
             },
 
             /*#region Array Grouping Function*/
-            groupBy(data, key) {
+            groupBy(data, key, display) {
                 //Credits to Ceasar Bautista and Juan Castillo @ stackoverflow
                 /*return data.reduce(function(storage, item) {
                     let group = item[key];
@@ -199,29 +749,134 @@
                     storage[group].push(item);
                     return storage;
                 }, {});*/
-
                 let ArrObj_Sorted = [];
+                let arrstr_display = !this.isNull(display) ? display.split(",") : [key];
 
                 for (let item of data) {
                     let index = ArrObj_Sorted.findIndex(x => x.Str_SortBy === item[key]);
 
                     if (index === -1) {
-                        ArrObj_Sorted.push({Str_SortBy: item[key], ArrObj_Items: [item]});
+                        let str_Display = "";
+                        for (let tempdisp of arrstr_display)
+                            str_Display += item[tempdisp] + " ";
+
+                        ArrObj_Sorted.push({Str_SortBy: item[key], Str_Display: str_Display, ArrObj_Items: [item]});
                     } else
                         ArrObj_Sorted[index].ArrObj_Items.push(item);
                 }
 
                 return ArrObj_Sorted;
             }
-            /*#endregion*/
+            /*#endregion*/,
 
+            /*#region Scroll Loader Functions*/
+            getScrollPercent() {
+                //Credits to Phil Ricketts @ stackoverflow
+                let height = document.documentElement,
+                    body = document.body,
+                    scrollTop = "scrollTop",
+                    scrollHeight = "scrollHeight";
+
+                return (height[scrollTop] || body[scrollTop]) / ((height[scrollHeight] || body[scrollHeight]) - height.clientHeight) * 100;
+            },
+            isScrollable() {
+                return $(document).height() > $(window).height();
+            },
+            debounce(func, wait, immediate) {
+                // Returns a function, that, as long as it continues to be invoked, will not
+                // be triggered. The function will be called after it stops being called for
+                // N milliseconds. If `immediate` is passed, trigger the function on the
+                // leading edge, instead of the trailing.
+                let timeout, result;
+                let self = this;
+
+                let later = function (context, args) {
+                    timeout = null;
+                    if (args) result = func.apply(context, args);
+                };
+
+                let debounced = self.restArguments(function (args) {
+                    if (timeout) clearTimeout(timeout);
+                    if (immediate) {
+                        let callNow = !timeout;
+                        timeout = setTimeout(later, wait);
+                        if (callNow) result = func.apply(this, args);
+                    } else {
+                        timeout = self.delay(later, wait, this, args);
+                    }
+
+                    return result;
+                });
+
+                debounced.cancel = function () {
+                    clearTimeout(timeout);
+                    timeout = null;
+                };
+
+                return debounced;
+            },
+            delay(func, wait, ...args) {
+                // Lodash Delay
+                /**
+                 * Invokes `func` after `wait` milliseconds. Any additional arguments are
+                 * provided to `func` when it's invoked.
+                 *
+                 * @since 0.1.0
+                 * @category Function
+                 * @param {Function} func The function to delay.
+                 * @param {number} wait The number of milliseconds to delay invocation.
+                 * @param {...*} [args] The arguments to invoke `func` with.
+                 * @returns {number} Returns the timer id.
+                 * @example
+                 *
+                 * delay(text => console.log(text), 1000, 'later')
+                 * // => Logs 'later' after one second.
+                 */
+                if (typeof func != "function") {
+                    throw new TypeError("Expected a function");
+                }
+                return setTimeout(func, +wait || 0, ...args);
+            },
+            restArguments(func, startIndex) {
+                // Some functions take a variable number of arguments, or a few expected
+                // arguments at the beginning and then a variable number of values to operate
+                // on. This helper accumulates all remaining arguments past the function?s
+                // argument length (or an explicit `startIndex`), into an array that becomes
+                // the last argument. Similar to ES6?s "rest parameter".
+                startIndex = startIndex == null ? func.length - 1 : +startIndex;
+                return function () {
+                    let length = Math.max(arguments.length - startIndex, 0),
+                        rest = Array(length),
+                        index = 0;
+                    for (; index < length; index++) {
+                        rest[index] = arguments[index + startIndex];
+                    }
+                    switch (startIndex) {
+                        case 0:
+                            return func.call(this, rest);
+                        case 1:
+                            return func.call(this, arguments[0], rest);
+                        case 2:
+                            return func.call(this, arguments[0], arguments[1], rest);
+                    }
+                    let args = Array(startIndex + 1);
+                    for (index = 0; index < startIndex; index++) {
+                        args[index] = arguments[index];
+                    }
+                    args[startIndex] = rest;
+                    return func.apply(this, args);
+                };
+            },
+            /*#endregion*/
         },
         mounted() {
+
             let self = this;
 
-            self.loadStudents();
+            self.loadClass();
 
-            let nabarxHeight = $(".nabarx").outerHeight();
+            /*#region floating draggable component. Need to be at main body to work instead of inside a modal*/
+            /*let nabarxHeight = $(".nabarx").outerHeight();
             let menuBoxWrap = $(".menu-box-wrap").outerHeight();
 
             $(window).scroll(() => {
@@ -231,7 +886,8 @@
                 else
                     $(".draggable" +
                         "").removeClass("position-fixed");
-            });
+            });*/
+            /*#endregion*/
 
             /*#region Select/Unselect All Functions*/
             $("#btn_SelectAll").click(() => {
@@ -252,29 +908,38 @@
                 });
             });
             /*#endregion*/
-        }
-        ,
+
+            $(document).on("change", "#ddl_Students", self.debounce(() => {
+                // self.loadPosts();
+                self.loadPortfolio();
+                self.loadPortfolioPosts();
+            }, 250));
+        },
         components: {
             draggable
-        }
-        ,
-        watch: {
-            arrobj_SelectedItem: function () {
-                // console.log(this.arrobj_SelectedItem);
-            },
-            obj_Student: function () {
-                console.log(this.obj_Student)
-            }
-        }
-    }
+        },
+    };
 </script>
-
-
 <style scoped>
+    #tbl_Portfolios {
+        width: 100%;
+    }
+
+    #tbl_Portfolios tbody tr {
+        cursor: pointer;
+    }
+
+    #tbl_Portfolios tbody th div {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     /*#region Post Card*/
     .card {
         max-width: 16rem;
-        margin: 10px;
+        margin: 10px 0;
     }
 
     .card .card-body p {
@@ -368,7 +1033,7 @@
         margin: 15px 5px 15px 10px;
     }
 
-    .draggable {
+    .overflow-x-scroll {
         overflow-x: auto;
     }
 
@@ -391,13 +1056,20 @@
             max-width: 94px;
         }
     }
+
     @media (max-width: 768px) {
         .student-image {
             max-width: 120px;
         }
     }
 
-    .student-image {
-        width: 180px;
+    .div_PortfolioPosts {
+        max-height: 500px;
+        overflow-y: scroll;
+    }
+</style>
+<style>
+    #portfolioCarousel .carousel-control-prev, #portfolioCarousel .carousel-control-next {
+        background-color: black;
     }
 </style>

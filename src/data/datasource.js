@@ -3,6 +3,7 @@ import {ERROR_SERVER_UNREACHABLE} from "../data/datasourceConst";
 import axios from "axios";
 import jQuery from 'jquery';
 import moment from "moment";
+import Cookies from "js-cookie";
 
 const API_HOST = process.env.VUE_APP_ROOT_API || "http://local.emsv2";
 let GoogleGeocodeAPIKey = 'AIzaSyBSjzdBEO1Akg0aZfKpglWYBtdqLMHJLzM';
@@ -58,12 +59,12 @@ export default class DataSource {
         }
 
         if (withToken) {
-            data.token = sessionStorage.getItem('authToken');
-            data.UserSchool_Session = sessionStorage.getItem('schoolSession');
-            data.UserID_Session = sessionStorage.getItem('userIDSession');
-            data.UserType_Session = sessionStorage.getItem('userTypeSession');
-            data.UserUniversity_Session = sessionStorage.getItem('userUniversitySession');
-            data.UserEmail_Session = sessionStorage.getItem('userEmailSession');
+            data.token = Cookies.get('authToken');
+            data.UserSchool_Session = Cookies.get('schoolSession');
+            data.UserID_Session = Cookies.get('userIDSession');
+            data.UserType_Session = Cookies.get('userTypeSession');
+            data.UserUniversity_Session = Cookies.get('userUniversitySession');
+            data.UserEmail_Session = Cookies.get('userEmailSession');
         }
 
         // this is just testing, remove this if savePost not working
@@ -74,7 +75,7 @@ export default class DataSource {
         }
 
         // get token from session
-        // const token = sessionStorage.getItem('authToken');
+        // const token = Cookies.get('authToken');
 
         // if token is available and withToken set as true, then pass request with headers
         // they not using header Authorization so disable this
@@ -88,8 +89,8 @@ export default class DataSource {
     async uploadFile(files, postID) {
         console.log(postID);
         const formData = new FormData();
-        formData.append('token', sessionStorage.getItem('authToken'));
-        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
 
         console.log(files);
 
@@ -119,20 +120,20 @@ export default class DataSource {
         // return response;
     }
 
-
     async login(userId, password) {
         const data = {
             userID: userId,
             userPassword: password
         };
         const response = await this.callWebService("/controller/Login.asmx/checkLogin", data, "POST", false);
-        sessionStorage.setItem('authToken', response.token);
-        sessionStorage.setItem('schoolSession', response.UserSchool_Session);
-        sessionStorage.setItem('userIDSession', response.UserID_Session);
-        sessionStorage.setItem('userTypeSession', response.UserType_Session);
-        sessionStorage.setItem('userUniversitySession', response.UserUniversity_Session);
-        sessionStorage.setItem('usRidSession', response.USRid_Session);
-        sessionStorage.setItem('userEmailSession', response.UserEmail_Session);
+        Cookies.set('authToken', response.token,  { expires: 1 });
+        Cookies.set('schoolSession', response.UserSchool_Session,  { expires: 1 });
+        Cookies.set('userIDSession', response.UserID_Session,  { expires: 1 });
+        Cookies.set('userTypeSession', response.UserType_Session,  { expires: 1 });
+        Cookies.set('userUniversitySession', response.UserUniversity_Session,  { expires: 1 });
+        Cookies.set('usRidSession', response.USRid_Session,  { expires: 1 });
+        Cookies.set('userEmailSession', response.UserEmail_Session,  { expires: 1 });
+
         return response;
     }
 
@@ -143,29 +144,35 @@ export default class DataSource {
         };
 
         const response = await this.callWebService("/controller/Login.asmx/checkLogin", data, "POST", false);
-        sessionStorage.setItem('authToken', response.token);
-        sessionStorage.setItem('schoolSession', response.UserSchool_Session);
-        sessionStorage.setItem('userIDSession', response.UserID_Session);
-        sessionStorage.setItem('userTypeSession', response.UserType_Session);
-        sessionStorage.setItem('userUniversitySession', response.UserUniversity_Session);
-        sessionStorage.setItem('usRidSession', response.USRid_Session);
-        sessionStorage.setItem('userEmailSession', response.UserEmail_Session);
+        Cookies.set('authToken', response.token,  { expires: 1 });
+        Cookies.set('schoolSession', response.UserSchool_Session,  { expires: 1 });
+        Cookies.set('userIDSession', response.UserID_Session,  { expires: 1 });
+        Cookies.set('userTypeSession', response.UserType_Session,  { expires: 1 });
+        Cookies.set('userUniversitySession', response.UserUniversity_Session,  { expires: 1 });
+        Cookies.set('usRidSession', response.USRid_Session,  { expires: 1 });
+        Cookies.set('userEmailSession', response.UserEmail_Session,  { expires: 1 });
         return response;
     }
 
     logout() {
-
         let $ = require("jquery");
 
+        let internalSession = new Promise((resolve, reject) => {
+            const data = {};
+
+            this.callWebService("/controller/Login.asmx/logOut", data, "POST").then((result) => {
+                resolve(result == "1");
+            });
+        });
 
         let sessionSignout = new Promise((resolve, reject) => {
-            sessionStorage.removeItem('authToken');
-            sessionStorage.removeItem('schoolSession');
-            sessionStorage.removeItem('userIDSession');
-            sessionStorage.removeItem('userTypeSession');
-            sessionStorage.removeItem('userUniversitySession');
-            sessionStorage.removeItem('usRidSession');
-            sessionStorage.removeItem('userEmailSession');
+            Cookies.remove('authToken');
+            Cookies.remove('schoolSession');
+            Cookies.remove('userIDSession');
+            Cookies.remove('userTypeSession');
+            Cookies.remove('userUniversitySession');
+            Cookies.remove('usRidSession');
+            Cookies.remove('userEmailSession');
             resolve(true);
         });
 
@@ -176,7 +183,7 @@ export default class DataSource {
                         client_id: "646978523324-lcudp248dvuuk0rda4q6kf2bti9qkk3b.apps.googleusercontent.com"
                     }).then((auth2) => {
                         auth2.signOut();
-                        resolve(true)
+                        resolve(true);
                     });
                 });
             });
@@ -185,18 +192,19 @@ export default class DataSource {
         let fbSignout = new Promise((resolve, reject) => {
             $.getScript('https://connect.facebook.net/en_US/sdk.js', function () {
                 FB.init({
-                    appId: '255792542012990',
+                    // appId: '255792542012990',
+                    appId: '1983777365262188',
                     version: 'v2.7' // or v2.1, v2.2, v2.3, ...
                 });
 
                 FB.getLoginStatus(() => {
                     FB.logout();
-                    resolve(true)
+                    resolve(true);
                 });
             });
         });
 
-        Promise.all([sessionSignout, googleSignout, fbSignout]).then((result) => {
+        Promise.all([internalSession, sessionSignout, googleSignout, fbSignout]).then((result) => {
             window.location.replace("/login");
         });
     }
@@ -249,8 +257,8 @@ export default class DataSource {
             studentFirstName: studentFirstName,
             studentLastName: studentLastName,
             parentName: parentName,
-            // token: sessionStorage.getItem('authToken'),
-            // UserSchool_Session: sessionStorage.getItem('schoolSession'),
+            // token: Cookies.get('authToken'),
+            // UserSchool_Session: Cookies.get('schoolSession'),
         };
         const response = await this.callWebService("/controller/Students.asmx/getStudent", data, "POST");
         return response;
@@ -361,10 +369,10 @@ export default class DataSource {
 
     async saveStudent(files, jsonString, jsonString2, familyID, parentID) {
         const data = new FormData();
-        data.append('token', sessionStorage.getItem('authToken'));
-        data.append('UserSchool_Session', sessionStorage.getItem('schoolSession'));
-        data.append('UserID_Session', sessionStorage.getItem('userIDSession'));
-        data.append('UserUniversity_Session', sessionStorage.getItem('userUniversitySession'));
+        data.append('token', Cookies.get('authToken'));
+        data.append('UserSchool_Session', Cookies.get('schoolSession'));
+        data.append('UserID_Session', Cookies.get('userIDSession'));
+        data.append('UserUniversity_Session', Cookies.get('userUniversitySession'));
 
         if (files && files.length > 1) {
             for (let key in files) {
@@ -411,7 +419,7 @@ export default class DataSource {
 
     async updateStudent(files, studentID, jsonString) {
         const data = new FormData();
-        data.append('token', sessionStorage.getItem('authToken'));
+        data.append('token', Cookies.get('authToken'));
 
         if (files && files.length > 1) {
             for (let key in files) {
@@ -484,8 +492,8 @@ export default class DataSource {
             familyID: familyId,
             parentFirstName: parentFirstName,
             parentLastName: parentLastName,
-            // token: sessionStorage.getItem('authToken'),
-            // UserSchool_Session: sessionStorage.getItem('schoolSession'),
+            // token: Cookies.get('authToken'),
+            // UserSchool_Session: Cookies.get('schoolSession'),
         };
         const response = await this.callWebService("/controller/Parents.asmx/getParentList", data, "POST");
         return response;
@@ -637,9 +645,9 @@ export default class DataSource {
     async getUserMenu() {
         const data = {};
 
-        const userType = sessionStorage.getItem('userTypeSession');
+        const userType = Cookies.get('userTypeSession');
         if (userType !== "Parent") {
-            data.USRid_Session = sessionStorage.getItem('usRidSession');
+            data.USRid_Session = Cookies.get('usRidSession');
         }
 
         const response = await this.callWebService("/controller/User.asmx/getUserMenu", data, "POST");
@@ -649,22 +657,35 @@ export default class DataSource {
     async getUserSch() {
         const data = {};
 
-        const userEmail = sessionStorage.getItem('userEmailSession');
+        const userEmail = Cookies.get('userEmailSession');
         if (userEmail !== "" || userEmail !== null) {
-            data.UserEmail_Session = sessionStorage.getItem('userEmailSession');
+            data.UserEmail_Session = Cookies.get('userEmailSession');
         }
 
         const response = await this.callWebService("/controller/User.asmx/getUserSch", data, "POST");
         return response;
     }
 
-    async getStaffPost() {
-        const data = {};
-
-        data.UserID_Session = sessionStorage.getItem('userIDSession');
-        data.numberOfPost = 30;
+    async getStaffPost(int_NumberOfPost, str_LastPostID, postType) {
+        const data = {
+            UserID_Session: Cookies.get('userIDSession'),
+            numberOfPost: int_NumberOfPost,
+            lastPostID: str_LastPostID,
+            postType: postType,
+        };
 
         const response = await this.callWebService("/controller/Posting.asmx/getPostStaff", data, "POST");
+        return response;
+    }
+
+    async getParentPost(int_NumberOfPost, str_LastPostID, postType) {
+        const data = {
+            UserID_Session: Cookies.get('userIDSession'),
+            numberOfPost: int_NumberOfPost,
+            lastPostID: str_LastPostID,
+            postType: postType,
+        };
+        const response = await this.callWebService("/controller/Posting.asmx/getPostParent", data, "POST");
         return response;
     }
 
@@ -674,21 +695,23 @@ export default class DataSource {
         return response;
     }
 
-    async getParentPost() {
+    async getStaffPostHome() {
         const data = {};
 
-        data.UserID_Session = sessionStorage.getItem('userIDSession');
-        data.numberOfPost = 30;
+        data.UserID_Session = Cookies.get('userIDSession');
+        data.numberOfPost = 5;
 
-        const response = await this.callWebService("/controller/Posting.asmx/getPostParent", data, "POST");
+        const response = await this.callWebService("/controller/Posting.asmx/getPostStaff", data, "POST");
         return response;
     }
 
-    async savePost(files, postContent, profolio = "No", tagUserID, tagClassID, tagLevelID) {
+    async savePostUpdate(files, postContent, tagUserID, tagClassID, tagLevelID, postLinkID) {
+        const postType = "UPDATE";
         const formData = new FormData();
-        formData.append('token', sessionStorage.getItem('authToken'));
-        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
-        formData.append('UserSchool_Session', sessionStorage.getItem('schoolSession'));
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
+        formData.append('UserSchool_Session', Cookies.get('schoolSession'));
+        formData.append("postLinkID", postLinkID);
 
         if (files && files.length > 1) {
             for (let key in files) {
@@ -706,9 +729,245 @@ export default class DataSource {
             formData.append("upload", files[0]);
         }
 
-        formData.append("postContent", postContent);
+        formData.append("updateContent", postContent);
         // formData.append("tagAcademicYearID", tagAcademicYearID);
-        formData.append("profolio", profolio);
+        formData.append("postType", postType);
+
+        if (tagUserID && tagUserID.length > 0) {
+            formData.append("tagUserID", tagUserID);
+        } else if (tagLevelID) {
+            formData.append("tagLevelID", tagLevelID);
+        } else if (tagClassID) {
+            formData.append("tagClassID", tagClassID);
+        }
+
+        const request = {
+            url: `${API_HOST}/controller/Posting.asmx/savePost`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async savePortfolioPost(files, porTitle, porObservation, porAnalysisReflection, porDevelopmentGoals, tagUserID, tagClassID, tagLevelID, postLinkID) {
+        const postType = "PORTFOLIO";
+        const formData = new FormData();
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
+        formData.append('UserSchool_Session', Cookies.get('schoolSession'));
+        formData.append("porTitle", porTitle);
+        formData.append("porObservation", porObservation);
+        formData.append("porAnalysisReflection", porAnalysisReflection);
+        formData.append("porDevelopmentGoals", porDevelopmentGoals);
+        formData.append("postLinkID", postLinkID);
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                // console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        formData.append(`upload_${key}`, files[key]);
+                    } else {
+                        formData.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            formData.append("upload", files[0]);
+        }
+
+        // formData.append("tagAcademicYearID", tagAcademicYearID);
+        formData.append("postType", postType);
+
+        if (tagUserID && tagUserID.length > 0) {
+            formData.append("tagUserID", tagUserID);
+        } else if (tagLevelID) {
+            formData.append("tagLevelID", tagLevelID);
+        } else if (tagClassID) {
+            formData.append("tagClassID", tagClassID);
+        }
+
+        const request = {
+            url: `${API_HOST}/controller/Posting.asmx/savePost`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async saveReportPost(files, repTitle, repObservation, tagUserID, tagClassID, tagLevelID, postLinkID) {
+        const postType = "REPORT";
+        const formData = new FormData();
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
+        formData.append('UserSchool_Session', Cookies.get('schoolSession'));
+        formData.append("repTitle", repTitle);
+        formData.append("repObservation", repObservation);
+        formData.append("postLinkID", postLinkID);
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                // console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        formData.append(`upload_${key}`, files[key]);
+                    } else {
+                        formData.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            formData.append("upload", files[0]);
+        }
+
+        // formData.append("tagAcademicYearID", tagAcademicYearID);
+        formData.append("postType", postType);
+
+        if (tagUserID && tagUserID.length > 0) {
+            formData.append("tagUserID", tagUserID);
+        } else if (tagLevelID) {
+            formData.append("tagLevelID", tagLevelID);
+        } else if (tagClassID) {
+            formData.append("tagClassID", tagClassID);
+        }
+
+        const request = {
+            url: `${API_HOST}/controller/Posting.asmx/savePost`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async saveDocumentPost(files, docContent, postLinkID) {
+        const postType = "DOCUMENTATION";
+        const formData = new FormData();
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
+        formData.append('UserSchool_Session', Cookies.get('schoolSession'));
+        formData.append("docContent", docContent);
+        formData.append("postLinkID", postLinkID);
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                // console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        formData.append(`upload_${key}`, files[key]);
+                    } else {
+                        formData.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            formData.append("upload", files[0]);
+        }
+
+        // formData.append("tagAcademicYearID", tagAcademicYearID);
+        formData.append("postType", postType);
+
+        if (tagUserID && tagUserID.length > 0) {
+            formData.append("tagUserID", "");
+        } else if (tagLevelID) {
+            formData.append("tagLevelID", "");
+        } else if (tagClassID) {
+            formData.append("tagClassID", "");
+        }
+
+        const request = {
+            url: `${API_HOST}/controller/Posting.asmx/savePost`,
+            cache: false,
+            type: 'POST',
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async saveBroadcastPost(files, broadContent, tagUserID, tagClassID, tagLevelID, postLinkID) {
+        const postType = "BROADCAST";
+        const formData = new FormData();
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
+        formData.append('UserSchool_Session', Cookies.get('schoolSession'));
+        formData.append("broadContent", broadContent);
+        formData.append("postLinkID", postLinkID);
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                // console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        formData.append(`upload_${key}`, files[key]);
+                    } else {
+                        formData.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            formData.append("upload", files[0]);
+        }
+
+        // formData.append("tagAcademicYearID", tagAcademicYearID);
+        formData.append("postType", postType);
 
         if (tagUserID && tagUserID.length > 0) {
             formData.append("tagUserID", tagUserID);
@@ -745,6 +1004,14 @@ export default class DataSource {
             postID: postID
         };
         const response = await this.callWebService("/controller/Posting.asmx/getPostFile", data, "POST");
+        return response;
+    }
+
+    async getPostAllTaggingStudentsByPostID(postID) {
+        const data = {
+            postID: postID
+        };
+        const response = await this.callWebService("/controller/Posting.asmx/getPostAllTaggingStudentsByPostID", data, "POST");
         return response;
     }
 
@@ -788,8 +1055,8 @@ export default class DataSource {
     async saveGallery(files, fileType, galFolderID, folderName) {
 
         const formData = new FormData();
-        formData.append('token', sessionStorage.getItem('authToken'));
-        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
 
         if (files && files.length > 1) {
             for (let key in files) {
@@ -843,8 +1110,8 @@ export default class DataSource {
             PostCreatedDate: PostCreatedDate,
             PostApproverID: PostApproverID
         };
-        data.UserID_Session = sessionStorage.getItem('userIDSession');
-        const response = await this.callWebService("/controller/Posting.asmx/getPendingApproverPost", data, "POST");
+        data.UserID_Session = Cookies.get('userIDSession');
+        const response = await this.callWebService("/controller/Approver.asmx/getPendingApproverPost", data, "POST");
         return response;
     }
 
@@ -853,15 +1120,15 @@ export default class DataSource {
             actionStatus: actionStatus,
             postApproverID: postApproverID,
         };
-        data.UserID_Session = sessionStorage.getItem('userIDSession');
+        data.UserID_Session = Cookies.get('userIDSession');
         const response = await this.callWebService("/controller/Posting.asmx/approvePost", data, "POST");
         return response;
     }
 
     async updatePost(currentFiles, actionStatus, postID, UpdateContent, profolio, tagUserID, tagClassID, tagLevelID) {
         const formData = new FormData();
-        formData.append('token', sessionStorage.getItem('authToken'));
-        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
         console.log(currentFiles);
         if (currentFiles && currentFiles.length > 1) {
             for (let key in currentFiles) {
@@ -909,7 +1176,6 @@ export default class DataSource {
         return response;
     }
 
-
     async softDeletePost(postId, profolio) {
         const data = {
             postID: postId,
@@ -921,13 +1187,12 @@ export default class DataSource {
         return response;
     }
 
-
     async getApproverMaster() {
         const data = {};
 
-        data.UserSchool_Session = sessionStorage.getItem('schoolSession');
+        data.UserSchool_Session = Cookies.get('schoolSession');
 
-        const response = await this.callWebService("/controller/Posting.asmx/getApproverMaster", data, "POST");
+        const response = await this.callWebService("/controller/Approver.asmx/getApproverMaster", data, "POST");
         return response;
     }
 
@@ -937,10 +1202,10 @@ export default class DataSource {
             approverUserID: approverUserID
         };
 
-        data.UserSchool_Session = sessionStorage.getItem('schoolSession');
-        data.UserID_Session = sessionStorage.getItem('userIDSession');
+        data.UserSchool_Session = Cookies.get('schoolSession');
+        data.UserID_Session = Cookies.get('userIDSession');
 
-        const response = await this.callWebService("/controller/Posting.asmx/saveApproverMaster", data, "POST");
+        const response = await this.callWebService("/controller/Approver.asmx/saveApproverMaster", data, "POST");
         return response;
     }
 
@@ -952,10 +1217,19 @@ export default class DataSource {
             status: status,
         };
 
-        // data.UserSchool_Session = sessionStorage.getItem('schoolSession');
-        // data.UserID_Session = sessionStorage.getItem('userIDSession');
+        // data.UserSchool_Session = Cookies.get('schoolSession');
+        // data.UserID_Session = Cookies.get('userIDSession');
 
-        const response = await this.callWebService("/controller/Posting.asmx/updateApproverMaster", data, "POST");
+        const response = await this.callWebService("/controller/Approver.asmx/updateApproverMaster", data, "POST");
+        return response;
+    }
+
+    async getPendingApprover() {
+        const data = {
+
+        };
+
+        const response = await this.callWebService("/controller/Approver.asmx/getPendingApprover", data, "POST");
         return response;
     }
 
@@ -965,7 +1239,7 @@ export default class DataSource {
             password: password
         };
         const response = await this.callAPI("/login", "POST", null, data);
-        sessionStorage.setItem('authToken', response.token);
+        Cookies.set('authToken', response.token,  { expires: 1 });
         return response;
     }
 
@@ -998,6 +1272,32 @@ export default class DataSource {
             jsonString: jsonString,
         };
         const response = await this.callWebService("/controller/Students.asmx/getStudentDropDownList", data, "POST");
+        return response;
+    }
+
+    async getStudentEnrollment() {
+        const data = {
+            UserSchool_Session: Cookies.get('schoolSession'),
+            passHowManyDaysStudentCreated: "30"
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getAllWithdrawStudentsCurrentActiveYearBySchool", data, "POST");
+        return response;
+    }
+
+    async getWithdrawStudent() {
+        const data = {
+            UserSchool_Session: Cookies.get('schoolSession'),
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getAllWithdrawStudentsCurrentActiveYearBySchool", data, "POST");
+        return response;
+    }
+
+    async getTransferStudent() {
+        const data = {
+            UserSchool_Session: Cookies.get('schoolSession'),
+            passHowManyDaysStudentCreated: "30"
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getAllTransferredStudentsBySchoolDay", data, "POST");
         return response;
     }
 
@@ -1052,7 +1352,7 @@ export default class DataSource {
         try {
             response = await fetch("URL", request);
         } catch (err) {
-            console.log(err);
+            console.log(err);getApproverMaster
             throw ERROR_SERVER_UNREACHABLE;
         }
         return await parseResponseAndHandleErrors(response);
@@ -1065,6 +1365,7 @@ export default class DataSource {
     }
 
     async LoadAttendanceList(classValue) {
+
         const data = {
             classValue: classValue,
         };
@@ -1081,7 +1382,7 @@ export default class DataSource {
         return response;
     }
 
-//#region Gallery
+    //#region Gallery
     async getFiles(galFolderID, startRowNo, endRowNo) {
         const data = {
             galFolderID: galFolderID,
@@ -1118,8 +1419,8 @@ export default class DataSource {
 
         formData.append('fileType', "File");
         formData.append('galFolderID', galFolderID);
-        formData.append('token', sessionStorage.getItem('authToken'));
-        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
         formData.append('folderName', "");
 
         if (files && files.length > 1) {
@@ -1158,8 +1459,8 @@ export default class DataSource {
 
         formData.append('fileType', "Folder");
         formData.append('galFolderID', galFolderID);
-        formData.append('token', sessionStorage.getItem('authToken'));
-        formData.append('UserID_Session', sessionStorage.getItem('userIDSession'));
+        formData.append('token', Cookies.get('authToken'));
+        formData.append('UserID_Session', Cookies.get('userIDSession'));
         formData.append('folderName', folderName);
         formData.append("files", null);
 
@@ -1221,79 +1522,106 @@ export default class DataSource {
         const data = {};
         const response = await this.callWebService("/controller/Gallery.asmx/getWhitelistFileExt", data, "POST");
 
-        return response.Table1;
+        return response;
     }
 
 //#endregion
 
     /*#region Portfolio*/
-    /**
-     * Get portfolio list like student's name
-     * @function
-     * @param {string} str_StudentName - Student's Name
-     */
-    async getPortfolioListByStudentName(str_StudentName) {
-        const data = {studentName: str_StudentName};
+    async softDeletePortfolio(portfolioID) {
+        const data = {
+            jsonStringPortfolioID: portfolioID,
+            actionStatus: "VOID"
+        };
+
+        const response = await this.callWebService("/controller/Portfolio.asmx/updatePortfolio", data, "POST");
+        return response;
+    }
+
+    async getPortfolioListByStudentID(str_StudentID) {
+        const data = {studentID: str_StudentID};
 
         return await this.callWebService("/controller/Portfolio.asmx/getPortfolioList", data, "POST");
     }
 
-    /**
-     * Get all the post tagged under a portfolio ID
-     * @function
-     * @param {string} str_PortfolioID - Portfolio ID
-     */
     async getPostByPortfolioID(str_PortfolioID) {
         const data = {portfolioID: str_PortfolioID};
 
-        return await this.callWebService("/controller/Portfolio.asmx/getPortfolio", data, "POST");
+        return await this.callWebService("/controller/Portfolio.asmx/getPortfolioPostingPost", data, "POST");
     }
 
-    /**
-     * Get all post tagged as portfolio by student ID
-     * @function
-     * @param {string} str_StudentID - Student's ID
-     */
-    async getStudentPortfolio(str_StudentID) {
-        const data = {studentID: str_StudentID};
+    async getPortfolioHeaderDetails(portfolioID) {
+        const data = {portfolioID: portfolioID};
 
-        return await this.callWebService("/controller/Portfolio.asmx/getStudentPortfolio", data, "POST");
+        return await this.callWebService("/controller/Portfolio.asmx/getPortfolioHeaderDetails", data, "POST");
     }
 
-    /**
-     * Save portfolio
-     * @function
-     * @param {string} str_PortfolioDesc - Portfolio description
-     * @param {string} str_StudentID - Student's ID
-     * @param {string} str_PostID - Post ID tagged to portfolio, concat with "," commas
-     */
-    async savePortfolio(str_PortfolioDesc, str_StudentID, str_PostID) {
+    async getStudentPostByType(str_StudentID, str_PostType, numberOfPost, lastPostID) {
+        const data = {
+            studentID: str_StudentID,
+            postType: str_PostType,
+            numberOfPost: numberOfPost,
+            lastPostID: lastPostID
+        };
+        return await this.callWebService("/controller/Posting.asmx/getPostStudent", data, "POST");
+    }
+
+    async savePortfolio(str_PortfolioDesc, str_StudentID, PortfolioLinkPortfolioID, portfolioTitle, portfolioEnduringThemes, portfolioResearchQuestion, jsonStringPostDetails) {
         const data = {
             portfolioDesc: str_PortfolioDesc,
             studentID: str_StudentID,
-            postID: str_PostID
+            PortfolioLinkPortfolioID: PortfolioLinkPortfolioID,
+            portfolioTitle: portfolioTitle,
+            portfolioEnduringThemes: portfolioEnduringThemes,
+            portfolioResearchQuestion: portfolioResearchQuestion,
+            jsonStringPostDetails: jsonStringPostDetails
         };
 
         return await this.callWebService("/controller/Portfolio.asmx/savePortfolio", data, "POST");
     }
 
-    async getPortfolioStudentClass() {
-        const data = {};
-        let result = await this.callWebService("/controller/Portfolio.asmx/getPortfolioStudentClass", data, "POST");
-        return result.Table;
+    async checkApprovePortfolioStatusByUser(portfolioID) {
+        const data = {
+            portfolioID: portfolioID,
+        };
+
+        let result = await this.callWebService("/controller/Portfolio.asmx/checkApprovePortfolioStatusByUser", data, "POST");
+        return result;
+    }
+
+    async approvePortfolio(portfolioID, actionStatus, portfolioEnduringThemesComment, portfolioResearchQuestionComment, jsonStringCommentValue) {
+        const data = {
+            portfolioID: portfolioID,
+            actionStatus: actionStatus,
+            portfolioEnduringThemesComment: portfolioEnduringThemesComment,
+            portfolioResearchQuestionComment: portfolioResearchQuestionComment,
+            jsonStringCommentValue: jsonStringCommentValue,
+        };
+
+        let result = await this.callWebService("/controller/Portfolio.asmx/approvePortfolio", data, "POST");
+        return result;
+    }
+
+    async getPortfolioComment(portfolioID) {
+        const data = {
+            portfolioID: portfolioID,
+        };
+
+        let result = await this.callWebService("/controller/Portfolio.asmx/getPortfolioComment", data, "POST");
+        return result;
     }
 
     /*#endregion*/
 
     /*#region Promotion*/
-    async getAcademicYear() {
+    async getPromotionAcademicYear() {
         const data = {};
 
         const response = await this.callWebService("/controller/Operations.asmx/getMassPromotionsAcademicYear", data, "POST");
         return response;
     }
 
-    async getLevel() {
+    async getPromotionLevel() {
         const data = {};
 
         const response = await this.callWebService("/controller/Operations.asmx/getMassPromotionsLevel", data, "POST");
@@ -1321,7 +1649,7 @@ export default class DataSource {
         return response;
     }
 
-// studentIDArray (student id split by comma ",") & levelID & academicYearID & classID
+    // studentIDArray (student id split by comma ",") & levelID & academicYearID & classID
     async saveStudentPromotions(arrstr_StudentID, str_AcademicYearID, str_LevelID, str_ClassID) {
         const data = {
             studentIDArray: arrstr_StudentID,
@@ -1334,8 +1662,131 @@ export default class DataSource {
         return response;
     }
 
+    async getAllActiveStudentsBySchool() {
+        const data = {};
+
+        const response = await this.callWebService("/controller/Students.asmx/getAllActiveStudentsBySchool", data, "POST");
+        return response;
+    }
+
     /*#endregion*/
 
+    /*#region Report*/
+
+    async getReportListByStudentID(str_StudentID) {
+        const data = {studentID: str_StudentID};
+
+        return await this.callWebService("/controller/Report.asmx/getReportList", data, "POST");
+    }
+
+    async saveReport(str_ReportDesc, str_StudentID, arrstr_PostID, ReportLinkReportID) {
+        const data = {
+            reportDesc: str_ReportDesc,
+            studentID: str_StudentID,
+            jsonStringPostID: arrstr_PostID,
+            ReportLinkReportID: ReportLinkReportID,
+        };
+
+        return await this.callWebService("/controller/Report.asmx/saveReport", data, "POST");
+    }
+
+    async getPostByReportID(str_ReportID) {
+        const data = {reportID: str_ReportID};
+
+        return await this.callWebService("/controller/Report.asmx/getReport", data, "POST");
+    }
+
+    async softDeleteReport(arrstr_ReportID) {
+        const data = {
+            jsonStringReportID: arrstr_ReportID,
+            actionStatus: "VOID"
+        };
+
+        const response = await this.callWebService("/controller/Report.asmx/updateReport", data, "POST");
+        return response;
+    }
+
+    /*#endregion*/
+
+    /*#region Reactions*/
+    async getPostReaction(relatedPostID) {
+        const data = {relatedPostID: relatedPostID};
+
+        return await this.callWebService("/controller/Posting.asmx/getPostReaction", data, "POST");
+    }
+
+    async savePostReaction(relatedPostID, postReaction, postType) {
+        const data = {relatedPostID: relatedPostID,
+            postReaction: postReaction,
+            postType: postType,
+        };
+
+        return await this.callWebService("/controller/Posting.asmx/savePostReaction", data, "POST");
+    }
+
+    async updatePostReaction(relatedPostID, actionMode) {
+        const data = {relatedPostID: relatedPostID,
+            actionMode: actionMode,
+        };
+
+        return await this.callWebService("/controller/Posting.asmx/updatePostReaction", data, "POST");
+    }
+
+    async getPostByPostID(jsonStringPostID) {
+        const data = {
+            jsonStringPostID: jsonStringPostID,
+        };
+
+        return await this.callWebService("/controller/Posting.asmx/getPostByPostID", data, "POST");
+    }
+
+    /*#endregion*/
+
+    async getAllActiveStudentsByClass(classID) {
+        const data = {classID: classID};
+
+        const response = await this.callWebService("/controller/Students.asmx/getAllActiveStudentsByClassSchool", data, "POST");
+        return response;
+    }
+
+    async getDailyRoutineByStudentID(studentID) {
+        const data = {studentID: studentID};
+
+        const response = await this.callWebService("/controller/Daily_Routine.asmx/getKgm_DailyRoutine", data, "POST");
+        return response;
+    }
+
+    async updateDailyRoutine(btnUpdateObject){
+        const data = {
+            studentID: btnUpdateObject.studentID,
+            DrID: btnUpdateObject.drID,
+            drRemark: btnUpdateObject.drRemark
+        };
+        const response = await this.callWebService("/controller/Daily_Routine.asmx/updateDailyRoutine", data, "POST");
+        return response;
+    }
+
+    async addDailyRoutine(btnAddObject){
+        const data={
+            studentID:btnAddObject.studentID,
+            drRemark:btnAddObject.DrRemark,
+            drStartTime: btnAddObject.DrStartTime,
+            drEndTime: btnAddObject.DrEndTime,
+            drReferenceType:btnAddObject.DrReferenceType
+        };
+
+        const response = await this.callWebService("/controller/Daily_Routine.asmx/addDailyRoutine", data, "POST");
+        return response;
+    }
+
+    async deleteDailyRoutine(btnDelObject){
+        const data = {
+            studentID: btnDelObject.DrStudentID,
+            DrID: btnDelObject.drID
+        };
+        const response = await this.callWebService("/controller/Daily_Routine.asmx/deleteDailyRoutine", data, "POST");
+        return response;
+    }
 
 }
 

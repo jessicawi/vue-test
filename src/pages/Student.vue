@@ -46,6 +46,20 @@
             </div>
 
             <b-tabs class="studentPageBTabs">
+
+                <span class="alert-badge badge1"
+                      v-if="$v.ddlParentMode.$error || $v.inputFatherFirstName.$error || $v.inputFatherLastName.$error || lblFatherNameDuplicated || $v.inputFatherOccupation.$error || $v.inputMotherFirstName.$error || $v.inputMotherLastName.$error || lblMotherNameDuplicated">
+                    !
+                </span>
+                <span class="alert-badge badge2"
+                      v-if="$v.inputStudentFirstName.$error || $v.inputStudentLastName.$error || $v.ddlStudentNationality.$error || $v.inputStudentDateOfBirth.$error || $v.inputStudentIdentificationNo.$error || $v.inputStudentIdentificationExpiryDate.$error || $v.inputStudentBirthCertificate.$error || $v.inputStudentIC.$error || $v.inputStudentPassport.$error || $v.inputStudentPassportExpiryDate.$error || $v.inputStudentOtherIdentification.$error || $v.inputFirstCommencementDate.$error || $v.ddlStudentPayer.$error">
+                    !
+                </span>
+                <span class="alert-badge badge4"
+                      v-if="$v.inputStudentPostalCode.$error || $v.inputStudentAddress1.$error || $v.inputStudentCorrespondancePostalCode.$error || $v.inputStudentCorrespondanceAddress1.$error || $v.inputParentPostalCode.$error || $v.inputParentAddress1.$error ">
+                    !
+                </span>
+
                 <b-tab title="Parents" active>
                     <div class="">
                         <div class="review-content-section">
@@ -2387,6 +2401,36 @@
 </script>
 
 <style scoped>
+
+    .studentPageBTabs{
+        position: relative;
+    }
+    .alert-badge {
+        background: red;
+        width: 14px;
+        height: 14px;
+        text-align: center;
+        display: block;
+        border-radius: 50%;
+        font-weight: bold;
+        color: #fff;
+        position: absolute;
+        top: 3px;
+        line-height: 1.2;
+        font-size: 12px;
+    }
+
+    .badge1 {
+        left: 83px;
+    }
+
+    .badge2 {
+        left: 185px;
+    }
+
+    .badge4 {
+        left: 503px;
+    }
     .studentAreaDiv, .familyIDAreaDiv, .parentAreaDiv, .amAreaDiv, .ecAreaDiv {
     }
 

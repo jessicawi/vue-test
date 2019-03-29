@@ -9,43 +9,46 @@
             </div>
         </div>
         <form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">
-            <div class="mb-3">
+            <div class="mb-3" :class="{ 'form-group--error': $v.userEmail.$error }">
                 <!--<label for="username">Username</label>-->
-                <vs-input label-placeholder="Email ID"  class="form-control text-left" id="userEmail" v-model="userEmail" required :readonly="!emailStatus"/>
+                <vs-input label-placeholder="Email ID"  class="form-control text-left" id="userEmail" v-model="userEmail" required :readonly="!emailStatus"  v-model.trim="$v.userEmail.$model"/>
                 <!--<input type="text" class="form-control" id="userEmail" v-model="userEmail"-->
                        <!--placeholder="Email ID"-->
                        <!--required :readonly="!emailStatus"/>-->
-                <div class="invalid-feedback" style="width: 100%;">
-                    Your Email ID is required.
-                </div>
+                <!--<div class="invalid-feedback" style="width: 100%;">-->
+                    <!--Your Email ID is required.-->
+                <!--</div>-->
+                <div class="error" v-if="!$v.userEmail.required">Email ID is required</div>
             </div>
-
-            <div class="mb-2">
+            <div class="mb-2" :class="{ 'form-group--error': $v.userPassword.$error }">
                 <!--<label for="password">Password</label>-->
                 <vs-input label-placeholder="Password"  type="password" class="form-control text-left" id="userPassword" v-model="userPassword"
-                          required v-if="passwordStatus"/>
+                          required v-if="passwordStatus" v-model.trim="$v.userPassword.$model"/>
                 <!--<input type="password" class="form-control" id="userPassword" v-model="userPassword"-->
                        <!--placeholder="Password"-->
                        <!--required v-if="passwordStatus">-->
                 <div class="invalid-feedback" style="width: 100%;">
                     Your password is required.
                 </div>
+                <div class="error" v-if="!$v.userPassword.required">password is required</div>
+                <div class="error" v-if="!$v.userPassword.minLength">Password must have at least {{$v.userPassword.$params.minLength.min}} character, numerical.</div>
             </div>
 
 
-            <div class="mb-2">
+            <div class="mb-2" :class="{ 'form-group--error': $v.studentID_Index.$error }">
                 <!--<label for="password">Password</label>-->
                 <vs-input label-placeholder="student ID"  type="text" class="form-control text-left" id="studentID_Index" v-model="studentID_Index"
-                          required />
+                          required  v-model.trim="$v.studentID_Index.$model"/>
                 <!--<input type="text" class="form-control" id="studentID_Index" v-model="studentID_Index"-->
                        <!--placeholder="student ID"-->
                        <!--required>-->
                 <div class="invalid-feedback" style="width: 100%;">
                     Your student ID is required.
                 </div>
+                <div class="error" v-if="!$v.studentID_Index.required">student ID is required</div>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-2" :class="{ 'form-group--error': $v.studentDOB.$error }">
                 <!--<label for="password">Password</label>-->
                 <!--<input type="text" class="form-control" id="studentDOB" v-model="studentDOB"-->
                        <!--placeholder="studentDOB"-->
@@ -54,14 +57,16 @@
                 <el-date-picker
                         v-model="studentDOB"
                         type="date"
-                        placeholder="student DOB">
+                        placeholder="student DOB"
+                        v-model.trim="$v.studentDOB.$model">
                 </el-date-picker>
                 <div class="invalid-feedback" style="width: 100%;">
                     Your student DOB is required.
                 </div>
+                <div class="error" v-if="!$v.studentDOB.required">Student DOB is required</div>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-2" :class="{ 'form-group--error': $v.studentDOB.$error }">
                 <!--<label for="password">Password</label>-->
                 <!--<vs-input label-placeholder="student ID Type"  class="form-control text-left" id="studentIDType" v-model="studentIDType" required/>-->
                 <vs-select
@@ -69,6 +74,7 @@
                         id="studentIDType"
                         label="student ID Type"
                         v-model="studentIDType"
+                        v-model.trim="$v.studentIDType.$model"
                 >
                     <!--<vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item,index) in studentIDTypeList" />-->
                     <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="item,index in studentIdTypeList" />
@@ -80,17 +86,19 @@
                     Your student ID Type is required.
                 </div>
                 <div class="whitespace-10"></div>
+                <div class="error" v-if="!$v.studentIDType.required">Student ID is required</div>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-2" :class="{ 'form-group--error': $v.studentIDNo.$error }">
                 <!--<label for="password">Password</label>-->
-                <vs-input label-placeholder="Identification No"  class="form-control text-left" id="studentIDNo" v-model="studentIDNo" required/>
+                <vs-input label-placeholder="Identification No"  class="form-control text-left" id="studentIDNo" v-model="studentIDNo" required v-model.trim="$v.studentIDNo.$model"/>
                 <!--<input type="text" class="form-control" id="studentIDNo" v-model="studentIDNo"-->
                        <!--placeholder="Identification No"-->
                        <!--required>-->
                 <div class="invalid-feedback" style="width: 100%;">
                     Your Identification No is required.
                 </div>
+                <div class="error" v-if="!$v.studentIDNo.required">Identification No is required</div>
             </div>
             <div class="system-msg"><p>{{results}}</p></div>
             <div class="row d-flex mt-3 mb-5">
@@ -107,6 +115,7 @@
                             <div class="line"></div>
                         </div>
                     </div>
+                    <a href="/login" class="mt10 d-block">Back to Login</a>
                 </div>
             </div>
         </form>
@@ -116,6 +125,7 @@
 <script>
     /* eslint-disable */
     import DataSource from "../data/datasource";
+    import { required, minLength } from 'vuelidate/lib/validators';
 
     export default {
         name: 'Parent_Register_Component',
@@ -142,13 +152,13 @@
         },
         methods: {
             async onSubmit() {
+                this.$v.$touch();
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
                     this.isLoading = true;
                     const response = await DataSource.shared.parentRegister(this.userEmail, this.userPassword, this.studentIDNo, this.studentID_Index, this.studentDOB, this.studentIDType, this.platform, this.tokenId);
                     this.isLoading = false;
-                    console.log(response);
                     if (response) {
                         switch (response.code) {
                             case "1":
@@ -186,6 +196,29 @@
             email: function () {
                 this.userEmail = this.email;
             }
+        },
+        validations: {
+            userEmail: {
+                required
+            },
+            userPassword:{
+                /*required,*/
+                minLength: minLength(6)
+            },
+            studentID_Index:{
+                required
+            },
+            studentDOB:{
+                required
+            },
+            studentIDType:{
+                required
+            },
+            studentIDNo:{
+                required
+            }
+
+
         }
     };
 </script>

@@ -84,7 +84,6 @@
                     this.isLoading = true;
                     const response = await DataSource.shared.resetEmailPassword(this.userEmail);
                     this.isLoading = false;
-                    console.log(response);
                     if (response) {
                         switch (response.code) {
                             case "1":

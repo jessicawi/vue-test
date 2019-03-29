@@ -41,7 +41,7 @@
 
                 </div>
             </vs-col>
-            <div class="col-md-8 mt-4">
+            <div class="col-md-8 mt-4 pb-4">
                 <div class="notification ">
                     <h4 class="text-left mb-3">Important Notification</h4>
                     <div class="row">
@@ -114,7 +114,8 @@
                 <div class="success">{{success}}</div>
                 <div v-if="isLoading">Loading...</div>
 
-                <div class="" v-for="object in list" :key="`${object.PostID}${object.commentItems ? object.commentItems.length : ''}`">
+                <div class="" v-for="object in list"
+                     :key="`${object.PostID}${object.commentItems ? object.commentItems.length : ''}`">
                     <PostComponent
                             :post="object"
                             :checkIfImage="checkIfImage"
@@ -218,6 +219,8 @@
     import isImage from "is-image";
     import PostComponent from "../components/postCompnent";
     import VueTagsInput from '@johmun/vue-tags-input';
+    import Cookies from "js-cookie";
+
     // import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
 
     export default {
@@ -355,7 +358,7 @@
                     // console.log("a ", this.studentTable);
                 }
 
-                this.userType = sessionStorage.getItem('userTypeSession');
+                this.userType = Cookies.get('userTypeSession');
 
 
             } catch (e) {
@@ -455,13 +458,13 @@
 
                                     if (item.PostID === commentPostID) {
                                         item.commentItems = newComment.Table;
-                                        console.log(item)
+                                        console.log(item);
                                         return item;
                                     }
 
                                 });
 
-                                this.$forceUpdate()
+                                this.$forceUpdate();
 
 
                                 // this.results = `Post Submitted`;
@@ -550,7 +553,7 @@
                                     }
 
                                 });
-                                this.$forceUpdate()
+                                this.$forceUpdate();
                                 break;
                             case "88":
                                 this.results = `Please Login to submit post`;

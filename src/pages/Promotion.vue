@@ -40,12 +40,13 @@
                          :key="tempobj_Student.id">
                         <label class="col- text-center" :for="tempobj_Student.Student_ID">
                             <img class="student" :src="getSource(tempobj_Student)"/>
+                            <input type="checkbox" :value="tempobj_Student.Student_ID" v-model="arrobj_SelectedStudents"
+                                   :id="tempobj_Student.Student_ID" @change="isCheck"/>
+                            <br/>
+                            <span v-if="!isNull(tempobj_Student.First_Name)">{{tempobj_Student.First_Name}}</span>
+                            <span v-if="!isNull(tempobj_Student.Middle_Name)">{{" " + tempobj_Student.Middle_Name}}</span>
+                            <span v-if="!isNull(tempobj_Student.Last_Name)">{{" " + tempobj_Student.Last_Name}}</span>
                         </label>
-                        <input type="checkbox" :value="tempobj_Student.Student_ID" v-model="arrobj_SelectedStudents"
-                               :id="tempobj_Student.Student_ID" @change="isCheck"/>
-                        <span v-if="!isBlank(tempobj_Student.First_Name)">{{tempobj_Student.First_Name}}</span>
-                        <span v-if="!isBlank(tempobj_Student.Middle_Name)">{{" " + tempobj_Student.Middle_Name}}</span>
-                        <span v-if="!isBlank(tempobj_Student.Last_Name)">{{" " + tempobj_Student.Last_Name}}</span>
                     </div>
                 </div>
             </div>
@@ -90,10 +91,7 @@
                 return imgsrc;
             },
             isNull(obj) {
-                return (obj === null || obj === undefined || obj === "undefined");
-            },
-            isBlank(str) {
-                return (str === null || str === undefined || str === "undefined" || str.length === 0);
+                return (obj === null || obj === undefined || obj === "undefined" || obj.length === 0);
             },
             loadYears() {
                 DataSource.shared.getAcademicYear().then((result) => {

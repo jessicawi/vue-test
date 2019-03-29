@@ -1,30 +1,20 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add vue-tags-input
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add vuedraggable
 
 PATH: 
-  C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Users\jessica\AppData\Local\Microsoft\WindowsApps;C:\Users\jessica\AppData\Roaming\npm;C:\Users\jessica\AppData\Local\Yarn\bin
+  C:\Python27\;C:\Python27\Scripts;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\jessi\AppData\Local\Microsoft\WindowsApps;C:\Users\jessi\AppData\Roaming\npm;C:\Users\jessi\AppData\Local\Yarn\bin
 
 Yarn version: 
-  1.12.3
+  1.13.0
 
 Node version: 
-  10.14.2
+  11.10.0
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/vue-tags-input: Not found
-      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65003:18)
-      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129018:22)
-      at Request.emit (events.js:182:13)
-      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:129990:10)
-      at Request.emit (events.js:182:13)
-      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:129912:12)
-      at Object.onceWrapper (events.js:273:13)
-      at IncomingMessage.emit (events.js:187:15)
-      at endReadableNT (_stream_readable.js:1094:12)
-      at process._tickCallback (internal/process/next_tick.js:63:19)
+  Error: EPERM: operation not permitted, unlink 'C:\Users\jessi\Documents\git\vue-test\node_modules\node-sass\vendor\win32-x64-67\binding.node'
 
 npm manifest: 
   {
@@ -37,6 +27,7 @@ npm manifest:
       "lint": "vue-cli-service lint"
     },
     "dependencies": {
+      "@johmun/vue-tags-input": "^2.0.0",
       "@websanova/vue-upload": "^1.2.6-beta",
       "axios": "^0.18.0",
       "bootstrap-vue": "^2.0.0-rc.11",
@@ -45,6 +36,7 @@ npm manifest:
       "is-image": "^2.0.0",
       "jquery": "^3.3.1",
       "material-icons": "^0.2.3",
+      "moment": "^2.24.0",
       "tiptap": "^1.7.0",
       "tiptap-extensions": "^1.7.0",
       "typeahead": "^0.2.2",
@@ -61,6 +53,7 @@ npm manifest:
       "vue-upload-component": "^2.8.18",
       "vue2-datatable-component": "^2.3.1",
       "vue2-dropzone": "^3.5.2",
+      "vuedraggable": "^2.17.0",
       "vuelidate": "^0.7.4",
       "vuesax": "^3.8.0",
       "webpack-cli": "^3.1.2",
@@ -767,6 +760,13 @@ Lockfile:
       cssnano "^4.0.0"
       cssnano-preset-default "^4.0.0"
       postcss "^7.0.0"
+  
+  "@johmun/vue-tags-input@^2.0.0":
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/@johmun/vue-tags-input/-/vue-tags-input-2.0.0.tgz#95870006ddd1320eb4979a58cec8ed24ee966c9b"
+    integrity sha512-SBNZm9ZtgwfnjEYUOkJ8Al7ZzUluZ3F49mO8EOTjTdYfB+ZJIQbf0R71PGYfKWkU7qdAwzW2imzlTPnJC3Wh7g==
+    dependencies:
+      vue "^2.5.16"
   
   "@mrmlnc/readdir-enhanced@^2.2.1":
     version "2.2.1"
@@ -5447,6 +5447,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
     integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
   
+  moment@^2.24.0:
+    version "2.24.0"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+    integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+  
   move-concurrently@^1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -7593,6 +7598,11 @@ Lockfile:
       faye-websocket "^0.10.0"
       uuid "^3.0.1"
   
+  sortablejs@^1.7.0:
+    version "1.8.3"
+    resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.8.3.tgz#5ae908ef96300966e95440a143340f5dd565a0df"
+    integrity sha512-AftvD4hdKcR5QlGi7L/JST506zGNGrysE8/QohDpwKXJarHWqCt+TUlrtoMk/wkECB607Q019/OZlJViyWiD6A==
+  
   source-list-map@^2.0.0:
     version "2.0.1"
     resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
@@ -8623,6 +8633,13 @@ Lockfile:
     version "2.5.21"
     resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.21.tgz#3d33dcd03bb813912ce894a8303ab553699c4a85"
     integrity sha512-Aejvyyfhn0zjVeLvXd70h4hrE4zZDx1wfZqia6ekkobLmUZ+vNFQer53B4fu0EjWBSiqApxPejzkO1Znt3joxQ==
+  
+  vuedraggable@^2.17.0:
+    version "2.17.0"
+    resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.17.0.tgz#489c16c9bcb9eb06f441944d3c52e5f2bb7060f9"
+    integrity sha512-TAC5tJTSbHSINQCSB59qHnuzT0Ad+E3IgvSWuA1e9UaebD8DxKaY1tCdvL3XvuLoaM3wc1dhpP/NbjpdxYsrng==
+    dependencies:
+      sortablejs "^1.7.0"
   
   vuelidate@^0.7.4:
     version "0.7.4"

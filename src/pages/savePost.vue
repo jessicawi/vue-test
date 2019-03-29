@@ -123,7 +123,6 @@
             },
             async onUpload() {
                 const formData = new FormData();
-                console.log(this.selectedFile);
                 formData.append('myFile', this.selectedFile, this.selectedFile.name)
                 this.formData = formData
                 await DataSource.shared.uploadFile(this.selectedFile)
@@ -133,7 +132,6 @@
                 //this.results = "<< Requesting.. >>";
                 try {
                     const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.postContent, this.tagAcademicYearID, this.profolio, this.tagUserID, this.tagClassID, this.tagLevelID, this.formData);
-                    console.log('response ', saveResponse);
                     if (saveResponse) {
                         switch (saveResponse.code) {
                             case "1":

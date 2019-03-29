@@ -52,8 +52,40 @@
 
                 </div>
             </vs-col>
-            <div class="col-md-8 mt-4">
-                <div class="notification ">
+            <div class="col-md-8 mt-4 pb-4">
+                <div class="notification">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h4 class="text-left mb-3">Broadcast</h4>
+                        </div>
+                        <div class="col-md-3">
+                            <button @click="showMoreBroadcastModal" class="btn btn-link">Show More <i
+                                    class="fa fa-ellipsis-h" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" v-for="obj_BroadcastPost of filteredBroadcastPost"
+                             :key="obj_BroadcastPost.id">
+                            <div class="notification__item">
+                                <div class="desc">
+                                    <span>{{obj_BroadcastPost.PostContent}}</span>
+                                </div>
+                                <div class="notification-item__footer">
+                                    <div class="notification__footer-item">
+                                        {{obj_BroadcastPost.CONname}}<br/>
+                                        {{obj_BroadcastPost.PostCreatedBy}}
+                                    </div>
+                                </div>
+                                <div class="notification-item__footer">
+                                    <div class="notification__footer-item">
+                                        <button class="btn text-center">Mark as read</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="notification">
                     <h4 class="text-left mb-3">Important Notification</h4>
                     <div class="row">
                         <div class=" col-md-4">
@@ -115,111 +147,70 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
+
                 <div class="feed-header">
                     <h4 class="text-left">Activity</h4>
-                    <div class="addPost" :class="{'d-none' :userType!=='Teacher'}">
-                        <b-btn v-b-modal.modal1 @click="showModal">ADD NOTE</b-btn>
+                    <div class="addPost" :class="{'d-none' :userType==='Teacher'}">
+                        <b-btn v-b-modal.modal1 @click="showBroadcast"><i class="fa fa-bullhorn" aria-hidden="true"></i>
+                            <span>Broadcast</span></b-btn>
+                    </div>
+                    <div class="addPost" :class="{'d-none' :userType==='Teacher'}">
+                        <b-btn v-b-modal.modal1 @click="showUpdates"><i class="fa fa-newspaper-o"
+                                                                        aria-hidden="true"></i> <span>Updates</span>
+                        </b-btn>
+                    </div>
+                    <div class="addPost" :class="{'d-none' :userType==='Teacher'}">
+                        <b-btn v-b-modal.modal1 @click="showPortfolio"><i class="fa fa-book" aria-hidden="true"></i>
+                            <span>Portfolio</span></b-btn>
                     </div>
                 </div>
                 <div class="success">{{success}}</div>
                 <div v-if="isLoading">Loading...</div>
 
-                <div class="" v-for="object in list" :key="`${object.PostID}${object.commentItems ? object.commentItems.length : ''}`">
+                <div class="" v-for="object of list"
+                     :key="`${object.PostID}${object.commentItems ? object.commentItems.length : ''}`">
                     <PostComponent
-                            :post="object"
-                            :checkIfImage="checkIfImage"
+                            :parent-post="object"
                             @commentitemSubmit="commentitemSubmit"
                             @commentEdit="commentEdit"
                             @commentDelete="commentDelete"
                             :commentPostContent="commentPostContent"
+                            :PostID="commentPostID"
+                            @loadPosts="loadPosts"
                     />
                     <hr/>
                 </div>
 
             </div>
-
         </div>
-
-
-        <b-modal id="modal1" hide-footer title="ADD NOTE" v-model="isModalOpen">
-            <form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">
-
-                <div class="mb-3 form-group">
-                    <!--<label for="username">Username</label>-->
-                    <textarea type="text" class="form-control" id="postContent" v-model="addPostContent"
-                              placeholder="CONTENT"></textarea>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 ">
-                        <label :for="tagClassID">Class</label>
-                        <select class="form-control" id="tagClassID" v-model="tagClassID">
-                            <option v-for="object in classesTable" :key="object.PK_Class_ID"
-                                    :value="object.PK_Class_ID">{{object.CLS_ClassName}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="tagLevelID">Level</label>
-                        <select class="form-control" id="tagLevelID" v-model="tagLevelID">
-                            <option v-for="object in levelsTable" :key="object.PK_Class_ID"
-                                    :value="object.SC_FK_CourseID">{{object.CRS_Course_Name}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <label>Student</label>
-                        <vue-tags-input
-                                v-model="tag"
-                                :tags="tags"
-                                :allow-edit-tags="true"
-                                :autocomplete-items="items"
-                                :add-only-from-autocomplete="true"
-                                :autocomplete-min-length="3"
-                                placeholder="Min 3 Character"
-                                class="tags-input"
-                                @tags-changed="newTags => tags = newTags"
-                        />
-                    </div>
-                </div>
-                <div class="row inputFile-box">
-                    <div class="col-md-12">
-                        <input type="file" multiple @change="onFileChanged" ref="fileupload" class="inputfile"
-                               id="inputfile"
-                               data-multiple-caption="{count} files selected">
-                        <label for="inputfile" @click="inputFile()">Choose a file</label>
-                        <!--<button @click.prevent="onUpload">Upload!</button>-->
-
-                        <div class="btn btn-primary" v-if="selectedFile" @click="clearPreview()"><strong>X</strong>
-                            REMOVE ALL
-                        </div>
-                        <div class="uploadFile-image">
-                            <div v-for="(file, key) in selectedFile" class="col-md-3 file-listing">
-                                <!--{{ file.name }}-->
-                                <img class="preview" v-bind:ref="'image'+parseInt( key )"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-2">
-
-                </div>
-                <div class="system-msg" v-bind:class="{'bg-danger': systemmsgError===true}">{{results}}
-                    <p v-if="error" style="color: red">{{error}}</p></div>
-                <div class="row d-flex submit-wrap">
-                    <div class="col-md-6">
-                        <b-btn class="float-left" @click="hideModal">Cancel</b-btn>
-                    </div>
-                    <div class="col-md-6">
-                        <button class="btn btn-primary login-btn" type="submit">Submit
-                        </button>
-                    </div>
-                </div>
-            </form>
+        <b-modal id="modal_ShowMoreBroadcast" ref="modal_ShowMoreBroadcast" size="lg" hide-footer title="Broadcast">
+            <button class="btn btn-primary" @click="showBroadcast"><i class="el-icon-bell"></i> Create Broadcast
+            </button>
+            <div class="" v-for="object of arrobj_BroadcastPost" :key="object.id">
+                <BroadcastList :parent-post="object" :hideComment="true" :hideSubmenu="true"/>
+                <!--<hr/>-->
+            </div>
         </b-modal>
-
+        <b-modal id="modal1" size="lg" hide-footer :title="modalTitle ? modalTitle : 'Post'" v-model="isModalOpen"
+                 @hidden="hideComponentModal">
+            <el-button-group class="mb-4 modal-quicklink">
+                <el-button type="primary" @click="showBroadcast" :class="{'active':modalTitle === 'Broadcast'}"><i
+                        class="fa fa-bullhorn" aria-hidden="true"></i> <span> Broadcast</span></el-button>
+                <el-button type="primary" @click="showUpdates" :class="{'active':modalTitle === 'Post'}"><i
+                        class="fa fa-newspaper-o" aria-hidden="true"></i> <span> Updates</span></el-button>
+                <el-button type="primary" @click="showPortfolio" :class="{'active':modalTitle === 'Portfolio'}"><i
+                        class="fa fa-book" aria-hidden="true"></i> <span> Portfolio</span></el-button>
+            </el-button-group>
+            <component
+                    @result="displayResult"
+                    :is="obj_SelectedComponent"
+                    @loadPosts="loadPosts"
+            ></component>
+        </b-modal>
+        <button @click="loadPosts" v-if="bool_ShowRefresh" class="btn btn-secondary"
+                style="position: fixed; right: 20px; bottom: 20px"><i class="fa fa-refresh" aria-hidden="true"></i>
+        </button>
     </div>
 </template>
 
@@ -228,7 +219,15 @@
     import {required, minLength} from 'vuelidate/lib/validators';
     import isImage from "is-image";
     import PostComponent from "../components/postCompnent";
+    import BroadcastList from "../components/BroadcastListCompnent";
     import VueTagsInput from '@johmun/vue-tags-input';
+    import portfolio from "../components/Post_Portfolio_Component";
+    import updates from "../components/Post_Updates_Component.vue";
+    import broadcast from "../components/Post_Broadcast_Component.vue";
+    import $ from 'jquery';
+    import Cookies from "js-cookie";
+
+
     // import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
 
     export default {
@@ -237,9 +236,11 @@
             PostComponent,
             VueTagsInput,
             // At,
+            BroadcastList
         },
         data() {
             return {
+                modalTitle: null,
                 files: [],
                 systemmsgError: false,
                 isModalOpen: false,
@@ -253,13 +254,12 @@
                 addPostContent: "",
                 tagAcademicYearID: "",
                 profolio: "No",
-
                 tagClassID: "",
                 tagLevelID: "",
                 // files: [],
                 content: '',
                 selectedFile: null,
-                success: null,
+                success: "",
                 isLoading: true,
                 saveResponse: "",
                 PostItemPath: "",
@@ -279,7 +279,14 @@
                 query: '',
                 tag: '',
                 tags: [],
-                isParent:"",
+                isParent: "",
+
+                obj_SelectedComponent: false,
+                int_NumberOfPost: 2,
+
+                arrobj_BroadcastPost: [],
+                intervalCheckNew: {},
+                bool_ShowRefresh: false,
             };
         },
         filters: {
@@ -294,143 +301,459 @@
                 });
             },
         },
-        async mounted() {
-            // this.showSession()
-            // user menu
-            try {
-                this.isParent = sessionStorage.getItem('userTypeSession');
-                const isParent = sessionStorage.getItem('userTypeSession');
-                if (isParent === "Parent") {
-                    let response = await DataSource.shared.getParentPost();
-                    console.log(response);
-                    if (response.Table) {
-                        for (let item of response.Table) {
-                            const fileRes = await DataSource.shared.getPostFile(item.PostID);
-                            const getCommentResponse = await DataSource.shared.getComment(item.PostID);
-                            if (getCommentResponse.Table) {
-                                item.commentItems = getCommentResponse.Table;
-                                item.collapsed = true;
+        /*async mounted() {
+            this.loadPosts();
+        },*/
+        mounted() {
+            const self = this;
+            this.loadPosts();
+            this.loadBroadcast();
+            /*#region Scroll Loader Functions*/
+            $(window).scroll(self.debounce(() => {
+                    if (self.getScrollPercent() >= 50) {
+                        this.isParent = Cookies.get('userTypeSession');
+                        let obj_LastPost = !this.isNull(this.list) ? this.list[this.list.length - 1] : "";
+                        let promise_GetPosts = this.isParent === "Parent" ? DataSource.shared.getParentPost(this.int_NumberOfPost, obj_LastPost.PostID) : DataSource.shared.getStaffPost(this.int_NumberOfPost, obj_LastPost.PostID);
+
+
+                        promise_GetPosts.then((response) => {
+                            if (response.Table) {
+                                this.list.push.apply(this.list, response.Table);
                             }
-                            if (fileRes.Table) {
-                                item.postFiles = fileRes.Table;
-                            }
-                            item.commentPostID = item.PostID;
-                        }
-                        this.list = response.Table;
+                        });
+
+                        /*if (this.isParent === "Parent") {
+                            DataSource.shared.getParentPost(this.int_NumberOfPost, str_LastPostID).then((response) => {
+                                if (response.Table) {
+                                    for (let item of response.Table) {
+                                        this.list.push.apply(this.list, response.Table);
+
+                                        DataSource.shared.getPostFile(item.PostID).then((fileRes) => {
+                                            if (fileRes.Table) {
+                                                item.postFiles = fileRes.Table;
+                                            }
+                                            item.commentPostID = item.PostID;
+                                        }).then(() => {
+                                            DataSource.shared.getComment(item.PostID).then((getCommentResponse) => {
+                                                if (getCommentResponse.Table) {
+                                                    item.commentItems = getCommentResponse.Table;
+                                                    item.collapsed = true;
+                                                }
+                                            });
+                                        });
+                                    }
+                                }
+                            });
+                        } else {
+                            DataSource.shared.getStaffPost(this.int_NumberOfPost, str_LastPostID).then((response) => {
+                                if (response.Table) {
+                                    this.list.push.apply(this.list, response.Table);
+
+                                    for (let item of response.Table) {
+                                        DataSource.shared.getPostFile(item.PostID).then((fileRes) => {
+                                            if (fileRes.Table) {
+                                                item.postFiles = fileRes.Table;
+                                            }
+                                            item.commentPostID = item.PostID;
+                                        }).then(() => {
+                                            DataSource.shared.getComment(item.PostID).then((getCommentResponse) => {
+                                                if (getCommentResponse.Table) {
+                                                    item.commentItems = getCommentResponse.Table;
+                                                    item.collapsed = true;
+                                                }
+                                            });
+                                        });
+                                    }
+                                }
+                            });
+                        }*/
                     }
-                } else {
-                    let response = await DataSource.shared.getStaffPost();
-                    console.log(response);
-                    if (response.Table) {
-                        for (let item of response.Table) {
-                            const fileRes = await DataSource.shared.getPostFile(item.PostID);
-                            const getCommentResponse = await DataSource.shared.getComment(item.PostID);
-                            if (getCommentResponse.Table) {
-                                item.commentItems = getCommentResponse.Table;
-                                item.collapsed = true;
-                            }
-                            if (fileRes.Table) {
-                                item.postFiles = fileRes.Table;
-                            }
-                            item.commentPostID = item.PostID;
-                        }
-                        this.list = response.Table;
-                    }
-                }
-
-
-                let tagResponse = await DataSource.shared.getPostDropdown();
-
-                if (tagResponse.AcademicYearTable && tagResponse.AcademicYearTable.Table) {
-                    let uniqueYears = [];
-                    tagResponse.AcademicYearTable.Table.forEach(object => {
-                        const isExist = uniqueYears.find(year => year.SMT_Code === object.SMT_Code);
-                        if (!isExist) {
-                            uniqueYears.push(object);
-                        }
-                    });
-                    this.academicYearTable = uniqueYears;
-                }
-                if (tagResponse.ClassesTable && tagResponse.ClassesTable.Table) {
-                    let uniqueClass = [];
-                    tagResponse.ClassesTable.Table.forEach(object => {
-                        const isExist = uniqueClass.find(year => year.PK_Class_ID === object.PK_Class_ID);
-                        if (!isExist) {
-                            uniqueClass.push(object);
-                        }
-                    });
-                    this.classesTable = uniqueClass;
-                }
-                if (tagResponse.LevelsTable && tagResponse.LevelsTable.Table) {
-
-                    let uniqueLevel = [];
-                    tagResponse.LevelsTable.Table.forEach(object => {
-                        const isExist = uniqueLevel.find(level => level.SC_FK_CourseID === object.SC_FK_CourseID);
-                        if (!isExist) {
-                            uniqueLevel.push(object);
-                        }
-                    });
-
-                    this.levelsTable = uniqueLevel;
-                }
-                if (tagResponse.StudentTable && tagResponse.StudentTable.Table) {
-                    let uniqueStudent = [];
-                    tagResponse.StudentTable.Table.forEach(object => {
-                        const isExist = uniqueStudent.find(student => student.Student_ID === object.Student_ID);
-                        if (!isExist) {
-                            const selectedValue = {
-                                Student_ID: object.Student_ID,
-                                text: object.Full_Name,
-                                Sex: object.Sex,
-                                // email: object.email,
-                                Status: object.Status
-                            };
-                            uniqueStudent.push(selectedValue);
-                        }
-                    });
-                    // this.studentTable = tagResponse.StudentTable.Table;
-                    this.studentTable = uniqueStudent;
-                    // console.log("a ", this.studentTable);
-                }
-
-                this.userType = sessionStorage.getItem('userTypeSession');
-
-
-            } catch (e) {
-                console.log(e, '  errrr');
-            }
-            this.isLoading = false;
+                }, 250
+            ));
+            /*#endregion*/
         },
         methods: {
-            inputChange(input) {
-                this.postContent = input;
+            initIntervalCheckNew() {
+                if (!this.bool_ShowRefresh)
+                    this.intervalCheckNew = setInterval(() => {
+                        this.CheckNew();
+                    }, 300000);
             },
-            checkIfImage(file) {
-                return isImage(file);
+
+            CheckNew() {
+                this.isParent = Cookies.get('userTypeSession');
+
+                let promise_GetPosts = this.isParent === "Parent" ?
+                    DataSource.shared.getParentPost(1, null, null)
+                    : DataSource.shared.getStaffPost(1, null, null);
+
+                promise_GetPosts.then((response) => {
+                    if (response.Table && (new Date(response.Table[0].PostCreatedDate)) > (new Date(this.list[0].PostCreatedDate))) {
+                        this.bool_ShowRefresh = true;
+                        clearInterval(this.intervalCheckNew);
+                    }
+                });
             },
-            showModal() {
+
+            showMoreBroadcastModal() {
+                this.$refs.modal_ShowMoreBroadcast.show();
+            },
+
+            isNull(obj) {
+                return (obj === null || obj === undefined || obj === "undefined" || obj.length === 0 || obj === "");
+            }
+            ,
+            /*#region Scroll Loader Functions*/
+            getScrollPercent() {
+                //Credits to Phil Ricketts @ stackoverflow
+                let height = document.documentElement,
+                    body = document.body,
+                    scrollTop = 'scrollTop',
+                    scrollHeight = 'scrollHeight';
+
+                return (height[scrollTop] || body[scrollTop]) / ((height[scrollHeight] || body[scrollHeight]) - height.clientHeight) * 100;
+            }
+            ,
+            isScrollable() {
+                return $(document).height() > $(window).height();
+            }
+            ,
+            debounce(func, wait, immediate) {
+                // Returns a function, that, as long as it continues to be invoked, will not
+                // be triggered. The function will be called after it stops being called for
+                // N milliseconds. If `immediate` is passed, trigger the function on the
+                // leading edge, instead of the trailing.
+                let timeout, result;
+                let self = this;
+
+                let later = function (context, args) {
+                    timeout = null;
+                    if (args) result = func.apply(context, args);
+                };
+
+                let debounced = self.restArguments(function (args) {
+                    if (timeout) clearTimeout(timeout);
+                    if (immediate) {
+                        let callNow = !timeout;
+                        timeout = setTimeout(later, wait);
+                        if (callNow) result = func.apply(this, args);
+                    } else {
+                        timeout = self.delay(later, wait, this, args);
+                    }
+
+                    return result;
+                });
+
+                debounced.cancel = function () {
+                    clearTimeout(timeout);
+                    timeout = null;
+                };
+
+                return debounced;
+            }
+            ,
+            delay(func, wait, ...args) {
+                // Lodash Delay
+                /**
+                 * Invokes `func` after `wait` milliseconds. Any additional arguments are
+                 * provided to `func` when it's invoked.
+                 *
+                 * @since 0.1.0
+                 * @category Function
+                 * @param {Function} func The function to delay.
+                 * @param {number} wait The number of milliseconds to delay invocation.
+                 * @param {...*} [args] The arguments to invoke `func` with.
+                 * @returns {number} Returns the timer id.
+                 * @example
+                 *
+                 * delay(text => console.log(text), 1000, 'later')
+                 * // => Logs 'later' after one second.
+                 */
+                if (typeof func != 'function') {
+                    throw new TypeError('Expected a function');
+                }
+                return setTimeout(func, +wait || 0, ...args);
+            }
+            ,
+            restArguments(func, startIndex) {
+                // Some functions take a variable number of arguments, or a few expected
+                // arguments at the beginning and then a variable number of values to operate
+                // on. This helper accumulates all remaining arguments past the function?s
+                // argument length (or an explicit `startIndex`), into an array that becomes
+                // the last argument. Similar to ES6?s "rest parameter".
+                startIndex = startIndex == null ? func.length - 1 : +startIndex;
+                return function () {
+                    let length = Math.max(arguments.length - startIndex, 0),
+                        rest = Array(length),
+                        index = 0;
+                    for (; index < length; index++) {
+                        rest[index] = arguments[index + startIndex];
+                    }
+                    switch (startIndex) {
+                        case 0:
+                            return func.call(this, rest);
+                        case 1:
+                            return func.call(this, arguments[0], rest);
+                        case 2:
+                            return func.call(this, arguments[0], arguments[1], rest);
+                    }
+                    let args = Array(startIndex + 1);
+                    for (index = 0; index < startIndex; index++) {
+                        args[index] = arguments[index];
+                    }
+                    args[startIndex] = rest;
+                    return func.apply(this, args);
+                };
+            }
+            ,
+            /*#endregion*/
+            loadPosts() {
+                // this.showSession()
+                // user menu
+                $("html, body").animate({scrollTop: 0}, "fast");
+                this.bool_ShowRefresh = false;
+                this.initIntervalCheckNew();
+                this.isParent = Cookies.get('userTypeSession');
+                this.list = [];
+                let promise_GetPosts = this.isParent === "Parent" ?
+                    DataSource.shared.getParentPost(this.int_NumberOfPost)
+                    : DataSource.shared.getStaffPost(this.int_NumberOfPost);
+
+                promise_GetPosts.then((response) => {
+                    if (response.Table)
+                        this.list.push.apply(this.list, response.Table);
+
+                    this.isLoading = false;
+                });
+
+
+                /*#region Past revision*/
+                /*for (let item of response.Table) {
+                DataSource.shared.getPostFile(item.PostID).then((fileRes) => {
+                    if (fileRes.Table) {
+                        item.postFiles = fileRes.Table;
+                    }
+                    item.commentPostID = item.PostID;
+                }).then(() => {
+                    DataSource.shared.getComment(item.PostID).then((getCommentResponse) => {
+                        if (getCommentResponse.Table) {
+                            item.commentItems = getCommentResponse.Table;
+                            item.collapsed = true;
+                        }
+                    });
+                });
+            }
+
+            this.list = response.Table;
+        }*/
+
+                // if (this.isParent === "Parent") {
+                //     DataSource.shared.getParentPost(this.int_NumberOfPost).then((response) => {
+                //         this.list = [];
+                //         if (response.Table) {
+                //             for (let item of response.Table) {
+                //                 this.list.push.apply(this.list, response.Table);
+                //
+                //                 DataSource.shared.getPostFile(item.PostID).then((fileRes) => {
+                //                     if (fileRes.Table) {
+                //                         item.postFiles = fileRes.Table;
+                //                     }
+                //                     item.commentPostID = item.PostID;
+                //                 }).then(() => {
+                //                     DataSource.shared.getComment(item.PostID).then((getCommentResponse) => {
+                //                         if (getCommentResponse.Table) {
+                //                             item.commentItems = getCommentResponse.Table;
+                //                             item.collapsed = true;
+                //                         }
+                //                     });
+                //                 });
+                //             }
+                //         }
+                //     });
+                // } else {
+                //
+                // }
+
+                // if (isParent === "Parent") {
+                //     let response = await DataSource.shared.getParentPost(this.int_NumberOfPost, "");
+                //     if (response.Table) {
+                //         for (let item of response.Table) {
+                //             const fileRes = await DataSource.shared.getPostFile(item.PostID);
+                //             const getCommentResponse = await DataSource.shared.getComment(item.PostID);
+                //             if (getCommentResponse.Table) {
+                //                 item.commentItems = getCommentResponse.Table;
+                //                 item.collapsed = true;
+                //             }
+                //             if (fileRes.Table) {
+                //                 item.postFiles = fileRes.Table;
+                //             }
+                //             item.commentPostID = item.PostID;
+                //         }
+                //         this.list = response.Table;
+                //     }
+                // } else {
+                //     let response = await DataSource.shared.getStaffPost(this.int_NumberOfPost, "");
+                //     if (response.Table) {
+                //         for (let item of response.Table) {
+                //             const fileRes = await DataSource.shared.getPostFile(item.PostID);
+                //             const getCommentResponse = await DataSource.shared.getComment(item.PostID);
+                //             if (getCommentResponse.Table) {
+                //                 item.commentItems = getCommentResponse.Table;
+                //                 item.collapsed = true;
+                //             }
+                //             if (fileRes.Table) {
+                //                 item.postFiles = fileRes.Table;
+                //             }
+                //             item.commentPostID = item.PostID;
+                //         }
+                //         this.list = response.Table;
+                //     }
+                // }
+
+
+                // try {
+                //     let tagResponse = await DataSource.shared.getPostDropdown();
+                //
+                //     if (tagResponse.AcademicYearTable && tagResponse.AcademicYearTable.Table) {
+                //         let uniqueYears = [];
+                //         tagResponse.AcademicYearTable.Table.forEach(object => {
+                //             const isExist = uniqueYears.find(year => year.SMT_Code === object.SMT_Code);
+                //             if (!isExist) {
+                //                 uniqueYears.push(object);
+                //             }
+                //         });
+                //         this.academicYearTable = uniqueYears;
+                //     }
+                //     if (tagResponse.ClassesTable && tagResponse.ClassesTable.Table) {
+                //         let uniqueClass = [];
+                //         tagResponse.ClassesTable.Table.forEach(object => {
+                //             const isExist = uniqueClass.find(year => year.PK_Class_ID === object.PK_Class_ID);
+                //             if (!isExist) {
+                //                 uniqueClass.push(object);
+                //             }
+                //         });
+                //         this.classesTable = uniqueClass;
+                //     }
+                //     if (tagResponse.LevelsTable && tagResponse.LevelsTable.Table) {
+                //
+                //         let uniqueLevel = [];
+                //         tagResponse.LevelsTable.Table.forEach(object => {
+                //             const isExist = uniqueLevel.find(level => level.SC_FK_CourseID === object.SC_FK_CourseID);
+                //             if (!isExist) {
+                //                 uniqueLevel.push(object);
+                //             }
+                //         });
+                //
+                //         this.levelsTable = uniqueLevel;
+                //     }
+                //     if (tagResponse.StudentTable && tagResponse.StudentTable.Table) {
+                //         let uniqueStudent = [];
+                //         tagResponse.StudentTable.Table.forEach(object => {
+                //             const isExist = uniqueStudent.find(student => student.Student_ID === object.Student_ID);
+                //             if (!isExist) {
+                //                 const selectedValue = {
+                //                     Student_ID: object.Student_ID,
+                //                     text: object.Full_Name,
+                //                     Sex: object.Sex,
+                //                     // email: object.email,
+                //                     Status: object.Status
+                //                 };
+                //                 uniqueStudent.push(selectedValue);
+                //             }
+                //         });
+                //         // this.studentTable = tagResponse.StudentTable.Table;
+                //         this.studentTable = uniqueStudent;
+                //     }
+                //
+                //     this.userType = Cookies.get('userTypeSession');
+                //
+                // } catch (e) {
+                //     console.log(e, '  errrr');
+                // }
+                // this.isLoading = false;
+                /*#endregion*/
+            }
+            ,
+
+            loadBroadcast() {
+                this.isParent = Cookies.get('userTypeSession');
+                this.arrobj_BroadcastPost = [];
+
+                let promise_GetPosts = this.isParent === "Parent" ?
+                    DataSource.shared.getParentPost(10, null, "BROADCAST")
+                    : DataSource.shared.getStaffPost(10, null, "BROADCAST");
+
+                promise_GetPosts.then((response) => {
+                    if (response.Table)
+                        this.arrobj_BroadcastPost.push.apply(this.arrobj_BroadcastPost, response.Table);
+                });
+            },
+            hideComponentModal() {
+                this.obj_SelectedComponent = false;
+                this.isModalOpen = false;
+                this.modalTitle = null;
+            }
+            ,
+            displayResult(value) {
+                //TODO: Show Message
+                if (value == "TRUE") {
+                    this.hideComponentModal();
+                }
+                // this.success = "Successfully posted";
+                // else
+                // this.success = "Something went wrong. Please inform the adminstrator";
+
+
+            }
+            ,
+            showUpdates() {
+                this.modalTitle = "Post";
+                this.obj_SelectedComponent = updates;
+                this.isModalOpen = true;
+            }
+            ,
+            showPortfolio() {
+                this.modalTitle = "Portfolio";
+                this.obj_SelectedComponent = portfolio;
+                this.isModalOpen = true;
+            }
+            ,
+            showBroadcast() {
+                this.modalTitle = "Broadcast";
+                this.obj_SelectedComponent = broadcast;
                 this.isModalOpen = true;
             },
+            inputChange(input) {
+                this.postContent = input;
+            }
+            ,
+            showModal() {
+                this.isModalOpen = true;
+            }
+            ,
             hideModal() {
                 this.isModalOpen = false;
-            },
+            }
+            ,
             onFileChanged(event) {
                 this.selectedFile = event.target.files;
                 this.getImagePreviews();
-            },
+            }
+            ,
             async onUpload() {
                 // const formData = new FormData();
-                // console.log(this.selectedFile);
                 // formData.append('myFile', this.selectedFile, this.selectedFile.name);
                 // this.formData = formData;
                 // await DataSource.shared.uploadFile(this.selectedFile);
-            },
+            }
+            ,
             async onSubmit() {
+                this.$v.$touch();
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
                     const studentsIds = this.tags.map(d => d.Student_ID);
-                    const saveResponse = await DataSource.shared.savePost(this.selectedFile, this.addPostContent, this.profolio, studentsIds, this.tagClassID, this.tagLevelID);
+                    const saveResponse = await DataSource.shared.savePostUpdate(this.selectedFile, this.addPostContent, studentsIds, this.tagClassID, this.tagLevelID);
 
                     if (saveResponse) {
                         switch (saveResponse.code) {
@@ -441,7 +764,6 @@
                                 this.$refs.fileupload.value = "";
                                 this.addPostContent = "";
                                 this.tagAcademicYearID = null;
-                                this.profolio = null;
 
                                 this.tagLevelID = null;
                                 this.tagClassID = null;
@@ -466,14 +788,14 @@
                     this.error = e;
                 }
 
-            },
-            async commentitemSubmit(commentPostID, comment) {
+            }
+            ,
+            async commentitemSubmit(postId, comment) {
                 this.error = "";
                 //this.results = "<< Requesting.. >>";
                 try {
 
-                    this.commentPostID = commentPostID;
-
+                    this.commentPostID = postId;
                     const commentResponse = await DataSource.shared.saveComment(this.commentPostID, comment);
 
 
@@ -488,18 +810,15 @@
 
                                 this.list.find(item => {
 
-                                    console.log("item ", item);
-                                    console.log("postid ", newComment);
 
                                     if (item.PostID === commentPostID) {
                                         item.commentItems = newComment.Table;
-                                        console.log(item)
                                         return item;
                                     }
 
                                 });
 
-                                this.$forceUpdate()
+                                this.$forceUpdate();
 
 
                                 // this.results = `Post Submitted`;
@@ -522,7 +841,8 @@
                     console.log(e);
                     this.error = e;
                 }
-            },
+            }
+            ,
             async commentEdit(PoCmID, PoCmContent) {
                 this.error = "";
                 try {
@@ -560,10 +880,12 @@
                     console.log(e);
                     this.error = e;
                 }
-            },
+            }
+            ,
             async okClick() {
 
-            },
+            }
+            ,
             async commentDelete(PoCmID, PoCmContent, postId) {
                 this.error = "";
                 try {
@@ -578,17 +900,15 @@
 
                                 const newComment = await DataSource.shared.getComment(PoCmID);
 
-                                console.log(newComment);
                                 this.list.find(item => {
 
                                     if (item.PostID === postId) {
-                                        console.log('hey', postId);
                                         item.commentItems = item.commentItems.filter(comment => comment.PoCmID !== PoCmID);
                                         return item;
                                     }
 
                                 });
-                                this.$forceUpdate()
+                                this.$forceUpdate();
                                 break;
                             case "88":
                                 this.results = `Please Login to submit post`;
@@ -604,7 +924,8 @@
                     console.log(e);
                     this.error = e;
                 }
-            },
+            }
+            ,
             async disableReadonly(PoCmID) {
                 this.error = "";
                 try {
@@ -614,7 +935,8 @@
                     console.log(e);
                     this.error = e;
                 }
-            },
+            }
+            ,
             getImagePreviews() {
                 /*
                   Iterate over all of the files and generate an image preview for each one.
@@ -645,21 +967,33 @@
                         reader.readAsDataURL(this.selectedFile[i]);
                     }
                 }
-            },
+            }
+            ,
             clearPreview() {
                 this.selectedFile = null;
-            },
-        },
-        validations: {
-            content: {
-                required,
-                minLength: minLength(4)
             }
+            ,
+        }
+        ,
+        validations: {
+            updateContent: {
+                required
+                // minLength: minLength(4)
+            }
+        }
+        ,
+        computed: {
+            filteredBroadcastPost: function () {
+                return this.arrobj_BroadcastPost.slice(0, 3);
+            },
         },
     };
 </script>
 
 <style scoped>
+    .overflow-x-scroll {
+        overflow-x: hidden;
+    }
 </style>
 
 <style>
@@ -719,5 +1053,9 @@
 
     .ti-deletion-mark {
         background-color: $ error;
+    }
+
+    #modal1 .modal-lg {
+        /*max-width: 95% !important;*/
     }
 </style>

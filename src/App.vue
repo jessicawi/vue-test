@@ -1,4 +1,5 @@
 <template>
+    <!-- eslint-disable -->
     <div v-if="isLoading===false" id="app">
         <Header/>
         <MainContent>
@@ -23,6 +24,7 @@
     import Header from "./components/Header";
     import MainContent from "./components/MainContent";
     import DataSource from "./data/datasource";
+    import Cookies from "js-cookie";
 
     export default {
         name: 'app',
@@ -39,7 +41,7 @@
             Header,
         },
         mounted() {
-            const isLogin = sessionStorage.getItem('authToken');
+            const isLogin = Cookies.get('authToken');
             if (this.$route.path !== "/login" && this.$route.path !== "/register/parent" && this.$route.path !== "/reset-password" && this.$route.path !== "/reset-email"  && (!isLogin || isLogin === "null")) {
                 this.$router.push('/login')
             }else if (isLogin) {
@@ -102,6 +104,17 @@
         text-decoration: none !important;
     }
 
+    .loading-screen{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        background: rgba(255, 255, 255, 0.63);
+        color: #000;
+        top: 0;
+        left: 0;
+        font-size: 30px;
+    }
 </style>
 
 <style lang="scss">

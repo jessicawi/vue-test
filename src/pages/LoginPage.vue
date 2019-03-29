@@ -21,26 +21,21 @@
                             <img src="../assets/kagami.jpg"/>
                         </div>
                     </div>
-                    <form class="needs-validation" novalidate @submit.prevent="onSubmit">
+                    <form class="needs-validation"  @submit.prevent="onSubmit">
 
-                        <div class="mb-3">
+                        <div class="mb-3" :class="{ 'form-group--error': $v.usernameInput.$error }">
                             <!--<label for="username">Username</label>-->
-                            <input type="text" class="form-control" id="username" v-model="usernameInput"
-                                   placeholder="Email ID"
-                                   required>
+                            <vs-input label-placeholder="Email ID"  class="form-control text-left" id="username" v-model="usernameInput" v-model.trim="$v.usernameInput.$model"/>
                             <div class="invalid-feedback" style="width: 100%;">
                                 Your username is required.
                             </div>
+                            <div class="error" v-if="!$v.usernameInput.required">Username is required</div>
                         </div>
 
-                        <div class="mb-2">
+                        <div class="mb-2" :class="{ 'form-group--error': $v.passwordInput.$error }">
                             <!--<label for="password">Password</label>-->
-                            <input type="password" class="form-control" id="password" v-model="passwordInput"
-                                   placeholder="Password"
-                                   required/>
-                            <div class="invalid-feedback" style="width: 100%;">
-                                Your password is required.
-                            </div>
+                            <vs-input type="password" label-placeholder="Password"  class="form-control text-left" id="password" v-model="passwordInput" v-model.trim="$v.passwordInput.$model"/>
+                            <div class="error" v-if="!$v.passwordInput.required">Password is required</div>
                         </div>
                         <small class="d-block text-left">By signing in, you accept the terms found in our <a href="">Trust
                             Centre</a></small>
@@ -63,18 +58,20 @@
                             </div>
                         </div>
                     </form>
-                    <div id="google-signin-button"></div>
-                    <button id="btn_FBLogin" @click="loginFB">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 216" class="_5h0m" color="#FFFFFF">
-                            <path fill="#FFFFFF" d="
+                    <div class="social-login">
+                        <div id="google-signin-button"></div>
+                        <button id="btn_FBLogin" @click="loginFB">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 216" class="_5h0m" color="#FFFFFF">
+                                <path fill="#FFFFFF" d="
           M204.1 0H11.9C5.3 0 0 5.3 0 11.9v192.2c0 6.6 5.3 11.9 11.9
           11.9h103.5v-83.6H87.2V99.8h28.1v-24c0-27.9 17-43.1 41.9-43.1
           11.9 0 22.2.9 25.2 1.3v29.2h-17.3c-13.5 0-16.2 6.4-16.2
           15.9v20.8h32.3l-4.2 32.6h-28V216h55c6.6 0 11.9-5.3
           11.9-11.9V11.9C216 5.3 210.7 0 204.1 0z"></path>
-                        </svg>
-                        Facebook
-                    </button>
+                            </svg>
+                            Facebook
+                        </button>
+                    </div>
                     <!--<button @click="logoutall">Logout all</button>-->
                     <!--<div class="social-wrap row">-->
                     <!--<div class="col-md-6 pr-2">-->
@@ -122,6 +119,8 @@
     import DataSource from "../data/datasource";
     import parentRegisterComponent from "../components/Parent_Register_Component"
     import $ from "jquery";
+    import { required, minLength } from 'vuelidate/lib/validators';
+    import Cookies from "js-cookie";
 
     export default {
         data() {
@@ -152,19 +151,21 @@
         },
         methods: {
             async onSubmit() {
+                this.$v.$touch();
                 //this.results = "<< Requesting.. >>";
+
+
                 try {
                     this.isLoading = true;
                     const response = await DataSource.shared.login(this.usernameInput, this.passwordInput);
                     this.redirecting = true;
 
-                    const isParent = sessionStorage.getItem('userTypeSession');
-                    console.log(response);
+                    const isParent = Cookies.get('userTypeSession');
                     if (response) {
                         if (response.token) {
                             this.results = `Login Success, Welcome Back`;
                             if (isParent === "Parent") {
-                                window.location.replace("/post/staff");
+                                window.location.replace("/feed");
                             } else {
                                 window.location.replace("/");
                             }
@@ -204,12 +205,12 @@
                             return;
                         }
 
-                        const isParent = sessionStorage.getItem('userTypeSession');
+                        const isParent = Cookies.get('userTypeSession');
 
                         if (result && result.token) {
                             this.results = `Login Success, Welcome Back`;
                             if (isParent === "Parent")
-                                window.location.replace("/post/staff");
+                                window.location.replace("/feed");
                             else
                                 window.location.replace("/");
                         }
@@ -248,7 +249,6 @@
             logoutFB() {
                 $.getScript('https://connect.facebook.net/en_US/sdk.js', function () {
                     FB.logout();
-                    console.log("FB Logout");
                 });
             },
             logoutGoogle() {
@@ -268,7 +268,8 @@
                 let self = this;
                 $.getScript('https://connect.facebook.net/en_US/sdk.js', function () {
                     FB.init({
-                        appId: '255792542012990',
+                        // appId: '255792542012990',
+                        appId: '1983777365262188',
                         version: 'v2.7' // or v2.1, v2.2, v2.3, ...
                     });
 
@@ -283,7 +284,8 @@
                 let self = this;
                 $.getScript('https://connect.facebook.net/en_US/sdk.js', function () {
                     FB.init({
-                        appId: '255792542012990',
+                        // appId: '255792542012990',
+                        appId: '1983777365262188',
                         version: 'v2.7' // or v2.1, v2.2, v2.3, ...
                     });
 
@@ -329,15 +331,25 @@
             },
         },
         mounted() {
-            const isLogin = sessionStorage.getItem('authToken');
+            const isLogin = Cookies.get('authToken');
             if (isLogin && isLogin !== "null") {
                 this.results = `You already logged in`;
+                // window.location.replace("/");
+                this.$router.go(-1);
             }
 
             this.getGoogleSignin();
             this.getFBSignin();
         },
-        components: {parentRegisterComponent}
+        components: {parentRegisterComponent},
+        validations: {
+            usernameInput: {
+                required
+            },
+            passwordInput:{
+                required
+            }
+        }
     };
 </script>
 
@@ -379,4 +391,5 @@
     .login header {
         display: none;
     }
+    .login .menu-box-wrap{display: none;}
 </style>

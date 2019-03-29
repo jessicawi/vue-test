@@ -13,14 +13,20 @@ import studentEditClass from "../pages/StudentEditClass";
 import parentList from "../pages/ParentList";
 import parent from "../pages/Parent";
 import manageRelationship from "../pages/ManageRelationship";
-import staffNewsfeed from "../pages/StaffNewsfeed";
+import staffNewsfeed from "../pages/StaffPost";
 import pendingPost from "../pages/PendingPost";
 import parentRegister from "../pages/ParentRegister";
 import getApproverMaster from "../pages/Approver";
 import attendanceList from "../pages/AttendanceList";
 import portfolio from "../pages/Portfolio";
+import portfolio2 from "../pages/Portfolio2";
 import gallery from "../pages/Gallery";
 import promotion from "../pages/Promotion";
+import report from "../pages/Report";
+import notFound from "../pages/NotFound";
+import portfolioPreview from "../pages/PortfolioPreview";
+import dailyRoutine from "../pages/DailyRoutine";
+import pendingApprover from "../pages/PendingApprover";
 
 
 Vue.use(VueRouter);
@@ -98,8 +104,8 @@ const router = new VueRouter({
             meta: {bodyClass: 'parent-register'}
         },
         {
-            path: '/post/staff',
-            name: 'Latest Update (Staff)',
+            path: '/feed',
+            name: 'Latest Update',
             component: staffNewsfeed,
         },
         {
@@ -120,8 +126,15 @@ const router = new VueRouter({
             path: '/Portfolio',
             name: 'Portfolio',
             component: portfolio
-        },
-        {
+        }, {
+            path: '/Portfolio2',
+            name: 'Portfolio2',
+            component: portfolio2
+        }, {
+            path: '/PortfolioPreview',
+            name: 'Portfolio Preview',
+            component: portfolioPreview
+        },{
             path: '/Gallery',
             name: 'Gallery',
             component: gallery
@@ -129,7 +142,25 @@ const router = new VueRouter({
             path: '/promotion',
             name: 'promotion',
             component: promotion
-        }
+        }, {
+            path: '/report',
+            name: 'report',
+            component: report
+        },{
+            path: '*',
+            name: 'Not Found',
+            component: notFound
+        },
+        {
+            path: '/DailyRoutine',
+            name: 'Daily Routine',
+            component: dailyRoutine
+        },
+        {
+            path: '/PendingApprover',
+            name: 'Pending Approver',
+            component: pendingApprover
+        },
     ]
 });
 

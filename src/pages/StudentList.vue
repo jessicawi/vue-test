@@ -58,6 +58,7 @@
         data() {
             return {
                 list: [],
+                Father_Name: "",
                 studentList: [{
                     prop: "Index_No",
                     label: "Student ID"
@@ -70,6 +71,9 @@
                 }, {
                     prop: "Status",
                     label: "Status"
+                }, {
+                    prop: "Father_Name",
+                    label: "Father_Name"
                 }],
                 actionCol: {
                     label: 'Edit',
@@ -91,6 +95,18 @@
                             }
                         },
                         label: 'Edit'
+                    },
+                    {
+                        props: {
+                            type: 'primary',
+                            icon: 'el-icon-document'
+                        },
+                        handler: row => {
+                            this.isModalOpen = true;
+                            this.Father_Name = row.Father_Name;
+                            console.log(this.Father_Name);
+                        },
+                        label: 'View'
                     }]
                 },
                 selectedRow: null,
@@ -112,6 +128,7 @@
                     const response = await DataSource.shared.getStudent('', this.stud_id, this.stud_fname, this.stud_lname, this.stud_parname);
                     if (response) {
                         this.list = response.Table;
+                        console.log(this.list);
                     }
                 } catch (e) {
                     this.results = e;
@@ -134,4 +151,15 @@
     #student-list .isFocus .vs-placeholder-label {
         color: #fff;
     }
+
+    /*jess*/
+    .action-list button {
+    width: 100%;
+    margin: 5px 0px;
+}
+
+.sc-table .action-list > span + span {
+    margin: 0px 0px;
+    display: block;
+}
 </style>
