@@ -1,11 +1,11 @@
 <template>
 
     <div class="row nabarx topbar">
-        <div class="col-md-4 text-left">
+        <div class="col-md-12 col-lg-4 text-left">
             <a href="/"> <img src="../assets/kagami-white.png"/></a>
             {{$route.name}}
         </div>
-        <div class="col-md-8 info-menu">
+        <div class="col-md-12 col-lg-8 info-menu">
             <div class="input-group search" v-if="!isMobile()">
                 <input type="text" class="form-control" placeholder="Search for...">
                 <span class="input-group-btn">
@@ -124,7 +124,7 @@
             },
 
             isMobile() {
-                if (screen.width <= 760) {
+                if (screen.width <= 770) {
                     return true;
                 } else {
                     return false;
@@ -159,11 +159,11 @@
 
                     this.schList.forEach(m => {
                         if (m.CONSchool === value) {
-                            Cookies.set('schoolSession', m.CONSchool, { expires: 1/48 }); //expire in 30 min
-                            Cookies.set('userIDSession', m.CONid,  { expires: 1/48 }); //expire in 30 min
-                            Cookies.set('userTypeSession', m.CONType,  { expires: 1/48 }); //expire in 30 min
-                            Cookies.set('userUniversitySession', m.CONUniversity,  { expires: 1/48 }); //expire in 30 min
-                            Cookies.set('usRidSession', m.USRid,  { expires: 1/48 }); //expire in 30 min
+                            Cookies.set('schoolSession', m.CONSchool, { expires: 3/24 }); //expire in 3 hour
+                            Cookies.set('userIDSession', m.CONid,  { expires: 3/24 }); //expire in 3 hour
+                            Cookies.set('userTypeSession', m.CONType,  { expires: 3/24 }); //expire in 3 hour
+                            Cookies.set('userUniversitySession', m.CONUniversity,  { expires: 3/24 }); //expire in 3 hour
+                            Cookies.set('usRidSession', m.USRid,  { expires: 3/24 }); //expire in 3 hour
                             window.location.replace('/');
                         }
                     });

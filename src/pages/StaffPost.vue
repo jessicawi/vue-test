@@ -282,7 +282,7 @@
                 isParent: "",
 
                 obj_SelectedComponent: false,
-                int_NumberOfPost: 2,
+                int_NumberOfPost: 3,
 
                 arrobj_BroadcastPost: [],
                 intervalCheckNew: {},

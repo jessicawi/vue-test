@@ -65,6 +65,7 @@ export default class DataSource {
             data.UserType_Session = Cookies.get('userTypeSession');
             data.UserUniversity_Session = Cookies.get('userUniversitySession');
             data.UserEmail_Session = Cookies.get('userEmailSession');
+            data.USRid_Session = Cookies.get('usRidSession');
         }
 
         // this is just testing, remove this if savePost not working
@@ -126,13 +127,13 @@ export default class DataSource {
             userPassword: password
         };
         const response = await this.callWebService("/controller/Login.asmx/checkLogin", data, "POST", false);
-        Cookies.set('authToken', response.token,  { expires: 1 });
-        Cookies.set('schoolSession', response.UserSchool_Session,  { expires: 1 });
-        Cookies.set('userIDSession', response.UserID_Session,  { expires: 1 });
-        Cookies.set('userTypeSession', response.UserType_Session,  { expires: 1 });
-        Cookies.set('userUniversitySession', response.UserUniversity_Session,  { expires: 1 });
-        Cookies.set('usRidSession', response.USRid_Session,  { expires: 1 });
-        Cookies.set('userEmailSession', response.UserEmail_Session,  { expires: 1 });
+        Cookies.set('authToken', response.token,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('schoolSession', response.UserSchool_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userIDSession', response.UserID_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userTypeSession', response.UserType_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userUniversitySession', response.UserUniversity_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('usRidSession', response.USRid_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userEmailSession', response.UserEmail_Session,  { expires: 3/24 }); //expire in 3 hour);
 
         return response;
     }
@@ -144,13 +145,13 @@ export default class DataSource {
         };
 
         const response = await this.callWebService("/controller/Login.asmx/checkLogin", data, "POST", false);
-        Cookies.set('authToken', response.token,  { expires: 1 });
-        Cookies.set('schoolSession', response.UserSchool_Session,  { expires: 1 });
-        Cookies.set('userIDSession', response.UserID_Session,  { expires: 1 });
-        Cookies.set('userTypeSession', response.UserType_Session,  { expires: 1 });
-        Cookies.set('userUniversitySession', response.UserUniversity_Session,  { expires: 1 });
-        Cookies.set('usRidSession', response.USRid_Session,  { expires: 1 });
-        Cookies.set('userEmailSession', response.UserEmail_Session,  { expires: 1 });
+        Cookies.set('authToken', response.token,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('schoolSession', response.UserSchool_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userIDSession', response.UserID_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userTypeSession', response.UserType_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userUniversitySession', response.UserUniversity_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('usRidSession', response.USRid_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userEmailSession', response.UserEmail_Session,  { expires: 3/24 }); //expire in 3 hour);
         return response;
     }
 
@@ -258,7 +259,16 @@ export default class DataSource {
             studentLastName: studentLastName,
             parentName: parentName,
             // token: Cookies.get('authToken'),
-            // UserSchool_Session: Cookies.get('schoolSession'),
+            //UserSchool_Session: Cookies.get('schoolSession'),
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getStudent", data, "POST");
+        return response;
+    }
+
+    async getStudentParentView(studentID) {
+        const data = {
+            studentID: studentID,
+            parentView: "YES"
         };
         const response = await this.callWebService("/controller/Students.asmx/getStudent", data, "POST");
         return response;
@@ -520,6 +530,14 @@ export default class DataSource {
         return response;
     }
 
+    async getRelationshipByParentID(parentID) {
+        const data = {
+            parentID: parentID,
+        };
+        const response = await this.callWebService("/controller/Parents.asmx/getRelationship", data, "POST");
+        return response;
+    }
+
     async getStudentSiblingReligionLanguages(parentID) {
         const data = {
             parentID: parentID,
@@ -663,6 +681,20 @@ export default class DataSource {
         }
 
         const response = await this.callWebService("/controller/User.asmx/getUserSch", data, "POST");
+        return response;
+    }
+
+    async getAllStaffListBySchool() {
+        const data = {};
+
+        const response = await this.callWebService("/controller/User.asmx/getAllStaffListBySchool", data, "POST");
+        return response;
+    }
+
+    async getAllStaffList() {
+        const data = {};
+
+        const response = await this.callWebService("/controller/User.asmx/getAllStaffList", data, "POST");
         return response;
     }
 
@@ -1115,12 +1147,14 @@ export default class DataSource {
         return response;
     }
 
-    async approvePost(postApproverID, actionStatus) {
+    async approvePost(postID, postType, actionStatus, postComment) {
         const data = {
+            postID: postID,
+            postType: postType,
             actionStatus: actionStatus,
-            postApproverID: postApproverID,
+            postComment: postComment
         };
-        data.UserID_Session = Cookies.get('userIDSession');
+
         const response = await this.callWebService("/controller/Posting.asmx/approvePost", data, "POST");
         return response;
     }
@@ -1188,39 +1222,59 @@ export default class DataSource {
     }
 
     async getApproverMaster() {
-        const data = {};
+        const data = {
 
-        data.UserSchool_Session = Cookies.get('schoolSession');
+        };
 
         const response = await this.callWebService("/controller/Approver.asmx/getApproverMaster", data, "POST");
         return response;
     }
 
-    async saveApproverMaster(approverLevel, approverUserID) {
+    async saveApproverMaster(approverLevel, approverUserID, approverType) {
         const data = {
             approverLevel: approverLevel,
-            approverUserID: approverUserID
+            approverUserID: approverUserID,
+            approverType: approverType
         };
-
-        data.UserSchool_Session = Cookies.get('schoolSession');
-        data.UserID_Session = Cookies.get('userIDSession');
 
         const response = await this.callWebService("/controller/Approver.asmx/saveApproverMaster", data, "POST");
         return response;
     }
 
-    async updateApproverMaster(approverID, approverLevel, approverUserID, status) {
+    async updateApproverMaster(approverMasterID, actionStatus) {
         const data = {
-            approverID: approverID,
-            approverLevel: approverLevel,
-            approverUserID: approverUserID,
-            status: status,
+            approverMasterID: approverMasterID,
+            actionStatus: actionStatus,
         };
 
-        // data.UserSchool_Session = Cookies.get('schoolSession');
-        // data.UserID_Session = Cookies.get('userIDSession');
-
         const response = await this.callWebService("/controller/Approver.asmx/updateApproverMaster", data, "POST");
+        return response;
+    }
+
+    async getApproverMasterSpecificUser() {
+        const data = {};
+
+        const response = await this.callWebService("/controller/Approver.asmx/getApproverMasterSpecificUser", data, "POST");
+        return response;
+    }
+
+    async updateApproverMasterSpecificUser(approverMasterSpecificID, actionStatus) {
+        const data = {
+            approverMasterSpecificID:approverMasterSpecificID,
+            actionStatus:actionStatus
+        };
+
+        const response = await this.callWebService("/controller/Approver.asmx/updateApproverMasterSpecificUser", data, "POST");
+        return response;
+    }
+
+    async saveApproverMasterSpecificUser(neededApproveSpecificUserID, approverType) {
+        const data = {
+            neededApproveSpecificUserID:neededApproveSpecificUserID,
+            approverType:approverType
+        };
+
+        const response = await this.callWebService("/controller/Approver.asmx/saveApproverMasterSpecificUser", data, "POST");
         return response;
     }
 
@@ -1233,13 +1287,23 @@ export default class DataSource {
         return response;
     }
 
+    async checkApproveStatusByUser(itemID, mode) {
+        const data = {
+            itemID: itemID,
+            mode: mode
+        };
+
+        let result = await this.callWebService("/controller/Approver.asmx/checkApproveStatusByUser", data, "POST");
+        return result;
+    }
+
     async login2(userId, password) {
         const data = {
             username: userId,
             password: password
         };
         const response = await this.callAPI("/login", "POST", null, data);
-        Cookies.set('authToken', response.token,  { expires: 1 });
+        Cookies.set('authToken', response.token,  { expires: 3/24 }); //expire in 3 hour);
         return response;
     }
 
@@ -1580,15 +1644,6 @@ export default class DataSource {
         return await this.callWebService("/controller/Portfolio.asmx/savePortfolio", data, "POST");
     }
 
-    async checkApprovePortfolioStatusByUser(portfolioID) {
-        const data = {
-            portfolioID: portfolioID,
-        };
-
-        let result = await this.callWebService("/controller/Portfolio.asmx/checkApprovePortfolioStatusByUser", data, "POST");
-        return result;
-    }
-
     async approvePortfolio(portfolioID, actionStatus, portfolioEnduringThemesComment, portfolioResearchQuestionComment, jsonStringCommentValue) {
         const data = {
             portfolioID: portfolioID,
@@ -1602,12 +1657,12 @@ export default class DataSource {
         return result;
     }
 
-    async getPortfolioComment(portfolioID) {
+    async getApproverComment(itemID) {
         const data = {
-            portfolioID: portfolioID,
+            itemID: itemID,
         };
 
-        let result = await this.callWebService("/controller/Portfolio.asmx/getPortfolioComment", data, "POST");
+        let result = await this.callWebService("/controller/Approver.asmx/getApproverComment", data, "POST");
         return result;
     }
 
@@ -1740,6 +1795,15 @@ export default class DataSource {
         return await this.callWebService("/controller/Posting.asmx/getPostByPostID", data, "POST");
     }
 
+    async getPostByPostIDByStatus(jsonStringPostID, postStatus) {
+        const data = {
+            jsonStringPostID: jsonStringPostID,
+            postStatus: postStatus,
+        };
+
+        return await this.callWebService("/controller/Posting.asmx/getPostByPostID", data, "POST");
+    }
+
     /*#endregion*/
 
     async getAllActiveStudentsByClass(classID) {
@@ -1788,5 +1852,74 @@ export default class DataSource {
         return response;
     }
 
+    async deString(inputString){
+        const data = {
+            inputString: inputString
+        };
+        const response = await this.callWebService("/controller/Login.asmx/deString", data, "POST");
+        return response;
+    }
+
+    async getStaffProfileImage(){
+        const data = {
+
+        };
+        const response = await this.callWebService("/controller/User.asmx/getStaffProfileImage", data, "POST");
+        return response;
+    }
+
+    async saveStaffProfileImage(files) {
+        const data = new FormData();
+        data.append('token', Cookies.get('authToken'));
+        data.append('UserSchool_Session', Cookies.get('schoolSession'));
+        data.append('UserID_Session', Cookies.get('userIDSession'));
+        data.append('UserUniversity_Session', Cookies.get('userUniversitySession'));
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                //console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        data.append(`upload_${key}`, files[key]);
+                    } else {
+                        data.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            data.append("upload", files[0]);
+        }
+
+        const request = {
+            url: `${API_HOST}/controller/User.asmx/saveStaffProfileImage`,
+            cache: false,
+            type: 'POST',
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async resetPasswordByPassword(userCurrentPassword, userNewPassword){
+        const data = {
+            userCurrentPassword: userCurrentPassword,
+            userNewPassword: userNewPassword
+        };
+        const response = await this.callWebService("/controller/Login.asmx/resetPasswordByPassword", data, "POST");
+        return response;
+    }
 }
 

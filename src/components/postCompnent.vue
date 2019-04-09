@@ -1,5 +1,5 @@
 <template>
-    <div class="aaaa">
+    <div >
         <div class="container-fluid row" v-if="result">
             {{result}}
         </div>
@@ -7,7 +7,7 @@
             <div class="author">
                 <div class="profile"><img src="../assets/boy.png"/></div>
                 <div class="feed-heading">
-                    <span>{{post.CONname}}</span>{{post.PostID}}
+                    <span>{{post.CONname}}</span>
                     <small class="date"><i class="fa fa-clock-o" aria-hidden="true"></i>
                         {{post.PostCreatedDate}}
                     </small>
@@ -16,7 +16,8 @@
                         placement="bottom"
                         width="100"
                         trigger="click"
-                        class="feed-box__dropdown">
+                        class="feed-box__dropdown"
+                        v-if="approverPostNotShow">
                     <button @click="editPost(post)" class="btn btn-link">Edit Post</button>
                     <button @click="removePost(post)" class="btn btn-link">Delete Post</button>
                     <el-button slot="reference"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></el-button>
@@ -92,7 +93,7 @@
                 </div>
             </div>
             <hr/>
-            <div class="feed-iconBox">
+            <div class="feed-iconBox" v-if="approverPostNotShow">
                 <el-button @click="showCommentTransition(post.PostID)" class="float-left ml-2 post-icon-btn"><i
                         class="material-icons">
                     chat_bubble_outline
@@ -406,15 +407,19 @@
                 str_TimerID: "",
                 likeCount: 0,
                 isFile: false,
+                approverPostNotShow: true,
             };
         },
         mounted() {
+            if (!this.isNull(this.approverPost) && this.approverPost === 'YES') {
+                this.approverPostNotShow = false;
+            }
             if (!this.isNull(this.parentPost)) {
                 this.initPost();
 
             }
         },
-        props: ["parentPost", "commentitemSubmit", "hideComment", "isHome", "hideSubmenu","loadPost"],
+        props: ["parentPost", "commentitemSubmit", "hideComment", "isHome", "hideSubmenu","loadPost", "approverPost"],
         methods: {
             checkIfImage(file) {
                 return isImage(file);

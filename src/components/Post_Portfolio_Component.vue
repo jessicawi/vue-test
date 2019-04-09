@@ -131,7 +131,7 @@
                     PostPorDtlAnalysisReflection: "",
                     PostPorDtlDevelopmentGoals: ""
                 },
-            }
+            };
         },
         methods: {
             //return a promise that resolves with a File instance
@@ -145,34 +145,87 @@
                         })
                 );
             },
-            verifyPost() {
-                if (this.isNull(this.obj_Post.PostPorDtlTitle) ||
-                    this.isNull(this.obj_Post.PostPorDtlObservation) ||
-                    this.isNull(this.obj_Post.PostPorDtlAnalysisReflection) ||
-                    this.isNull(this.obj_Post.PostPorDtlDevelopmentGoals) ||
-                    this.isNull(this.arrobj_SelectedStudents)) {
-                    this.$emit("result", "FALSE");
-                    return;
+            showLoading() {
+                this.$vs.loading();
+            },
+            hideLoading() {
+                this.$vs.loading.close();
+            },
+            sleep(milliseconds) {
+                return new Promise(resolve => setTimeout(resolve, milliseconds));
+            },
+            async verifyPost() {
+                this.$vs.loading();
+
+                try {
+                    if (this.isNull(this.obj_Post.PostPorDtlTitle) ||
+                        this.isNull(this.obj_Post.PostPorDtlObservation) ||
+                        this.isNull(this.obj_Post.PostPorDtlAnalysisReflection) ||
+                        this.isNull(this.obj_Post.PostPorDtlDevelopmentGoals) ||
+                        this.isNull(this.arrobj_SelectedStudents)) {
+
+                        setTimeout(() => {
+                            this.$vs.loading.close();
+                        }, 500);
+
+                        this.$emit("result", "FALSE");
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Please fill in content'
+                        });
+                        return;
+                    }
+
+                    console.log('2');
+                    await this.sleep(1000);
+                    /*let studentsIds = this.arrobj_SelectedStudents.map(x => x.Student_ID);*/
+                    const response = await DataSource.shared.savePortfolioPost(this.arrobj_SelectedFiles,
+                        this.obj_Post.PostPorDtlTitle,
+                        this.obj_Post.PostPorDtlObservation,
+                        this.obj_Post.PostPorDtlAnalysisReflection,
+                        this.obj_Post.PostPorDtlDevelopmentGoals,
+                        this.arrobj_SelectedStudents, "", "",
+                        this.obj_Post.PostID);
+
+                    if (response) {
+                        if (!this.isNull(response) && response.code === "1") {
+                            this.$emit("result", "TRUE");
+                            await DataSource.shared.softDeletePost(this.obj_Post.PostID);
+                        } else
+                            this.$emit("result", "FALSE");
+                    }
+
+                    this.$notify({
+                        title: 'Success',
+                        message: 'Portfolio added.',
+                        type: 'success'
+                    });
+                    this.$vs.loading.close();
+                    // DataSource.shared.savePortfolioPost(this.arrobj_SelectedFiles,
+                    //     this.obj_Post.PostPorDtlTitle,
+                    //     this.obj_Post.PostPorDtlObservation,
+                    //     this.obj_Post.PostPorDtlAnalysisReflection,
+                    //     this.obj_Post.PostPorDtlDevelopmentGoals,
+                    //     this.arrobj_SelectedStudents, "", "",
+                    //     this.obj_Post.PostID)
+                    //     .then((result) => {
+                    //
+                    //         console.log("333")
+                    //
+                    //         if (!this.isNull(result) && result.code == "1") {
+                    //             this.$emit("result", "TRUE");
+                    //
+                    //             DataSource.shared.softDeletePost(this.obj_Post.PostID);
+                    //         }
+                    //         else
+                    //             this.$emit("result", "FALSE");
+                    //     });
+
+                } catch (e) {
+                    console.log('wawawwwwwwwww');
+                    this.results = e;
                 }
 
-                /*let studentsIds = this.arrobj_SelectedStudents.map(x => x.Student_ID);*/
-
-                DataSource.shared.savePortfolioPost(this.arrobj_SelectedFiles,
-                    this.obj_Post.PostPorDtlTitle,
-                    this.obj_Post.PostPorDtlObservation,
-                    this.obj_Post.PostPorDtlAnalysisReflection,
-                    this.obj_Post.PostPorDtlDevelopmentGoals,
-                    this.arrobj_SelectedStudents, "", "",
-                    this.obj_Post.PostID)
-                    .then((result) => {
-                        if (!this.isNull(result) && result.code == "1") {
-                            this.$emit("result", "TRUE");
-
-                            DataSource.shared.softDeletePost(this.obj_Post.PostID);
-                        }
-                        else
-                            this.$emit("result", "FALSE");
-                    });
             },
             isNull(obj) {
                 return (obj === null || obj === undefined || obj === "undefined" || obj.length === 0);
@@ -293,11 +346,11 @@
             },
             /*#region Carousel Slider*/
             onSlideStart(slide) {
-                this.sliding = true
+                this.sliding = true;
             }
             ,
             onSlideEnd(slide) {
-                this.sliding = false
+                this.sliding = false;
             }
             ,
             /*endregion*/
@@ -331,7 +384,7 @@
                     PostPorDtlObservation: "",
                     PostPorDtlAnalysisReflection: "",
                     PostPorDtlDevelopmentGoals: ""
-                }
+                };
                 this.$emit("result", "CANCEL");
             },
         },
@@ -340,7 +393,7 @@
             self.init();
 
             if (!this.isNull(this.post)) {
-                console.log(this.post)
+                console.log(this.post);
                 this.obj_Post = this.post;
                 this.arrobj_SelectedFiles = [];
                 if (!this.isNull(this.post.postFiles)) {
@@ -349,7 +402,7 @@
                         let fileName = image.PostItemID + image.PostItemFileExt;
                         let mimeType = image.PostItemFileType;
                         this.urltoFile(url, fileName, mimeType).then((file) => {
-                            this.arrobj_SelectedFiles.push(file)
+                            this.arrobj_SelectedFiles.push(file);
                         }).finally(() => {
                             this.getImagePreviews();
                         });
@@ -364,7 +417,7 @@
                     let fileName = image.GalFileName + image.GalFileExt;
                     let mimeType = image.GalFileType;
                     this.urltoFile(url, fileName, mimeType).then((file) => {
-                        this.arrobj_SelectedFiles.push(file)
+                        this.arrobj_SelectedFiles.push(file);
                     }).finally(() => {
                         this.getImagePreviews();
                     });
@@ -382,7 +435,7 @@
         }
         ,
         props: ["images", "post"],
-    }
+    };
 </script>
 
 <style scoped>

@@ -2,7 +2,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import loginPage from "../pages/LoginPage";
 import homePage from "../pages/HomePage";
-import countryListPage from "../pages/CountryListPage";
 import forgotPassword from "../pages/ForgotPassword";
 import resetEmail from "../pages/ResetEmail";
 import resetPassword from "../pages/ResetPassword";
@@ -16,10 +15,8 @@ import manageRelationship from "../pages/ManageRelationship";
 import staffNewsfeed from "../pages/StaffPost";
 import pendingPost from "../pages/PendingPost";
 import parentRegister from "../pages/ParentRegister";
-import getApproverMaster from "../pages/Approver";
 import attendanceList from "../pages/AttendanceList";
 import portfolio from "../pages/Portfolio";
-import portfolio2 from "../pages/Portfolio2";
 import gallery from "../pages/Gallery";
 import promotion from "../pages/Promotion";
 import report from "../pages/Report";
@@ -27,7 +24,10 @@ import notFound from "../pages/NotFound";
 import portfolioPreview from "../pages/PortfolioPreview";
 import dailyRoutine from "../pages/DailyRoutine";
 import pendingApprover from "../pages/PendingApprover";
-
+import postapprove from "../pages/PostApprove";
+import myAccount from "../pages/MyAccount";
+import myChild from "../pages/MyChild";
+import approvermaster from "../pages/ApproverMaster";
 
 Vue.use(VueRouter);
 
@@ -114,11 +114,6 @@ const router = new VueRouter({
             component: pendingPost,
         },
         {
-            path: '/approver',
-            name: 'Approver',
-            component: getApproverMaster,
-        },
-        {
             path: '/attendancelist',
             name: 'Attendance List',
             component: attendanceList,
@@ -126,10 +121,6 @@ const router = new VueRouter({
             path: '/Portfolio',
             name: 'Portfolio',
             component: portfolio
-        }, {
-            path: '/Portfolio2',
-            name: 'Portfolio2',
-            component: portfolio2
         }, {
             path: '/PortfolioPreview',
             name: 'Portfolio Preview',
@@ -160,6 +151,26 @@ const router = new VueRouter({
             path: '/PendingApprover',
             name: 'Pending Approver',
             component: pendingApprover
+        },
+        {
+            path: '/PostApprove',
+            name: 'Post Approve',
+            component: postapprove
+        },
+        {
+            path: '/MyAccount',
+            name: 'My Account',
+            component: myAccount
+        },
+        {
+            path: '/MyChild',
+            name: 'My Child',
+            component: myChild
+        },
+        {
+            path: '/ApproverMaster',
+            name: 'Approver Master',
+            component: approvermaster
         },
     ]
 });

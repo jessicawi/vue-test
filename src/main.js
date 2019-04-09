@@ -8,6 +8,7 @@ import Vuesax from 'vuesax';
 import 'vuesax/dist/vuesax.css';
 import 'material-icons/iconfont/material-icons.css';
 import "./custom.css";
+import "./responsive.css";
 import vbclass from 'vue-body-class';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';

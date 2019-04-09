@@ -43,10 +43,15 @@
                             class="btn btn-primary waves-effect waves-light m-r-10 btnChangeStatus">Action
                     </button>
                 </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <b-btn v-b-modal.withdrawGraduationModal variant="primary" class="btnWithdrawGraduation">
+                        Withdraw / Graduation
+                    </b-btn>
+                </div>
             </div>
 
             <b-tabs class="studentPageBTabs">
-
                 <span class="alert-badge badge1"
                       v-if="$v.ddlParentMode.$error || $v.inputFatherFirstName.$error || $v.inputFatherLastName.$error || lblFatherNameDuplicated || $v.inputFatherOccupation.$error || $v.inputMotherFirstName.$error || $v.inputMotherLastName.$error || lblMotherNameDuplicated">
                     !
@@ -901,10 +906,22 @@
                 </b-tab>
                 <b-tab title="Siblings" v-if="siblingTab">
                     <div v-if="siblingList.length>0">
-                        <data-tables :data="siblingList" :action-col="actionCol_Sibling">
+                        <!--<data-tables :data="siblingList" :action-col="actionCol_Sibling">-->
+                        <data-tables :data="siblingList">
                             <el-table-column v-for="siblingListInfo in siblingListAll" :prop="siblingListInfo.prop"
                                              :label="siblingListInfo.label" :key="siblingListInfo.prop"
                                              sortable="custom">
+                            </el-table-column>
+
+                            <el-table-column label="Edit">
+                                <template slot-scope="scope">
+                                    <el-button type="primary"
+                                               icon="el-icon-edit"
+                                               v-if="checkSiblingEditButton(siblingList[scope.$index].School_ID) === true"
+                                               @click.native.prevent="editSibling(siblingList[scope.$index].School_ID, siblingList[scope.$index].Student_ID)">
+                                        Edit
+                                    </el-button>
+                                </template>
                             </el-table-column>
                         </data-tables>
                     </div>
@@ -1053,6 +1070,13 @@
                 </div>
             </div>
         </b-modal>
+
+        <b-modal id="withdrawGraduationModal" class="studentPageBModal" size="lg" title="Withdraw / Graduation" ok-only
+                 ok-variant="secondary" ok-title="Cancel" ref="withdrawGraduationShowModal">
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                test
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -1061,6 +1085,7 @@
     import ProfileImg from "../assets/boy.png";
     import {required, requiredIf, requiredUnless} from "vuelidate/lib/validators";
     import promotionComponent from "../components/Promotion_Component";
+    import Cookies from "js-cookie";
 
     const API_HOST = process.env.VUE_APP_ROOT_API;
 
@@ -1249,7 +1274,11 @@
                             icon: 'el-icon-edit'
                         },
                         handler: row => {
-                            window.location.replace('/student?id=' + row.Student_ID);
+                            if (row.School_ID === Cookies.get('schoolSession')) {
+                                window.location.replace('/student?id=' + row.Student_ID);
+                            } else {
+                                alert("You are not authorize to edit this student's info");
+                            }
                         },
                         label: 'Edit'
                     }]
@@ -2396,6 +2425,20 @@
                     alert('Error promotion');
                 }
             },
+            checkSiblingEditButton(value) {
+                if (value === Cookies.get('schoolSession')) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            editSibling(schID, siblingStudentID) {
+                if (schID === Cookies.get('schoolSession')) {
+                    window.location.replace('/student?id=' + siblingStudentID);
+                } else {
+                    alert("You are not authorize to edit this student's info");
+                }
+            },
         },
     };
 </script>
@@ -2490,7 +2533,7 @@
         padding: 0px;
     }
 
-    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus {
+    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus, .btnWithdrawGraduation {
         width: auto;
         display: inline !important;
         margin: 10px;

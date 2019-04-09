@@ -48,6 +48,9 @@
                 this.isLoggedIn = true;
                 setTimeout(this.warningLogout, 10800000); // 3 hours
             }
+            if (isLogin===null){
+                this.$router.push('/login');
+            }
             this.isLoading = false;
 
         },
@@ -89,7 +92,7 @@
         text-align: center;
         color: #2c3e50;
         background: #f1f1f1;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 
     .white-box {
