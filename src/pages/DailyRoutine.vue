@@ -49,7 +49,7 @@
             <div v-if="StudentHeader !== null">
                 <label class="activity-title"><h5>Select Activity:</h5></label>
                 <div class="daily-activity">
-                    <el-select v-model="ddlTaskDescription"  @change="TaskDescription()">
+                    <el-select v-model="ddlTaskDescription" @change="TaskDescription()">
                         <el-option key="Rest" label="Rest" value="Rest"></el-option>
                         <el-option key="Feed" label="Feed" value="Feed"></el-option>
                         <el-option key="Poop" label="Poop" value="Poop"></el-option>
@@ -61,7 +61,7 @@
                     <!--<option>Poop</option>-->
                     <!--<option>Hygiene</option>-->
                     <!--</select>-->
-                    <el-select v-model="ddlRest"  v-if="selectionRest">
+                    <el-select v-model="ddlRest" v-if="selectionRest">
                         <el-option key="Nap" label="Nap" value="Nap"></el-option>
                         <el-option key="Sleep" label="Sleep" value="Sleep"></el-option>
                     </el-select>
@@ -100,7 +100,7 @@
                             <el-option key="Hard" label="Hard" value="Hard"></el-option>
                             <el-option key="Watery" label="Watery" value="Watery"></el-option>
                         </el-select>
-                        <el-select v-model="ddlColor"  v-if="selectionColor">
+                        <el-select v-model="ddlColor" v-if="selectionColor">
                             <el-option key="Brown" label="Brown" value="Brown"></el-option>
                             <el-option key="Tan" label="Tan" value="Tan"></el-option>
                             <el-option key="Yellow" label="Yellow" value="Yellow"></el-option>
@@ -108,14 +108,14 @@
                             <el-option key="Black" label="Black" value="Black"></el-option>
                         </el-select>
                     </div>
-                    <el-select v-model="ddlHygiene"  v-if="selectionHygiene">
+                    <el-select v-model="ddlHygiene" v-if="selectionHygiene">
                         <el-option key="Diaper change" label="Diaper change" value="Diaper change"></el-option>
                         <el-option key="Shower&Diaper change" label="Shower&Diaper change"
                                    value="Shower&Diaper change"></el-option>
                         <el-option key="Shower" label="Shower" value="Shower"></el-option>
                     </el-select>
                     <!--<el-time-picker type="time" v-model="txtTimeStart" value-format="hh:mm"-->
-                                    <!--placeholder="Get current time" v-if="selectionCurrentTime"></el-time-picker>-->
+                    <!--placeholder="Get current time" v-if="selectionCurrentTime"></el-time-picker>-->
 
                     <el-time-select
                             placeholder="Get current time"
@@ -147,10 +147,10 @@
                     </el-time-select>
 
                     <!--<el-time-picker type="time" v-model="txtTimeStart" value-format="hh:mm"-->
-                                    <!--placeholder="Get Start time" v-if="selectionStartEndTime"></el-time-picker>-->
+                    <!--placeholder="Get Start time" v-if="selectionStartEndTime"></el-time-picker>-->
 
                     <!--<el-time-picker type="time" v-model="txtTimeStop" value-format="hh:mm"-->
-                                    <!--placeholder="Get End time" v-if="selectionStartEndTime"></el-time-picker>-->
+                    <!--placeholder="Get End time" v-if="selectionStartEndTime"></el-time-picker>-->
                 </div>
 
 
@@ -333,8 +333,8 @@
             this.loadHardCodeArray();
             this.loadHardCodeClassArray();
         },
-        async mounted(){
-          this.txtTimeStart = moment().format("HH:mm");
+        async mounted() {
+            this.txtTimeStart = moment().format("HH:mm");
         },
         methods: {
             getIcon(value) {
@@ -590,13 +590,37 @@
                         btnAddObject.studentID = this.obj_Student.Student_ID;
                         btnAddObject.DrReferenceType = drReferenceType;
 
-                        console.log(btnAddObject.DrEndTime);
-                        if (this.txtTimeStop === null || this.txtTimeStart === null || this.txtTimeStop === "" || this.txtTimeStart === ""){
+                        // console.log(btnAddObject.DrEndTime);
+                        // if (this.txtTimeStop === null || this.txtTimeStart === null || this.txtTimeStop === "" || this.txtTimeStart === ""){
+                        //     this.$notify.error({
+                        //         title: 'Error',
+                        //         message: 'Please fill in content'
+                        //     });
+                        // }else{
+
+
+                        if (this.selectionRest === true && this.txtTimeStop === "") {
                             this.$notify.error({
                                 title: 'Error',
                                 message: 'Please fill in content'
                             });
-                        }else{
+                        } else if (this.selectionRest === true && this.txtTimeStart === "") {
+                            this.$notify.error({
+                                title: 'Error',
+                                message: 'Please fill in content'
+                            });
+                        } else if (this.selectionFeed === true && this.txtTimeStart === "") {
+                                this.$notify.error({
+                                    title: 'Error',
+                                    message: 'Please fill in content'
+                                });
+                        } else if (this.selectionHygiene === true && this.txtTimeStart === "") {
+                            this.$notify.error({
+                                title: 'Error',
+                                message: 'Please fill in content'
+                            });
+                        }else  {
+                            console.log("33");
                             const resp = DataSource.shared.addDailyRoutine(btnAddObject);
                             resp.then((resp) => {
 

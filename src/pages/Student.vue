@@ -976,6 +976,12 @@
                                 v-bind:course-id="strClassIDLevelComponent"></promotion-component>
                             </div>
 
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <b-btn v-b-modal.transferModal variant="primary" class="btnTransfer">
+                                    Transfer
+                                </b-btn>
+                            </div>
+
                             <div v-if="lvlLevelList_Level.length>0">
                                 <data-tables :data="lvlLevelList_Level" :actionCol="actionCol_Level"
                                              @selection-change="handleSelectionChange">
@@ -1077,6 +1083,39 @@
                 test
             </div>
         </b-modal>
+
+        <b-modal id="transferModal" class="studentPageBModal" size="lg" title="Transfer" ok-only
+                 ok-variant="secondary" ok-title="Cancel" ref="transferShowModal">
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label>Transfer to School</label>
+                    <select v-model="ddlTransferSchool" class="form-control pro-edt-select form-control-primary">
+                        <option v-for="item in transferSchoolList" v-bind:value="item.PK_SCH_ID">
+                            {{ item.SCH_Name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label>Remarks</label>
+                    <input type="text" class="form-control" v-model="inputTransferSchoolRemark">
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label>Effective Date</label>
+                    <div class="date">
+                        <el-date-picker v-model="inputTransferSchoolEffDate" format="dd/MM/yyyy"
+                                        value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <button v-on:click="transferSave()" class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">
+                        Confirm Transfer
+                    </button>
+                </div>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -1105,6 +1144,7 @@
             //await this.BindStudentLevel();
             await this.BindAcademicYear();
             await this.BindStudentIntakeYear();
+            await this.BindTransferSchool();
         },
         async mounted() {
             await this.LoadStudentParentInfo();
@@ -1129,9 +1169,10 @@
                 levelList_Level: [],
                 academicYearList_Level: [],
                 studentIntakeYearList_Level: [],
-
                 arrayStudentIDLevelComponent:[],
                 strClassIDLevelComponent: '',
+                transferSchoolList: [],
+                transferSchoolCourseList: [],
 
                 inputStudentDateOfBirth: '',
                 inputFatherDateofBirth: '',
@@ -1222,7 +1263,6 @@
                 ddlStudentIntakeYear_Level: '',
                 ddlCopyAddToResBil: '',
                 ddlCopyAddToStuCorAdd: '',
-
                 editModeDisable: '',
                 lblCreateOrEdit: '',
                 lblStudentID: '',
@@ -1238,10 +1278,13 @@
                 icShowHide: '',
                 stuCorAddCopy: '',
                 resBilAddCopy: '',
-
                 siblingTab: '',
                 changeStatusAction: '',
                 levelTab: '',
+                ddlTransferSchool: '',
+                ddlTransferSchoolCourse: '',
+                inputTransferSchoolRemark: '',
+                inputTransferSchoolEffDate: '',
 
                 siblingList: [],
                 siblingListAll: [{
@@ -2439,6 +2482,53 @@
                     alert("You are not authorize to edit this student's info");
                 }
             },
+            async BindTransferSchool () {
+                try {
+                    const response = await DataSource.shared.getAllActiveSchool();
+                    if (response) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        }
+                        else {
+                            this.transferSchoolListResponse = response.Table;
+                            this.transferSchoolListResponse.forEach(m => {
+                                if (m.PK_SCH_ID !== 'SCH20120000001') {
+                                    this.transferSchoolList.push(m);
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+            async transferSave () {
+                try {
+                    if (this.ddlTransferSchool !== '' && this.ddlTransferSchool !== undefined) {
+                        const response = await DataSource.shared.saveTransferSchool(this.lblStudentID, this.ddlTransferSchool, this.inputTransferSchoolRemark, this.inputTransferSchoolEffDate);
+                        if (response) {
+                            if (response.code === '88') {
+                                window.location.replace('/');
+                            } else if (response.code === '99') {
+                                alert('Error!');
+                            } else if (response.code === '2') {
+                                alert('Effective date cannot today or less than today!');
+                            } else if (response.code === '3') {
+                                alert('Duplicated transfer action!');
+                            } else if (response.code === '4') {
+                                alert('Cannot transfer to same school!');
+                            } else {
+                                alert('Student has been provisionally transfered!');
+                            }
+                        }
+                    }
+                    else {
+                        alert('Please fill in all the fields!');
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
         },
     };
 </script>
@@ -2533,7 +2623,7 @@
         padding: 0px;
     }
 
-    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus, .btnWithdrawGraduation {
+    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus, .btnWithdrawGraduation, .btnTransfer {
         width: auto;
         display: inline !important;
         margin: 10px;

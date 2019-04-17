@@ -1,98 +1,255 @@
 <template>
     <div id="approvermaster">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <b-btn v-b-modal.specificUserToApprove variant="primary">
-                        Specific User To Approve
-                    </b-btn>
-                </div>
-
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div v-if="approverListInt.length>0" class="datatable_group">
-                        <data-tables :data="approverListInt" :action-col="approverListDeleteButton" @selection-change="handleSelectionChange">
-                            <el-table-column v-for="approverListInfo in approverList" :prop="approverListInfo.prop"
-                                             :label="approverListInfo.label" :key="approverListInfo.prop"
-                                             sortable="custom">
-                            </el-table-column>
-                        </data-tables>
-                    </div>
-                </div>
-
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Approver Type</label>
-                    <select v-model="ddlApproverType" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in approverTypeList" v-bind:value="item">
-                            {{ item }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Approver Level</label>
-                    <select v-model="ddlApproverLevel" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in approverLevelList" v-bind:value="item">
-                            {{ item }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Approver</label>
-                    <select v-model="ddlStaffList" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in staffList" v-bind:value="item.CONid">
-                            {{ item.CONname }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <button v-on:click="saveApproverMaster()" class="btn btn-primary waves-effect waves-light m-r-10">
-                        Save
-                    </button>
+        <div class="container admin-wrap">
+            <div class="row header">
+                <div class="col-lg-12 ">
+                    <h3 class="text-left"> APPROVER MASTER</h3>
                 </div>
             </div>
-        </div>
+            <el-tabs v-model="tabForm" @tab-click="handleClick">
+                <el-tab-pane label="Approver Master" name="approver_master">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div v-if="approverListInt.length>0" class="datatable_group">
+                            <div class="toolbar">
+                                <el-button-group class="float-right mb-3">
 
-        <b-modal id="specificUserToApprove" size="lg" title="Specific User To Approve" ok-only
-                 ok-variant="secondary" ok-title="Cancel" ref="familyModalShowModal">
-            <div class="row">
-                <div class= "col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div v-if="approverSpecificUserInt.length>0" class="datatable_group">
-                        <data-tables :data="approverSpecificUserInt" :action-col="approverSpecificUserListDeleteButton" @selection-change="handleSelectionChange">
-                            <el-table-column v-for="approverSpecificUserListInfo in approverSpecificUserList" :prop="approverSpecificUserListInfo.prop"
-                                             :label="approverSpecificUserListInfo.label" :key="approverSpecificUserListInfo.prop"
-                                             sortable="custom">
-                            </el-table-column>
-                        </data-tables>
+                                    <el-tooltip class="item" effect="dark" content="Add Approver Master"
+                                                placement="top-start">
+                                        <el-button type="primary" icon="el-icon-plus"
+                                                   @click="showApproverMaster"></el-button>
+                                    </el-tooltip>
+
+                                    <el-tooltip class="item" effect="dark" content="Delete" placement="top-start">
+                                        <el-button type="primary" icon="el-icon-delete" :disabled="selectedRow.length<1"
+                                                   @click="deleteSelectedApproverMaster()"></el-button>
+                                    </el-tooltip>
+                                </el-button-group>
+                            </div>
+                            <data-tables :data="approverListInt" :action-col="approverListDeleteButton"
+                                         @selection-change="handleSelectionChange">
+                                <el-table-column type="selection" width="55">
+                                </el-table-column>
+                                <el-table-column v-for="approverListInfo in approverList" :prop="approverListInfo.prop"
+                                                 :label="approverListInfo.label" :key="approverListInfo.prop"
+                                                 sortable="custom">
+                                </el-table-column>
+                            </data-tables>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Approver Type</label>
-                    <select v-model="ddlApproverTypeSpecificUser" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in approverTypeList" v-bind:value="item">
-                            {{ item }}
-                        </option>
-                    </select>
-                </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Specific Needed Approve User</label>
-                    <select v-model="ddlStaffListSpecificUser" class="form-control pro-edt-select form-control-primary">
-                        <option v-for="item in staffListSpecificUser" v-bind:value="item.CONid">
-                            {{ item.CONname }}
-                        </option>
-                    </select>
-                </div>
+                </el-tab-pane>
+                <el-tab-pane label="Specific User To Approve" name="SpecificUser_approver">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div v-if="approverSpecificUserInt.length>0" class="datatable_group">
+                                <div class="toolbar">
+                                    <el-button-group class="float-right mb-3">
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <button v-on:click="saveApproveSpecificUser()" class="btn btn-primary waves-effect waves-light m-r-10">
-                        Save
-                    </button>
-                </div>
+                                        <el-tooltip class="item" effect="dark" content="Add Approver Master"
+                                                    placement="top-start">
+                                            <el-button type="primary" icon="el-icon-plus"
+                                                       @click="showSpecificApproverMaster"></el-button>
+                                        </el-tooltip>
+
+                                        <el-tooltip class="item" effect="dark" content="Delete" placement="top-start">
+                                            <el-button type="primary" icon="el-icon-delete" :disabled="selectedRow.length<1"
+                                                       @click="deleteSelectedApproverMaster()"></el-button>
+                                        </el-tooltip>
+                                    </el-button-group>
+                                </div>
+                                <data-tables :data="approverSpecificUserInt"
+                                             :action-col="approverSpecificUserListDeleteButton"
+                                             @selection-change="handleSelectionChange">
+                                    <el-table-column type="selection" width="55">
+                                    </el-table-column>
+                                    <el-table-column v-for="approverSpecificUserListInfo in approverSpecificUserList"
+                                                     :prop="approverSpecificUserListInfo.prop"
+                                                     :label="approverSpecificUserListInfo.label"
+                                                     :key="approverSpecificUserListInfo.prop"
+                                                     sortable="custom">
+                                    </el-table-column>
+                                </data-tables>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+            <!--<div class="row">-->
+            <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+            <!--<b-btn v-b-modal.specificUserToApprove variant="primary">-->
+            <!--Specific User To Approve-->
+            <!--</b-btn>-->
+            <!--</div>-->
+
+
+            <!--</div>-->
+        </div>
+        <b-modal id="addApproverMaster" title="Add Approver Master" hide-footer v-model="showAddApproverMaster">
+            <div class="col-lg-12 mb-3">
+                <label>Approver Type</label>
+                <el-select
+                        v-model="ddlApproverType"
+                        :loading="loading"
+                        class="w-100">
+                    <el-option
+                            v-for="item in approverTypeList"
+                            :key="item"
+                            :label="item"
+                            :value="item">
+                    </el-option>
+                </el-select>
+                <!--<select v-model="ddlApproverType" class="form-control pro-edt-select form-control-primary">-->
+                    <!--<option v-for="item in approverTypeList" v-bind:value="item">-->
+                        <!--{{ item }}-->
+                    <!--</option>-->
+                <!--</select>-->
+            </div>
+
+            <div class="col-lg-12 mb-3">
+                <label>Approver Level</label>
+                <el-select
+                        v-model="ddlApproverLevel"
+                        filterable
+                        reserve-keyword
+                        :loading="loading"
+                        class="w-100">
+                    <el-option
+                            v-for="item in approverLevelList"
+                            :key="item"
+                            :label="item"
+                            :value="item">
+                    </el-option>
+                </el-select>
+                <!--<select v-model="ddlApproverLevel" class="form-control pro-edt-select form-control-primary">-->
+                    <!--<option v-for="item in approverLevelList" v-bind:value="item">-->
+                        <!--{{ item }}-->
+                    <!--</option>-->
+                <!--</select>-->
+            </div>
+
+            <div class="col-lg-12 mb-3">
+                <label>Approver</label>
+                <el-select
+                        v-model="ddlStaffList"
+                        filterable
+                        reserve-keyword
+                        :loading="loading"
+                        class="w-100">
+                    <el-option
+                            v-for="item in staffList"
+                            :key="item.CONid"
+                            :label="item.CONname"
+                            :value="item.CONid">
+                    </el-option>
+                </el-select>
+                <!--<select v-model="ddlStaffList" class="form-control pro-edt-select form-control-primary">-->
+                <!--<option v-for="item in staffList" v-bind:value="item.CONid">-->
+                <!--{{ item.CONname }}-->
+                <!--</option>-->
+                <!--</select>-->
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <button v-on:click="saveApproverMaster()" class="btn btn-primary waves-effect waves-light m-r-10">
+                    Save
+                </button>
             </div>
         </b-modal>
+        <b-modal id="addSpecificApproverMaster" title="Specific Needed Approver" hide-footer v-model="showAddSpecific">
+            <div class="col-lg-12 mb-3">
+                <label>Approver Type</label>
+                <el-select
+                        v-model="ddlApproverTypeSpecificUser"
+                        :loading="loading"
+                        class="w-100">
+                    <el-option
+                            v-for="item in approverTypeList"
+                            :key="item"
+                            :label="item"
+                            :value="item">
+                    </el-option>
+                </el-select>
+                <!--<select v-model="ddlApproverTypeSpecificUser"-->
+                        <!--class="form-control pro-edt-select form-control-primary">-->
+                    <!--<option v-for="item in approverTypeList" v-bind:value="item">-->
+                        <!--{{ item }}-->
+                    <!--</option>-->
+                <!--</select>-->
+            </div>
+
+            <div class="col-lg-12 mb-3">
+                <label>Specific Needed Approve User</label>
+
+                <el-select
+                        v-model="ddlStaffListSpecificUser"
+                        filterable
+                        reserve-keyword
+                        :loading="loading"
+                        class="w-100">
+                    <el-option
+                            v-for="item in staffListSpecificUser"
+                            :key="item.CONid"
+                            :label="item.CONname"
+                            :value="item.CONid">
+                    </el-option>
+                </el-select>
+                <!--<select v-model="ddlStaffListSpecificUser"-->
+                        <!--class="form-control pro-edt-select form-control-primary">-->
+                    <!--<option v-for="item in staffListSpecificUser" v-bind:value="item.CONid">-->
+                        <!--{{ item.CONname }}-->
+                    <!--</option>-->
+                <!--</select>-->
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <button v-on:click="saveApproveSpecificUser()"
+                        class="btn btn-primary waves-effect waves-light m-r-10">
+                    Save
+                </button>
+            </div>
+        </b-modal>
+        <!--<b-modal id="specificUserToApprove" size="lg" title="Specific User To Approve" ok-only-->
+        <!--ok-variant="secondary" ok-title="Cancel" ref="familyModalShowModal">-->
+        <!--<div class="row">-->
+        <!--<div class= "col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+        <!--<div v-if="approverSpecificUserInt.length>0" class="datatable_group">-->
+        <!--<data-tables :data="approverSpecificUserInt" :action-col="approverSpecificUserListDeleteButton" @selection-change="handleSelectionChange">-->
+        <!--<el-table-column v-for="approverSpecificUserListInfo in approverSpecificUserList" :prop="approverSpecificUserListInfo.prop"-->
+        <!--:label="approverSpecificUserListInfo.label" :key="approverSpecificUserListInfo.prop"-->
+        <!--sortable="custom">-->
+        <!--</el-table-column>-->
+        <!--</data-tables>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+        <!--<label>Approver Type</label>-->
+        <!--<select v-model="ddlApproverTypeSpecificUser" class="form-control pro-edt-select form-control-primary">-->
+        <!--<option v-for="item in approverTypeList" v-bind:value="item">-->
+        <!--{{ item }}-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+
+        <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+        <!--<label>Specific Needed Approve User</label>-->
+        <!--<select v-model="ddlStaffListSpecificUser" class="form-control pro-edt-select form-control-primary">-->
+        <!--<option v-for="item in staffListSpecificUser" v-bind:value="item.CONid">-->
+        <!--{{ item.CONname }}-->
+        <!--</option>-->
+        <!--</select>-->
+        <!--</div>-->
+
+        <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+        <!--<button v-on:click="saveApproveSpecificUser()" class="btn btn-primary waves-effect waves-light m-r-10">-->
+        <!--Save-->
+        <!--</button>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</b-modal>-->
     </div>
 </template>
 
@@ -103,6 +260,9 @@
         name: "ApproverMaster",
         data() {
             return {
+                showAddSpecific: false,
+                showAddApproverMaster: false,
+                tabForm: 'approver_master',
                 ddlStaffList: '',
                 staffList: [],
                 ddlStaffListSpecificUser: '',
@@ -110,8 +270,9 @@
                 approverTypeList: ['Portfolio', 'Documentation_Posting', 'Update_Posting', 'Portfolio_Posting', 'Report_Posting', 'Broadcast_Posting'],
                 ddlApproverType: '',
                 ddlApproverTypeSpecificUser: '',
-                approverLevelList: ['1','2','3','4','5','6','7','8','9','10'],
+                approverLevelList: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
                 ddlApproverLevel: '',
+                selectedRow: [],
 
                 approverListInt: [],
                 approverList: [{
@@ -179,6 +340,16 @@
             this.getApproverMasterSpecificUser();
         },
         methods: {
+            showSpecificApproverMaster(){
+                this.showAddSpecific = true;
+            },
+            showApproverMaster() {
+                this.showAddApproverMaster = true;
+            },
+            handleSelectionChange(val) {
+                this.selectedRow = val;
+                console.log(this.selectedRow);
+            },
             async getStaffList() {
                 this.$vs.loading();
                 try {
@@ -260,15 +431,58 @@
             async deleteApproverMaster(approverMasterID) {
                 this.$vs.loading();
                 try {
-                    const response = await DataSource.shared.updateApproverMaster(approverMasterID , "VOID");
+                    const response = await DataSource.shared.updateApproverMaster(approverMasterID, "VOID");
                     if (response) {
                         switch (response.code) {
                             case "1":
-                                this.$notify.error({
+                                this.$notify({
                                     title: 'Successful Delete',
-                                    message: 'Successful Delete'
+                                    message: 'Successful Delete',
+                                    type: 'success'
                                 });
-                                window.location.replace('/ApproverMaster');
+                                this.getApproverMaster();
+                                // window.location.replace('/ApproverMaster');
+                                break;
+                            case "2":
+                                this.$notify.error({
+                                    title: 'Error',
+                                    message: 'Higher Approver Level Is Existing, Not Able To Empty Lower Approver Level'
+                                });
+                                break;
+                            case "88":
+                                this.$router.push('/');
+                                break;
+                            case "99":
+                                this.$notify.error({
+                                    title: 'Error',
+                                    message: 'Error'
+                                });
+                                break;
+                        }
+
+                        this.approverListInt = response.Table;
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+                this.$vs.loading.close();
+            },
+            async deleteSelectedApproverMaster() {
+                this.$vs.loading();
+                try {
+                    const approverMasterID = JSON.stringify(this.selectedRow.map(m => m.ApproverMasterID));
+                    console.log(approverMasterID);
+                    const response = await DataSource.shared.updateApproverMaster(approverMasterID, "VOID");
+                    if (response) {
+                        switch (response.code) {
+                            case "1":
+                                this.$notify({
+                                    title: 'Successful Delete',
+                                    message: 'Successful Delete',
+                                    type: 'success'
+                                });
+                                this.getApproverMaster();
+                                // window.location.replace('/ApproverMaster');
                                 break;
                             case "2":
                                 this.$notify.error({
@@ -308,11 +522,14 @@
                         if (response) {
                             switch (response.code) {
                                 case "1":
-                                    this.$notify.error({
+                                    this.showAddApproverMaster = false;
+                                    this.$notify({
                                         title: 'Successful',
-                                        message: 'Successful Added'
+                                        message: 'Successful added.',
+                                        type: 'success'
                                     });
-                                    window.location.replace('/ApproverMaster');
+                                    this.getApproverMaster();
+                                    // window.location.replace('/ApproverMaster');
                                     break;
                                 case "2":
                                     this.$notify.error({
@@ -377,11 +594,13 @@
                     if (response) {
                         switch (response.code) {
                             case "1":
-                                this.$notify.error({
+                                this.$notify({
                                     title: 'Successful',
-                                    message: 'Successful Added'
+                                    message: 'Successful Added',
+                                    type: 'success'
                                 });
-                                window.location.replace('/ApproverMaster');
+                                this.getApproverMasterSpecificUser();
+                                // window.location.replace('/ApproverMaster');
                                 break;
                             case "88":
                                 this.$router.push('/');
@@ -414,11 +633,15 @@
                         if (response) {
                             switch (response.code) {
                                 case "1":
-                                    this.$notify.error({
+                                    this.showAddSpecific = false;
+                                    this.$notify({
                                         title: 'Successful',
-                                        message: 'Successful Added'
+                                        message: 'Successful Added',
+                                        type: 'success'
                                     });
-                                    window.location.replace('/ApproverMaster');
+
+                                    this.getApproverMasterSpecificUser();
+                                    // window.location.replace('/ApproverMaster');
                                     break;
                                 case "2":
                                     this.$notify.error({
@@ -446,7 +669,7 @@
 
             },
         },
-    }
+    };
 </script>
 
 <style scoped>

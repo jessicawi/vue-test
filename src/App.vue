@@ -70,6 +70,7 @@
             },
             cancelClick() {
                 DataSource.shared.logout();
+                Cookies.remove('authToken');
             },
         }
     };

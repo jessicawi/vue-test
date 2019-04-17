@@ -1,11 +1,19 @@
 <template>
-    <div >
+    <div>
         <div class="container-fluid row" v-if="result">
             {{result}}
         </div>
         <div class="feed-box" v-bind:class="[post.PostID]" v-if="!isHome">
+
             <div class="author">
-                <div class="profile"><img src="../assets/boy.png"/></div>
+                <div class="profile">
+                    <!--<img slot="img" class="card-img-top d-block img-fluid w-100"-->
+                         <!--:src="getProfileSource(post.ProfileImage)"-->
+                         <!--:alt="post.PostPorDtlTitle"/>-->
+                    <img src="../assets/boy.png" v-if="post.ProfileImage === ''">
+                    <img :src="`data:image/jpg;base64, ${post.ProfileImage}`"
+                         v-if="post.ProfileImage"/>
+                </div>
                 <div class="feed-heading">
                     <span>{{post.CONname}}</span>
                     <small class="date"><i class="fa fa-clock-o" aria-hidden="true"></i>
@@ -39,20 +47,23 @@
             </div>
             <div class="image-wrapper" v-if="!isNull(post.postFiles)">
                 <ul v-if="!isMobile()">
-                    <li class="postFile__item" v-for="obj_Images of post.postFiles" :key="obj_Images.id"
-                        :class="{'isFile':isImageByExt(obj_Images)===false}">
-
+                    <li class="postFile__item" v-for="(obj_Images, index) in post.postFiles" :key="obj_Images.id"
+                        :class="{'isFile':isImageByExt(obj_Images)===false}" v-if="index < 5">
                         <img slot="img" class="card-img-top d-block img-fluid w-100"
                              :src="getMediumSource(obj_Images)"
                              v-if="isImageByExt(obj_Images)"
                              :alt="post.PostPorDtlTitle"/>
-
                         <div v-else>
-                            <a :href="getFile(obj_Images)" :download="`${obj_Images.PostItemID}${obj_Images.PostItemFileExt}`" class="filepath">
+                            <a :href="getFile(obj_Images)"
+                               :download="`${obj_Images.PostItemID}${obj_Images.PostItemFileExt}`" class="filepath">
                                 {{obj_Images.PostItemID}}{{obj_Images.PostItemFileExt}}
                             </a>
                             <!--<span class="filepath" @click="getFile(obj_Images)">{{obj_Images.PostItemID}}{{obj_Images.PostItemFileExt}}</span>-->
                         </div>
+
+                        <button v-if="index === 4 " class="postFile-remainingNumber" @click="showImageModal">
+                            + {{remainingImage}}
+                        </button>
                         <!--<img :src="getLowSource(obj_Images)"-->
                         <!--:class="{'post-disabled':postFile.PostItemStatus !=='Active'}"-->
                         <!--/>-->
@@ -354,6 +365,23 @@
                  @hidden="hideEditModal">
             <component @result="displayResult" :is="obj_SelectedComponent" :post="post"></component>
         </b-modal>
+        <b-modal id="imageModal" ref="imageModal" hide-footer hide-header>
+            <b-carousel id="modal_carousel"
+                        style="text-shadow: 1px 1px 2px #333;"
+                        :controls="post.postFiles.length > 1"
+                        indicators
+                        background="#fff"
+                        :interval="0">
+                <div>
+                    <b-carousel-slide v-for="obj_Images of post.postFiles" :key="obj_Images.id">
+                        <img slot="img" class="card-img-top d-block img-fluid w-100"
+                             :src="getMediumSource(obj_Images)"
+                             v-if="isImageByExt(obj_Images)"
+                             :alt="post.PostPorDtlTitle"/>
+                    </b-carousel-slide>
+                </div>
+            </b-carousel>
+        </b-modal>
     </div>
 </template>
 
@@ -385,7 +413,6 @@
                 deleteCmContent: null,
                 deleteCmPostId: null,
                 deletePostModalShow: false,
-
                 obj_SelectedComponent: false,
                 result: "",
                 post: [{
@@ -403,11 +430,13 @@
                     commentPostID: "",
                     postFiles: "",
                     postReaction: [],
+                    countImageFile: ""
                 }],
                 str_TimerID: "",
                 likeCount: 0,
                 isFile: false,
                 approverPostNotShow: true,
+                remainingImage: "",
             };
         },
         mounted() {
@@ -416,11 +445,16 @@
             }
             if (!this.isNull(this.parentPost)) {
                 this.initPost();
-
             }
         },
-        props: ["parentPost", "commentitemSubmit", "hideComment", "isHome", "hideSubmenu","loadPost", "approverPost"],
+        props: ["parentPost", "commentitemSubmit", "hideComment", "isHome", "hideSubmenu", "loadPost", "approverPost"],
         methods: {
+            showImageModal(){
+                this.$refs['imageModal'].show()
+            },
+            hideImageModal(){
+                this.$refs['imageModal'].hide()
+            },
             checkIfImage(file) {
                 return isImage(file);
             },
@@ -597,33 +631,38 @@
                 let promise_GetPostFile = DataSource.shared.getPostFile(this.post.PostID);
                 let promise_GetPostReaction = DataSource.shared.getPostReaction(this.post.PostID);
 
-
                 Promise.all([promise_GetPostFile, promise_GetPostReaction])
                     .then((result) => {
                         this.$set(this.post, "postFiles", result[0].Table);
                         this.$set(this.post, "collapsed", true);
                         this.$set(this.post, "postReaction", result[1].Table);
                         this.getComment();
+                        const countImageFile = this.post && this.post.postFiles && this.post.postFiles.length;
+                        this.$set(this.post, "countImageFile", countImageFile);
+
+                        this.remainingImage = this.post.countImageFile - 4;
                     });
+
+
             },
 
             initCommentInterval() {
-               /* setInterval(() => {
-                    this.getComment;
-                },
-                   3000);*/
+                /* setInterval(() => {
+                     this.getComment;
+                 },
+                    3000);*/
 
-               /*  setTimeout(
-                     this.getComment
-                     , 3000);*/
-               /* if (!this.isNull(comments.Table)) {
-                    for (let i = 0; i < comments.Table.length; i++)
-                        setInterval(() => {
-                            DataSource.shared.getPostReaction(comments.Table[i].PoCmID).then((commentReactions) => {
-                                this.$set(this.post.commentItems[i], "commentReactions", commentReactions.Table);
-                            });
-                        }, 5000);
-                }*/
+                /*  setTimeout(
+                      this.getComment
+                      , 3000);*/
+                /* if (!this.isNull(comments.Table)) {
+                     for (let i = 0; i < comments.Table.length; i++)
+                         setInterval(() => {
+                             DataSource.shared.getPostReaction(comments.Table[i].PoCmID).then((commentReactions) => {
+                                 this.$set(this.post.commentItems[i], "commentReactions", commentReactions.Table);
+                             });
+                         }, 5000);
+                 }*/
 
                 /*this.$set(this.post, "commentPostID", this.post.PostID);
                 this.$set(this.post, "commentItems", result[1].Table);*/
@@ -648,8 +687,8 @@
                             this.commentCount = "0";
                         }
                     });
-                },6000);
-                },
+                }, 6000);
+            },
 
             isNull(obj) {
                 return (obj === null || obj === undefined || obj === "undefined" || obj.length === 0 || obj === "");
@@ -679,7 +718,7 @@
                 let SourceisImage = this.isImageByExt(file);
                 if (SourceisImage === true) {
                     return `data:image/jpg;base64, ${file.PostItemFileMedium}`;
-                } else {
+                } else{
                     return `data:application/pdf;base64, ${file.PostItemFile}`;
                 }
             },

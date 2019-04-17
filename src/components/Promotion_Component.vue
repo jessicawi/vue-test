@@ -1,5 +1,15 @@
 <template>
     <div class="container-fluid">
+        <div class="form-group row promotion-modal-tag">
+            <el-tag
+                    :key="student.Student_ID"
+                    v-for="student in selectedStudents"
+                    closable
+                    :disable-transitions="false"
+                    @close="RemoveSelectedStudent(student.Student_ID)">
+                {{student.Student_Name}}
+            </el-tag>
+        </div>
         <div class="form-group row">
             <label for="ddl_NewYear">Academic Year</label>
             <select id="ddl_NewYear" class="mb-3 form-control" v-model="obj_SelectedNewYear"
@@ -48,27 +58,57 @@
                 arrobj_NewAcademicYears: null,
                 arrobj_NewClasses: null,
                 obj_SelectedNewYear: null,
-                obj_SelectedNewClass: null
+                obj_SelectedNewClass: null,
+                filterStudents:"",
             }
         },
-        props: {selectedStudents: [Array], CourseId: String},
+        props: {selectedStudents: [Array], CourseId: String, selectedStudentsID: [Array]},
         methods: {
+            sleep(milliseconds) {
+                return new Promise(resolve => setTimeout(resolve, milliseconds));
+            },
             isNull(obj) {
                 return (obj === null || obj === undefined || obj === "undefined");
             },
-            promoteStudents() {
+            RemoveSelectedStudent(student){
+                this.selectedStudents = this.selectedStudents.filter(d => {
+                    return d.Student_ID !== student;
+                });
+                this.selectedStudentsID = this.selectedStudentsID.filter(d => {
+                    return d !== student;
+                });
+            },
+            async promoteStudents() {
                 let str_StudentIDs = "";
-
-                for (let i of this.selectedStudents)
+                for (let i of this.selectedStudentsID)
                     str_StudentIDs += i + ",";
 
                 str_StudentIDs = str_StudentIDs.substr(0, str_StudentIDs.length - 1);
+                if (this.obj_SelectedNewYear===null || this.obj_SelectedNewClass === null){
 
-                this.showLoading();
-                DataSource.shared.saveStudentPromotions(str_StudentIDs, this.obj_SelectedNewYear.PK_Semester_ID, this.obj_SelectedNewClass.PK_Course_ID, this.obj_SelectedNewClass.PK_Class_ID).then((result) => {
+                    this.$notify.error({
+                        title: 'Error',
+                        message: 'Please fill in content'
+                    });
+                }else{
+
+                    this.showLoading();
+                }
+                await DataSource.shared.saveStudentPromotions(str_StudentIDs, this.obj_SelectedNewYear.PK_Semester_ID, this.obj_SelectedNewClass.PK_Course_ID, this.obj_SelectedNewClass.PK_Class_ID).then((result) => {
+
                     this.hideLoading();
+                    if (!this.isNull(result) && result.code === "1") {
+                        this.$notify({
+                            title: 'Success',
+                            message: 'Students Promoted',
+                            type: 'success'
+                        });
+                    }
                     this.$emit("result", true);
-                });
+                })
+                // this.filterStudents = this.selectedStudents;
+
+                this.hideLoading();
             },
             loadNewYears() {
                 DataSource.shared.getAcademicYear().then((result) => {
@@ -177,6 +217,12 @@
         mounted() {
             this.loadNewYears();
             this.loadNewClasses();
+            // this.loadStudentID();
+
+            // this.filterStudents = this.selectedStudents;
+            // this.selectedStudentsID = this.selectedStudents.map(d => d.Student_ID);
+
+
         }
     }
 </script>

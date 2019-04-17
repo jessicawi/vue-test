@@ -1,7 +1,31 @@
 <template>
     <div id="postapprove">
         <div class="container">
-            <div class="row">
+            <div class="row header">
+                <h3 class="col-lg-8 text-left">POST REQUEST</h3>
+                <div class="col-lg-4">
+                    <router-link :to="{name: 'Pending Approver'}">
+                        <el-button type="primary" round class="float-right"><i class="material-icons">
+                            chevron_left
+                        </i> BACK</el-button>
+                    </router-link>
+                </div>
+            </div>
+            <div class="row post-approve_content">
+                <div v-if="approverPostAction" class="action-btn pt-2 pb-2">
+                    <el-button type="primary" round v-on:click="approvePost('APPROVED')"
+                               class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch"><i
+                            class="material-icons">
+                        check
+                    </i> Approve
+                    </el-button>
+                    <el-button type="info" round v-on:click="approvePost('REJECT')"
+                               class="btn btn-info waves-effect waves-light m-r-10 btnFamilyIDSearch"><i
+                            class="material-icons">
+                        close
+                    </i> Reject
+                    </el-button>
+                </div>
                 <label style="display:none !important;">{{ postID }}</label>
                 <label style="display:none !important;">{{ postType }}</label>
 
@@ -18,8 +42,10 @@
                     />
                 </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <h6 class="text-left">Remark:</h6>
+                <div class="col-lg-12 pt-4">
+                    <h6 class="text-left"><i class="material-icons">
+                        event_note
+                    </i> Remark:</h6>
 
                     <div v-for="value in postCommentHistoryList" class="preview-comment__list">
 
@@ -31,16 +57,13 @@
                         </label>
                     </div>
 
-                    <input type="text" class="form-control" v-model="inputPostComment">
-                </div>
-
-                <div v-if="approverPostAction">
-                    <button v-on:click="approvePost('APPROVED')"
-                            class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Approve
-                    </button>
-                    <button v-on:click="approvePost('REJECT')"
-                            class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Reject
-                    </button>
+                    <!--<input type="text" class="form-control" v-model="inputPostComment">-->
+                    <el-input
+                            type="textarea"
+                            autosize
+                            v-model="inputPostComment"
+                            class="pt-3 custom-textarea">
+                    </el-input>
                 </div>
             </div>
         </div>
@@ -48,8 +71,8 @@
 </template>
 
 <script>
-    import DataSource from "../data/datasource";
-    import PostComponent from "../components/postCompnent";
+    import DataSource from "../../data/datasource";
+    import PostComponent from "../../components/postCompnent";
 
     export default {
         name: "PostApprove",
@@ -189,7 +212,7 @@
                                     message: 'Done!',
                                     type: 'success'
                                 });
-                                this.$router.go(-1)
+                                this.$router.go(-1);
                                 // window.location.replace('/');
                             }
                         }
@@ -199,7 +222,7 @@
                 }
             },
         },
-    }
+    };
 </script>
 
 <style scoped>

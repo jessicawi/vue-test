@@ -24,10 +24,11 @@ import notFound from "../pages/NotFound";
 import portfolioPreview from "../pages/PortfolioPreview";
 import dailyRoutine from "../pages/DailyRoutine";
 import pendingApprover from "../pages/PendingApprover";
-import postapprove from "../pages/PostApprove";
+import postapprove from "../pages/unuse/PostApprove";
 import myAccount from "../pages/MyAccount";
 import myChild from "../pages/MyChild";
 import approvermaster from "../pages/ApproverMaster";
+import transferIn from "../pages/TransferIn";
 
 Vue.use(VueRouter);
 
@@ -171,6 +172,11 @@ const router = new VueRouter({
             path: '/ApproverMaster',
             name: 'Approver Master',
             component: approvermaster
+        },
+        {
+            path: '/TransferIn',
+            name: 'Transfer In',
+            component: transferIn
         },
     ]
 });

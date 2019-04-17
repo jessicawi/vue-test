@@ -17,27 +17,36 @@
                         <tr>
                             <th>Student ID</th>
                             <th>Student Name</th>
-                            <th>Attendance <br> <input type="checkbox" @click="checkAll()" ref="checkAllBox"></th>
+                            <!--<th>Attendance <br> <input type="checkbox" @click="checkAll()" ref="checkAllBox"></th>-->
+                            <th>Attendance</th>
                             <th>Remarks</th>
                         </tr>
                         <tr v-for="item in studentList" ref="studentList_Update">
+                            <td style="display:none;"><input type="text" class="form-control" :value="item.AttDtlID" ref="studentAttID"></td>
                             <td><label>{{item.AttDtlStudentIndexNo}}</label></td>
                             <td><label>{{item.AttDtlStudentName}}</label></td>
                             <!--<td><input type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList"></td>-->
+                            <!--<td>-->
+                                <!--<div class="form-group__wrapper row">-->
+                                    <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">-->
+                                        <!--<label class="lblCheckBox">-->
+                                            <!--<input class="form-control" type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList">-->
+                                            <!--<span>-->
+                                        <!--<span>-->
+                                            <!--<svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path" fill="none" stroke="white"-->
+                                                                                             <!--d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>-->
+                                        <!--</span>-->
+                                    <!--</span>-->
+                                        <!--</label>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</td>-->
                             <td>
-                                <div class="form-group__wrapper row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
-                                        <label class="lblCheckBox">
-                                            <input class="form-control" type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList">
-                                            <span>
-                                        <span>
-                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path" fill="none" stroke="white"
-                                                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
-                                        </span>
-                                    </span>
-                                        </label>
-                                    </div>
-                                </div>
+                                <select ref="studentCheckList" class="form-control pro-edt-select form-control-primary">
+                                    <option v-for="itemCheckList in checkListSelect" :value="itemCheckList" :selected="itemCheckList === item.AttDtlMark">
+                                        {{ itemCheckList }}
+                                    </option>
+                                </select>
                             </td>
                             <td><input type="text" class="form-control" :value="item.AttDtlRemark" ref="studentRemark"></td>
                         </tr>
@@ -59,6 +68,7 @@
         name: "AttendanceList",
         data(){
             return{
+                checkListSelect: ['Late', 'Sick', 'On Holiday', 'Sent Home'],
                 lblAttID: '',
                 ddlClassList: [],
                 ddlClass: '',
@@ -120,51 +130,49 @@
                     this.results = e;
                 }
             },
-            async Save_zzz() {
-                try {
-                    let jsonString = '';
-
-                    this.$refs.studentCheckList.forEach(m => {
-                        if (jsonString === '') {
-                            jsonString = '"' + m.value + '":"' + m.checked + '"';
-                        }
-                        else {
-                            jsonString = jsonString + ',"' + m.value + '":"' + m.checked + '"';
-                        }
-                    });
-
-                    jsonString = '{ ' + jsonString + ' }'
-
-                    const response = await DataSource.shared.updateAttendanceList(this.lblAttID, jsonString);
-                    if (response) {
-                        if (response.code == '1') {
-                            alert('Successfully saved');
-                            window.location.replace('/attendancelist');
-                        } else {
-                            alert('Error! Please try again later');
-                            window.location.replace('/attendancelist');
-                        }
-                    }
-                } catch (e) {
-                    this.results = e;
-                }
-            },
             async Save() {
                 try {
-                    let jsonString = '';
+                    // let jsonString = '';
+                    //
+                    // this.$refs.studentList_Update.forEach((m, index) => {
+                    //     if (jsonString === '') {
+                    //         jsonString = '"' + this.$refs.studentCheckList[index].value + '":"' + this.$refs.studentCheckList[index].checked + ',' + this.$refs.studentRemark[index].value + '"';
+                    //     }
+                    //     else {
+                    //         jsonString = jsonString + ',"' + this.$refs.studentCheckList[index].value + '":"' + this.$refs.studentCheckList[index].checked + ',' + this.$refs.studentRemark[index].value + '"';
+                    //     }
+                    // });
+                    //
+                    // jsonString = '{ ' + jsonString + ' }';
+
+                    // const response = await DataSource.shared.updateAttendanceList(this.lblAttID, jsonString);
+                    // if (response) {
+                    //     if (response.code == '1') {
+                    //         alert('Successfully saved');
+                    //         window.location.replace('/attendancelist');
+                    //     } else {
+                    //         alert('Error! Please try again later');
+                    //         window.location.replace('/attendancelist');
+                    //     }
+                    // }
+
+                    let attendanceList = [];
 
                     this.$refs.studentList_Update.forEach((m, index) => {
-                        if (jsonString === '') {
-                            jsonString = '"' + this.$refs.studentCheckList[index].value + '":"' + this.$refs.studentCheckList[index].checked + ',' + this.$refs.studentRemark[index].value + '"';
-                        }
-                        else {
-                            jsonString = jsonString + ',"' + this.$refs.studentCheckList[index].value + '":"' + this.$refs.studentCheckList[index].checked + ',' + this.$refs.studentRemark[index].value + '"';
-                        }
+                        let attendanceDetials = {
+                            status: this.$refs.studentCheckList[index].value,
+                            remark: this.$refs.studentRemark[index].value
+                        };
+
+                        let attendanceListTemp = {
+                            attID: this.$refs.studentAttID[index].value,
+                            attDetails: attendanceDetials
+                        };
+
+                        attendanceList.push(attendanceListTemp);
                     });
 
-                    jsonString = '{ ' + jsonString + ' }';
-
-                    const response = await DataSource.shared.updateAttendanceList(this.lblAttID, jsonString);
+                    const response = await DataSource.shared.updateAttendanceList(this.lblAttID, JSON.stringify(attendanceList));
                     if (response) {
                         if (response.code == '1') {
                             alert('Successfully saved');

@@ -66,6 +66,7 @@ export default class DataSource {
             data.UserUniversity_Session = Cookies.get('userUniversitySession');
             data.UserEmail_Session = Cookies.get('userEmailSession');
             data.USRid_Session = Cookies.get('usRidSession');
+            data.UserName_Session = Cookies.get('userNameSession');
         }
 
         // this is just testing, remove this if savePost not working
@@ -134,7 +135,7 @@ export default class DataSource {
         Cookies.set('userUniversitySession', response.UserUniversity_Session,  { expires: 3/24 }); //expire in 3 hour);
         Cookies.set('usRidSession', response.USRid_Session,  { expires: 3/24 }); //expire in 3 hour);
         Cookies.set('userEmailSession', response.UserEmail_Session,  { expires: 3/24 }); //expire in 3 hour);
-
+        Cookies.set('userNameSession', response.UserName_Session,  { expires: 3/24 }); //expire in 3 hour);
         return response;
     }
 
@@ -152,6 +153,7 @@ export default class DataSource {
         Cookies.set('userUniversitySession', response.UserUniversity_Session,  { expires: 3/24 }); //expire in 3 hour);
         Cookies.set('usRidSession', response.USRid_Session,  { expires: 3/24 }); //expire in 3 hour);
         Cookies.set('userEmailSession', response.UserEmail_Session,  { expires: 3/24 }); //expire in 3 hour);
+        Cookies.set('userNameSession', response.UserName_Session,  { expires: 3/24 }); //expire in 3 hour);
         return response;
     }
 
@@ -174,6 +176,7 @@ export default class DataSource {
             Cookies.remove('userUniversitySession');
             Cookies.remove('usRidSession');
             Cookies.remove('userEmailSession');
+            Cookies.remove('userNameSession');
             resolve(true);
         });
 
@@ -645,6 +648,21 @@ export default class DataSource {
             toDate: toDate,
             academicYearID: academicYearID,
             intakeYear: intakeYear,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/setLevel", data, "POST");
+        return response;
+    }
+
+    async setLevelForAcceptScool(studentID, levelID, fromDate, toDate, academicYearID, intakeYear, acceptTransferStudent, studentSchoolID) {
+        const data = {
+            studentID: studentID,
+            levelID: levelID,
+            fromDate: fromDate,
+            toDate: toDate,
+            academicYearID: academicYearID,
+            intakeYear: intakeYear,
+            acceptTransferStudent: acceptTransferStudent,
+            studentSchoolID: studentSchoolID
         };
         const response = await this.callWebService("/controller/Students.asmx/setLevel", data, "POST");
         return response;
@@ -1148,6 +1166,7 @@ export default class DataSource {
     }
 
     async approvePost(postID, postType, actionStatus, postComment) {
+
         const data = {
             postID: postID,
             postType: postType,
@@ -1326,6 +1345,14 @@ export default class DataSource {
     async getLevel(customLevelNotEqual) {
         const data = {
             customLevelNotEqual: customLevelNotEqual,
+        };
+        const response = await this.callWebService("/controller/Course.asmx/getLevel", data, "POST");
+        return response;
+    }
+
+    async getLevelSpecificSchool(speificSchoolID) {
+        const data = {
+            speificSchoolID: speificSchoolID,
         };
         const response = await this.callWebService("/controller/Course.asmx/getLevel", data, "POST");
         return response;
@@ -1919,6 +1946,33 @@ export default class DataSource {
             userNewPassword: userNewPassword
         };
         const response = await this.callWebService("/controller/Login.asmx/resetPasswordByPassword", data, "POST");
+        return response;
+    }
+
+    async getAllActiveSchool(){
+        const data = {
+
+        };
+        const response = await this.callWebService("/controller/Operations.asmx/getAllActiveSchool", data, "POST");
+        return response;
+    }
+
+    async saveTransferSchool(studentID, toTransferSchoolID, remark, effectiveDate){
+        const data = {
+            studentID: studentID,
+            toTransferSchoolID: toTransferSchoolID,
+            remark: remark,
+            effectiveDate: effectiveDate
+        };
+        const response = await this.callWebService("/controller/Students.asmx/saveTransferSchool", data, "POST");
+        return response;
+    }
+
+    async getPendingAcceptTransferSchoolBySchool(){
+        const data = {
+
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getPendingAcceptTransferSchoolBySchool", data, "POST");
         return response;
     }
 }

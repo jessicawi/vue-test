@@ -154,7 +154,7 @@
 
     /*jess*/
     .action-list button {
-    width: 100%;
+    /*width: 100%;*/
     margin: 5px 0px;
 }
 
