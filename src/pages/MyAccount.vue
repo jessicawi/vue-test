@@ -26,7 +26,8 @@
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Middle Name</label>
-                                    <input type="text" class="form-control" ref="inputFatherMiddleName" readonly="readonly">
+                                    <input type="text" class="form-control" ref="inputFatherMiddleName"
+                                           readonly="readonly">
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -127,14 +128,14 @@
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Identification No Expiry Date</label>
-                                <div class="date">
-                                    <el-date-picker v-model="inputFatherIdentificationNoExpiryDate"
-                                                    format="dd/MM/yyyy"
-                                                    value-format="dd/MM/yyyy" type="date"
-                                                    placeholder="Pick a date"></el-date-picker>
+                                    <label>Identification No Expiry Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputFatherIdentificationNoExpiryDate"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date"
+                                                        placeholder="Pick a date"></el-date-picker>
+                                    </div>
                                 </div>
-                            </div>
 
                             </div>
                         </div>
@@ -476,24 +477,27 @@
                             <div class="row form-group__wrapper">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>First Name</label>
-                                    <input type="text" class="form-control" ref="inputGuardianFirstName" readonly="readonly">
+                                    <input type="text" class="form-control" ref="inputGuardianFirstName"
+                                           readonly="readonly">
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Middle Name</label>
-                                    <input type="text" class="form-control" ref="inputGuardianMiddleName" readonly="readonly">
+                                    <input type="text" class="form-control" ref="inputGuardianMiddleName"
+                                           readonly="readonly">
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Last Name</label>
-                                    <input type="text" class="form-control" ref="inputGuardianLastName" readonly="readonly">
+                                    <input type="text" class="form-control" ref="inputGuardianLastName"
+                                           readonly="readonly">
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Date of Birth</label>
                                     <div class="date">
                                         <input type="text" class="form-control" v-model="inputGuardianDateofBirth"
-                                           ref="inputGuardianDateofBirth" readonly="readonly">
+                                               ref="inputGuardianDateofBirth" readonly="readonly">
                                     </div>
                                 </div>
 
@@ -773,9 +777,9 @@
                         </div>
                     </div>
                 </b-tab>
-                <b-tab title="Children">
+                <b-tab title="Children" class="mb-5">
                     <div class="row form-group__wrapper">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                             <div v-if="childList.length>0">
                                 <data-tables :data="childList" :action-col="actionCol_Child">
                                     <el-table-column v-for="childListInfo in childListAll" :prop="childListInfo.prop"
@@ -790,11 +794,11 @@
             </b-tabs>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
-                        <button v-on:click="backToPrevious" type="button"
-                                class="btn btn-primary waves-effect waves-light m-r-10 float-left">Cancel
-                        </button>
-                    </div>
+                    <!--<div class="text-center mg-b-pro-edt custom-pro-edt-ds">-->
+                        <!--<button v-on:click="backToPrevious" type="button"-->
+                                <!--class="btn btn-primary waves-effect waves-light m-r-10 float-left">Cancel-->
+                        <!--</button>-->
+                    <!--</div>-->
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
@@ -806,87 +810,126 @@
             </div>
         </div>
 
-        <div v-if="isStaff" class="mt-3 container  pt-5">
+        <div v-if="isStaff" class="">
 
-            <div class="profilePictureArea form-group">
-                <div class=" container ">
-                    <div class="profile_wrap">
-                        <img v-bind:src="imgStaffProfile" type="file" @click="uploadStaffProfileImg()"
+            <div class="profilePictureArea">
+                <div class="myaccount-header_img">
+                    <img src="../assets/myaccount-bg.jpg"/>
+                </div>
+                <div class="myaccount-profile_wrap">
+                    <div class="myaccount-image_wrap">
+                        <img v-bind:src="imgStaffProfile" type="file"
                              class="imgStaffProfile"/>
-                        <button v-on:click="SaveStaff" type="button"
-                        class="col-2 text-center">Save Profile Photo
+
+                        <button v-on:click="showProfileModal" type="button"
+                                class=" text-center"><span>Edit Profile Photo</span>
                         </button>
                     </div>
+                    <h4 class="">{{userType}}</h4>
                 </div>
-                        <input type="file" ref="file" accept="image/*" style="display:none" @change="previewImgStaffProfile">
+
+
+                <!--<button v-on:click="SaveStaff" type="button"-->
+                        <!--class=" text-center"><span>Save Profile Photo</span>-->
+                <!--</button>-->
+                <!--<input type="file" ref="file" accept="image/*" style="display:none" @change="previewImgStaffProfile">-->
             </div>
-
-            <div class="reset_password">
-                <div class="row login-box">
-                    <div class="resetlink-wrap">
-                        <div class="col-md-12 mb-6 login-form col-sm-12">
-                            <div class="login-header mb-5 row">
-                                <div class="col-md-10">
-                                    <h4 class="mb-3 text-muted">Reset Password</h4><br/>
-                                    <span>Your password needs to have at least one symbol or number, <br/>and have at least 8 characters.</span>
+            <div class="myaccount_form   pt-3 pb-5">
+                <div class="reset_password">
+                    <div class="row login-box">
+                        <div class="resetlink-wrap">
+                            <div class="col-md-12 mb-6 login-form col-sm-12">
+                                <div class="login-header mb-5 row">
+                                    <div class="col-md-10">
+                                        <h4 class="mb-3 text-muted">Reset Password</h4><br/>
+                                        <span>Your password needs to have at least one symbol or number, <br/>and have at least 8 characters.</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="reset-content">
-                                <form class="needs-validation" novalidate @submit.prevent="onSubmit">
+                                <div class="reset-content">
+                                    <form class="needs-validation" novalidate @submit.prevent="onSubmit">
 
-                                    <div class="mb-3 form-group" :class="{ 'form-group--error': $v.oldPassword.$error }">
-                                        <input type="password" class="form-control" id="oldPassword" v-model="oldPassword"
-                                               placeholder="Old Password">
-                                    </div>
-                                    <div class="error" v-if="!$v.oldPassword.required">Please enter current password</div>
+                                        <div class="mb-3 form-group"
+                                             :class="{ 'form-group--error': $v.oldPassword.$error }">
+                                            <input type="password" class="form-control" id="oldPassword"
+                                                   v-model="oldPassword"
+                                                   placeholder="Old Password">
+                                        </div>
+                                        <div class="error" v-if="!$v.oldPassword.required">Please enter current
+                                            password
+                                        </div>
 
-                                    <div class="mb-3 form-group" :class="{ 'form-group--error': $v.userPassword1.$error }">
-                                        <input type="password" class="form-control" id="userPassword1" v-model="userPassword1"
-                                               placeholder="New Password"
-                                               v-model.trim="$v.userPassword1.$model">
-                                    </div>
-                                    <div class="error" v-if="!$v.userPassword1.required">Password is required</div>
-                                    <div class="error" v-if="!$v.userPassword1.minLength">Password must have at least 6 letters.</div>
+                                        <div class="mb-3 form-group"
+                                             :class="{ 'form-group--error': $v.userPassword1.$error }">
+                                            <input type="password" class="form-control" id="userPassword1"
+                                                   v-model="userPassword1"
+                                                   placeholder="New Password"
+                                                   v-model.trim="$v.userPassword1.$model">
+                                        </div>
+                                        <div class="error" v-if="!$v.userPassword1.required">Password is required</div>
+                                        <div class="error" v-if="!$v.userPassword1.minLength">Password must have at
+                                            least 6 letters.
+                                        </div>
 
-                                    <div class="mb-3 form-group" :class="{ 'form-group--error': $v.userPassword2.$error }">
-                                        <input type="password" class="form-control" id="userPassword2" v-model="userPassword2"
-                                               placeholder="Confirm New Password"
-                                               v-model.trim="$v.userPassword2.$model">
-                                    </div>
-                                    <div class="error" v-if="!$v.userPassword2.required">Password is required</div>
-                                    <div class="error" v-if="!$v.userPassword2.minLength">Password must have at least 6 letters.</div>
+                                        <div class="mb-3 form-group"
+                                             :class="{ 'form-group--error': $v.userPassword2.$error }">
+                                            <input type="password" class="form-control" id="userPassword2"
+                                                   v-model="userPassword2"
+                                                   placeholder="Confirm New Password"
+                                                   v-model.trim="$v.userPassword2.$model">
+                                        </div>
+                                        <div class="error" v-if="!$v.userPassword2.required">Password is required</div>
+                                        <div class="error" v-if="!$v.userPassword2.minLength">Password must have at
+                                            least 6 letters.
+                                        </div>
 
-                                    <div class="system-msg"><p>{{results}}</p></div>
-                                    <div class="row d-flex mt-3 mb-5">
-                                        <div class="col-md-12">
-                                            <button class="btn btn-primary btn-lg btn-block login-btn" type="submit" v-show="isLoading===false">
-                                                Submit
-                                            </button>
-                                            <div class="loading" v-if="isLoading===true">
-                                                <div class="load-3">
-                                                    <div class="line"></div>
-                                                    <div class="line"></div>
-                                                    <div class="line"></div>
+                                        <div class="system-msg"><p>{{results}}</p></div>
+                                        <div class="row d-flex mt-3 mb-5">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-primary btn-lg btn-block login-btn" type="submit"
+                                                        v-show="isLoading===false">
+                                                    Submit
+                                                </button>
+                                                <div class="loading" v-if="isLoading===true">
+                                                    <div class="load-3">
+                                                        <div class="line"></div>
+                                                        <div class="line"></div>
+                                                        <div class="line"></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="whitespace-30"></div>
 
+            </div>
+            <b-modal id="modal_uploadProfile" title="Update Profile Picture" ref="modal_uploadProfile" centered
+                     hide-footer hide-header>
+
+                <H5 class="mt-2 mb-4">PROFILE PHOTO</H5>
+                <div class="myaccount-image_wrap">
+                    <div class="myaccount-image_overlay" @click="uploadStaffProfileImg()"><i class="material-icons">
+                        add_circle_outline
+                    </i>  BROWSE</div>
+                    <img v-bind:src="imgStaffProfile" type="file"
+                         class="imgStaffProfile" />
+                </div>
+                <el-button type="primary" v-on:click="SaveStaff"  round class="mt-4 mb-2"><span>Save Profile Photo</span></el-button>
+                <input type="file" ref="file" accept="image/*" style="display:none" @change="previewImgStaffProfile">
+
+            </b-modal>
         </div>
 
-        <div class="whitespace-30"></div>
     </div>
 </template>
 
 <script>
     import DataSource from "../data/datasource";
-    import {required,minLength} from "vuelidate/lib/validators";
+    import {required, minLength} from "vuelidate/lib/validators";
     import Cookies from "js-cookie";
     import ProfileImg from "../assets/boy.png";
 
@@ -894,8 +937,9 @@
         name: "MyAccount",
         data() {
             return {
+                userType:"",
                 isStaff: '',
-                imgStaffProfile:'',
+                imgStaffProfile: '',
 
                 countryList: [],
                 ddlFatherReligionList: [],
@@ -936,7 +980,7 @@
                 isLoading: false,
                 //end:reset password
 
-                staffProPicLoop:'',
+                staffProPicLoop: '',
 
                 childList: [],
                 childListAll: [{
@@ -970,10 +1014,8 @@
         },
         validations: {
             //reset password
-            newPassword:'',
-            oldPassword: {
-
-            },
+            newPassword: '',
+            oldPassword: {},
             userPassword1: {
                 required,
                 minLength: minLength(6)
@@ -999,9 +1041,12 @@
             }
         },
         async mounted() {
-
+this.userType = Cookies.get('userTypeSession');
         },
         methods: {
+            showProfileModal(){
+                this.$refs.modal_uploadProfile.show();
+            },
             backToPrevious() {
                 window.location.replace("/MyAccount");
             },
@@ -1055,16 +1100,25 @@
 
                         const response = await DataSource.shared.getParent(Cookies.get('userIDSession'), "");
                         if (response) {
-                            if (response.code == "2") {
-                                alert('No record found');
-                            } else if (response.code == "99") {
-                                alert('Please try again later');
+                            if (response.code === "2") {
+                                this.$notify.error({
+                                    title: 'Error',
+                                    message: 'No record found'
+                                });
+                            } else if (response.code === "99") {
+                                this.$notify.error({
+                                    title: 'Error',
+                                    message: 'Please try again later'
+                                });
                             } else {
                                 this.BindParentFields(response.Table);
                             }
                         }
                     } else {
-                        alert('Error! Please search again.');
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Error! Please search again.'
+                        });
                     }
                 } catch (e) {
                     this.results = e;
@@ -1490,30 +1544,32 @@
                     this.results = e;
                 }
             },
-            async BindChildList(){
-                try{
+            async BindChildList() {
+                try {
                     if (Cookies.get('userIDSession') !== null || Cookies.get('userIDSession') !== undefined) {
                         const relRes = await DataSource.shared.getRelationshipByParentID(Cookies.get('userIDSession'));
                         if (relRes) {
                             if (relRes.code === '88') {
                                 window.location.replace('/');
                             } else if (relRes.code === '99') {
-                                alert('Error!');
+                                this.$notify.error({
+                                    title: 'Error',
+                                    message: 'Error!'
+                                });
                             } else {
-                                if(relRes){
+                                if (relRes) {
                                     this.childList = relRes.Table;
                                 }
 
                             }
                         }
                     }
-                }
-                catch (e) {
+                } catch (e) {
                     this.results = e;
                 }
             },
-            async LoadProfileImg(){
-                try{
+            async LoadProfileImg() {
+                try {
                     const staffProPic = await DataSource.shared.getStaffProfileImage();
                     if (staffProPic) {
                         if (staffProPic.code !== '2' && staffProPic.code !== '88' && staffProPic.code !== '99') {
@@ -1521,8 +1577,7 @@
                             image64String !== '' ? this.imgStaffProfile = image64String : '';
                         }
                     }
-                }
-                catch(e){
+                } catch (e) {
                     this.result = e;
                 }
             },
@@ -1638,14 +1693,25 @@
                         const response = await DataSource.shared.updateParent(this.lblParentID, jsonString);
                         if (response) {
                             if (response.code == "1") {
-                                alert('Records Successfully Edited');
-                                window.location.replace('MyAccount');
+                                this.$notify({
+                                    title: 'Success',
+                                    message: 'Records Successfully Edited',
+                                    type: 'success'
+                                });
+                                setTimeout(() => window.location.replace('MyAccount'), 500);
+
                             } else {
-                                alert('Update Parent Error - Please try again later');
+                                this.$notify.error({
+                                    title: 'Error',
+                                    message: 'Update Parent Error - Please try again later'
+                                });
                             }
                         }
                     } else {
-                        alert('Error! Please search again.');
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Error! Please search again.'
+                        });
                     }
                 } catch (e) {
                     this.results = e;
@@ -1673,21 +1739,27 @@
                     this.results = e;
                 }
             },
-            async SaveStaff () {
+            async SaveStaff() {
                 const response = await DataSource.shared.saveStaffProfileImage(this.selectedFile);
                 if (response) {
                     if (response.code === '88') {
                         window.location.replace('/');
-                    }
-                    else if (response.code === "1") {
-                        alert('Records Successfully Saved');
+                    } else if (response.code === "1") {
+                        this.$notify({
+                            title: 'Success',
+                            message: 'Records Successfully Saved',
+                            type: 'success'
+                        });
                         window.location.replace('/MyAccount');
                     } else {
-                        alert("Save Staff Error - Please try again later");
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Save Staff Error - Please try again later'
+                        });
                     }
                 }
             },
-            ConvertBase64StringToImage (file) {
+            ConvertBase64StringToImage(file) {
                 if (this.isImage(file))
                     return "data:" + file.UPPImageFileType + ";base64," + file.UPPImage;
                 else
@@ -1713,28 +1785,46 @@
             async onSubmit() {
                 try {
                     //if old password doesnt match
-                    if(this.userPassword1!==this.userPassword2){
-                        alert('Password not match');
-                    }
-                    else{
+                    if (this.oldPassword === null || this.userPassword1 === null || this.userPassword2 === null) {
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Please fill in all field'
+                        });
+                    } else if(this.userPassword1 !== this.userPassword2) {
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Password not match'
+                        });
+                    } else {
                         this.isLoading = true;
                         const response = await DataSource.shared.resetPasswordByPassword(this.oldPassword, this.userPassword1);
                         this.isLoading = false;
                         if (response) {
                             switch (response.code) {
                                 case "1":
-                                    alert('Success');
+                                    this.$notify({
+                                        title: 'Success',
+                                        message: 'Password Reset',
+                                        type: 'success'
+                                    });
                                     window.location.replace("/MyAccount");
-                                    this.results = `Password Reset`;
+                                    // this.results = `Password Reset`;
                                     break;
                                 case "2":
-                                    this.results = `Current password wrong`;
+                                    this.$notify.error({
+                                        title: 'Error',
+                                        message: 'Current password wrong'
+                                    });
+                                    // this.results = `Current password wrong`;
                                     break;
                                 case "88":
                                     window.location.replace("/");
                                     break;
                                 case "99":
-                                    this.results = `Please Try Again`;
+                                    this.$notify.error({
+                                        title: 'Error',
+                                        message: 'Please fill in all field'
+                                    });
                                     break;
                             }
                         }
@@ -1766,6 +1856,6 @@
         width: 200px;
         height: auto;
         background-color: #ffffff;
-        margin-top: 16px;
+        /*margin-top: 16px;*/
     }
 </style>

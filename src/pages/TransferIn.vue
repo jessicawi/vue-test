@@ -16,7 +16,7 @@
         </div>
 
         <b-modal id="transferModal" size="lg" title="Transfer" ok-only ok-variant="secondary" ok-title="Cancel" ref="transferShowModal">
-            <div>{{ transferStudentID }} - {{ studentSchoolID }}</div>
+            <div style="display: none;">{{ transferStudentID }} - {{ studentSchoolID }}</div>
             <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Select Level</label>
@@ -43,6 +43,14 @@
                     </select>
                 </div>
 
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label>Date of Commencement</label>
+                    <div class="date">
+                        <el-date-picker v-model="inputDateOfCommencement" format="dd/MM/yyyy"
+                                        value-format="dd/MM/yyyy" type="date" placeholder="Pick a date"></el-date-picker>
+                    </div>
+                </div>
+
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-primary waves-effect waves-light m-r-10" v-on:click="ApproveReject('APPROVE')">Approve</button>
                     <button class="btn btn-primary waves-effect waves-light m-r-10" v-on:click="ApproveReject('REJECT')">Reject</button>
@@ -64,6 +72,7 @@
                 studentIntakeYearList: [],
                 transferStudentID: '',
                 studentSchoolID: '',
+                inputDateOfCommencement: '',
 
                 transferInListInt: [],
                 transferInList: [{
@@ -92,6 +101,7 @@
                         handler: row => {
                             this.transferStudentID = row.Student_ID;
                             this.studentSchoolID = row.PK_STUSCH_ID;
+                            this.inputDateOfCommencement = row.STUSCH_EffectiveDate_convert;
                             this.$refs.transferShowModal.show();
                         },
                         label: 'Action'
@@ -209,12 +219,14 @@
             },
             async academicYearToDate(value, academicYearFromDate, academicYearToDate, level, adYear, intakeYear) {
                 try {
-                    const getSetLvlRes = await DataSource.shared.setLevelForAcceptScool(this.transferStudentID, level, academicYearFromDate, academicYearToDate, adYear, intakeYear, value, this.studentSchoolID);
+                    const getSetLvlRes = await DataSource.shared.setLevelForAcceptScool(this.transferStudentID, level, academicYearFromDate, academicYearToDate, adYear, intakeYear, value, this.studentSchoolID, this.inputDateOfCommencement);
 
                     if (getSetLvlRes) {
                         if (getSetLvlRes.code === "1") {
                             alert('Records Successfully Saved');
                             window.location.replace('/TransferIn');
+                        } else if (getSetLvlRes.code === "2") {
+                                alert('Date of Commencement Cannot today or less than today');
                         } else {
                             alert('Save Student Accept / Reject School - Please try again later');
                         }

@@ -11,6 +11,7 @@
                     <img v-bind:src="imgStudentProfile" type="file" @click="uploadStudentProfileImg()"
                          class="imgStudentProfile"/>
                     <span>{{inputStudentFirstName}}</span>
+                    <small class="parent_wrap" @click="backPrevious()">Parent: {{inputFatherFirstName}} & {{inputMotherFirstName}}</small>
                 </div>
             </div>
             <input type="file" ref="file" accept="image/*" style="display:none" @change="previewImgStudentProfile">
@@ -416,6 +417,9 @@
                 };
         },
         methods:{
+                backPrevious(){
+                    this.$router.go(-1);
+                },
             async uploadStudentProfileImg() {
                 try {
                     this.$refs.file.click();
@@ -446,7 +450,10 @@
                     const responce = await DataSource.shared.getStudentParentView(this.$route.params.studentID);
                     if(responce){
                         if(responce.code==='88'){
-                            alert('error');
+                            this.$notify.error({
+                                title: 'Error',
+                                message: 'Error'
+                            });
                         }else{
                             this.BindStudentFields(responce.Table);
                         }
@@ -476,6 +483,8 @@
                         this.lblStudentIndexNo = m.Index_No;
                         this.inputStudentID = m.Index_No;
                         this.inputStudentFirstName = m.Full_Name;
+                        this.inputFatherFirstName = m.PAR_Father_FirstName;
+                        this.inputMotherFirstName = m.PAR_Mother_FirstName;
                         this.inputStudentMiddleName = m.Middle_name;
                         this.inputStudentLastName = m.Last_name;
                         this.ddlStudentGender = m.Sex;
@@ -609,7 +618,10 @@
                 try {
                     this.$v.$touch();
                     if (this.$v.$error) {
-                        alert('Please fill in all * fields & at least one of ** field');
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Please fill in all * fields & at least one of ** field'
+                        });
                         return;
                     }
                     this.Save();
@@ -678,10 +690,17 @@
                             window.location.replace('/');
                         }
                         else if (saveStuRes.code === "1") {
-                            alert('Records Successfully Saved');
+                            this.$notify({
+                                title: 'Success',
+                                message: 'Records Successfully Saved',
+                                type: 'success'
+                            });
                             window.location.replace('/MyAccount');
                         } else {
-                            alert("Update Error - Please try again later");
+                            this.$notify.error({
+                                title: 'Error',
+                                message: 'Update Error - Please try again later'
+                            });
                             window.location.replace('/MyAccount');
                         }
                     }

@@ -45,8 +45,12 @@
                 </div>
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <b-btn v-b-modal.withdrawGraduationModal variant="primary" class="btnWithdrawGraduation">
-                        Withdraw / Graduation
+                    <b-btn v-b-modal.withdrawModal variant="primary" class="btnWithdraw">
+                        Withdraw
+                    </b-btn>
+
+                    <b-btn v-b-modal.transferModal variant="primary" class="btnTransfer">
+                        Transfer
                     </b-btn>
                 </div>
             </div>
@@ -976,12 +980,6 @@
                                 v-bind:course-id="strClassIDLevelComponent"></promotion-component>
                             </div>
 
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <b-btn v-b-modal.transferModal variant="primary" class="btnTransfer">
-                                    Transfer
-                                </b-btn>
-                            </div>
-
                             <div v-if="lvlLevelList_Level.length>0">
                                 <data-tables :data="lvlLevelList_Level" :actionCol="actionCol_Level"
                                              @selection-change="handleSelectionChange">
@@ -1077,10 +1075,66 @@
             </div>
         </b-modal>
 
-        <b-modal id="withdrawGraduationModal" class="studentPageBModal" size="lg" title="Withdraw / Graduation" ok-only
-                 ok-variant="secondary" ok-title="Cancel" ref="withdrawGraduationShowModal">
-            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                test
+        <b-modal id="withdrawModal" class="studentPageBModal" size="lg" title="Withdraw" ok-only ok-variant="secondary" ok-title="Cancel" ref="withdrawShowModal">
+            <div>
+                <div class="row form-group__wrapper">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <label>Withdrawal Date</label>
+                        <el-date-picker v-model="inputWithdrawalDate" format="dd/MM/yyyy"
+                                        value-format="dd/MM/yyyy" type="date"
+                                        placeholder="Pick a day"></el-date-picker>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="withdrawMainReason">
+                        <label>Main Reason</label>
+                        <select v-model="ddlMainReason" @change="WithdrawTaskDescription()" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in ddlMainReasonList" v-bind:value="item.OPTvalue.trim()">
+                                {{item.OPTvalue.trim()}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="withdrawInternationalSchool">
+                        <label>International School Name</label>
+                        <select v-model="ddlInternationalSchool" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in ddlInternationaSchoolList" v-bind:value="item.OPTvalue.trim()">
+                                {{ item.OPTvalue.trim() }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="withdrawReason1">
+                        <label>Reason1</label>
+                        <select v-model="ddlReason1" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in ddlReason1List" v-bind:value="item.OPTvalue.trim()">
+                                {{ item.OPTvalue.trim() }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="withdrawReason2" >
+                        <label>Reason2</label>
+                        <select v-model="ddlReason2" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in ddlReason2List" v-bind:value="item.OPTvalue.trim()">
+                                {{ item.OPTvalue.trim() }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="withdrawReason3">
+                        <label>Reason3</label>
+                        <select v-model="ddlReason3" class="form-control pro-edt-select form-control-primary">
+                            <option v-for="item in ddlReason3List" v-bind:value="item.OPTvalue.trim()">
+                                {{ item.OPTvalue.trim() }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <button v-on:click="WithdrawSave"
+                        class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Withdraw
+                </button>
+
             </div>
         </b-modal>
 
@@ -1102,7 +1156,7 @@
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>Effective Date</label>
+                    <label>Commencement Date</label>
                     <div class="date">
                         <el-date-picker v-model="inputTransferSchoolEffDate" format="dd/MM/yyyy"
                                         value-format="dd/MM/yyyy" type="date" placeholder="Pick a day"></el-date-picker>
@@ -1139,6 +1193,13 @@
             this.icShowHide = true;
             this.stuCorAddCopy = false;
             this.resBilAddCopy = false;
+            //withdrawn
+            this.withdrawMainReason = true;
+            this.withdrawInternationalSchool = false;
+            this.withdrawReason1 = false;
+            this.withdrawReason2 = false;
+            this.withdrawReason3 = false;
+            //end withdrawn
             await this.BindCountryList();
             await this.BindStudentDropdown();
             //await this.BindStudentLevel();
@@ -1285,6 +1346,27 @@
                 ddlTransferSchoolCourse: '',
                 inputTransferSchoolRemark: '',
                 inputTransferSchoolEffDate: '',
+
+                //For withdrawal and graduation
+                withdrawInternationalSchool:'',
+                withdrawMainReason:'',
+                withdrawReason1:'',
+                withdrawReason2:'',
+                withdrawReason3:'',
+                ddlWithdrawGraduation:'',
+                inputWithdrawalDate:'',
+                ddlMainReason:'',
+                ddlReason1:'',
+                ddlReason2:'',
+                ddlReason3:'',
+                ddlInternationalSchool:'',
+                ddlMainReasonList:[],
+                ddlInternationaSchoolList:[],
+                ddlReason1List:[],
+                ddlReason2List:[],
+                ddlReason3List:[],
+                WithGradReason1: '',
+                //End withdrawal and graduation
 
                 siblingList: [],
                 siblingListAll: [{
@@ -1509,6 +1591,9 @@
                     jsonString = jsonString + ',"Sponsorship Type":"Sponsorship Type"';
                     jsonString = jsonString + ',"ParentID":"ParentID"';
                     jsonString = jsonString + ',"Parent Mode":"Parent Mode"';
+                    jsonString = jsonString + ',"Graduation_Remarks":"Graduation_Remarks"';
+                    jsonString = jsonString + ',"International School Name":"International School Name"';
+                    jsonString = jsonString + ',"Widthdrawal Reason":"Widthdrawal Reason"';
                     jsonString = "{" + jsonString + "}";
 
                     const response = await DataSource.shared.getStudentDropDownList(jsonString);
@@ -1536,6 +1621,15 @@
                                     this.ddlMotherIdentificationTypeList.push(m);
                                 } else if (m.OGPname.trim() === 'Parent Mode') {
                                     this.ddlParentModeList.push(m);
+                                } else if (m.OGPname.trim() === 'Graduation_Remarks') {
+                                    console.log("Graduation_Remarks");
+                                    this.ddlMainReasonList.push(m);
+                                } else if (m.OGPname.trim() === 'International School Name') {
+                                    this.ddlInternationaSchoolList.push(m);
+                                } else if (m.OGPname.trim() === 'Widthdrawal Reason') {
+                                    this.ddlReason1List.push(m);
+                                    this.ddlReason2List.push(m);
+                                    this.ddlReason3List.push(m);
                                 }
                             });
                         }
@@ -2512,7 +2606,7 @@
                             } else if (response.code === '99') {
                                 alert('Error!');
                             } else if (response.code === '2') {
-                                alert('Effective date cannot today or less than today!');
+                                alert('Commencement Date cannot today or less than today!');
                             } else if (response.code === '3') {
                                 alert('Duplicated transfer action!');
                             } else if (response.code === '4') {
@@ -2527,6 +2621,75 @@
                     }
                 } catch (e) {
                     this.results = e;
+                }
+            },
+            async WithdrawSave(){
+                try
+                {
+                    let date = new Date().getDate();
+                    let month = new Date().getMonth() + 1;
+                    let year = new Date().getFullYear();
+                    console.log(this.ddlInternationaSchool);
+                    var withdrawObj = {
+                        studentID:this.lblStudentID,
+                        GRD_Remarks:this.ddlMainReason,
+                        GRD_Remarks1:this.ddlReason1,
+                        GRD_Remarks2:this.ddlReason2,
+                        GRD_Remarks3:this.ddlReason3,
+                        GRD_Date:this.inputWithdrawalDate,
+                        GRD_Withdraw_Date:this.inputWithdrawalDate,
+                        GRD_SchoolName: this.ddlInternationalSchool,
+                    };
+                    //check student withdraw status
+                    if(this.lblCurrentStatus==='Withdrawn'){
+                        alert('Cannot Withdraw student who is already Withdrawn');
+                    }
+                    else if(this.ddlMainReason === '' || this.ddlMainReason === null || this.ddlMainReason === undefined){
+                        alert('Please select withdraw reason');
+                    }
+                    else if(this.inputWithdrawalDate === '' || this.inputWithdrawalDate === null || this.inputWithdrawalDate === undefined){
+                        alert('Please select datetime');
+                    }
+                    else{
+
+                        const response = await DataSource.shared.saveStudentWithdraw(JSON.stringify(withdrawObj));
+
+                        console.log(response.code);
+
+                        if(response.code==='88'){
+                            console.log('88');
+                        }
+                        else if(response.code==="99"){
+                            console.log('99');
+                        }
+                        else if(response.code==='1'){
+                            alert('Withdraw Successful');
+                            window.location.replace('/student?id='+this.lblStudentID);
+                        }
+                    }
+                }
+                catch (e) {
+                    this.results = e;
+                }
+
+            },
+            WithdrawTaskDescription(){
+                if(this.ddlMainReason==="Transferring to another international school")
+                {
+                    this.withdrawInternationalSchool = true;
+                    this.withdrawReason1 = true;
+                    this.withdrawReason2 = true;
+                    this.withdrawReason3 = true;
+                }
+                else{
+                    this.ddlInternationaSchool= '';
+                    this.ddlReason1 = '';
+                    this.ddlReason2 = '';
+                    this.ddlReason3 = '';
+                    this.withdrawInternationalSchool=false;
+                    this.withdrawReason1 = false;
+                    this.withdrawReason2 = false;
+                    this.withdrawReason3 = false;
                 }
             },
         },
@@ -2623,7 +2786,7 @@
         padding: 0px;
     }
 
-    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus, .btnWithdrawGraduation, .btnTransfer {
+    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus, .btnWithdraw, .btnTransfer {
         width: auto;
         display: inline !important;
         margin: 10px;

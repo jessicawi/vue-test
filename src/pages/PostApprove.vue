@@ -71,8 +71,8 @@
 </template>
 
 <script>
-    import DataSource from "../../data/datasource";
-    import PostComponent from "../../components/postCompnent";
+    import DataSource from "../data/datasource";
+    import PostComponent from "../components/postCompnent";
 
     export default {
         name: "PostApprove",

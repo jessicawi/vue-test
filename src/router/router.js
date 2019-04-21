@@ -24,11 +24,13 @@ import notFound from "../pages/NotFound";
 import portfolioPreview from "../pages/PortfolioPreview";
 import dailyRoutine from "../pages/DailyRoutine";
 import pendingApprover from "../pages/PendingApprover";
-import postapprove from "../pages/unuse/PostApprove";
+import postapprove from "../pages/PostApprove";
 import myAccount from "../pages/MyAccount";
 import myChild from "../pages/MyChild";
 import approvermaster from "../pages/ApproverMaster";
 import transferIn from "../pages/TransferIn";
+import studentgraduation from "../pages/StudentGraduation";
+import classManagement from "../pages/ClassManagement";
 
 Vue.use(VueRouter);
 
@@ -178,6 +180,17 @@ const router = new VueRouter({
             name: 'Transfer In',
             component: transferIn
         },
+        {
+            path: '/StudentGraduation',
+            name: 'Student Graduation',
+            component: studentgraduation
+        },
+        {
+            path: '/ClassManagement',
+            name: 'Class Management',
+            component: classManagement
+        },
+
     ]
 });
 

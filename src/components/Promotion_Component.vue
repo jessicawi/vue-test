@@ -59,10 +59,11 @@
                 arrobj_NewClasses: null,
                 obj_SelectedNewYear: null,
                 obj_SelectedNewClass: null,
-                filterStudents:"",
-            }
+                filterStudents: "",
+            };
         },
-        props: {selectedStudents: [Array], CourseId: String, selectedStudentsID: [Array]},
+        props: ["selectedStudents","courseId","arrobjSelectedStudentID"],
+        // props: {selectedStudents: [Array], CourseId: String, arrobjSelectedStudentID: [Array]},
         methods: {
             sleep(milliseconds) {
                 return new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -70,27 +71,29 @@
             isNull(obj) {
                 return (obj === null || obj === undefined || obj === "undefined");
             },
-            RemoveSelectedStudent(student){
+            RemoveSelectedStudent(student) {
                 this.selectedStudents = this.selectedStudents.filter(d => {
                     return d.Student_ID !== student;
                 });
-                this.selectedStudentsID = this.selectedStudentsID.filter(d => {
+                this.arrobjSelectedStudentID = this.arrobjSelectedStudentID.filter(d => {
                     return d !== student;
                 });
             },
             async promoteStudents() {
                 let str_StudentIDs = "";
-                for (let i of this.selectedStudentsID)
+                for (let i of this.arrobjSelectedStudentID) {
                     str_StudentIDs += i + ",";
+                }
+
 
                 str_StudentIDs = str_StudentIDs.substr(0, str_StudentIDs.length - 1);
-                if (this.obj_SelectedNewYear===null || this.obj_SelectedNewClass === null){
+                if (this.obj_SelectedNewYear === null || this.obj_SelectedNewClass === null) {
 
                     this.$notify.error({
                         title: 'Error',
                         message: 'Please fill in content'
                     });
-                }else{
+                } else {
 
                     this.showLoading();
                 }
@@ -105,7 +108,7 @@
                         });
                     }
                     this.$emit("result", true);
-                })
+                });
                 // this.filterStudents = this.selectedStudents;
 
                 this.hideLoading();
@@ -122,7 +125,7 @@
                 this.arrobj_NewClasses = null;
 
                 let promise_NextLevel = new Promise((resolve) => {
-                    DataSource.shared.getNextLevel(this.CourseId).then((result) => {
+                    DataSource.shared.getNextLevel(this.courseId).then((result) => {
                         resolve(result.Table[0]);
                     });
                 });
@@ -173,7 +176,7 @@
                     console.log(result);
                 });*/
             },
-            close(){
+            close() {
                 this.$emit("result", true);
             },
 
@@ -220,11 +223,11 @@
             // this.loadStudentID();
 
             // this.filterStudents = this.selectedStudents;
-            // this.selectedStudentsID = this.selectedStudents.map(d => d.Student_ID);
+            // this.arrobjSelectedStudentID = this.selectedStudents.map(d => d.Student_ID);
 
 
         }
-    }
+    };
 </script>
 
 <style scoped>

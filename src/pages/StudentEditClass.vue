@@ -114,11 +114,7 @@
                 try {
                     const response = await DataSource.shared.getStudentClass(this.lblStudentID, this.lblCourseID);
                     if (response) {
-                        if (response.code == 2)
-                        {
-                            alert('No record found');
-                        }
-                        else if (response.code == 99) {
+                        if (response.code == 99) {
                             alert('Please try again later');
                         }
                         else

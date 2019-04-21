@@ -604,6 +604,15 @@ export default class DataSource {
         return response;
     }
 
+    async massSetClass(classID, jsonString) {
+        const data = {
+            classID: classID,
+            jsonString: jsonString,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/massSetClass", data, "POST");
+        return response;
+    }
+
     async updateLevel(studentID, studentCourseID, actionMode) {
         const data = {
             studentID: studentID,
@@ -653,7 +662,7 @@ export default class DataSource {
         return response;
     }
 
-    async setLevelForAcceptScool(studentID, levelID, fromDate, toDate, academicYearID, intakeYear, acceptTransferStudent, studentSchoolID) {
+    async setLevelForAcceptScool(studentID, levelID, fromDate, toDate, academicYearID, intakeYear, acceptTransferStudent, studentSchoolID, effectiveDate) {
         const data = {
             studentID: studentID,
             levelID: levelID,
@@ -662,7 +671,8 @@ export default class DataSource {
             academicYearID: academicYearID,
             intakeYear: intakeYear,
             acceptTransferStudent: acceptTransferStudent,
-            studentSchoolID: studentSchoolID
+            studentSchoolID: studentSchoolID,
+            effectiveDate: effectiveDate
         };
         const response = await this.callWebService("/controller/Students.asmx/setLevel", data, "POST");
         return response;
@@ -1975,5 +1985,75 @@ export default class DataSource {
         const response = await this.callWebService("/controller/Students.asmx/getPendingAcceptTransferSchoolBySchool", data, "POST");
         return response;
     }
+
+    async saveStudentWithdraw(obj){
+        const data = {
+            obj:obj
+        };
+        const response = await this.callWebService("/controller/Students.asmx/saveStudentWthdraw", data, "POST");
+        return response;
+    }
+
+    async getClassType(){
+        const data = {
+        };
+        const response = await this.callWebService("/controller/Class.asmx/getClassType", data, "POST");
+        return response;
+    }
+
+    async getTeacherListBySchool(){
+        const data = {
+        };
+        const response = await this.callWebService("/controller/User.asmx/getTeacherListBySchool", data, "POST");
+        return response;
+    }
+
+    async saveClass(levelID, semesterID, batch, className, maxStudents, classTeacher){
+        const data = {
+            levelID: levelID,
+            semesterID: semesterID,
+            batch: batch,
+            className: className,
+            maxStudents: maxStudents,
+            classTeacher: classTeacher,
+        };
+        const response = await this.callWebService("/controller/Class.asmx/saveClass", data, "POST");
+        return response;
+    }
+
+    async getClass(academicYear){
+        const data = {
+            academicYear: academicYear,
+        };
+        const response = await this.callWebService("/controller/Course.asmx/getClass", data, "POST");
+        return response;
+    }
+
+    async updateClass(classID, className, classStatus, maxStudents){
+        const data = {
+            classID: classID,
+            className: className,
+            classStatus: classStatus,
+            maxStudents: maxStudents,
+        };
+        const response = await this.callWebService("/controller/Class.asmx/updateClass", data, "POST");
+        return response;
+    }
+
+    async getActiveStudentsByLevelSchool(levelID){
+        const data = {
+            levelID: levelID,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getActiveStudentsByLevelSchool", data, "POST");
+        return response;
+    }
+    async saveStudentGraduation(obj){
+        const data = {
+            obj:obj
+        };
+        const response = await this.callWebService("/controller/Students.asmx/saveStudentGraduation", data, "POST");
+        return response;
+    }
+
 }
 

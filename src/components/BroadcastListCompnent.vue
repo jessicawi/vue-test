@@ -215,7 +215,7 @@
             ,
             /*#endregion*/
             initPost(){
-                let tempobj = this.parentPost;
+                /*let tempobj = this.parentPost;
                 let promise_GetPostFile = DataSource.shared.getPostFile(tempobj.PostID);
                 let promise_GetComment = DataSource.shared.getComment(tempobj.PostID);
 
@@ -225,9 +225,10 @@
                     tempobj.commentItems = result[1].Table;
                     tempobj.collapsed = true;
                 })
+
                     .then(()=>{
                         this.post=tempobj;
-                    });
+                    });*/
             },
             isNull(obj) {
                 return (obj === null || obj === undefined || obj === "undefined" || obj.length === 0 || obj === "");

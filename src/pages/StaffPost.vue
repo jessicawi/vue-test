@@ -806,7 +806,7 @@
                                 this.commentPostID = null;
                                 this.commentPostContent = "";
 
-                                const newComment = await DataSource.shared.getComment(commentPostID);
+                            //    const newComment = await DataSource.shared.getComment(commentPostID);
 
                                 this.list.find(item => {
 
@@ -818,7 +818,7 @@
 
                                 });
 
-                                this.$forceUpdate();
+                               // this.$forceUpdate();
 
 
                                 // this.results = `Post Submitted`;
@@ -856,7 +856,7 @@
                                 this.commentPostContent = "";
                                 this.readonly = true;
 
-                                const newComment = await DataSource.shared.getComment(PoCmID);
+                               // const newComment = await DataSource.shared.getComment(PoCmID);
                                 this.list.find(item => {
 
                                     if (item.PostID === PoCmID) {
@@ -898,7 +898,7 @@
                                 this.commentPostID = null;
                                 this.commentPostContent = "";
 
-                                const newComment = await DataSource.shared.getComment(PoCmID);
+                           //     const newComment = await DataSource.shared.getComment(PoCmID);
 
                                 this.list.find(item => {
 
@@ -908,7 +908,7 @@
                                     }
 
                                 });
-                                this.$forceUpdate();
+                              //  this.$forceUpdate();
                                 break;
                             case "88":
                                 this.results = `Please Login to submit post`;

@@ -642,8 +642,9 @@
 
                         this.remainingImage = this.post.countImageFile - 4;
                     });
-
-
+                setInterval(() => {
+                    this.getComment();
+                    }, 3000);
             },
 
             initCommentInterval() {
@@ -671,23 +672,23 @@
                 }*/
             },
             getComment() {
-                setInterval(() => {
+
                     DataSource.shared.getComment(this.post.PostID).then((comments) => {
                         this.$set(this.post, "commentItems", comments.Table);
 
                         if (!this.isNull(this.post.commentItems)) {
-                            for (let i = 0; i < this.post.commentItems.length; i++) {
+                            /*for (let i = 0; i < this.post.commentItems.length; i++) {
                                 DataSource.shared.getPostReaction(comments.Table[i].PoCmID).then((commentReactions) => {
                                     this.$set(this.post.commentItems[i], "commentReactions", commentReactions.Table);
                                 });
-                            }
+                            }*/
 
                             this.commentCount = this.post.commentItems.length;
                         } else {
                             this.commentCount = "0";
                         }
                     });
-                }, 6000);
+
             },
 
             isNull(obj) {

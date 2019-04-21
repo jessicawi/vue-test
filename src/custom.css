@@ -31,6 +31,7 @@
 30---daily routine---
 31---post approve---
 32---promotion---
+33---myaccount---
  */
 
 :root {
@@ -76,6 +77,7 @@ a {
     color: #585388;
     font-weight: bold;
 }
+
 /*
 1---form---
  */
@@ -141,11 +143,13 @@ label {
     padding: 10px;
     border-color: #edf0f4;
 }
+
 .form-footer {
     background: #eee;
     padding: 10px 0px;
     margin: 0;
 }
+
 .inputfile {
     width: 0.1px;
     height: 0.1px;
@@ -209,6 +213,7 @@ label {
 .inputFile-box .btn:hover {
     background: #eee;
 }
+
 /*
 2---button---
  */
@@ -224,11 +229,13 @@ label {
     display: block;
     min-width: 100px;
 }
+
 .el-button--info span {
     color: #eee;
     font-weight: bold;
     letter-spacing: 1px;
 }
+
 /*
 3---table---
 */
@@ -289,12 +296,14 @@ label {
     background-color: #f65151;
     margin: 0px 10px;
 }
-.empty-list_image img{
-    max-width:500px !important;
+
+.empty-list_image img {
+    max-width: 500px !important;
     max-height: 500px !important;
-    margin:auto;
+    margin: auto;
     display: block;
 }
+
 .empty-list_image {
     margin: auto;
 }
@@ -303,6 +312,7 @@ label {
     font-size: 30px;
     color: #ccc;
 }
+
 /*
 5---notification---
  */
@@ -336,6 +346,7 @@ label {
 .modal-dialog.modal-dialog .btn .btn {
     float: right;
 }
+
 .modal .submit-wrap button {
     color: #fff;
     border-radius: 4px;
@@ -356,6 +367,7 @@ label {
     border-color: #409eff;
     color: #ffffff;
 }
+
 /*
 7---carousel---
  */
@@ -380,13 +392,19 @@ label {
 
 @keyframes loadingC {
 
-0{
+0
+{
     transform: translate(0, 0)
-;}
-50%{
+;
+}
+50
+%
+{
     transform: translate(0, 15px)
-;}
-100%
+;
+}
+100
+%
 {
     transform: translate(0, 0)
 ;
@@ -559,7 +577,6 @@ div#schoolListModal.con-vs-popup .vs-popup {
 div#schoolListModal .vs-popup--content {
     max-height: 500px;
 }
-
 
 
 /*
@@ -1190,7 +1207,7 @@ li.info-menu__item i {
     font-size: 26px;
     float: right;
     position: relative;
-    top: -3px;
+    top: 11px;
 }
 
 .menu-wrap-active .parent-menu, .parent-menu.menu-active {
@@ -1455,6 +1472,7 @@ a.home-addStudent {
     display: table;
     width: 100%;
 }
+
 button.postFile-remainingNumber {
     position: absolute;
     display: none;
@@ -1471,6 +1489,7 @@ button.postFile-remainingNumber {
 .postFile__item:last-child button.postFile-remainingNumber {
     display: block;
 }
+
 li.postFile__item img {
     width: 100%;
     display: initial;
@@ -1989,9 +2008,11 @@ span.clearFile-single {
 .file-listing:hover span.clearFile-single {
     display: block;
 }
+
 div#staff-post {
     min-height: 100vh;
 }
+
 /*
 20---broadcast---
  */
@@ -2141,11 +2162,13 @@ h4.title {
     line-height: 30px;
     margin-right: 10px;
 }
+
 .action-list button:focus {
     color: #ccc;
 }
+
 /*.action-list button:focus {*/
-    /*color: #67c23a;*/
+/*color: #67c23a;*/
 /*}*/
 
 .post-image-wrapper .postFile__item img {
@@ -3443,6 +3466,7 @@ label.activity-title h5 {
     border-radius: 12px;
     position: relative;
 }
+
 .daily-checkall h4 {
     flex: 1 1 280px;
 }
@@ -3452,6 +3476,7 @@ label.activity-title h5 {
     top: -2px;
     position: relative;
 }
+
 .daily-checkall .con-vs-checkbox {
     margin: 0px !important;
     text-align: left;
@@ -3469,12 +3494,15 @@ label.activity-title h5 {
     position: relative;
     right: 1px;
 }
-.daily-checkall .vs-checkbox-primary .vs-checkbox--check{
+
+.daily-checkall .vs-checkbox-primary .vs-checkbox--check {
     background: #ff5d68;
 }
-.daily-checkall .vs-checkbox--input:checked+.vs-checkbox .vs-icon{
-    color:white;
+
+.daily-checkall .vs-checkbox--input:checked + .vs-checkbox .vs-icon {
+    color: white;
 }
+
 .daily-timeline__item .vs-checkbox i {
     top: 2px;
     position: relative;
@@ -3521,6 +3549,7 @@ label.activity-title h5 {
     top: 10px;
     left: 8px;
 }
+
 .daily-desc_wrap {
     /*align-items: center;*/
     margin-bottom: 10px;
@@ -3557,6 +3586,7 @@ label.activity-title h5 {
     box-shadow: none;
     border-color: #ff5c67;
 }
+
 .daily-desc_wrap .el-textarea textarea {
     background: transparent;
     border: 0px;
@@ -3564,6 +3594,7 @@ label.activity-title h5 {
     padding: 10px;
     border-radius: 0px;
 }
+
 .daily-timeline {
     position: relative;
 }
@@ -3578,12 +3609,15 @@ label.activity-title h5 {
     top: 0;
     border: 2px dashed #f56c6c;
 }
+
 .Feed .daily-item_image {
     background: #ffc543;
 }
+
 .Poop .daily-item_image {
     background: #a9dc35;
 }
+
 .Hygiene .daily-item_image {
     background: #63d3ff;
 }
@@ -3616,6 +3650,7 @@ label.activity-title h5 {
     border-radius: 11px;
     padding: 20px 0;
 }
+
 .action-btn button i {
     position: relative;
     top: 6px;
@@ -3629,6 +3664,7 @@ i.material-icons {
     position: relative;
     top: 7px;
 }
+
 div#pendingapprover .header h3 span {
     background: #ec4050;
     color: white;
@@ -3640,6 +3676,7 @@ div#pendingapprover .header h3 span {
     line-height: 34px;
     font-size: 20px;
 }
+
 .admin-wrap.container {
     background: white;
     padding: 40px;
@@ -3663,10 +3700,12 @@ div#pendingapprover .header h3 span {
     color: #999;
     font-weight: bold;
 }
+
 .promotionAcademicYear-select-wrap {
     display: flex;
     justify-content: flex-end;
 }
+
 .promotion-student .div_Student {
     background: #eee;
     margin: 10px;
@@ -3709,19 +3748,19 @@ div#pendingapprover .header h3 span {
 }
 
 #btn_PromoteSelected {
-     position: fixed;
-     bottom: 40px;
-     right: 20px;
-     white-space: normal;
-     border-radius: 40px;
-     -webkit-box-shadow: 0px 0px 16px -5px #a6abb3;
-     box-shadow: 0px 0px 16px -5px #a6abb3;
-     background-color: #f35858;
-     border-color: #ffa4a4;
-     width: auto;
-     padding: 20px;
-     /* height: 60px; */
- }
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    white-space: normal;
+    border-radius: 40px;
+    -webkit-box-shadow: 0px 0px 16px -5px #a6abb3;
+    box-shadow: 0px 0px 16px -5px #a6abb3;
+    background-color: #f35858;
+    border-color: #ffa4a4;
+    width: auto;
+    padding: 20px;
+    /* height: 60px; */
+}
 
 #btn_PromoteSelected i {
     width: 16px;
@@ -3742,6 +3781,7 @@ div#pendingapprover .header h3 span {
     background: #999;
     border-color: #999;
 }
+
 .promotion-modal-tag .el-tag {
     margin: 0 5px;
     background-color: #f5f5f5;
@@ -3759,4 +3799,184 @@ div#pendingapprover .header h3 span {
 .promotion-modal-tag {
     display: table;
     width: 100%;
+}
+
+/*
+33---myaccount---
+ */
+.myaccount-header_img img {
+    max-height: 250px;
+    opacity: 0.5;
+}
+
+.myaccount-image_wrap {
+    border-radius: 100%;
+    overflow: hidden;
+    display: flex;
+    width: 200px;
+    height: 200px;
+    position: relative;
+    background: white;
+    left: 0;
+    right: 0;
+    margin: 0 auto -80px;
+    top: -100px;
+    z-index: 9;
+    border: 9px solid #edeff4;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px -5px;
+}
+
+.myaccount-profile_wrap {
+    background: white;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 150px;
+}
+
+.myaccount-image_wrap button {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    background: #23222f9e;
+    border: 0px;
+    height: 50%;
+    bottom: 0;
+    /* align-items: flex-start !important; */
+    justify-content: center;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.myaccount-image_wrap:hover button {
+    opacity: 1;
+}
+
+.myaccount-image_wrap button span {
+    /* align-self: flex-start; */
+    margin: 20px 0;
+    color: white;
+    font-weight: bold !important;
+}
+
+div#modal_uploadProfile .myaccount-image_wrap {
+    position: relative;
+    top: 0;
+}
+
+.myaccount-image_overlay {
+    position: absolute;
+    background: #00000057;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    color: white;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    font-size: 20px;
+    opacity: 0;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.myaccount-image_overlay i {
+    position: relative;
+    top: 0px;
+    margin-right: 10px;
+}
+
+div#modal_uploadProfile .myaccount-image_wrap:hover .myaccount-image_overlay {
+    opacity: 1;
+}
+
+.myaccount_form {
+    background: white;
+    display: table;
+    width: 100%;
+}
+
+.myaccount_form .resetlink-wrap {
+    box-shadow: none;
+}
+
+#myaccount .nav-tabs {
+    margin-bottom: 21px;
+    background: white;
+    box-shadow: 0 0 10px -5px #ccc;
+    overflow: hidden;
+}
+
+#myaccount .nav-tabs .nav-item {
+    flex: 1;
+}
+
+#myaccount .parentPageBTabs {
+    border-radius: 0px;
+}
+
+#myaccount .parentPageBTabs .nav-tabs .nav-link.active {
+    background: #5565cf;
+    color: white;
+}
+
+#myaccount .nav-tabs .nav-item a {
+    border-radius: 0px !important;
+    padding: 20px 10px;
+    position: relative;
+}
+
+#myaccount .nav-tabs .nav-item a:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    width: 1px;
+    height: 30px;
+    background: #eee;
+    top: 25%;
+}
+
+#myaccount .parentPageBTabs .nav-tabs .nav-link.active:after,.parentPageBTabs .nav-tabs li:hover .nav-link:after {
+    display: none;
+}
+
+#myaccount .parentPageBTabs .nav-link:hover {
+    background: #6d7ef1;
+}
+div#myChild .profilePictureArea {
+    background: white;
+    padding: 20px 0;
+}
+
+div#myChild .profilePictureArea .profile_wrap span {
+    text-align: left;
+    margin: 0;
+    float: left;
+}
+
+div#myChild .profile_wrap img.imgStudentProfile {
+    display: none;
+}
+
+div#myChild .profile_wrap {
+    display: table;
+    width: 100%;
+}
+
+div#myChild small.parent_wrap {
+    font-size: 13px;
+    background: #eee;
+    padding: 5px 10px;
+    margin: 0;
+    display: table;
+    float: right;
+    cursor: pointer;
+}
+div#myChild small.parent_wrap:hover{
+    background: #dbdbdb;
 }
