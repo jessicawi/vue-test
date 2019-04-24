@@ -108,6 +108,12 @@
                             message: 'Students Promoted',
                             type: 'success'
                         });
+                    } else if (!this.isNull(result) && result.code === "2") {
+                        this.$notify({
+                            title: 'Student Exceeded',
+                            message: 'Number of students assign to this class have excceded max number of class',
+                            type: 'success'
+                        });
                     }
                     this.$emit("result", true);
                 });

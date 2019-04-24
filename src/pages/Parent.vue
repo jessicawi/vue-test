@@ -158,6 +158,35 @@
                                                         placeholder="Pick a date"></el-date-picker>
                                     </div>
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Race</label>
+                                    <select v-model="ddlFatherRace"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlRaceList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Marital Status</label>
+                                    <select v-model="ddlFatherMaritalStatus"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlMaritalStatusList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working</label>
+                                    <select class="form-control pro-edt-select form-control-primary"
+                                            v-model="ddlFatherWorking">
+                                        <option>No</option>
+                                        <option>Yes</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -256,6 +285,16 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Company Email</label>
                                     <input type="text" class="form-control" ref="inputFatherCompanyEmail">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working Commencement Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputFatherWorkingCommencementDate"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date"
+                                                        placeholder="Pick a day"></el-date-picker>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -400,8 +439,38 @@
                                                         placeholder="Pick a date"></el-date-picker>
                                     </div>
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Race</label>
+                                    <select v-model="ddlMotherRace"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlRaceList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Marital Status</label>
+                                    <select v-model="ddlMotherMaritalStatus"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlMaritalStatusList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working</label>
+                                    <select class="form-control pro-edt-select form-control-primary"
+                                            v-model="ddlMotherWorking">
+                                        <option>No</option>
+                                        <option>Yes</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+
                         <div class="motherAreaDiv">
                             <div class="">
                                 <h5 class="text-left student-form__title">Mother's Local Residential Address</h5>
@@ -497,6 +566,16 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Company Email</label>
                                     <input type="text" class="form-control" ref="inputMotherCompanyEmail">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working Commencement Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputMotherWorkingCommencementDate"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date"
+                                                        placeholder="Pick a day"></el-date-picker>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -619,6 +698,35 @@
                                     <label>Identification No</label>
                                     <input type="text" class="form-control" ref="inputGuardianIdentificationNo">
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Race</label>
+                                    <select v-model="ddlGuardianRace"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlRaceList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Marital Status</label>
+                                    <select v-model="ddlGuardianMaritalStatus"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlMaritalStatusList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working</label>
+                                    <select class="form-control pro-edt-select form-control-primary"
+                                            v-model="ddlGuardianWorking">
+                                        <option>No</option>
+                                        <option>Yes</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -663,6 +771,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="guardianAreaDiv">
                             <div class="">
                                 <h5 class="text-left student-form__title">Guardian's Company Address</h5>
@@ -716,6 +825,16 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Company Email</label>
                                     <input type="text" class="form-control" ref="inputGuardianCompanyEmail">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working Commencement Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputGuardianWorkingCommencementDate"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date"
+                                                        placeholder="Pick a day"></el-date-picker>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -870,6 +989,8 @@
                 ddlFatherEmploymentStatusList: [],
                 ddlMotherEmploymentStatusList: [],
                 ddlGuardianEmploymentStatusList: [],
+                ddlMaritalStatusList: [],
+                ddlRaceList: [],
 
                 inputFatherFirstName: '',
                 inputFatherLastName: '',
@@ -889,8 +1010,19 @@
                 ddlFatherEmploymentStatus: '',
                 ddlMotherEmploymentStatus: '',
                 ddlGuardianEmploymentStatus: '',
-
+                ddlFatherRace: '',
+                ddlFatherMaritalStatus: '',
+                ddlFatherWorking: '',
+                ddlMotherRace: '',
+                ddlMotherMaritalStatus: '',
+                ddlMotherWorking : '',
+                ddlGuardianRace: '',
+                ddlGuardianMaritalStatus: '',
+                ddlGuardianWorking: '',
                 lblParentID: '',
+                inputFatherWorkingCommencementDate: '',
+                inputMotherWorkingCommencementDate: '',
+                inputGuardianWorkingCommencementDate: '',
             };
         },
         validations: {
@@ -931,6 +1063,8 @@
                     let jsonString = '"Religion":"Religion"';
                     jsonString = jsonString + ',"ParentID":"ParentID"';
                     jsonString = jsonString + ',"EmpStatus":"EmpStatus"';
+                    jsonString = jsonString + ',"Parents Martial Status":"Parents Martial Status"';
+                    jsonString = jsonString + ',"Race":"Race"';
                     jsonString = "{" + jsonString + "}";
 
                     const response = await DataSource.shared.getStudentDropDownList(jsonString);
@@ -949,6 +1083,10 @@
                                 this.ddlFatherEmploymentStatusList.push(m);
                                 this.ddlMotherEmploymentStatusList.push(m);
                                 this.ddlGuardianEmploymentStatusList.push(m);
+                            } else if (m.OGPname.trim() === 'Parents Martial Status') {
+                                this.ddlMaritalStatusList.push(m);
+                            } else if (m.OGPname.trim() === 'Race') {
+                                this.ddlRaceList.push(m);
                             }
                         });
                     }
@@ -1114,6 +1252,13 @@
                             this.$refs.inputFatherCompanyEmail.value = m.PAR_FComp_Email;
                         }
                         ;
+                        this.ddlFatherRace = m.PAR_Father_Race;
+                        this.ddlFatherMaritalStatus = m.PAR_Father_MaritalStatus;
+                        this.ddlFatherWorking = m.PAR_Father_Working;
+                        if (m.PAR_Father_WorkingCommencementDate_convert !== '01/01/1901') {
+                            this.inputFatherWorkingCommencementDate = m.PAR_Father_WorkingCommencementDate_convert;
+                        }
+                        ;
                         //father
 
                         //mother
@@ -1240,6 +1385,13 @@
                             this.$refs.inputMotherCompanyEmail.value = m.PAR_MComp_Email;
                         }
                         ;
+                        this.ddlMotherRace = m.PAR_Mother_Race;
+                        this.ddlMotherMaritalStatus  = m.PAR_Mother_MaritalStatus;
+                        this.ddlMotherWorking  = m.PAR_Mother_Working;
+                        if (m.PAR_Mother_WorkingCommencementDate_convert !== '01/01/1901') {
+                            this.inputMotherWorkingCommencementDate = m.PAR_Mother_WorkingCommencementDate_convert;
+                        }
+                        ;
                         //mother
 
                         //guardian
@@ -1360,6 +1512,13 @@
                         ;
                         if (m.PAR_GComp_Email !== undefined) {
                             this.$refs.inputGuardianCompanyEmail.value = m.PAR_GComp_Email;
+                        }
+                        ;
+                        this.ddlGuardianRace = m.PAR_Guardian_Race;
+                        this.ddlGuardianMaritalStatus = m.PAR_Guardian_MaritalStatus;
+                        this.ddlGuardianWorking = m.PAR_Guardian_Working;
+                        if (m.PAR_Guardian_WorkingCommencementDate_convert !== '01/01/1901') {
+                            this.inputGuardianWorkingCommencementDate = m.PAR_Guardian_WorkingCommencementDate_convert;
                         }
                         ;
                         //guardian
@@ -1533,6 +1692,18 @@
                         jsonString = jsonString + ',"PAR_TPCountry":"' + this.$refs.inputThirdPartyCountry.value + '"';
                         jsonString = jsonString + ',"PAR_TPPin":"' + this.$refs.inputThirdPartyPostalCode.value + '"';
                         jsonString = jsonString + ',"PAR_TPComp_Email":"' + this.$refs.inputThirdPartyCompanyEmail.value + '"';
+                        jsonString = jsonString + ',"PAR_Father_Race":"' + this.ddlFatherRace + '"';
+                        jsonString = jsonString + ',"PAR_Father_MaritalStatus":"' + this.ddlFatherMaritalStatus + '"';
+                        jsonString = jsonString + ',"PAR_Father_Working":"' + this.ddlFatherWorking + '"';
+                        jsonString = jsonString + ',"PAR_Mother_Race":"' + this.ddlMotherRace + '"';
+                        jsonString = jsonString + ',"PAR_Mother_MaritalStatus":"' + this.ddlMotherMaritalStatus + '"';
+                        jsonString = jsonString + ',"PAR_Mother_Working":"' + this.ddlMotherWorking + '"';
+                        jsonString = jsonString + ',"PAR_Guardian_Race":"' + this.ddlGuardianRace + '"';
+                        jsonString = jsonString + ',"PAR_Guardian_MaritalStatus":"' + this.ddlGuardianMaritalStatus + '"';
+                        jsonString = jsonString + ',"PAR_Guardian_Working":"' + this.ddlGuardianWorking + '"';
+                        jsonString = jsonString + ',"PAR_Father_WorkingCommencementDate":"' + this.inputFatherWorkingCommencementDate + '"';
+                        jsonString = jsonString + ',"PAR_Mother_WorkingCommencementDate":"' + this.inputMotherWorkingCommencementDate + '"';
+                        jsonString = jsonString + ',"PAR_Guardian_WorkingCommencementDate":"' + this.inputGuardianWorkingCommencementDate + '"';
 
                         jsonString = '{ ' + jsonString + ' }';
 

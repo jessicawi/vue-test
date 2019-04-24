@@ -3504,7 +3504,7 @@ label.activity-title h5 {
 }
 
 .daily-timeline__item .vs-checkbox i {
-    top: 2px;
+    top: 9px;
     position: relative;
     right: 1px;
 }
@@ -4017,12 +4017,71 @@ div#myChild small.parent_wrap:hover{
 }
 
 .attTable td .el-select input{
-    background: #40c1ff;
+    background: #dee2e6;
     color: white !important;
     border-radius: 20px;
 }
 
 .attTable td .el-select input::placeholder,
 .attTable td .el-select .el-input .el-select__caret{
-    color:white;
+    color:#222;
+}
+
+div#attendance-list .el-select.absent input {
+    background: #f56c6c;
+}
+
+div#attendance-list .el-select.late input {
+    background: #ffc15c;
+}
+
+div#attendance-list .el-select.sick input {
+    background: #28d893;
+}
+
+div#attendance-list .el-select.home input {
+    background: #623bff;
+}
+
+div#attendance-list .el-select.holiday input {
+    background: #40c1ff;
+}
+
+div#attendance-list .vs-checkbox .vs-icon {
+    top: 3px;
+    left: -2px;
+}
+div#attendance-list .actionBar .vs-checkbox .vs-icon {
+    top: 2px;
+    left: -1px;
+}
+.actionBar .el-select {
+    margin-left: auto;
+    float: right;
+    align-items: center;
+    display: flex;
+}
+
+.actionBar .con-vs-checkbox {
+    margin: 10px 0;
+}
+
+.actionBar {
+    /* background: #edf0f4; */
+    padding: 10px 0;
+    margin: 0;
+    /* border-radius: 5px; */
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: #eee;
+}
+
+.actionBar .el-select input{
+    background: #409eff;
+    border: 0px;
+    color: white;
+}
+
+.actionBar .el-select input::placeholder {
+    color: white;
 }

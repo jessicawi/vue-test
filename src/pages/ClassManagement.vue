@@ -123,7 +123,7 @@
 
         <b-modal id="assignClassModal" size="lg" title="Assign Class" ok-only ok-variant="secondary" ok-title="Cancel" ref="assignClassShowModal">
             <div class="row">
-                <div style="display: block;">{{ assignClassLevelID }} - {{ assignClassID }}</div>
+                <div style="display: none;">{{ assignClassLevelID }} - {{ assignClassID }}</div>
 
                 <div class= "col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div v-if="assignStudentsListInt.length>0">
@@ -412,6 +412,8 @@
                     if (response.code === '1') {
                         alert('Successfully saved');
                         window.location.replace('/ClassManagement');
+                    } else if (response.code === '2') {
+                        alert('The class have been exceeded max number of student!');
                     } else {
                         alert('Error! Please try again later');
                         window.location.replace('/ClassManagement');

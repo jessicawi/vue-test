@@ -114,8 +114,12 @@
                 try {
                     const response = await DataSource.shared.getStudentClass(this.lblStudentID, this.lblCourseID);
                     if (response) {
-                        if (response.code == 99) {
+                        if (response.code === '99') {
                             alert('Please try again later');
+                        }
+                        else if (response.code === '2')
+                        {
+                            this.BindEditClass('');
                         }
                         else
                         {
@@ -134,6 +138,7 @@
                                     customClassNotEqual = customClassNotEqual + "," + m.PK_Class_ID;
                                 }
                             });
+
                             this.BindEditClass(customClassNotEqual);
                             //filter the added class to BindEditClass
                         }
@@ -153,12 +158,16 @@
                     try {
                         const response = await DataSource.shared.setClass(this.lblStudentID, this.$refs.ddlEditClass.value, this.lblCourseID);
                         if (response) {
-                            if (response.code == 1)
+                            if (response.code === '1')
                             {
                                 alert('Class added');
                                 window.location.replace('/student-edit-class?courseid=' + this.lblCourseID + '&id=' + this.lblStudentID + '&semid=' + this.lblSemID + '&subjectcourseid=' + this.lblSubjectCourseID);
                             }
-                            else if (response.code == 99) {
+                            else if (response.code === '2')
+                            {
+                                alert('The class have been exceeded max number of student!');
+                            }
+                            else if (response.code === '99') {
                                 alert('Please try again later');
                             }
                         }

@@ -77,7 +77,7 @@
                     !
                 </span>
                 <span class="alert-badge badge4"
-                      v-if="$v.inputStudentPostalCode.$error || $v.inputStudentAddress1.$error || $v.inputStudentCorrespondancePostalCode.$error || $v.inputStudentCorrespondanceAddress1.$error || $v.inputParentPostalCode.$error || $v.inputParentAddress1.$error ">
+                      v-if="$v.inputStudentPostalCode.$error || $v.inputStudentAddress1.$error || $v.inputStudentCorrespondancePostalCode.$error || $v.inputStudentCorrespondanceAddress1.$error">
                     !
                 </span>
 
@@ -118,7 +118,6 @@
                             </div>
 
                             <div class=" parentAreaDiv">
-
                                 <div v-if="divParent" class="parentAreaDiv">
                                     <div class="">
                                         <h5 class="text-left student-form__title">Father's Details</h5>
@@ -231,6 +230,106 @@
                                             <input type="text" class="form-control" v-model="inputFatherEmail"
                                                    v-bind:disabled="editModeDisable">
                                         </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Race</label>
+                                            <select v-model="ddlFatherRace"
+                                                    v-bind:disabled="editModeDisable"
+                                                    class="form-control pro-edt-select form-control-primary">
+                                                <option v-for="item in ddlRaceList"
+                                                        v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Marital Status</label>
+                                            <select v-model="ddlFatherMaritalStatus"
+                                                    v-bind:disabled="editModeDisable"
+                                                    class="form-control pro-edt-select form-control-primary">
+                                                <option v-for="item in ddlMaritalStatusList"
+                                                        v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Working</label>
+                                            <select class="form-control pro-edt-select form-control-primary"
+                                                    v-model="ddlFatherWorking" @change="ParentCompanyAddressShow('Father')"
+                                                    v-bind:disabled="editModeDisable">
+                                                <option>No</option>
+                                                <option>Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div v-if="divParent & divFatherCompany" class="parentAreaDiv">
+                                    <div class="">
+                                        <h5 class="text-left student-form__title">Father's Company</h5>
+                                    </div>
+
+                                    <div class="row form-group__wrapper">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Name</label>
+                                            <input type="text" class="form-control" v-model="inputFatherCompanyName">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Addressee Name</label>
+                                            <input type="text" class="form-control" v-model="inputFatherCompanyAddresseeName">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Address 1</label>
+                                            <input type="text" class="form-control" v-model="inputFatherCompanyAddress1">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Address 2</label>
+                                            <input type="text" class="form-control" v-model="inputFatherCompanyAddress2">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Address 3</label>
+                                            <input type="text" class="form-control" v-model="inputFatherCompanyAddress3">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company City</label>
+                                            <input type="text" class="form-control" v-model="inputFatherCompanyCity">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Country</label>
+                                            <select v-model="ddlFatherCompanyCountry"
+                                                    class="form-control pro-edt-select form-control-primary">
+                                                <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">
+                                                    {{item.CNYname.trim() }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Postal Code</label>
+                                            <input type="text" class="form-control" v-model="inputFatherCompanyPostalCode">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Email</label>
+                                            <input type="text" class="form-control" v-model="inputFatherCompanyEmail">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Working Commencement Date</label>
+                                            <div class="date">
+                                                <el-date-picker v-model="inputFatherWorkingCommencementDate"
+                                                                v-bind:disabled="editModeDisable" format="dd/MM/yyyy"
+                                                                value-format="dd/MM/yyyy" type="date"
+                                                                placeholder="Pick a day"></el-date-picker>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -326,9 +425,108 @@
                                             <input type="text" class="form-control" v-model="inputMotherEmail"
                                                    v-bind:disabled="editModeDisable">
                                         </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Race</label>
+                                            <select v-model="ddlMotherRace"
+                                                    v-bind:disabled="editModeDisable"
+                                                    class="form-control pro-edt-select form-control-primary">
+                                                <option v-for="item in ddlRaceList"
+                                                        v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Marital Status</label>
+                                            <select v-model="ddlMotherMaritalStatus"
+                                                    v-bind:disabled="editModeDisable"
+                                                    class="form-control pro-edt-select form-control-primary">
+                                                <option v-for="item in ddlMaritalStatusList"
+                                                        v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Working</label>
+                                            <select class="form-control pro-edt-select form-control-primary"
+                                                    v-model="ddlMotherWorking" @change="ParentCompanyAddressShow('Mother')"
+                                                    v-bind:disabled="editModeDisable">
+                                                <option>No</option>
+                                                <option>Yes</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
+                                <div v-if="divParent & divMotherCompany" class="parentAreaDiv">
+                                    <div class="">
+                                        <h5 class="text-left student-form__title">Mother's Company</h5>
+                                    </div>
+
+                                    <div class="row form-group__wrapper">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Name</label>
+                                            <input type="text" class="form-control" v-model="inputMotherCompanyName">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Addressee Name</label>
+                                            <input type="text" class="form-control" v-model="inputMotherCompanyAddresseeName">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Address 1</label>
+                                            <input type="text" class="form-control" v-model="inputMotherCompanyAddress1">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Address 2</label>
+                                            <input type="text" class="form-control" v-model="inputMotherCompanyAddress2">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Address 3</label>
+                                            <input type="text" class="form-control" v-model="inputMotherCompanyAddress3">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company City</label>
+                                            <input type="text" class="form-control" v-model="inputMotherCompanyCity">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Country</label>
+                                            <select v-model="ddlMotherCompanyCountry"
+                                                    class="form-control pro-edt-select form-control-primary">
+                                                <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">{{
+                                                    item.CNYname.trim() }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Postal Code</label>
+                                            <input type="text" class="form-control" v-model="inputMotherCompanyPostalCode">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Company Email</label>
+                                            <input type="text" class="form-control" v-model="inputMotherCompanyEmail">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Working Commencement Date</label>
+                                            <div class="date">
+                                                <el-date-picker v-model="inputMotherWorkingCommencementDate"
+                                                                v-bind:disabled="editModeDisable" format="dd/MM/yyyy"
+                                                                value-format="dd/MM/yyyy" type="date"
+                                                                placeholder="Pick a day"></el-date-picker>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -658,7 +856,7 @@
                     <div class=" form-group ">
                         <div class="addAreaDiv">
                             <div class="">
-                                <h5 class="text-left student-form__title">Student's Permanent Address</h5>
+                                <h5 class="text-left student-form__title">Student's Local Residential Address</h5>
                             </div>
 
                             <div class="row form-group__wrapper">
@@ -710,7 +908,7 @@
 
                         <div class="addAreaDiv">
                             <div class="">
-                                <h5 class="text-left student-form__title">Student's Correspondance Address</h5>
+                                <h5 class="text-left student-form__title">Student's Billing Address</h5>
                             </div>
 
                             <div class="row form-group__wrapper">
@@ -793,80 +991,6 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Email</label>
                                     <input type="text" class="form-control" v-model="inputStudentEmail">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div v-if="divParent" class="addAreaDiv">
-                            <div class="">
-                                <h5 class="text-left student-form__title">Residential/Billing Address</h5>
-                            </div>
-
-                            <div class="row form-group__wrapper">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Copy Address From</label>
-                                    <select v-model="ddlCopyAddToResBil" v-bind:disabled="editModeDisable" class="form-control pro-edt-select form-control-primary" @change="onchangeCopyAdd()">
-                                        <option value=""></option>
-                                        <option value="stuPerAdd">Student's Permanent Address</option>
-                                        <option value="stuCorAdd">Student's Correspondance Address</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Country</label>
-                                    <select v-model="ddlParentCountry" v-bind:disabled="editModeDisable || resBilAddCopy"
-                                            class="form-control pro-edt-select form-control-primary">
-                                        <option v-for="item in countryList" v-bind:value="item.CNYname.trim()">
-                                            {{
-                                            item.CNYname.trim() }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Postal Code</label>
-                                    <input type="text" class="form-control" v-model="inputParentPostalCode"
-                                           v-bind:disabled="editModeDisable || resBilAddCopy"
-                                           :class="{ 'requiredFields': $v.inputParentPostalCode.$error }"
-                                           v-on:blur="GetGoogleAPI('inputParentPostalCode')">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputParentPostalCode.$error">Postal
-                                        Code Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Address 1</label>
-                                    <input type="text" class="form-control" v-model="inputParentAddress1"
-                                           v-bind:disabled="editModeDisable || resBilAddCopy"
-                                           :class="{ 'requiredFields': $v.inputParentAddress1.$error }">
-                                    <div class="requiredFieldsMsg" v-if="$v.inputParentAddress1.$error">Address
-                                        1
-                                        Require
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Address 2</label>
-                                    <input type="text" class="form-control" v-model="inputParentAddress2"
-                                           v-bind:disabled="editModeDisable || resBilAddCopy">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Address 3</label>
-                                    <input type="text" class="form-control" v-model="inputParentAddress3"
-                                           v-bind:disabled="editModeDisable || resBilAddCopy">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>City</label>
-                                    <input type="text" class="form-control" v-model="inputParentCity"
-                                           v-bind:disabled="editModeDisable">
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Landline No</label>
-                                    <input type="text" class="form-control" v-model="inputParentLandlineNo"
-                                           v-bind:disabled="editModeDisable">
                                 </div>
                             </div>
                         </div>
@@ -1384,6 +1508,8 @@
                 transferSchoolList: [],
                 transferSchoolCourseList: [],
                 studentFileListInt: [],
+                ddlMaritalStatusList: [],
+                ddlRaceList: [],
 
                 inputStudentDateOfBirth: '',
                 inputFatherDateofBirth: '',
@@ -1445,13 +1571,6 @@
                 inputMotherIdentificationNo: '',
                 inputMotherMobileNo: '',
                 inputMotherEmail: '',
-                inputParentAddress1: '',
-                inputParentAddress2: '',
-                inputParentAddress3: '',
-                inputParentCity: '',
-                inputParentLandlineNo: '',
-                ddlParentCountry: '',
-                inputParentPostalCode: '',
                 ddlStudentAddressCountry: '',
                 ddlStudentReligion: '',
                 ddlStudentAdditionalLanguage: '',
@@ -1472,7 +1591,6 @@
                 ddlStudentSelectLevel_Level: '',
                 ddlStudentFirstAcademicYear_Level: '',
                 ddlStudentIntakeYear_Level: '',
-                ddlCopyAddToResBil: '',
                 ddlCopyAddToStuCorAdd: '',
                 editModeDisable: '',
                 lblCreateOrEdit: '',
@@ -1500,6 +1618,34 @@
                 immunizationRecordsUpload: '',
                 inputImmunizationRecordsDescription: '',
                 inputAllAboutMeDescription: '',
+                ddlFatherWorking: '',
+                divFatherCompany: '',
+                ddlFatherMaritalStatus: '',
+                ddlFatherRace: '',
+                inputFatherCompanyName: '',
+                inputFatherCompanyAddresseeName: '',
+                inputFatherCompanyAddress1: '',
+                inputFatherCompanyAddress2: '',
+                inputFatherCompanyAddress3: '',
+                inputFatherCompanyCity: '',
+                ddlFatherCompanyCountry: '',
+                inputFatherCompanyPostalCode: '',
+                inputFatherCompanyEmail: '',
+                divMotherCompany: '',
+                ddlMotherRace: '',
+                ddlMotherMaritalStatus: '',
+                ddlMotherWorking: '',
+                inputMotherCompanyName: '',
+                inputMotherCompanyAddresseeName: '',
+                inputMotherCompanyAddress1: '',
+                inputMotherCompanyAddress2: '',
+                inputMotherCompanyAddress3: '',
+                inputMotherCompanyCity: '',
+                ddlMotherCompanyCountry: '',
+                inputMotherCompanyPostalCode: '',
+                inputMotherCompanyEmail: '',
+                inputFatherWorkingCommencementDate: '',
+                inputMotherWorkingCommencementDate: '',
 
                 //For withdrawal and graduation
                 withdrawInternationalSchool:'',
@@ -1733,8 +1879,6 @@
             inputFatherOccupation: {requiredIf: requiredIf('isdivParent')},
             inputMotherFirstName: {requiredIf: requiredIf('isdivParent')},
             inputMotherLastName: {requiredIf: requiredIf('isdivParent')},
-            inputParentAddress1: {requiredIf: requiredIf('isdivParent')},
-            inputParentPostalCode: {requiredIf: requiredIf('isdivParent')},
         },
         components: {promotionComponent},
         methods: {
@@ -1772,6 +1916,8 @@
                     jsonString = jsonString + ',"Graduation_Remarks":"Graduation_Remarks"';
                     jsonString = jsonString + ',"International School Name":"International School Name"';
                     jsonString = jsonString + ',"Widthdrawal Reason":"Widthdrawal Reason"';
+                    jsonString = jsonString + ',"Parents Martial Status":"Parents Martial Status"';
+                    jsonString = jsonString + ',"Race":"Race"';
                     jsonString = "{" + jsonString + "}";
 
                     const response = await DataSource.shared.getStudentDropDownList(jsonString);
@@ -1807,6 +1953,10 @@
                                     this.ddlReason1List.push(m);
                                     this.ddlReason2List.push(m);
                                     this.ddlReason3List.push(m);
+                                } else if (m.OGPname.trim() === 'Parents Martial Status') {
+                                    this.ddlMaritalStatusList.push(m);
+                                } else if (m.OGPname.trim() === 'Race') {
+                                    this.ddlRaceList.push(m);
                                 }
                             });
                         }
@@ -2004,7 +2154,6 @@
 
                         this.ddlStudentAddressCountry = 'Singapore';
                         this.ddlStudentAddressCorrespondanceCountry = 'Singapore';
-                        this.ddlParentCountry = 'Singapore';
                     }
                 } catch (e) {
                     this.results = e;
@@ -2132,20 +2281,10 @@
                         }
                         ;
                         this.inputFatherOccupation = m.PAR_Father_Occupation;
-                        this.inputParentLandlineNo = m.PAR_FatResContact;
                         this.inputFatherMobileNo = m.PAR_Father_Phone;
                         this.inputFatherEmail = m.PAR_Father_Email;
                         this.ddlFatherIdentificationType = m.PAR_Father_IDType;
                         this.inputFatherIdentificationNo = m.PAR_Father_UID;
-                        this.inputParentAddress1 = m.PAR_Father_Loc_Residence_No;
-                        this.inputParentAddress2 = m.PAR_Father_Loc_Address1;
-                        this.inputParentAddress3 = m.PAR_Father_Loc_Address2;
-                        this.inputParentPostalCode = m.PAR_Father_Loc_Postalcode;
-                        this.inputParentCity = m.PAR_Father_Loc_City;
-                        this.ddlParentCountry = m.PAR_Father_Loc_Country;
-                        this.inputParentCity = m.PAR_Father_City;
-                        this.ddlParentCountry = m.PAR_Father_Country;
-                        this.inputParentPostalCode = m.PAR_Father_PostalCode;
                         this.inputMotherFirstName = m.PAR_Mother_FirstName;
                         this.inputMotherMiddleName = m.PAR_Mother_MiddleName;
                         this.inputMotherLastName = m.PAR_Mother_LastName;
@@ -2154,31 +2293,10 @@
                         }
                         ;
                         this.inputMotherOccupation = m.PAR_Mother_Occupation;
-                        this.inputParentLandlineNo = m.PAR_MotResContact;
                         this.inputMotherMobileNo = m.PAR_Mother_Phone;
                         this.inputMotherEmail = m.PAR_Mother_Email;
                         this.ddlMotherIdentificationType = m.PAR_Mother_IDType;
                         this.inputMotherIdentificationNo = m.PAR_Mother_UID;
-                        this.inputParentAddress1 = m.PAR_Mother_Loc_Residence_No;
-                        this.inputParentAddress2 = m.PAR_Mother_Loc_Address1;
-                        this.inputParentAddress3 = m.PAR_Mother_Loc_Address2;
-                        this.inputParentCity = m.PAR_Mother_Loc_City;
-                        this.ddlParentCountry = m.PAR_Mother_Loc_Country;
-                        this.inputParentPostalCode = m.PAR_Mother_Loc_Postalcode;
-                        this.inputParentCity = m.PAR_Mother_City;
-                        this.ddlParentCountry = m.PAR_Mother_Country;
-                        this.inputParentPostalCode = m.PAR_Mother_PostalCode;
-                        this.inputParentLandlineNo = m.PAR_GarResContact;
-                        this.inputParentAddress1 = m.PAR_Guardian_Loc_Residence_No;
-                        this.inputParentAddress1 = m.PAR_Guardian_Loc_City;
-                        this.inputParentAddress2 = m.PAR_Guardian_Loc_Country;
-                        this.inputParentAddress3 = m.PAR_Guardian_Loc_PostalCode;
-                        this.inputParentAddress1 = m.PAR_Guardian_Residence_No;
-                        this.inputParentAddress2 = m.PAR_Guardian_Address1;
-                        this.inputParentAddress3 = m.PAR_Guardian_Address2;
-                        this.inputParentCity = m.PAR_Guardian_City;
-                        this.ddlParentCountry = m.PAR_Guardian_Country;
-                        this.inputParentPostalCode = m.PAR_Guardian_Postalcode;
                         if (m.PAR_Father_IDExpDate_convert !== '01/01/1901') {
                             this.inputFatherIdentificationNoExpiryDate = m.PAR_Father_IDExpDate_convert;
                         }
@@ -2188,6 +2306,12 @@
                         }
                         ;
                         this.inputFamilyID = m.PAR_Family_Number;
+                        this.ddlFatherRace = m.PAR_Father_Race;
+                        this.ddlFatherMaritalStatus = m.PAR_Father_MaritalStatus;
+                        this.ddlFatherWorking = m.PAR_Father_Working;
+                        this.ddlMotherRace = m.PAR_Mother_Race;
+                        this.ddlMotherMaritalStatus = m.PAR_Mother_MaritalStatus;
+                        this.ddlMotherWorking = m.PAR_Mother_Working;
                     });
                 } catch (e) {
                     this.results = e;
@@ -2271,52 +2395,63 @@
                     jsonString2 = jsonString2 + ',"PAR_Father_LastName":"' + this.inputFatherLastName + '"';
                     jsonString2 = jsonString2 + ',"PAR_Father_DOB":"' + this.inputFatherDateofBirth + '"';
                     jsonString2 = jsonString2 + ',"PAR_Father_Occupation":"' + this.inputFatherOccupation + '"';
-                    jsonString2 = jsonString2 + ',"PAR_FatResContact":"' + this.inputParentLandlineNo + '"';
                     jsonString2 = jsonString2 + ',"PAR_Father_Phone":"' + this.inputFatherMobileNo + '"';
                     jsonString2 = jsonString2 + ',"PAR_Father_Email":"' + this.inputFatherEmail + '"';
                     jsonString2 = jsonString2 + ',"PAR_Father_IDType":"' + this.ddlFatherIdentificationType + '"';
                     jsonString2 = jsonString2 + ',"PAR_Father_UID":"' + this.inputFatherIdentificationNo + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Residence_No":"' + this.inputParentAddress1 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Address1":"' + this.inputParentAddress2 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Address2":"' + this.inputParentAddress3 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Postalcode":"' + this.inputParentPostalCode + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_City":"' + this.inputParentCity + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Country":"' + this.ddlParentCountry + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_City":"' + this.inputParentCity + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_Country":"' + this.ddlParentCountry + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Father_PostalCode":"' + this.inputParentPostalCode + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_FirstName":"' + this.inputMotherFirstName + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_MiddleName":"' + this.inputMotherMiddleName + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_LastName":"' + this.inputMotherLastName + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_DOB":"' + this.inputMotherDateofBirth + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_Occupation":"' + this.inputMotherOccupation + '"';
-                    jsonString2 = jsonString2 + ',"PAR_MotResContact":"' + this.inputParentLandlineNo + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_Phone":"' + this.inputMotherMobileNo + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_Email":"' + this.inputMotherEmail + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_IDType":"' + this.ddlMotherIdentificationType + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_UID":"' + this.inputMotherIdentificationNo + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Residence_No":"' + this.inputParentAddress1 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Address1":"' + this.inputParentAddress2 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Address2":"' + this.inputParentAddress3 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_City":"' + this.inputParentCity + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Country":"' + this.ddlParentCountry + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Postalcode":"' + this.inputParentPostalCode + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_City":"' + this.inputParentCity + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_Country":"' + this.ddlParentCountry + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Mother_PostalCode":"' + this.inputParentPostalCode + '"';
-                    jsonString2 = jsonString2 + ',"PAR_GarResContact":"' + this.inputParentLandlineNo + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_Residence_No":"' + this.inputParentAddress1 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_City":"' + this.inputParentAddress1 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_Country":"' + this.inputParentAddress2 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Loc_PostalCode":"' + this.inputParentAddress3 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Residence_No":"' + this.inputParentAddress1 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Address1":"' + this.inputParentAddress2 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Address2":"' + this.inputParentAddress3 + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_City":"' + this.inputParentCity + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Country":"' + this.ddlParentCountry + '"';
-                    jsonString2 = jsonString2 + ',"PAR_Guardian_Postalcode":"' + this.inputParentPostalCode + '"';
                     jsonString2 = jsonString2 + ',"PAR_Father_IDExpDate":"' + this.inputFatherIdentificationNoExpiryDate + '"';
                     jsonString2 = jsonString2 + ',"PAR_Mother_IDExpDate":"' + this.inputMotherIdentificationNoExpiryDate + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Residence_No":"' + this.inputStudentAddress1 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Address1":"' + this.inputStudentAddress2 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Address2":"' + this.inputStudentAddress3 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Postalcode":"' + this.inputStudentPostalCode + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_City":"' + this.inputStudentCity + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Loc_Country":"' + this.ddlStudentAddressCountry + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Residence_No":"' + this.inputStudentAddress1 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Address1":"' + this.inputStudentAddress2 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Address2":"' + this.inputStudentAddress3 + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_City":"' + this.inputStudentCity + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Country":"' + this.ddlStudentAddressCountry + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Loc_Postalcode":"' + this.inputStudentPostalCode + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Race":"' + this.ddlFatherRace + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Race":"' + this.ddlMotherRace + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_MaritalStatus":"' + this.ddlFatherMaritalStatus + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_MaritalStatus":"' + this.ddlMotherMaritalStatus + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Father_Working":"' + this.ddlFatherWorking + '"';
+                    jsonString2 = jsonString2 + ',"PAR_Mother_Working":"' + this.ddlMotherWorking + '"';
+                    if (this.ddlFatherWorking === 'Yes') {
+                        jsonString2 = jsonString2 + ',"PAR_Father_CompanyName":"' + this.inputFatherCompanyName + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Fat_Comp_Addressee":"' + this.inputFatherCompanyAddresseeName + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Father_Residence_No":"' + this.inputFatherCompanyAddress1 + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Father_Address1":"' + this.inputFatherCompanyAddress2 + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Father_Address2":"' + this.inputFatherCompanyAddress3 + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Father_City":"' + this.inputFatherCompanyCity + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Father_Country":"' + this.ddlFatherCompanyCountry + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Father_PostalCode":"' + this.inputFatherCompanyPostalCode + '"';
+                        jsonString2 = jsonString2 + ',"PAR_FComp_Email":"' + this.inputFatherCompanyEmail + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Father_WorkingCommencementDate":"' + this.inputFatherWorkingCommencementDate + '"';
+                    }
+                    if (this.ddlMotherWorking === 'Yes') {
+                        jsonString2 = jsonString2 + ',"PAR_Mother_CompanyName":"' + this.inputMotherCompanyName + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Mot_Comp_Addressee":"' + this.inputMotherCompanyAddresseeName + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Mother_Residence_No":"' + this.inputMotherCompanyAddress1 + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Mother_Address1":"' + this.inputMotherCompanyAddress2 + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Mother_Address2":"' + this.inputMotherCompanyAddress3 + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Mother_City":"' + this.inputMotherCompanyCity + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Mother_Country":"' + this.ddlMotherCompanyCountry + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Mother_PostalCode":"' + this.inputMotherCompanyPostalCode + '"';
+                        jsonString2 = jsonString2 + ',"PAR_MComp_Email":"' + this.inputMotherCompanyEmail + '"';
+                        jsonString2 = jsonString2 + ',"PAR_Mother_WorkingCommencementDate":"' + this.inputMotherWorkingCommencementDate + '"';
+                    }
                     //parent
 
                     jsonString = '{ ' + jsonString + ' }';
@@ -2667,11 +2802,6 @@
                         if (response !== '') {
                             this.inputStudentCorrespondanceAddress1 = response;
                         }
-                    } else if (postcodeModel === 'inputParentPostalCode' && this.inputParentPostalCode !== '' && this.inputParentAddress1 === '') {
-                        const response = await DataSource.shared.getStudentAddressGoogleAPI(this.inputParentPostalCode, this.ddlParentCountry);
-                        if (response !== '') {
-                            this.inputParentAddress1 = response;
-                        }
                     }
 
                     this.onchangeCopyAdd();
@@ -2709,30 +2839,6 @@
                     this.inputStudentCorrespondanceCity = this.inputStudentCity;
                 } else {
                     this.stuCorAddCopy = false;
-                }
-
-                if (this.ddlCopyAddToResBil === 'stuPerAdd') {
-                    this.resBilAddCopy = true;
-
-                    this.ddlParentCountry = this.ddlStudentAddressCountry;
-                    this.inputParentPostalCode = this.inputStudentPostalCode;
-                    this.inputParentAddress1 = this.inputStudentAddress1;
-                    this.inputParentAddress2 = this.inputStudentAddress2;
-                    this.inputParentAddress3 = this.inputStudentAddress3;
-                    this.inputParentCity = this.inputStudentCity;
-                }
-                else if (this.ddlCopyAddToResBil === 'stuCorAdd') {
-                    this.resBilAddCopy = true;
-
-                    this.ddlParentCountry = this.ddlStudentAddressCorrespondanceCountry;
-                    this.inputParentPostalCode = this.inputStudentCorrespondancePostalCode;
-                    this.inputParentAddress1 = this.inputStudentCorrespondanceAddress1;
-                    this.inputParentAddress2 = this.inputStudentCorrespondanceAddress2;
-                    this.inputParentAddress3 = this.inputStudentCorrespondanceAddress3;
-                    this.inputParentCity = this.inputStudentCorrespondanceCity;
-                }
-                else {
-                    this.resBilAddCopy = false;
                 }
             },
             promotionResult(result){
@@ -3087,6 +3193,21 @@
                     }
                 } catch (e) {
                     this.results = e;
+                }
+            },
+            ParentCompanyAddressShow (value) {
+                if (value === 'Father') {
+                    if (this.ddlFatherWorking === 'Yes') {
+                        this.divFatherCompany = true;
+                    } else {
+                        this.divFatherCompany = false;
+                    }
+                } else if (value === 'Mother') {
+                    if (this.ddlMotherWorking === 'Yes') {
+                        this.divMotherCompany = true;
+                    } else {
+                        this.divMotherCompany = false;
+                    }
                 }
             },
         },
