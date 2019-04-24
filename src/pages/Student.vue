@@ -52,6 +52,18 @@
                     <b-btn v-b-modal.transferModal variant="primary" class="btnTransfer">
                         Transfer
                     </b-btn>
+
+                    <b-btn variant="primary" class="btnUploadDocument" v-on:click="showStudentDocumentModal()">
+                        Student Doc
+                    </b-btn>
+
+                    <b-btn variant="primary" class="btnImmunizationRecords" v-if="immunizationRecordsUpload" v-on:click="showImmunizationRecordsModal()">
+                        Immunization Records
+                    </b-btn>
+
+                    <b-btn variant="primary" class="btnAllAboutMe" v-on:click="showAllAboutMeModal()">
+                        All About Me
+                    </b-btn>
                 </div>
             </div>
 
@@ -976,8 +988,12 @@
                                     <!--</button>-->
                                 <!--</div>-->
 
-                                <promotion-component @result="promotionResult" v-bind:selected-students="arrayStudentIDLevelComponent"
-                                v-bind:course-id="strClassIDLevelComponent"></promotion-component>
+                                <promotion-component @result="promotionResult"
+                                                     :selectedStudents="arrayStudentIDLevelComponent"
+                                                     :courseId="strClassIDLevelComponent"
+                                ></promotion-component>
+                                {{strClassIDLevelComponent}}
+
                             </div>
 
                             <div v-if="lvlLevelList_Level.length>0">
@@ -1170,6 +1186,138 @@
                 </div>
             </div>
         </b-modal>
+
+        <b-modal id="uploadDocumentModal" class="studentPageBModal" size="lg" title="Student Document" ok-only
+                 ok-variant="secondary" ok-title="Cancel" ref="uploadDocumentShowModal">
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <!--<input type="file" ref="studentDocument" accept="image/*" multiple>-->
+                    <label>Upload File</label>
+                    <input type="file" ref="studentDocument">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label>File Description</label>
+                    <input type="text" class="form-control form__input" v-model="inputStudentFileDescription">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <button class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch" v-on:click="uploadStudentDocument()">
+                        Upload
+                    </button>
+                </div>
+
+                <div class= "col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div v-if="studentFileListInt.length>0">
+                        <data-tables :data="studentFileListInt" :action-col="studentFileListAction">
+                            <el-table-column v-for="studentFileListInfo in studentFileList" :prop="studentFileListInfo.prop"
+                                             :label="studentFileListInfo.label" :key="studentFileListInfo.prop"
+                                             sortable="custom">
+                            </el-table-column>
+
+                            <el-table-column label="Download" min-width="100px">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            v-for="studentFileDownloadButton in studentFileDownload(scope.row)"
+                                            :key="studentFileDownloadButton.name" type="primary"
+                                            @click="studentFileDownloadButton.handler">
+                                        {{studentFileDownloadButton.name}}
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </data-tables>
+                    </div>
+                </div>
+            </div>
+        </b-modal>
+
+        <b-modal id="uploadImmunizationRecordsModal" class="studentPageBModal" size="lg" title="Immunization Records" ok-only
+                 ok-variant="secondary" ok-title="Cancel" ref="uploadImmunizationRecordsShowModal">
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <!--<input type="file" ref="studentDocument" accept="image/*" multiple>-->
+                    <label>Upload File</label>
+                    <input type="file" ref="immunizationRecords">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label>File Description</label>
+                    <input type="text" class="form-control form__input" v-model="inputImmunizationRecordsDescription">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <button class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch" v-on:click="uploadImmunizationRecords()">
+                        Upload
+                    </button>
+                </div>
+
+                <div class= "col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div v-if="studentFileListInt.length>0">
+                        <data-tables :data="studentFileListInt" :action-col="studentFileListAction">
+                            <el-table-column v-for="studentFileListInfo in studentFileList" :prop="studentFileListInfo.prop"
+                                             :label="studentFileListInfo.label" :key="studentFileListInfo.prop"
+                                             sortable="custom">
+                            </el-table-column>
+
+                            <el-table-column label="Download" min-width="100px">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            v-for="studentFileDownloadButton in studentFileDownload(scope.row)"
+                                            :key="studentFileDownloadButton.name" type="primary"
+                                            @click="studentFileDownloadButton.handler">
+                                        {{studentFileDownloadButton.name}}
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </data-tables>
+                    </div>
+                </div>
+            </div>
+        </b-modal>
+
+        <b-modal id="uploadAllAboutMeModal" class="studentPageBModal" size="lg" title="All About Me" ok-only
+                 ok-variant="secondary" ok-title="Cancel" ref="uploadAllAboutMeShowModal">
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <!--<input type="file" ref="studentDocument" accept="image/*" multiple>-->
+                    <label>Upload File</label>
+                    <input type="file" ref="allAboutMe">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label>File Description</label>
+                    <input type="text" class="form-control form__input" v-model="inputAllAboutMeDescription">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <button class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch" v-on:click="uploadAllAboutMe()">
+                        Upload
+                    </button>
+                </div>
+
+                <div class= "col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div v-if="studentFileListInt.length>0">
+                        <data-tables :data="studentFileListInt" :action-col="studentFileListAction">
+                            <el-table-column v-for="studentFileListInfo in studentFileList" :prop="studentFileListInfo.prop"
+                                             :label="studentFileListInfo.label" :key="studentFileListInfo.prop"
+                                             sortable="custom">
+                            </el-table-column>
+
+                            <el-table-column label="Download" min-width="100px">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            v-for="studentFileDownloadButton in studentFileDownload(scope.row)"
+                                            :key="studentFileDownloadButton.name" type="primary"
+                                            @click="studentFileDownloadButton.handler">
+                                        {{studentFileDownloadButton.name}}
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </data-tables>
+                    </div>
+                </div>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -1179,6 +1327,7 @@
     import {required, requiredIf, requiredUnless} from "vuelidate/lib/validators";
     import promotionComponent from "../components/Promotion_Component";
     import Cookies from "js-cookie";
+    import axios from 'axios';
 
     const API_HOST = process.env.VUE_APP_ROOT_API;
 
@@ -1234,6 +1383,7 @@
                 strClassIDLevelComponent: '',
                 transferSchoolList: [],
                 transferSchoolCourseList: [],
+                studentFileListInt: [],
 
                 inputStudentDateOfBirth: '',
                 inputFatherDateofBirth: '',
@@ -1346,6 +1496,10 @@
                 ddlTransferSchoolCourse: '',
                 inputTransferSchoolRemark: '',
                 inputTransferSchoolEffDate: '',
+                inputStudentFileDescription: '',
+                immunizationRecordsUpload: '',
+                inputImmunizationRecordsDescription: '',
+                inputAllAboutMeDescription: '',
 
                 //For withdrawal and graduation
                 withdrawInternationalSchool:'',
@@ -1488,6 +1642,30 @@
                 },
 
                 selectedRow: null,
+
+                studentFileList: [{
+                    prop: "SF_File_Description",
+                    label: "File Description"
+                }, {
+                    prop: "SF_Upload_Date_convert",
+                    label: "File Uploaded Date"
+                }],
+                studentFileListAction: {
+                    label: 'Delete',
+                    props: {
+                        align: 'center',
+                    },
+                    buttons: [{
+                        props: {
+                            type: 'primary',
+                            icon: 'el-icon-edit'
+                        },
+                        handler: row => {
+                            this.deleteStudentDocument(row.PK_SF_ID);
+                        },
+                        label: 'Delete'
+                    }]
+                },
             };
         },
         computed: {
@@ -1622,7 +1800,6 @@
                                 } else if (m.OGPname.trim() === 'Parent Mode') {
                                     this.ddlParentModeList.push(m);
                                 } else if (m.OGPname.trim() === 'Graduation_Remarks') {
-                                    console.log("Graduation_Remarks");
                                     this.ddlMainReasonList.push(m);
                                 } else if (m.OGPname.trim() === 'International School Name') {
                                     this.ddlInternationaSchoolList.push(m);
@@ -1730,11 +1907,16 @@
                         if (stuRes) {
                             if (stuRes.code === '88') {
                                 window.location.replace('/');
+                            } else if (stuRes.code === '2') {
+                                window.location.replace('/');
                             } else {
                                 this.BindActiveIntakeYear();
                                 this.BindStudentFields(stuRes.Table);
                                 this.BindStudentSibling();
                                 this.arrayStudentIDLevelComponent.push(stuRes.Table[0].Student_ID);
+                                if (stuRes.Table[0].Nationality !== 'Singaporean') {
+                                    await this.checkImmunizationRecordsUpload();
+                                }
                             }
                         }
 
@@ -2692,6 +2874,221 @@
                     this.withdrawReason3 = false;
                 }
             },
+            async showStudentDocumentModal () {
+                this.$vs.loading();
+                try {
+                    this.studentFileListInt = [];
+
+                    const response = await DataSource.shared.getStudentDocument(this.lblStudentID, 'DOCUMENT');
+
+                    if (response) {
+                        this.studentFileListInt = response.Table;
+                    }
+
+                    this.$refs.uploadDocumentShowModal.show();
+                } catch (e) {
+                    this.results = e;
+                }
+                this.$vs.loading.close();
+            },
+            async uploadStudentDocument () {
+                try {
+                    if (this.$refs.studentDocument.files.length === 0) {
+                        alert('Please select file!');
+                    } else if (this.inputStudentFileDescription === '') {
+                        alert('Please fill in file description!');
+                    } else {
+                        const response = await DataSource.shared.saveStudentDocument(this.$refs.studentDocument.files, this.lblStudentID, this.inputStudentFileDescription, 'Upload Student Documents');
+
+                        if (response) {
+                            if (response.code === '88') {
+                                window.location.replace('/');
+                            } else if (response.code === '99') {
+                                alert('Error!');
+                            } else if (response.code === '2') {
+                                alert('No files being upload!');
+                            } else if (response.code === '3') {
+                                alert('Upload files error! Please try again');
+                            } else if (response.code === '1') {
+                                this.inputStudentFileDescription = '';
+                                this.studentFileListInt = [];
+                                this.$refs.studentDocument.value = null;
+
+                                alert('File Successfuly saved!');
+
+                                this.$refs.uploadDocumentShowModal.hide();
+                            }
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+            async deleteStudentDocument (studentFilesID) {
+                try {
+                    const response = await DataSource.shared.updateStudentDocument(studentFilesID, 'DELETE');
+
+                    if (response) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        } else if (response.code === '99') {
+                            alert('Error!');
+                        } else if (response.code === '1') {
+                            this.inputStudentFileDescription = '';
+                            this.studentFileListInt = [];
+
+                            alert('File Successfuly saved!');
+
+                            this.$refs.uploadDocumentShowModal.hide();
+                            this.$refs.uploadImmunizationRecordsShowModal.hide();
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+            studentFileDownload(row) {
+                return [{
+                    name: 'Download',
+                    handler: _ => {
+                        axios({
+                            method: 'get',
+                            url: row.fileLink,
+                            responseType: 'arraybuffer'
+                        })
+                        .then(response => {
+                            this.fileDownload(response, row.fileExt)
+                        })
+                        .catch(() => console.log('error occured'))
+                    }
+                }];
+            },
+            fileDownload(response, fileExt){
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'file' + fileExt);
+                document.body.appendChild(link);
+                link.click();
+            },
+            async checkImmunizationRecordsUpload() {
+                try {
+                    const response = await DataSource.shared.getSchoolInfoBySchoolID(Cookies.get('schoolSession'));
+                    if (response) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        } else if (response.code === '99') {
+                            console.log('no school found in checkImmunizationRecordsUpload');
+                        } else {
+                            if (response.Table[0].SCH_SchoolType.includes('International')) {
+                                this.immunizationRecordsUpload = true;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+            async showImmunizationRecordsModal () {
+                this.$vs.loading();
+                try {
+                    this.studentFileListInt = [];
+
+                    const response = await DataSource.shared.getStudentDocument(this.lblStudentID, 'IMMNUIZATION');
+
+                    if (response) {
+                        this.studentFileListInt = response.Table;
+                    }
+
+                    this.$refs.uploadImmunizationRecordsShowModal.show();
+                } catch (e) {
+                    this.results = e;
+                }
+                this.$vs.loading.close();
+            },
+            async uploadImmunizationRecords () {
+                try {
+                    if (this.$refs.immunizationRecords.files.length === 0) {
+                        alert('Please select file!');
+                    } else if (this.inputImmunizationRecordsDescription === '') {
+                        alert('Please fill in file description!');
+                    } else {
+                        const response = await DataSource.shared.saveStudentDocument(this.$refs.immunizationRecords.files, this.lblStudentID, this.inputImmunizationRecordsDescription, 'Upload Student Immunization Records');
+
+                        if (response) {
+                            if (response.code === '88') {
+                                window.location.replace('/');
+                            } else if (response.code === '99') {
+                                alert('Error!');
+                            } else if (response.code === '2') {
+                                alert('No files being upload!');
+                            } else if (response.code === '3') {
+                                alert('Upload files error! Please try again');
+                            } else if (response.code === '1') {
+                                this.inputImmunizationRecordsDescription = '';
+                                this.studentFileListInt = [];
+                                this.$refs.immunizationRecords.value = null;
+
+                                alert('File Successfuly saved!');
+
+                                this.$refs.uploadImmunizationRecordsShowModal.hide();
+                            }
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+            async showAllAboutMeModal () {
+                this.$vs.loading();
+                try {
+                    this.studentFileListInt = [];
+
+                    const response = await DataSource.shared.getStudentDocument(this.lblStudentID, 'ALLABOUTME');
+
+                    if (response) {
+                        this.studentFileListInt = response.Table;
+                    }
+
+                    this.$refs.uploadAllAboutMeShowModal.show();
+                } catch (e) {
+                    this.results = e;
+                }
+                this.$vs.loading.close();
+            },
+            async uploadAllAboutMe () {
+                try {
+                    if (this.$refs.allAboutMe.files.length === 0) {
+                        alert('Please select file!');
+                    } else if (this.inputAllAboutMeDescription === '') {
+                        alert('Please fill in file description!');
+                    } else {
+                        const response = await DataSource.shared.saveStudentDocument(this.$refs.allAboutMe.files, this.lblStudentID, this.inputAllAboutMeDescription, 'Upload All About Me');
+
+                        if (response) {
+                            if (response.code === '88') {
+                                window.location.replace('/');
+                            } else if (response.code === '99') {
+                                alert('Error!');
+                            } else if (response.code === '2') {
+                                alert('No files being upload!');
+                            } else if (response.code === '3') {
+                                alert('Upload files error! Please try again');
+                            } else if (response.code === '1') {
+                                this.inputAllAboutMeDescription = '';
+                                this.studentFileListInt = [];
+                                this.$refs.allAboutMe.value = null;
+
+                                alert('File Successfuly saved!');
+
+                                this.$refs.uploadAllAboutMeShowModal.hide();
+                            }
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
         },
     };
 </script>
@@ -2786,7 +3183,7 @@
         padding: 0px;
     }
 
-    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus, .btnWithdraw, .btnTransfer {
+    .ddlChangeStatusTo, .lblChangeStatusTo, .btnChangeStatus, .btnWithdraw, .btnTransfer, .btnUploadDocument, .btnImmunizationRecords, .btnAllAboutMe {
         width: auto;
         display: inline !important;
         margin: 10px;

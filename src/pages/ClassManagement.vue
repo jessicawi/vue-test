@@ -123,7 +123,7 @@
 
         <b-modal id="assignClassModal" size="lg" title="Assign Class" ok-only ok-variant="secondary" ok-title="Cancel" ref="assignClassShowModal">
             <div class="row">
-                <div style="display: none;">{{ assignClassLevelID }}</div>
+                <div style="display: block;">{{ assignClassLevelID }} - {{ assignClassID }}</div>
 
                 <div class= "col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div v-if="assignStudentsListInt.length>0">
@@ -173,6 +173,7 @@
                 inputEditMaxStudents: '',
                 inputeditLevel: '',
                 assignClassLevelID: '',
+                assignClassID: '',
 
                 levelList: [],
                 semesterList: [],
@@ -229,6 +230,9 @@
                 }, {
                     prop: "Last_name",
                     label: "Last Name"
+                }, {
+                    prop: "assignToCurrentClass",
+                    label: "Assigned Current Class"
                 }],
                 multipleSelection:[]
             }
@@ -370,6 +374,7 @@
                     name: 'Assign',
                     handler: _ => {
                         this.assignClassLevelID = row.PK_Course_ID;
+                        this.assignClassID = row.PK_Class_ID;
                         this.getAssignStudents();
                         this.$refs.assignClassShowModal.show();
                     }
@@ -377,7 +382,7 @@
             },
             async getAssignStudents() {
                 try {
-                    const response = await DataSource.shared.getActiveStudentsByLevelSchool(this.assignClassLevelID);
+                    const response = await DataSource.shared.getActiveStudentsByLevelSchool(this.assignClassLevelID, this.assignClassID);
                     if (response) {
                         if (response.code === '88') {
                             window.location.replace('/');
@@ -402,7 +407,7 @@
                     classAssignList.push(classAssignDetials);
                 });
 
-                const response = await DataSource.shared.massSetClass(this.assignClassLevelID, JSON.stringify(classAssignList));
+                const response = await DataSource.shared.massSetClass(this.assignClassID, JSON.stringify(classAssignList));
                 if (response) {
                     if (response.code === '1') {
                         alert('Successfully saved');

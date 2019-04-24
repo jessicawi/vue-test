@@ -1465,7 +1465,7 @@ export default class DataSource {
         return response;
     }
 
-    async LoadAttendanceList(classValue) {
+    async   LoadAttendanceList(classValue) {
 
         const data = {
             classValue: classValue,
@@ -2040,13 +2040,15 @@ export default class DataSource {
         return response;
     }
 
-    async getActiveStudentsByLevelSchool(levelID){
+    async getActiveStudentsByLevelSchool(levelID, classID){
         const data = {
             levelID: levelID,
+            classID: classID,
         };
         const response = await this.callWebService("/controller/Students.asmx/getActiveStudentsByLevelSchool", data, "POST");
         return response;
     }
+
     async saveStudentGraduation(obj){
         const data = {
             obj:obj
@@ -2055,5 +2057,79 @@ export default class DataSource {
         return response;
     }
 
+    async saveStudentDocument(files, studentID, fileDescription, uploadMode) {
+        const data = new FormData();
+        data.append('token', Cookies.get('authToken'));
+        data.append('UserSchool_Session', Cookies.get('schoolSession'));
+        data.append('UserID_Session', Cookies.get('userIDSession'));
+        data.append('UserUniversity_Session', Cookies.get('userUniversitySession'));
+
+        if (files && files.length > 1) {
+            for (let key in files) {
+                //console.log(key);
+                if (files.hasOwnProperty(key)) {
+                    // console.log(files[key]);
+                    if (key > 0) {
+                        data.append(`upload_${key}`, files[key]);
+                    } else {
+                        data.append("upload", files[key]);
+                    }
+                }
+            }
+        } else if (files) {
+            data.append("upload", files[0]);
+        }
+
+        data.append('studentID', studentID);
+        data.append('fileDescription', fileDescription);
+        data.append('uploadMode', uploadMode);
+
+        const request = {
+            url: `${API_HOST}/controller/Students.asmx/saveStudentDocument`,
+            cache: false,
+            type: 'POST',
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            async: false,
+            json: false,
+            success: function (response) {
+                return response;
+            }
+        };
+
+        let response = await jQuery.ajax(request);
+        if (typeof response === "string") {
+            response = JSON.parse(response);
+        }
+        return response;
+    }
+
+    async getStudentDocument(studentID, docuType){
+        const data = {
+            studentID: studentID,
+            docuType: docuType,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getStudentDocument", data, "POST");
+        return response;
+    }
+
+    async updateStudentDocument(studentFilesID, actionStatus){
+        const data = {
+            studentFilesID: studentFilesID,
+            actionStatus: actionStatus,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/updateStudentDocument", data, "POST");
+        return response;
+    }
+
+    async getSchoolInfoBySchoolID(schoolID){
+        const data = {
+            schoolID: schoolID,
+        };
+        const response = await this.callWebService("/controller/User.asmx/getSchoolInfoBySchoolID", data, "POST");
+        return response;
+    }
 }
 

@@ -3980,3 +3980,49 @@ div#myChild small.parent_wrap {
 div#myChild small.parent_wrap:hover{
     background: #dbdbdb;
 }
+
+/*
+---34 attendance
+ */
+
+.attendance-search .el-select {
+    float: right;
+    display: block;
+    margin-left: auto;
+}
+
+.attendance-search .el-select input.el-input__inner {
+    background: #edf0f4;
+    border: 0px;
+}
+
+.attTable td {
+    background: #edf0f4;
+    border-width: 0 0 14px;
+    border-style: solid;
+    border-color: white;
+    padding: 9px 10px !important;
+    vertical-align: middle;
+}
+
+.attTable td select, .attTable td input {
+    margin: 0px;
+    background: #dee2e6;
+    border-radius: 20px;
+}
+
+.attTable tr {
+    border-radius: 19px;
+    overflow: hidden !important;
+}
+
+.attTable td .el-select input{
+    background: #40c1ff;
+    color: white !important;
+    border-radius: 20px;
+}
+
+.attTable td .el-select input::placeholder,
+.attTable td .el-select .el-input .el-select__caret{
+    color:white;
+}

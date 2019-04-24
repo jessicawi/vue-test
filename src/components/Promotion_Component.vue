@@ -1,6 +1,8 @@
 <template>
     <div class="container-fluid">
-        <div class="form-group row promotion-modal-tag">
+        {{selectedStudents}}
+        {{courseId}}
+        <div class="form-group row promotion-modal-tag" v-if="showStudentTag === true">
             <el-tag
                     :key="student.Student_ID"
                     v-for="student in selectedStudents"
@@ -62,7 +64,7 @@
                 filterStudents: "",
             };
         },
-        props: ["selectedStudents","courseId","arrobjSelectedStudentID"],
+        props: ["selectedStudents","courseId","arrobjSelectedStudentID","showStudentTag"],
         // props: {selectedStudents: [Array], CourseId: String, arrobjSelectedStudentID: [Array]},
         methods: {
             sleep(milliseconds) {

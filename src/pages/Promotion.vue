@@ -129,7 +129,9 @@
                 <promotion-component @result="promotionResult"
                                      :selectedStudents="arrobj_SelectedStudents"
                                      :courseId="str_CourseID"
-                                     :arrobjSelectedStudentID="arrobj_selectedStudentID"></promotion-component>
+                                     :arrobjSelectedStudentID="arrobj_selectedStudentID"
+                                     :showStudentTag="true"
+                ></promotion-component>
 
                 <!--<promotion-component @result="promotionResult" v-bind:selected-students="arrobj_SelectedStudents"-->
                                                                                                                                                                                                                            <!--v-bind:course-id="str_CourseID" :arrobjSelectedStudentID="arrobj_selectedStudentID" v-bind:selected-students-ID="arrobj_selectedStudentID"></promotion-component>-->

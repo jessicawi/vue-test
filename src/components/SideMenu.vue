@@ -1,5 +1,6 @@
 <template>
-    <div class="menu-box-wrap" :class="{'fixed-header':scrollPosition>120}">
+    <div class="menu-box-wrap" >
+        <!--<div class="menu-box-wrap" :class="{'fixed-header':scrollPosition>120}">-->
         <div class="menu-box">
             <!--<vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active"-->
             <!--icon-pack="fa">-->

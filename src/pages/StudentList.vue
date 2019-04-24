@@ -128,7 +128,6 @@
                     const response = await DataSource.shared.getStudent('', this.stud_id, this.stud_fname, this.stud_lname, this.stud_parname);
                     if (response) {
                         this.list = response.Table;
-                        console.log(this.list);
                     }
                 } catch (e) {
                     this.results = e;
