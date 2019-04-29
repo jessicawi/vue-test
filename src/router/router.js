@@ -31,6 +31,7 @@ import approvermaster from "../pages/ApproverMaster";
 import transferIn from "../pages/TransferIn";
 import studentgraduation from "../pages/StudentGraduation";
 import classManagement from "../pages/ClassManagement";
+import studentPaymentPlan from "../pages/StudentPaymentPlan";
 
 Vue.use(VueRouter);
 
@@ -190,7 +191,11 @@ const router = new VueRouter({
             name: 'Class Management',
             component: classManagement
         },
-
+        {
+            path: '/StudentPaymentPlan',
+            name: 'Student Payment Plan',
+            component: studentPaymentPlan
+        },
     ]
 });
 

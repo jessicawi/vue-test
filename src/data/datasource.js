@@ -277,7 +277,7 @@ export default class DataSource {
         return response;
     }
 
-    async checkStudentDuplication(studentFirstName, studentLastName, studentDOB, finExpire, fin, birthCert, ic, passport, passportExpire, otherID) {
+    async checkStudentDuplication(studentFirstName, studentLastName, studentDOB, finExpire, fin, birthCert, ic, passport, passportExpire) {
         const data = {
             studentFirstName: studentFirstName,
             studentLastName: studentLastName,
@@ -288,7 +288,6 @@ export default class DataSource {
             ic: ic,
             passport: passport,
             passportExpire: passportExpire,
-            otherID: otherID,
         };
         const response = await this.callWebService("/controller/Students.asmx/checkStudentDuplication", data, "POST");
         return response;
@@ -380,7 +379,7 @@ export default class DataSource {
         return result;
     }
 
-    async saveStudent(files, jsonString, jsonString2, familyID, parentID) {
+    async saveStudent(files, jsonString, jsonString2, familyID, parentID, allergiesList) {
         const data = new FormData();
         data.append('token', Cookies.get('authToken'));
         data.append('UserSchool_Session', Cookies.get('schoolSession'));
@@ -407,6 +406,7 @@ export default class DataSource {
         data.append("jsonString2", jsonString2);
         data.append("familyID", familyID);
         data.append("parentID", parentID);
+        data.append("allergiesList", allergiesList);
 
         const request = {
             url: `${API_HOST}/controller/Students.asmx/saveStudent`,
@@ -430,9 +430,10 @@ export default class DataSource {
         return response;
     }
 
-    async updateStudent(files, studentID, jsonString) {
+    async updateStudent(files, studentID, jsonString, allergiesList) {
         const data = new FormData();
         data.append('token', Cookies.get('authToken'));
+        data.append('UserID_Session', Cookies.get('userIDSession'));
 
         if (files && files.length > 1) {
             for (let key in files) {
@@ -452,6 +453,7 @@ export default class DataSource {
 
         data.append("studentID", studentID);
         data.append("jsonString", jsonString);
+        data.append("allergiesList", allergiesList);
 
         const request = {
             url: `${API_HOST}/controller/Students.asmx/updateStudent`,
@@ -1465,7 +1467,7 @@ export default class DataSource {
         return response;
     }
 
-    async   LoadAttendanceList(classValue) {
+    async LoadAttendanceList(classValue) {
 
         const data = {
             classValue: classValue,
@@ -2131,5 +2133,32 @@ export default class DataSource {
         const response = await this.callWebService("/controller/User.asmx/getSchoolInfoBySchoolID", data, "POST");
         return response;
     }
+
+    async getStudentAllergies(studentID, allergiesType){
+        const data = {
+            studentID: studentID,
+            allergiesType: allergiesType,
+        };
+        const response = await this.callWebService("/controller/Students.asmx/getStudentAllergies", data, "POST");
+        return response;
+    }
+
+    async getStudentPaymentList(studentCourseID){
+        const data = {
+            studentCourseID:studentCourseID,
+        };
+        const response = await this.callWebService("/controller/Billing.asmx/getStudentPaymentList", data, "POST");
+        return response;
+    }
+
+    async getItemTransDetailsList(SPDID){
+        const data = {
+            SPDID:SPDID,
+        };
+        const response = await this.callWebService("/controller/Billing.asmx/getItemTransDetailsList", data, "POST");
+        return response;
+    }
+
+
 }
 

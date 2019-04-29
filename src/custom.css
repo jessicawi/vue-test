@@ -32,6 +32,8 @@
 31---post approve---
 32---promotion---
 33---myaccount---
+34---attendance---
+35---Class Management---
  */
 
 :root {
@@ -77,10 +79,22 @@ a {
     color: #585388;
     font-weight: bold;
 }
-
+hr.custom-hr {
+    border: 1px solid #eee;
+    display: block;
+    width: 100%;
+}
 /*
 1---form---
  */
+.form-control:disabled, .form-control[readonly] {
+    background: #fafafa;
+    color: #a9a9a9;
+}
+.el-select input {
+    border: 0px;
+    background: whitesmoke;
+}
 input[type="checkbox"].form-control {
     width: 20px;
     display: inline-block;
@@ -213,7 +227,23 @@ label {
 .inputFile-box .btn:hover {
     background: #eee;
 }
+.search-datatable {
+    background: #f5f6f9;
+    padding: 5px;
+    border-radius: 33px;
+}
 
+.search-datatable .el-input-group__prepend {
+    background: #409eff;
+    color: white;
+    border: 0px;
+    border-radius: 20px;
+}
+
+.search-datatable input {
+    background: transparent;
+    border: 0px;
+}
 /*
 2---button---
  */
@@ -251,6 +281,10 @@ label {
 /*
 4---layout---
  */
+
+.fullwidth{
+    width: 100%;
+}
 .whitespace-10 {
     display: block;
     height: 10px;
@@ -312,7 +346,9 @@ label {
     font-size: 30px;
     color: #ccc;
 }
-
+.empty-list_image button {
+    margin: 10px auto;
+}
 /*
 5---notification---
  */
@@ -3712,6 +3748,7 @@ div#pendingapprover .header h3 span {
     flex: 1 1 20%;
     border-radius: 11px;
     overflow: hidden;
+    max-width: 23%;
 }
 
 .promotion-student {
@@ -3723,6 +3760,7 @@ div#pendingapprover .header h3 span {
 .promotion-student .div_Student label {
     padding: 20px 0;
     margin: 0px;
+    min-height: 100%;
 }
 
 .promotion-student .div_Student label.check {
@@ -3783,7 +3821,7 @@ div#pendingapprover .header h3 span {
 }
 
 .promotion-modal-tag .el-tag {
-    margin: 0 5px;
+    margin: 5px;
     background-color: #f5f5f5;
     border-color: #f5f5f5;
     color: #999;
@@ -3982,7 +4020,7 @@ div#myChild small.parent_wrap:hover{
 }
 
 /*
----34 attendance
+34---attendance---
  */
 
 .attendance-search .el-select {
@@ -4027,6 +4065,10 @@ div#myChild small.parent_wrap:hover{
     color:#222;
 }
 
+div#attendance-list .el-select.attend input {
+    background: #28d893;
+}
+
 div#attendance-list .el-select.absent input {
     background: #f56c6c;
 }
@@ -4036,7 +4078,7 @@ div#attendance-list .el-select.late input {
 }
 
 div#attendance-list .el-select.sick input {
-    background: #28d893;
+    background: #C82FE6;
 }
 
 div#attendance-list .el-select.home input {
@@ -4084,4 +4126,110 @@ div#attendance-list .actionBar .vs-checkbox .vs-icon {
 
 .actionBar .el-select input::placeholder {
     color: white;
+}
+
+.actionBar .el-button {
+    padding: 12.8px 10px;
+}
+
+/*
+35---Class Management---
+ */
+
+.classManage-ActionBar {
+    display: flex;
+    align-items: flex-end;
+}
+
+.classManage-Table th:nth-child(n+5) {
+    text-align: center;
+}
+
+.classManage-Table .el-button {
+    margin: auto;
+    display: block;
+    background: #ffffff;
+    border-color: #eee;
+    color: #999;
+}
+
+.classManage-Table th {
+    background: #edf0f494 !important;
+}
+
+.classManage-Table table {
+    overflow:hidden;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+div#assignClassModal .el-input-group__prepend {
+    background: #409eff;
+    color: white;
+    border-radius: 20px;
+    border: 0px;
+    padd-right: 10px;
+}
+
+div#assignClassModal .el-input-group input {
+    border: 0px;
+    background: transparent;
+}
+
+div#assignClassModal .el-input-group {
+    background: #eee;
+    padding: 5px;
+    border-radius: 36px;
+}
+
+div#assignClassModal .el-input-group__prepend {
+    background: #409eff;
+    color: white;
+    border-radius: 20px;
+    border: 0px;
+    padd-right: 10px;
+}
+
+div#assignClassModal .el-input-group input {
+    border: 0px;
+    background: transparent;
+}
+
+div#assignClassModal .el-input-group {
+    background: #eee;
+    padding: 5px;
+    border-radius: 36px;
+}
+
+.classManage-ActionBar button {
+    /* margin: 5px 0; */
+    padding: 17px 23px !important;
+    border-radius: 40px !important;
+}
+
+.custom-checkbox label input[type="checkbox"] + span {
+    width: initial;
+    margin: 0px;
+    padding: 12px 20px;
+}
+
+.custom-checkbox .el-checkbox-button {
+    display: inline-block !important;
+}
+
+.custom-checkbox {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.custom-checkbox label {
+    width: 33%;
+    padding: 0 5px;
+}
+
+.custom-checkbox label span {
+    width: 100% !important;
+    border-radius: 4px !important;
 }

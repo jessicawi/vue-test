@@ -1,7 +1,5 @@
 <template>
     <div class="container-fluid">
-        {{selectedStudents}}
-        {{courseId}}
         <div class="form-group row promotion-modal-tag" v-if="showStudentTag === true">
             <el-tag
                     :key="student.Student_ID"

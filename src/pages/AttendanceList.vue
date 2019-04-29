@@ -30,10 +30,14 @@
                 </div>
             </div>
 
-            <div>
+            <div class="pb-5">
 
                 <div class="empty-list_image" v-if="studentList.length<1">
-                    <strong>Please select Class...</strong>
+                    <strong v-if="hideStudentList===false">Please select Class...</strong>
+                    <strong v-if="hideStudentList===true">No Student Found...</strong>
+                    <router-link :to="{name: 'Class Management'}">
+                    <el-button type="primary" round v-if="hideStudentList===true" class="d-table" @click="">Assign Student to Class</el-button>
+                    </router-link>
                     <img src="../assets/attendance.jpg"/>
                 </div>
 
@@ -48,10 +52,13 @@
                         <!--</el-table-column>-->
                         <!--</data-tables>-->
                         <div class="col-lg-2">
-                            <vs-checkbox ref="isCheckAll" v-model="selectallStudent" @click="checkAllStudent()">Select All</vs-checkbox>
+                            <vs-checkbox ref="isCheckAll" v-model="selectallStudent" @click="checkAllStudent()">Select
+                                All
+                            </vs-checkbox>
                         </div>
                         <div class="col-lg-10 ">
-                            <el-select placeholder="Select Attendance" v-model="studentCheck" @change="selectedAttendance()" class="" v-if="bundleAttendance === true">
+                            <el-select placeholder="Select Attendance" v-model="studentCheck"
+                                       @change="selectedAttendance()" class="" v-if="bundleAttendance === true">
                                 <el-option
                                         v-for="itemCheckList in checkListSelect"
                                         :key="itemCheckList"
@@ -60,79 +67,101 @@
                                 >
                                 </el-option>
                             </el-select>
+
+                            <router-link :to="{name: 'Class Management'}">
+                                <el-button type="primary"  class="float-right mr-3" @click="">Class Management</el-button>
+                            </router-link>
                         </div>
                     </div>
-                        <table class="attTable">
-                            <tr>
-                                <th>Student ID</th>
-                                <th>Student Name</th>
-                                <!--<th>Attendance <br> <input type="checkbox" @click="checkAll()" ref="checkAllBox"></th>-->
-                                <th>Attendance</th>
-                                <th>Remarks</th>
-                            </tr>
-                            <tr v-for="(item,i) in studentList" ref="studentList_Update">
-                                <td style="display:none;"><input type="text" class="form-control" :value="item.AttDtlID"
-                                                                 ref="studentAttID"></td>
-                                <td><vs-checkbox ref="chkitems" v-model="item.checked" @change="showBundleAttendance()"></vs-checkbox></td>
-                                <td>{{item.checked}}</td>
-                                <td><label>{{item.AttDtlStudentIndexNo}}</label></td>
-                                <td><label>{{item.AttDtlStudentName}}</label></td>
-                                <!--<td><input type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList"></td>-->
-                                <!--<td>-->
-                                <!--<div class="form-group__wrapper row">-->
-                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">-->
-                                <!--<label class="lblCheckBox">-->
-                                <!--<input class="form-control" type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList">-->
-                                <!--<span>-->
-                                <!--<span>-->
-                                <!--<svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path" fill="none" stroke="white"-->
-                                <!--d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>-->
-                                <!--</span>-->
-                                <!--</span>-->
-                                <!--</label>-->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--</td>-->
-                                <td class="">
-                                    <!--<select ref="studentCheckList"-->
-                                    <!--class="form-control pro-edt-select form-control-primary">-->
-                                    <!--<option v-for="itemCheckList in checkListSelect" :value="itemCheckList"-->
+                    <table class="attTable">
+                        <tr>
+                            <th></th>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <!--<th>Attendance <br> <input type="checkbox" @click="checkAll()" ref="checkAllBox"></th>-->
+                            <th>Attendance</th>
+                            <th>Remarks</th>
+                            <th>Parents Mobile</th>
+                        </tr>
+                        <tr v-for="(item,i) in studentList" ref="studentList_Update">
+                            <td style="display:none;"><input type="text" class="form-control" :value="item.AttDtlID"
+                                                             ref="studentAttID"></td>
+                            <td>
+                                <vs-checkbox ref="chkitems" v-model="item.checked"
+                                             @change="showBundleAttendance()"></vs-checkbox>
+                            </td>
+                            <td style="display: none;">{{item.checked}}</td>
+                            <td><label>{{item.AttDtlStudentIndexNo}}</label></td>
+                            <td><label>{{item.AttDtlStudentName}}</label></td>
+                            <!--<td><input type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList"></td>-->
+                            <!--<td>-->
+                            <!--<div class="form-group__wrapper row">-->
+                            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">-->
+                            <!--<label class="lblCheckBox">-->
+                            <!--<input class="form-control" type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList">-->
+                            <!--<span>-->
+                            <!--<span>-->
+                            <!--<svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path" fill="none" stroke="white"-->
+                            <!--d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>-->
+                            <!--</span>-->
+                            <!--</span>-->
+                            <!--</label>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</td>-->
+                            <td class="">
+                                <!--<select ref="studentCheckList"-->
+                                <!--class="form-control pro-edt-select form-control-primary">-->
+                                <!--<option v-for="itemCheckList in checkListSelect" :value="itemCheckList"-->
+                                <!--:selected="itemCheckList === item.AttDtlMark">-->
+                                <!--{{ itemCheckList }}-->
+                                <!--</option>-->
+                                <!--</select>-->
+
+                                <el-select ref="studentCheckList" placeholder="Select" v-model="item.AttDtlMark"
+                                           :class="[{attend: item.AttDtlMark === 'Attend'},{late: item.AttDtlMark === 'Late'},{absent: item.AttDtlMark === 'Absent'},{sick: item.AttDtlMark === 'Sick'},{holiday: item.AttDtlMark === 'On Holiday'},{home: item.AttDtlMark === 'Sent Home'}]">
+                                    <el-option
+                                            v-for="itemCheckList in checkListSelect"
+                                            :key="itemCheckList"
+                                            :label="itemCheckList"
+                                            :value="itemCheckList"
+                                    >
+                                    </el-option>
+                                    <!--<el-option-->
+                                    <!--v-for="itemCheckList in checkListSelect"-->
+                                    <!--:key="itemCheckList"-->
+                                    <!--:label="itemCheckList"-->
+                                    <!--:value="itemCheckList"-->
                                     <!--:selected="itemCheckList === item.AttDtlMark">-->
-                                    <!--{{ itemCheckList }}-->
-                                    <!--</option>-->
-                                    <!--</select>-->
+                                    <!--</el-option>-->
+                                </el-select>
+                            </td>
+                            <td><input type="text" class="form-control" :value="item.AttDtlRemark"
+                                       ref="studentRemark">
+                            </td>
+                            <td>
+                                <select class="parentsMobileNo">
+                                    <option v-if="item.fatherMobile !== ''">Father - {{ item.fatherMobile }}</option>
+                                    <option v-if="item.fatherMobile === ''">Father - Nil</option>
+                                    <option v-if="item.motherMobile !== ''">Mother - {{ item.motherMobile }}</option>
+                                    <option v-if="item.motherMobile === ''">Mother - Nil</option>
+                                </select>
+                                <!--<el-select>-->
+                                    <!--<el-option-->
+                                            <!--:label="item.fatherMobile">-->
+                                    <!--</el-option>-->
+                                <!--</el-select>-->
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-                                    <el-select ref="studentCheckList" placeholder="Select" v-model="item.AttDtlMark"
-                                               :class="[{late: item.AttDtlMark === 'Late'},{absent: item.AttDtlMark === 'Absent'},{sick: item.AttDtlMark === 'Sick'},{holiday: item.AttDtlMark === 'On Holiday'},{home: item.AttDtlMark === 'Sent Home'}]">
-                                        <el-option
-                                                v-for="itemCheckList in checkListSelect"
-                                                :key="itemCheckList"
-                                                :label="itemCheckList"
-                                                :value="itemCheckList"
-                                                >
-                                        </el-option>
-                                        <!--<el-option-->
-                                        <!--v-for="itemCheckList in checkListSelect"-->
-                                        <!--:key="itemCheckList"-->
-                                        <!--:label="itemCheckList"-->
-                                        <!--:value="itemCheckList"-->
-                                        <!--:selected="itemCheckList === item.AttDtlMark">-->
-                                        <!--</el-option>-->
-                                    </el-select>
-                                </td>
-                                <td><input type="text" class="form-control" :value="item.AttDtlRemark"
-                                           ref="studentRemark">
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class=" text-center form-group col-lg-12" style="margin-top:20px;">
-                        <button type="button" class="btn btn-primary float-right" v-on:click="Save">Save</button>
-                    </div>
+                <div class=" text-center form-group col-lg-12" style="margin-top:20px;" v-if="studentList.length>0">
+                    <button type="button" class="btn btn-primary float-right" v-on:click="Save">Save</button>
                 </div>
             </div>
         </div>
+    </div>
 
     </div>
 </template>
@@ -144,16 +173,17 @@
         name: "AttendanceList",
         data() {
             return {
-                checkListSelect: ['Absent', 'Late', 'Sick', 'On Holiday', 'Sent Home'],
+                checkListSelect: ['Attend','Absent', 'Late', 'Sick', 'On Holiday', 'Sent Home'],
                 lblAttID: '',
                 ddlClassList: [],
                 ddlClass: '',
                 studentList: [],
                 studentClass: [],
                 studentCheck: [],
-                selectedStudent:[],
+                selectedStudent: [],
                 selectallStudent: false,
                 bundleAttendance: false,
+                hideStudentList: false,
             };
         },
         async created() {
@@ -162,22 +192,18 @@
         async mounted() {
         },
         methods: {
-            showBundleAttendance(){
-                if (this.bundleAttendance === false){
+            showBundleAttendance() {
 
                     const isCheck = this.studentList.find(m => m.checked === true);
-                    console.log(isCheck)
                     if (isCheck) {
                         this.bundleAttendance = true;
-                    }else{
+                    } else {
                         this.bundleAttendance = false;
                     }
-                }
             },
-            checkAllStudent(){
-                console.log("111")
+            checkAllStudent() {
                 if (this.selectallStudent === false) {
-this.bundleAttendance = true;
+                    this.bundleAttendance = true;
                     this.studentList.forEach(m => {
                         m.checked = true;
                     });
@@ -189,11 +215,10 @@ this.bundleAttendance = true;
                     });
                 }
             },
-            selectedAttendance(){
-                console.log("ok")
+            selectedAttendance() {
                 this.studentList.forEach(m => {
 
-                    if (m.checked === true){
+                    if (m.checked === true) {
                         m.AttDtlMark = this.studentCheck;
                     }
                 });
@@ -201,30 +226,33 @@ this.bundleAttendance = true;
             async bindClasses() {
                 try {
                     const response = await DataSource.shared.getAttendanceClass();
-                    // if (response) {
-                    //     this.ddlClassList = await getAttendanceList(response.Table);
-                    // }
-                    // const response = await DataSource.shared.getAttendanceClass();
                     if (response) {
                         this.class = response.Table;
-                        let classValue;
                         this.class.forEach(m => {
-                            // item.PK_Semester_ID.trim() + ',' + item.SC_FK_CourseID.trim() + ',' + item.PK_Class_ID.trim()">{{ item.CLS_ClassName.trim()
-                            classValue = m.PK_Semester_ID.trim() + ',' + m.SC_FK_CourseID.trim() + ',' + m.PK_Class_ID.trim();
-
-                            DataSource.shared.LoadAttendanceList(classValue).then((AttendResponse) => {
-                                if (AttendResponse.code === "2") {
-                                    return;
-
-                                } else {
-                                    // this.studentclass = AttendResponse.Table;
-                                    this.ddlClassList.push(m);
-                                }
-                            });
+                            this.ddlClassList.push(m);
                         });
-
-
                     }
+                    // const response = await DataSource.shared.getAttendanceClass();
+                    // if (response) {
+                    //     this.class = response.Table;
+                    //     let classValue;
+                    //     this.class.forEach(m => {
+                    //         // item.PK_Semester_ID.trim() + ',' + item.SC_FK_CourseID.trim() + ',' + item.PK_Class_ID.trim()">{{ item.CLS_ClassName.trim()
+                    //         classValue = m.PK_Semester_ID.trim() + ',' + m.SC_FK_CourseID.trim() + ',' + m.PK_Class_ID.trim();
+                    //
+                    //         DataSource.shared.LoadAttendanceList(classValue).then((AttendResponse) => {
+                    //             if (AttendResponse.code === "2") {
+                    //                 return;
+                    //
+                    //             } else {
+                    //                 // this.studentclass = AttendResponse.Table;
+                    //                 this.ddlClassList.push(m);
+                    //             }
+                    //         });
+                    //     });
+                    //
+                    //
+                    // }
                 } catch (e) {
                     this.results = e;
                 }
@@ -243,10 +271,12 @@ this.bundleAttendance = true;
                         if (response) {
 
                             if (response.code === '2') {
-                                this.$notify.error({
-                                    title: 'Error',
-                                    message: 'No student found'
-                                });
+                                this.studentList = [];
+                                this.hideStudentList = true;
+                                // this.$notify.error({
+                                //     title: 'Error',
+                                //     message: 'No student found'
+                                // });
                             } else if (response.code === '99') {
                                 this.$notify.error({
                                     title: 'Error',
@@ -255,12 +285,10 @@ this.bundleAttendance = true;
                             } else {
 
                                 this.studentList.forEach(m => {
-                                    console.log("go")
                                     m.checked = false;
-                                    console.log(m.checked)
                                 });
                                 response.Table.forEach(x => {
-                                    if(x.AttDtlMark === "No"){
+                                    if (x.AttDtlMark === "No") {
                                         x.AttDtlMark = null;
                                     }
                                 });
@@ -303,7 +331,6 @@ this.bundleAttendance = true;
                     //         window.location.replace('/attendancelist');
                     //     }
                     // }
-
                     let attendanceList = [];
 
                     this.$refs.studentList_Update.forEach((m, index) => {
@@ -329,6 +356,9 @@ this.bundleAttendance = true;
                                 type: 'success'
                             });
                             this.Load();
+
+                            this.selectallStudent = false;
+                            this.studentCheck = "";
                             // window.location.replace('/attendancelist');
                         } else {
                             this.$notify.error({
@@ -404,5 +434,21 @@ this.bundleAttendance = true;
 
     .lblCheckBox {
         width: 100%;
+    }
+
+    .parentsMobileNo {
+        background-color: #FFF;
+        background-image: none;
+        border-radius: 4px;
+        border: 1px solid #DCDFE6;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: #606266;
+        display: inline-block;
+        font-size: inherit;
+        height: 40px;
+        line-height: 40px;
+        outline: 0;
+        padding: 0 15px;
     }
 </style>
