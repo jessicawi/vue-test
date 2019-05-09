@@ -1992,7 +1992,7 @@ export default class DataSource {
         const data = {
             obj:obj
         };
-        const response = await this.callWebService("/controller/Students.asmx/saveStudentWthdraw", data, "POST");
+        const response = await this.callWebService("/controller/Students.asmx/saveStudentWithdraw", data, "POST");
         return response;
     }
 
@@ -2010,7 +2010,7 @@ export default class DataSource {
         return response;
     }
 
-    async saveClass(levelID, semesterID, batch, className, maxStudents, classTeacher){
+    async saveClass(levelID, semesterID, batch, className, maxStudents, classTeacher, saveType){
         const data = {
             levelID: levelID,
             semesterID: semesterID,
@@ -2018,6 +2018,7 @@ export default class DataSource {
             className: className,
             maxStudents: maxStudents,
             classTeacher: classTeacher,
+            saveType: saveType,
         };
         const response = await this.callWebService("/controller/Class.asmx/saveClass", data, "POST");
         return response;
@@ -2031,12 +2032,23 @@ export default class DataSource {
         return response;
     }
 
-    async updateClass(classID, className, classStatus, maxStudents){
+    async getParentClassList(academicYear, modeType){
         const data = {
-            classID: classID,
-            className: className,
+            academicYear: academicYear,
+            modeType: modeType,
+        };
+        const response = await this.callWebService("/controller/Course.asmx/getClass", data, "POST");
+        return response;
+    }
+
+    async updateClass(classStatus, newClassName, maxStudents, currentClassName, levelID, semesterID){
+        const data = {
             classStatus: classStatus,
+            newClassName: newClassName,
             maxStudents: maxStudents,
+            currentClassName: currentClassName,
+            levelID: levelID,
+            semesterID: semesterID,
         };
         const response = await this.callWebService("/controller/Class.asmx/updateClass", data, "POST");
         return response;
@@ -2156,6 +2168,21 @@ export default class DataSource {
             SPDID:SPDID,
         };
         const response = await this.callWebService("/controller/Billing.asmx/getItemTransDetailsList", data, "POST");
+        return response;
+    }
+
+    async saveEvent(obj){
+        const data = {
+            obj:obj
+        };
+        const response = await this.callWebService("/controller/Event.asmx/saveEvent", data, "POST");
+        return response;
+    }
+
+    async getEvent(){
+        const data = {
+        };
+        const response = await this.callWebService("/controller/Event.asmx/getEvent", data, "POST");
         return response;
     }
 

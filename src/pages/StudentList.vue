@@ -1,6 +1,6 @@
 <template>
     <div id="student-list">
-        <div class="datatable-form__header">
+        <div class="datatable-form__header ">
             <div class="datatable-form__input form-group">
                 <!--<label>Student No</label>-->
                 <!--<input class="form-control" ref="stud_id">-->
@@ -29,7 +29,15 @@
                 <button class="btn btn-success searchbtn" v-on:click="Search">Search</button>
             </div>
         </div>
-        <div class="mt-3 container">
+        <div class="mt-5 container" :class="{'admin-wrap' :list.length>0}">
+            <div class="row header mb-2"  v-if="list.length>0">
+                <div class="col-lg-5 ">
+                    <h3 class="text-left mb-3">Student List</h3>
+                </div>
+                <div class="col-lg-7 actionDiv">
+                    <div class="text-right  student-search-count">Total <span>{{list.length}}</span> Students</div>
+                </div>
+            </div>
             <div class="emptylist-info" v-if="list.length===0">
                 <span>PLEASE SEARCH TO VIEW LIST...</span>
                 <div class="emptylist__img">

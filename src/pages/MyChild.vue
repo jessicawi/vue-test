@@ -185,51 +185,51 @@
                                     </select>
                                 </div>
 
-                                <div class=" form-group ">
-                                    <div class="medAreaDiv">
-                                        <div class="">
-                                            <h5 class="text-left student-form__title">Student's Medical Details</h5>
-                                        </div>
-                                        <div class="row form-group__wrapper">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Major Ailments List</label>
-                                                <textarea rows="3" class="textArea"
-                                                          v-model="taMajorAilmentsList"></textarea>
-                                            </div>
+                                <!--<div class=" form-group ">-->
+                                    <!--<div class="medAreaDiv">-->
+                                        <!--<div class="">-->
+                                            <!--<h5 class="text-left student-form__title">Student's Medical Details</h5>-->
+                                        <!--</div>-->
+                                        <!--<div class="row form-group__wrapper">-->
+                                            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                                <!--<label>Major Ailments List</label>-->
+                                                <!--<textarea rows="3" class="textArea"-->
+                                                          <!--v-model="taMajorAilmentsList"></textarea>-->
+                                            <!--</div>-->
 
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Medication Allergies List</label>
-                                                <textarea rows="3" class="textArea"
-                                                          v-model="taMedicationAllergiesList"></textarea>
-                                            </div>
+                                            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                                <!--<label>Medication Allergies List</label>-->
+                                                <!--<textarea rows="3" class="textArea"-->
+                                                          <!--v-model="taMedicationAllergiesList"></textarea>-->
+                                            <!--</div>-->
 
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Blood Group</label>
-                                                <input type="text" class="form-control" v-model="inputBloodGroup">
-                                            </div>
+                                            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                                <!--<label>Blood Group</label>-->
+                                                <!--<input type="text" class="form-control" v-model="inputBloodGroup">-->
+                                            <!--</div>-->
 
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Blood Donor No</label>
-                                                <input type="text" class="form-control" v-model="inputBloodDonorNo">
-                                            </div>
+                                            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                                <!--<label>Blood Donor No</label>-->
+                                                <!--<input type="text" class="form-control" v-model="inputBloodDonorNo">-->
+                                            <!--</div>-->
 
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Name of Family Doctor</label>
-                                                <input type="text" class="form-control" v-model="inputNameofFamilyDoctor">
-                                            </div>
+                                            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                                <!--<label>Name of Family Doctor</label>-->
+                                                <!--<input type="text" class="form-control" v-model="inputNameofFamilyDoctor">-->
+                                            <!--</div>-->
 
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Clinic Address</label>
-                                                <input type="text" class="form-control" v-model="inputClinicAddress">
-                                            </div>
+                                            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                                <!--<label>Clinic Address</label>-->
+                                                <!--<input type="text" class="form-control" v-model="inputClinicAddress">-->
+                                            <!--</div>-->
 
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Clinic Phone No</label>
-                                                <input type="text" class="form-control" v-model="inputClinicPhoneNo">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                            <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                                <!--<label>Clinic Phone No</label>-->
+                                                <!--<input type="text" class="form-control" v-model="inputClinicPhoneNo">-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
 
                                 <div class=" form-group ">
                                     <div class="ecAreaDiv">
@@ -250,6 +250,109 @@
                                     </div>
                                 </div>
 
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
+                <b-tab title="Medical">
+                    <div class=" form-group ">
+                        <div class="medAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Medication Allergies List</h5>
+                            </div>
+
+                            <div>
+                                <div v-if="medicationAllergiesListInt.length>0">
+                                    <data-tables :data="medicationAllergiesListInt" :action-col="medicationAllergiesListAcion">
+                                        <el-table-column v-for="medicationAllergiesListInfo in medicationAllergiesList" :prop="medicationAllergiesListInfo.prop"
+                                                         :label="medicationAllergiesListInfo.label" :key="medicationAllergiesListInfo.prop"
+                                                         sortable="custom">
+                                        </el-table-column>
+                                    </data-tables>
+                                </div>
+                            </div>
+
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Medication</label>
+                                    <input type="text" class="form-control" v-model="inputStudentMedicationAllergiesMedication">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Remarks</label>
+                                    <input type="text" class="form-control" v-model="inputStudentMedicationAllergiesRemarks">
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary waves-effect waves-light m-r-10" v-on:click="addMedicationAllergiesList()">
+                                Add
+                            </button>
+                        </div>
+
+                        <div class="medAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Food Allergies List</h5>
+                            </div>
+
+                            <div>
+                                <div v-if="foodAllergiesListInt.length>0">
+                                    <data-tables :data="foodAllergiesListInt" :action-col="foodAllergiesListAcion">
+                                        <el-table-column v-for="foodAllergiesListInfo in foodAllergiesList" :prop="foodAllergiesListInfo.prop"
+                                                         :label="foodAllergiesListInfo.label" :key="foodAllergiesListInfo.prop"
+                                                         sortable="custom">
+                                        </el-table-column>
+                                    </data-tables>
+                                </div>
+                            </div>
+
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Food</label>
+                                    <select v-model="ddlStudentFoodAllergiesFood"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in ddlddlStudentFoodAllergiesFoodList"
+                                                v-bind:value="item.OPTvalue.trim()">{{ item.OPTvalue.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Remarks</label>
+                                    <input type="text" class="form-control" v-model="inputStudentFoodAllergiesRemarks">
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary waves-effect waves-light m-r-10" v-on:click="addFoodAllergiesList()">
+                                Add
+                            </button>
+                        </div>
+
+                        <div class="medAreaDiv">
+                            <div class="">
+                                <h5 class="text-left student-form__title">Student's Medical Details</h5>
+                            </div>
+
+                            <div class="row form-group__wrapper">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Major Ailments List</label>
+                                    <textarea rows="3" class="textArea"
+                                              v-model="taMajorAilmentsList"></textarea>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Name of Family Doctor</label>
+                                    <input type="text" class="form-control" v-model="inputNameofFamilyDoctor">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Clinic Address</label>
+                                    <input type="text" class="form-control" v-model="inputClinicAddress">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Clinic Phone No</label>
+                                    <input type="text" class="form-control" v-model="inputClinicPhoneNo">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -414,10 +517,66 @@
                     siblingTab: '',
                     changeStatusAction: '',
                     levelTab: '',
+
+                    //student medical allergies list
+                    medicationAllergiesListInt: [],
+                    medicationAllergiesList: [{
+                        prop: "StAllItem",
+                        label: "Medication"
+                    }, {
+                        prop: "StAllRemarks",
+                        label: "Remarks"
+                    }],
+                    medicationAllergiesListAcion: {
+                        label: 'Delete',
+                        props: {
+                            align: 'center',
+                        },
+                        buttons: [{
+                            props: {
+                                type: 'primary',
+                                icon: 'el-icon-edit'
+                            },
+                            handler: row => {
+                                this.medicationAllergiesListInt.splice(this.medicationAllergiesListInt.indexOf(row), 1)
+                            },
+                            label: 'Delete'
+                        }]
+                    },
+
+                    foodAllergiesListInt: [],
+                    foodAllergiesList: [{
+                        prop: "StAllItem",
+                        label: "Food"
+                    }, {
+                        prop: "StAllRemarks",
+                        label: "Remarks"
+                    }],
+                    foodAllergiesListAcion: {
+                        label: 'Delete',
+                        props: {
+                            align: 'center',
+                        },
+                        buttons: [{
+                            props: {
+                                type: 'primary',
+                                icon: 'el-icon-edit'
+                            },
+                            handler: row => {
+                                this.foodAllergiesListInt.splice(this.foodAllergiesListInt.indexOf(row), 1)
+                            },
+                            label: 'Delete'
+                        }]
+                    },
+                    ddlddlStudentFoodAllergiesFoodList: [],
+                    ddlStudentFoodAllergiesFood: '',
+                    inputStudentFoodAllergiesRemarks: '',
+                    inputStudentMedicationAllergiesMedication: '',
+                    inputStudentMedicationAllergiesRemarks: '',
                 };
         },
         methods:{
-                backPrevious(){
+            backPrevious(){
                     this.$router.go(-1);
                 },
             async uploadStudentProfileImg() {
@@ -469,6 +628,25 @@
                                     this.imgStudentProfile = API_HOST + '/db/Files/' + m.SF_File_Name;
                                 });
                             }
+                        }
+                    }
+                    const alleRes = await DataSource.shared.getStudentAllergies(this.$route.params.studentID, '');
+                    if (alleRes) {
+                        if (alleRes.code === '88') {
+                            window.location.replace('/');
+                        } else if (alleRes.code === '99') {
+                            console.log('get getStudentAllergies Error');
+                        } else if (alleRes.code === '2') {
+                            console.log('getStudentAllergies No Record');
+                        } else {
+                            this.alleResLoop = alleRes.Table;
+                            this.alleResLoop.forEach(m => {
+                                if (m.StAllType === 'Medical') {
+                                    this.medicationAllergiesListInt.push(m);
+                                } else if (m.StAllType === 'Food') {
+                                    this.foodAllergiesListInt.push(m);
+                                }
+                            });
                         }
                     }
                 }
@@ -578,6 +756,7 @@
                     jsonString = jsonString + ',"Residency Status":"Residency Status"';
                     jsonString = jsonString + ',"Sponsorship Type":"Sponsorship Type"';
                     jsonString = jsonString + ',"ParentID":"ParentID"';
+                    jsonString = jsonString + ',"Food Allergies":"Food Allergies"';
                     jsonString = jsonString + ',"Parent Mode":"Parent Mode"';
                     jsonString = "{" + jsonString + "}";
 
@@ -604,6 +783,8 @@
                                 } else if (m.OGPname.trim() === 'ParentID') {
                                     this.ddlFatherIdentificationTypeList.push(m);
                                     this.ddlMotherIdentificationTypeList.push(m);
+                                } else if (m.OGPname.trim() === 'Food Allergies') {
+                                    this.ddlddlStudentFoodAllergiesFoodList.push(m);
                                 } else if (m.OGPname.trim() === 'Parent Mode') {
                                     this.ddlParentModeList.push(m);
                                 }
@@ -683,11 +864,36 @@
                     //students
 
                     jsonString = '{ ' + jsonString + ' }';
+                    //allergies list combining into one whole list//
+                    let allergiesList = [];
 
-                    const saveStuRes = await DataSource.shared.updateStudent(this.selectedFile, this.studentID, jsonString);
+                    //medical
+                    this.medicationAllergiesListInt.forEach(item => {
+                        let medicationAllergiesListIntDetials = {
+                            Item: item.StAllItem,
+                            Remarks: item.StAllRemarks,
+                            Type: 'Medical'
+                        };
+
+                        allergiesList.push(medicationAllergiesListIntDetials);
+                    });
+
+                    //food
+                    this.foodAllergiesListInt.forEach(item => {
+                        let foodAllergiesListIntDetials = {
+                            Item: item.StAllItem,
+                            Remarks: item.StAllRemarks,
+                            Type: 'Food'
+                        };
+
+                        allergiesList.push(foodAllergiesListIntDetials);
+                    });
+                    //allergies list combining into one whole list//
+
+                    const saveStuRes = await DataSource.shared.updateStudent(this.selectedFile, this.studentID, jsonString, JSON.stringify(allergiesList));
                     if (saveStuRes) {
                         if (saveStuRes.code === '88') {
-                            window.location.replace('/');
+                           // window.location.replace('/');
                         }
                         else if (saveStuRes.code === "1") {
                             this.$notify({
@@ -695,13 +901,13 @@
                                 message: 'Records Successfully Saved',
                                 type: 'success'
                             });
-                            window.location.replace('/MyAccount');
+                           // window.location.replace('/MyAccount');
                         } else {
                             this.$notify.error({
                                 title: 'Error',
                                 message: 'Update Error - Please try again later'
                             });
-                            window.location.replace('/MyAccount');
+                            // window.location.replace('/MyAccount');
                         }
                     }
                 }
@@ -709,6 +915,36 @@
 
                 }
 
+            },
+            addMedicationAllergiesList () {
+                if (this.inputStudentMedicationAllergiesMedication !== '' && this.inputStudentMedicationAllergiesRemarks !== '') {
+                    let addNewRowList = {
+                        StAllItem: this.inputStudentMedicationAllergiesMedication,
+                        StAllRemarks: this.inputStudentMedicationAllergiesRemarks,
+                    };
+
+                    this.medicationAllergiesListInt.push(addNewRowList);
+
+                    this.inputStudentMedicationAllergiesMedication = '';
+                    this.inputStudentMedicationAllergiesRemarks = '';
+                } else {
+                    alert('Please fill Medication and Remarks');
+                }
+            },
+            addFoodAllergiesList () {
+                if (this.ddlStudentFoodAllergiesFood !== '' && this.inputStudentFoodAllergiesRemarks !== '') {
+                    let addNewRowList = {
+                        StAllItem: this.ddlStudentFoodAllergiesFood,
+                        StAllRemarks: this.inputStudentFoodAllergiesRemarks,
+                    };
+
+                    this.foodAllergiesListInt.push(addNewRowList);
+
+                    this.ddlStudentFoodAllergiesFood = '';
+                    this.inputStudentFoodAllergiesRemarks = '';
+                } else {
+                    alert('Please fill Food and Remarks');
+                }
             },
         }
     }
@@ -888,9 +1124,6 @@
 </style>
 
 <style>
-    .studentPageBModal .modal-dialog, .studentPageBModal .modal-lg {
-        min-width: 90% !important;
-    }
 
     .studentPageBTabs .tab-content {
         margin-top: 30px;

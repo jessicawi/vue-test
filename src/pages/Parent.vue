@@ -1573,7 +1573,9 @@
                         let jsonString = '"PAR_Father_FirstName":"' + this.$refs.inputFatherFirstName.value + '"';
                         jsonString = jsonString + ',"PAR_Father_MiddleName":"' + this.$refs.inputFatherMiddleName.value + '"';
                         jsonString = jsonString + ',"PAR_Father_LastName":"' + this.$refs.inputFatherLastName.value + '"';
-                        jsonString = jsonString + ',"PAR_Father_DOB":"' + this.inputFatherDateofBirth + '"';
+                        if (this.inputFatherDateofBirth !== undefined && this.inputFatherDateofBirth !== null) {
+                            jsonString = jsonString + ',"PAR_Father_DOB":"' + this.inputFatherDateofBirth + '"';
+                        };
                         jsonString = jsonString + ',"PAR_Fat_Emp_Status":"' + this.ddlFatherEmploymentStatus + '"';
                         jsonString = jsonString + ',"PAR_Father_Occupation":"' + this.$refs.inputFatherOccupation.value + '"';
                         jsonString = jsonString + ',"PAR_Father_Designation":"' + this.$refs.inputFatherDesignation.value + '"';
@@ -1587,18 +1589,20 @@
                         jsonString = jsonString + ',"PAR_FatRemarks":"' + this.$refs.inputFatherRemarks.value + '"';
                         jsonString = jsonString + ',"PAR_Father_IDType":"' + this.ddlFatherIdentificationType + '"';
                         jsonString = jsonString + ',"PAR_Father_UID":"' + this.$refs.inputFatherIdentificationNo.value + '"';
-                        jsonString = jsonString + ',"PAR_Father_IDExpDate":"' + this.inputFatherIdentificationNoExpiryDate + '"';
-                        if (this.$refs.cbFatherShareMyEmail.checked == true) {
+                        if (this.inputFatherIdentificationNoExpiryDate !== undefined && this.inputFatherIdentificationNoExpiryDate !== null) {
+                            jsonString = jsonString + ',"PAR_Father_IDExpDate":"' + this.inputFatherIdentificationNoExpiryDate + '"';
+                        };
+                        if (this.$refs.cbFatherShareMyEmail.checked === true) {
                             jsonString = jsonString + ',"PAR_ShareMyContact":"Yes"';
                         } else {
                             jsonString = jsonString + ',"PAR_ShareMyContact":"No"';
                         }
-                        if (this.$refs.cbFatherShareMyMobileNumber.checked == true) {
+                        if (this.$refs.cbFatherShareMyMobileNumber.checked === true) {
                             jsonString = jsonString + ',"PAR_ShareMyMobile":"Yes"';
                         } else {
                             jsonString = jsonString + ',"PAR_ShareMyMobile":"No"';
                         }
-                        if (this.$refs.cbFatherEtonStaff.checked == true) {
+                        if (this.$refs.cbFatherEtonStaff.checked === true) {
                             jsonString = jsonString + ',"PAR_Father_IsStaff":"True"';
                         } else {
                             jsonString = jsonString + ',"PAR_Father_IsStaff":"False"';
@@ -1621,7 +1625,9 @@
                         jsonString = jsonString + ',"PAR_Mother_FirstName":"' + this.$refs.inputMotherFirstName.value + '"';
                         jsonString = jsonString + ',"PAR_Mother_MiddleName":"' + this.$refs.inputMotherMiddleName.value + '"';
                         jsonString = jsonString + ',"PAR_Mother_LastName":"' + this.$refs.inputMotherLastName.value + '"';
-                        jsonString = jsonString + ',"PAR_Mother_DOB":"' + this.inputMotherDateofBirth + '"';
+                        if (this.inputMotherDateofBirth !== undefined && this.inputMotherDateofBirth !== null) {
+                            jsonString = jsonString + ',"PAR_Mother_DOB":"' + this.inputMotherDateofBirth + '"';
+                        };
                         jsonString = jsonString + ',"PAR_Mot_Emp_Status":"' + this.ddlMotherEmploymentStatus + '"';
                         jsonString = jsonString + ',"PAR_Mother_Occupation":"' + this.$refs.inputMotherOccupation.value + '"';
                         jsonString = jsonString + ',"PAR_Mother_Designation":"' + this.$refs.inputMotherDesignation.value + '"';
@@ -1635,7 +1641,9 @@
                         jsonString = jsonString + ',"PAR_MotRemarks":"' + this.$refs.inputMotherRemarks.value + '"';
                         jsonString = jsonString + ',"PAR_Mother_IDType":"' + this.ddlMotherIdentificationType + '"';
                         jsonString = jsonString + ',"PAR_Mother_UID":"' + this.$refs.inputMotherIdentificationNo.value + '"';
-                        jsonString = jsonString + ',"PAR_Mother_IDExpDate":"' + this.inputMotherIdentificationNoExpiryDate + '"';
+                        if (this.inputMotherIdentificationNoExpiryDate !== undefined && this.inputMotherIdentificationNoExpiryDate !== null) {
+                            jsonString = jsonString + ',"PAR_Mother_IDExpDate":"' + this.inputMotherIdentificationNoExpiryDate + '"';
+                        };
                         jsonString = jsonString + ',"PAR_Mother_Loc_Residence_No":"' + this.$refs.inputMotherAddress1.value + '"';
                         jsonString = jsonString + ',"PAR_Mother_Loc_Address1":"' + this.$refs.inputMotherAddress2.value + '"';
                         jsonString = jsonString + ',"PAR_Mother_Loc_Address2":"' + this.$refs.inputMotherAddress3.value + '"';
@@ -1654,7 +1662,9 @@
                         jsonString = jsonString + ',"PAR_Guardian_FirstName":"' + this.$refs.inputGuardianFirstName.value + '"';
                         jsonString = jsonString + ',"PAR_Guardian_MiddleName":"' + this.$refs.inputGuardianMiddleName.value + '"';
                         jsonString = jsonString + ',"PAR_Guardian_LastName":"' + this.$refs.inputGuardianLastName.value + '"';
-                        jsonString = jsonString + ',"PAR_Guardian_DOB":"' + this.inputGuardianDateofBirth + '"';
+                        if (this.inputGuardianDateofBirth !== undefined && this.inputGuardianDateofBirth !== null) {
+                            jsonString = jsonString + ',"PAR_Guardian_DOB":"' + this.inputGuardianDateofBirth + '"';
+                        };
                         jsonString = jsonString + ',"PAR_Gar_Emp_Status":"' + this.ddlGuardianEmploymentStatus + '"';
                         jsonString = jsonString + ',"PAR_Guardian_Occupation":"' + this.$refs.inputGuardianOccupation.value + '"';
                         jsonString = jsonString + ',"PAR_Guardian_Designation":"' + this.$refs.inputGuardianDesignation.value + '"';
@@ -1701,10 +1711,16 @@
                         jsonString = jsonString + ',"PAR_Guardian_Race":"' + this.ddlGuardianRace + '"';
                         jsonString = jsonString + ',"PAR_Guardian_MaritalStatus":"' + this.ddlGuardianMaritalStatus + '"';
                         jsonString = jsonString + ',"PAR_Guardian_Working":"' + this.ddlGuardianWorking + '"';
-                        jsonString = jsonString + ',"PAR_Father_WorkingCommencementDate":"' + this.inputFatherWorkingCommencementDate + '"';
-                        jsonString = jsonString + ',"PAR_Mother_WorkingCommencementDate":"' + this.inputMotherWorkingCommencementDate + '"';
-                        jsonString = jsonString + ',"PAR_Guardian_WorkingCommencementDate":"' + this.inputGuardianWorkingCommencementDate + '"';
-
+                        if (this.inputFatherWorkingCommencementDate !== undefined && this.inputFatherWorkingCommencementDate !== null) {
+                            jsonString = jsonString + ',"PAR_Father_WorkingCommencementDate":"' + this.inputFatherWorkingCommencementDate + '"';
+                        };
+                        if (this.inputMotherWorkingCommencementDate !== undefined && this.inputMotherWorkingCommencementDate !== null) {
+                            jsonString = jsonString + ',"PAR_Mother_WorkingCommencementDate":"' + this.inputMotherWorkingCommencementDate + '"';
+                        };
+                        if (this.inputGuardianWorkingCommencementDate !== undefined && this.inputGuardianWorkingCommencementDate !== null) {
+                            jsonString = jsonString + ',"PAR_Guardian_WorkingCommencementDate":"' + this.inputGuardianWorkingCommencementDate + '"';
+                        };
+                        
                         jsonString = '{ ' + jsonString + ' }';
 
                         const response = await DataSource.shared.updateParent(this.lblParentID, jsonString);

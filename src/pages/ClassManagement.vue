@@ -25,76 +25,129 @@
                     <!--</b-btn>-->
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div v-if="classListInt.length>0">
-                        <el-row style="margin-bottom: 10px">
-                            <el-col :span="11">
-                                <el-input v-model="ClassFilters[0].value" class="search-datatable" placeholder="Search">
-                                    <template slot="prepend"><i class="material-icons">
-                                        search
-                                    </i> Search Class Name
-                                    </template>
-                                </el-input>
-                            </el-col>
-                            <el-col :span="11" :offset="2">
-                                <!--<el-select v-model="ClassFilters[1].value" placeholder="select type"-->
-                                <!--multiple="multiple" class="float-right">-->
-                                <!--<el-option-->
-                                <!--v-for="item in classListFilteritem"-->
-                                <!--:key="item"-->
-                                <!--:label="item"-->
-                                <!--:value="item">-->
-                                <!--</el-option>-->
-                                <!--</el-select>-->
-                                <el-popover
-                                        placement="bottom-end"
-                                        width="400"
-                                        trigger="click">
 
-                                    <el-checkbox-group v-model="ClassFilters[1].value" class="custom-checkbox">
-                                        <el-checkbox-button v-for="item in classListFilteritem" :label="item"
-                                                            :key="item">{{item}}
-                                        </el-checkbox-button>
-                                    </el-checkbox-group>
-                                    <el-button slot="reference" type="primary" round
-                                               class="float-right large-btn classManage-filter"><i
-                                            class="material-icons">
-                                        tune
-                                    </i> Filter
-                                    </el-button>
-                                </el-popover>
-                            </el-col>
-                        </el-row>
-                        <data-tables :data="classListInt" :action-col="classListAction" class="classManage-Table"
-                                     :filters="ClassFilters">
-                            <el-table-column v-for="classListInfo in classList" :prop="classListInfo.prop"
-                                             :label="classListInfo.label" :key="classListInfo.prop"
-                                             sortable="custom">
-                            </el-table-column>
+                    <el-row style="margin-bottom: 10px">
+                        <el-col :span="11">
+                            <el-input v-model="ClassFilters[0].value" class="search-datatable" placeholder="Search">
+                                <template slot="prepend"><i class="material-icons">
+                                    search
+                                </i> Search Class Name
+                                </template>
+                            </el-input>
+                        </el-col>
+                        <el-col :span="11" :offset="2">
+                            <!--<el-select v-model="ClassFilters[1].value" placeholder="select type"-->
+                            <!--multiple="multiple" class="float-right">-->
+                            <!--<el-option-->
+                            <!--v-for="item in classListFilteritem"-->
+                            <!--:key="item"-->
+                            <!--:label="item"-->
+                            <!--:value="item">-->
+                            <!--</el-option>-->
+                            <!--</el-select>-->
+                            <el-popover
+                                    placement="bottom-end"
+                                    width="400"
+                                    trigger="click">
 
-                            <el-table-column label="Assign Students" min-width="100px">
-                                <template slot-scope="scope">
-                                    <el-button v-for="assignStudents in assignStudentToClass(scope.row)"
-                                               :key="assignStudents.name" type="primary"
-                                               @click="assignStudents.handler">
-                                        {{assignStudents.name}}
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="View Students" min-width="100px">
-                                <template slot-scope="scope">
-                                    <el-button v-for="assignStudents in ViewStudentToClass(scope.row)"
-                                               :key="assignStudents.name" type="primary"
-                                               @click="assignStudents.handler">
-                                        {{assignStudents.name}}
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                        </data-tables>
-                    </div>
+                                <el-checkbox-group v-model="ClassFilters[1].value" class="custom-checkbox">
+                                    <el-checkbox-button v-for="item in classListFilteritem" :label="item"
+                                                        :key="item">{{item}}
+                                    </el-checkbox-button>
+                                </el-checkbox-group>
+                                <el-button slot="reference" type="primary" round
+                                           class="float-right large-btn classManage-filter"><i
+                                        class="material-icons">
+                                    tune
+                                </i> Filter
+                                </el-button>
+                            </el-popover>
+                        </el-col>
+                    </el-row>
+                    <data-tables :data="parentClassListInt" :action-col="parentClassListAction"
+                                 class="classManage-Table" :filters="ClassFilters">
+                        <el-table-column v-for="parentClassListIntInfo in parentClassList"
+                                         :prop="parentClassListIntInfo.prop"
+                                         :label="parentClassListIntInfo.label" :key="parentClassListIntInfo.prop"
+                                         sortable="custom">
+                        </el-table-column>
+                    </data-tables>
                 </div>
             </div>
+
+            <!--<div class="row">-->
+            <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+            <!--<div v-if="classListInt.length>0">-->
+            <!--<el-row style="margin-bottom: 10px">-->
+            <!--<el-col :span="11">-->
+            <!--<el-input v-model="ClassFilters[0].value" class="search-datatable" placeholder="Search">-->
+            <!--<template slot="prepend"><i class="material-icons">-->
+            <!--search-->
+            <!--</i> Search Class Name-->
+            <!--</template>-->
+            <!--</el-input>-->
+            <!--</el-col>-->
+            <!--<el-col :span="11" :offset="2">-->
+            <!--&lt;!&ndash;<el-select v-model="ClassFilters[1].value" placeholder="select type"&ndash;&gt;-->
+            <!--&lt;!&ndash;multiple="multiple" class="float-right">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-option&ndash;&gt;-->
+            <!--&lt;!&ndash;v-for="item in classListFilteritem"&ndash;&gt;-->
+            <!--&lt;!&ndash;:key="item"&ndash;&gt;-->
+            <!--&lt;!&ndash;:label="item"&ndash;&gt;-->
+            <!--&lt;!&ndash;:value="item">&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-option>&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-select>&ndash;&gt;-->
+            <!--<el-popover-->
+            <!--placement="bottom-end"-->
+            <!--width="400"-->
+            <!--trigger="click">-->
+
+            <!--<el-checkbox-group v-model="ClassFilters[1].value" class="custom-checkbox">-->
+            <!--<el-checkbox-button v-for="item in classListFilteritem" :label="item"-->
+            <!--:key="item">{{item}}-->
+            <!--</el-checkbox-button>-->
+            <!--</el-checkbox-group>-->
+            <!--<el-button slot="reference" type="primary" round-->
+            <!--class="float-right large-btn classManage-filter"><i-->
+            <!--class="material-icons">-->
+            <!--tune-->
+            <!--</i> Filter-->
+            <!--</el-button>-->
+            <!--</el-popover>-->
+            <!--</el-col>-->
+            <!--</el-row>-->
+            <!--<data-tables :data="classListInt" :action-col="classListAction" class="classManage-Table"-->
+            <!--:filters="ClassFilters">-->
+            <!--<el-table-column v-for="classListInfo in classList" :prop="classListInfo.prop"-->
+            <!--:label="classListInfo.label" :key="classListInfo.prop"-->
+            <!--sortable="custom">-->
+            <!--</el-table-column>-->
+
+            <!--<el-table-column label="Assign Students" min-width="100px">-->
+            <!--<template slot-scope="scope">-->
+            <!--<el-button v-for="assignStudents in assignStudentToClass(scope.row)"-->
+            <!--:key="assignStudents.name" type="primary"-->
+            <!--@click="assignStudents.handler">-->
+            <!--{{assignStudents.name}}-->
+            <!--</el-button>-->
+            <!--</template>-->
+            <!--</el-table-column>-->
+            <!--<el-table-column label="View Students" min-width="100px">-->
+            <!--<template slot-scope="scope">-->
+            <!--<el-button v-for="assignStudents in ViewStudentToClass(scope.row)"-->
+            <!--:key="assignStudents.name" type="primary"-->
+            <!--@click="assignStudents.handler">-->
+            <!--{{assignStudents.name}}-->
+            <!--</el-button>-->
+            <!--</template>-->
+            <!--</el-table-column>-->
+            <!--</data-tables>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
         </div>
 
         <b-modal id="newClassModal" size="lg" title="Create New Class" ok-only ok-variant="secondary" hide-footer
@@ -115,6 +168,7 @@
                                 :value="item.PK_Course_ID">
                         </el-option>
                     </el-select>
+
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -139,22 +193,22 @@
                     <input type="text" class="form-control" v-model="inputClassName">
                 </div>
 
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>Programme</label>
-                    <el-select v-model="ddlClassType" placeholder="Select" class="fullwidth">
-                        <el-option
-                                v-for="item in classTypeList"
-                                :key="item.CTY_ClassType"
-                                :label="item.CTY_ClassType"
-                                :value="item.CTY_ClassType">
-                        </el-option>
-                    </el-select>
-                    <!--<select v-model="ddlClassType" class="form-control pro-edt-select form-control-primary">-->
-                    <!--<option v-for="item in classTypeList" v-bind:value="item.CTY_ClassType">-->
-                    <!--{{ item.CTY_ClassType }}-->
-                    <!--</option>-->
-                    <!--</select>-->
-                </div>
+                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                <!--<label>Programme</label>-->
+                <!--<el-select v-model="ddlClassType" placeholder="Select" class="fullwidth">-->
+                <!--<el-option-->
+                <!--v-for="item in classTypeList"-->
+                <!--:key="item.CTY_ClassType"-->
+                <!--:label="item.CTY_ClassType"-->
+                <!--:value="item.CTY_ClassType">-->
+                <!--</el-option>-->
+                <!--</el-select>-->
+                <!--&lt;!&ndash;<select v-model="ddlClassType" class="form-control pro-edt-select form-control-primary">&ndash;&gt;-->
+                <!--&lt;!&ndash;<option v-for="item in classTypeList" v-bind:value="item.CTY_ClassType">&ndash;&gt;-->
+                <!--&lt;!&ndash;{{ item.CTY_ClassType }}&ndash;&gt;-->
+                <!--&lt;!&ndash;</option>&ndash;&gt;-->
+                <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                <!--</div>-->
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Class Teacher</label>
@@ -184,8 +238,8 @@
                     </button>
                 </div>
                 <div class="col-lg-6">
-                    <button v-on:click="saveClass()"
-                            class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Create
+                    <button v-on:click="createNewProgrmamme('New')"
+                            class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Next
                     </button>
                 </div>
             </div>
@@ -194,7 +248,7 @@
         <b-modal id="editClassModal" size="lg" title="Edit Class" ok-only ok-variant="secondary"
                  ref="editClassShowModal" hide-footer v-model="editClassShowModal">
             <div class="row ml-2 mr-2">
-                <div style="display: none;">{{ editClassID }}</div>
+                <div style="display: none;">{{ editSemesterID }} - {{ editCourseID }} - {{ editClassName }}</div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Level</label>
@@ -229,8 +283,8 @@
                 </div>
                 <hr class="custom-hr"/>
                 <div class="col-lg-6">
-                    <button @click="closeAssignModal()" class=" btn btn-secondary float-left">
-                        Close
+                    <button @click="backtoClassList()" class=" btn btn-secondary float-left">
+                        Back
                     </button>
                 </div>
                 <div class="col-lg-6">
@@ -247,9 +301,13 @@
                 <div style="display: none;">{{ assignClassLevelID }} - {{ assignClassID }}</div>
 
                 <div class="">
+                    <div v-if="assignStudentsListInt.length<1" class="empty-list_image">
+                        <strong>No Record ...</strong>
+                        <img src="../assets/promotion.jpg"/>
+                    </div>
                     <div v-if="assignStudentsListInt.length>0">
 
-                        <el-row style="margin-bottom: 10px" class="classManage-ActionBar    ">
+                        <el-row style="margin-bottom: 10px" class="classManage-ActionBar">
                             <el-col :span="16">
                                 <el-input v-model="filters[0].value">
                                     <template slot="prepend">Search</template>
@@ -261,7 +319,8 @@
                             </el-col>
                         </el-row>
                         <data-tables :data="assignStudentsListInt" :filters="filters"
-                                     @selection-change="changeSelection" :row-key="getRowKey">
+                                     :pagination-props="{ background: true, pageSizes: [2, 3, 4] }"
+                                     @selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">
                             <el-table-column type="selection" width="55" :reserve-selection="true">
                             </el-table-column>
 
@@ -276,26 +335,32 @@
                 <hr class="custom-hr"/>
                 <div class="row">
                     <div class="col-lg-6">
-                        <button v-on:click="closeAssignModal()"
-                                class="btn btn-secondary close-modal-btn float-left">Close
+                        <button v-on:click="backtoClassList()"
+                                class="btn btn-secondary close-modal-btn float-left">Back
                         </button>
                     </div>
                     <div class="col-lg-6">
                         <button v-on:click="assignClass()"
-                                class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch float-right">Assign
+                                class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch float-right" :disabled="assignStudentsListInt.length<1">
+                            Assign
                         </button>
                     </div>
                 </div>
             </div>
         </b-modal>
+
         <b-modal id="ViewClassModal" size="lg" title="Assign Class" ok-only ok-variant="secondary"
-                 ref="ViewClassModal" ok-title="Close">
+                 ref="ViewClassModal" ok-title="Close" hide-footer v-model="ViewClassModal">
             <div class="">
                 <div style="display: none;">{{ assignClassLevelID }} - {{ assignClassID }}</div>
 
+                <div v-if="currentStudent.length<1" class="empty-list_image">
+                    <strong>No Record ...</strong>
+                    <img src="../assets/promotion.jpg"/>
+                </div>
                 <div class="">
                     <div>
-                        <data-tables :data="currentStudent">
+                        <data-tables :data="currentStudent" v-if="currentStudent.length>0">
 
                             <el-table-column v-for="studentList in currentStudentList"
                                              :prop="studentList.prop"
@@ -304,6 +369,138 @@
                             </el-table-column>
                         </data-tables>
                     </div>
+                </div>
+            </div>
+            <hr class="custom-hr"/>
+            <div class="row ">
+                <div class="col-lg-6">
+                    <button @click="closeAssignModal"
+                            class="btn btn-secondary waves-effect waves-light m-r-10 btnFamilyIDSearch float-left">
+                        Close
+                    </button>
+                </div>
+                <div class="col-lg-6">
+                    <button @click="returnAssignStudents"
+                            class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch float-right">
+                        Assign Student
+                    </button>
+                </div>
+            </div>
+        </b-modal>
+
+        <b-modal id="ClassListModal" size="lg" title="Class List" ok-only ok-variant="secondary" hide-footer
+                 ref="classListShowModal" v-model="ClassListModal">
+            <div class="row ml-2 mr-2">
+                <div style="display: none;">{{ classListSemesterID }} - {{ classListCourseID }} - {{ classListClassName
+                    }} - {{ classListLevelName }} - {{ classListMaxStudents }}
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                    <el-button-group class=" ">
+                        <el-button type="primary" v-on:click="editClass()" variant="primary"><i class="material-icons">
+                            edit
+                        </i> Edit Class
+                        </el-button>
+                        <el-button type="primary" v-on:click="createNewProgrmamme('Edit')" variant="primary"><i
+                                class="material-icons">
+                            note_add
+                        </i> Create New
+                            Programme
+                        </el-button>
+                    </el-button-group>
+
+                    <div v-if="classListInt.length>0">
+
+                        <data-tables :data="classListInt" class="classManage-Table"
+                                     :filters="ClassFilters">
+                            <el-table-column v-for="classListInfo in classList" :prop="classListInfo.prop"
+                                             :label="classListInfo.label" :key="classListInfo.prop"
+                                             sortable="custom">
+                            </el-table-column>
+
+                            <el-table-column label="Assign Students" min-width="100px">
+                                <template slot-scope="scope">
+                                    <el-button v-for="assignStudents in assignStudentToClass(scope.row)"
+                                               :key="assignStudents.name" type="primary"
+                                               @click="assignStudents.handler">
+                                        {{assignStudents.name}}
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="View Students" min-width="100px">
+                                <template slot-scope="scope">
+                                    <el-button v-for="assignStudents in ViewStudentToClass(scope.row)"
+                                               :key="assignStudents.name" type="primary"
+                                               @click="assignStudents.handler">
+                                        {{assignStudents.name}}
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </data-tables>
+                    </div>
+                </div>
+
+                <hr class="custom-hr"/>
+                <div class="col-lg-6">
+                    <button v-on:click="closeAssignModal()"
+                            class="btn btn-secondary close-modal-btn float-left">Close
+                    </button>
+                </div>
+                <!--<div class="col-lg-6">-->
+                <!--<button v-on:click="editClass()"-->
+                <!--class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Edit Class-->
+                <!--</button>-->
+
+                <!--<button v-on:click="createNewProgrmamme('Edit')"-->
+                <!--class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Create New-->
+                <!--Programme-->
+                <!--</button>-->
+                <!--</div>-->
+            </div>
+        </b-modal>
+
+        <b-modal id="newProgrammeModal" size="lg" title="Create New Programme" ok-only ok-variant="secondary"
+                 hide-footer
+                 ref="newProgrammeShowModal" v-model="newProgrammeShowModal">
+            <div class="row ml-2 mr-2">
+                <div style="display: none;">{{ programmeLevelID }} - {{ programmeSemID }} - {{ programmeClassName }} -
+                    {{ programmeMaxStudent }} - {{ programmeClassTeacher }} - {{ programmeSaveType }}
+                </div>
+
+                <div class="col-lg-12" v-if="currentClassTypeList > 0">
+                    <label>Programme</label>
+                </div>
+                <div class="col-lg-6">
+                    <el-select v-model="ddlClassType" placeholder="Select" class="fullwidth"
+                               v-if="currentClassTypeList > 0">
+                        <el-option
+                                v-for="item in currentClassTypeList"
+                                :key="item.CTY_ClassType"
+                                :label="item.CTY_ClassType"
+                                :value="item.CTY_ClassType"
+                                :disabled="item.disabled===true">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="col-lg-12">
+                    <div v-if="currentClassTypeList.length<1" class="empty-list_image">
+                        <strong class="text-center">All Programme has been created.</strong>
+                        <img src="../assets/promotion.jpg"/>
+                    </div>
+                </div>
+
+                <hr class="custom-hr"/>
+                <div class="col-lg-6">
+                    <button v-on:click="backtoClassList()"
+                            class="btn btn-secondary close-modal-btn float-left" v-if="showbackBtn === true">Back
+                    </button>
+                </div>
+                <div class="col-lg-6">
+                    <button v-on:click="saveClass()"
+                            class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch"
+                            :disabled="currentClassTypeList < 1">Create
+                    </button>
                 </div>
             </div>
         </b-modal>
@@ -316,7 +513,8 @@
     export default {
         name: "ClassManagement",
         async created() {
-            await this.getClass();
+            //await this.getClass();
+            await this.getParentClassList();
             await this.getLevel();
             await this.getAcademicYear();
             await this.getClassType();
@@ -324,26 +522,45 @@
         },
         data() {
             return {
+                currentClassProgs: [],
                 assignClassModal: false,
                 newClassShowModal: false,
                 editClassShowModal: false,
+                newProgrammeShowModal: false,
+                ClassListModal: false,
+                ViewClassModal: false,
+                showbackBtn: false,
                 ddlClassLevel: '',
                 ddlSemester: '',
                 inputClassName: '',
                 ddlClassType: '',
                 ddlClassTeacher: '',
                 inputMaxStudents: '',
-                editClassID: '',
                 ddlEditClassStatus: '',
                 inputEditClassName: '',
                 inputEditMaxStudents: '',
                 inputeditLevel: '',
                 assignClassLevelID: '',
                 assignClassID: '',
+                classListSemesterID: '',
+                classListCourseID: '',
+                classListClassName: '',
+                classListLevelName: '',
+                classListMaxStudents: '',
+                programmeLevelID: '',
+                programmeSemID: '',
+                programmeClassName: '',
+                programmeMaxStudent: '',
+                programmeClassTeacher: '',
+                programmeSaveType: '',
+                editSemesterID: '',
+                editCourseID: '',
+                editClassName: '',
 
                 levelList: [],
                 semesterList: [],
                 classTypeList: [],
+                currentClassTypeList: [],
                 classTeacherList: [],
                 classListInt: [],
                 classListFilteritem: [],
@@ -363,27 +580,26 @@
                     prop: "CRS_Course_Name",
                     label: "Level"
                 }],
-                classListAction: {
-                    label: 'Edit',
-                    props: {
-                        align: 'center',
-                    },
-                    buttons: [{
-                        props: {
-                            type: 'primary',
-                            icon: 'el-icon-edit'
-                        },
-                        handler: row => {
-                            this.editClassID = row.PK_Class_ID;
-                            this.inputEditClassName = row.CLS_ClassName;
-                            this.ddlEditClassStatus = 'Active';
-                            this.inputEditMaxStudents = row.CLS_Class_Max_Students;
-                            this.inputeditLevel = row.CRS_Course_Name;
-                            this.$refs.editClassShowModal.show();
-                        },
-                        label: 'Edit'
-                    }]
-                },
+                // classListAction: {
+                //     label: 'Edit',
+                //     props: {
+                //         align: 'center',
+                //     },
+                //     buttons: [{
+                //         props: {
+                //             type: 'primary',
+                //             icon: 'el-icon-edit'
+                //         },
+                //         handler: row => {
+                //             this.inputEditClassName = row.CLS_ClassName;
+                //             this.ddlEditClassStatus = 'Active';
+                //             this.inputEditMaxStudents = row.CLS_Class_Max_Students;
+                //             this.inputeditLevel = row.CRS_Course_Name;
+                //             this.$refs.editClassShowModal.show();
+                //         },
+                //         label: 'Edit'
+                //     }]
+                // },
 
                 assignStudentsList: [{
                     prop: "Index_No",
@@ -410,13 +626,14 @@
                     },
                     {
                         value: [],
-                        prop: ['CRS_Course_Name', 'CLS_Batch']
+                        prop: 'CRS_Course_Name'
                     }],
                 filters: [{
                     value: '',
                     prop: 'Full_Name',
                 }],
                 multipleSelection: [],
+
                 currentStudent: [],
                 currentStudentList: [{
                     prop: "Index_No",
@@ -431,16 +648,80 @@
                     prop: "Last_name",
                     label: "Last Name"
                 }],
-                tempRow: ""
+                tempRow: "",
+
+
+                parentClassListInt: [],
+                parentClassList: [{
+                    prop: "CLS_ClassName",
+                    label: "Class Name"
+                }, {
+                    prop: "Average_MaxStudents",
+                    label: "Max Students"
+                }, {
+                    prop: "CRS_Course_Name",
+                    label: "Level"
+                }, {
+                    prop: "SMT_Year",
+                    label: "Year"
+                }],
+                parentClassListAction: {
+                    label: 'Edit',
+                    props: {
+                        align: 'center',
+                    },
+                    buttons: [{
+                        props: {
+                            type: 'primary',
+                            icon: 'el-icon-edit'
+                        },
+                        handler: row => {
+                            this.classListSemesterID = row.CLS_FK_Semester_ID;
+                            this.classListCourseID = row.CLS_FK_Course_ID;
+                            this.classListClassName = row.CLS_ClassName;
+                            this.classListLevelName = row.CRS_Course_Name;
+                            this.classListMaxStudents = row.Average_MaxStudents;
+                            this.getClass();
+                            this.$refs.classListShowModal.show();
+                            this.showbackBtn = true;
+                        },
+                        label: 'Edit'
+                    }]
+                },
             };
         },
         methods: {
             getRowKey(row) {
-                console.log("helo", row);
                 return row.Student_ID;
             },
-            async changeSelection(val) {
+            changeSelection(val) {
                 this.multipleSelection = val;
+            },
+            backtoClassList() {
+                this.$refs.classListShowModal.show();
+            },
+            async getParentClassList() {
+                try {
+                    const response = await DataSource.shared.getParentClassList('', 'GET CLASS LIST GROUP BY LEVEL, SEMESTER, SCHOOL AND CLASS NAME');
+                    if (response) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        } else if (response.code === '99') {
+                            console.log('Error! getParentClassList');
+                        } else {
+                            this.parentClassListInt = response.Table;
+                            this.parentClassListInt.forEach(object => {
+                                const foundLevel = this.classListFilteritem.find(d => d === object.CRS_Course_Name);
+                                if (!foundLevel) {
+                                    this.classListFilteritem.push(object.CRS_Course_Name);
+                                }
+                            });
+                        }
+                    }
+
+                } catch (e) {
+                    this.results = e;
+                }
             },
             async getClass() {
                 try {
@@ -450,16 +731,26 @@
                             window.location.replace('/');
                         } else {
                             this.classListInt = response.Table;
-                            this.classListInt.forEach(object => {
-                                const found = this.classListFilteritem.find(d => d === object.CLS_Batch);
-                                if (!found) {
-                                    this.classListFilteritem.push(object.CLS_Batch);
-                                }
-                                const foundLevel = this.classListFilteritem.find(d => d === object.CRS_Course_Name);
-                                if (!foundLevel) {
-                                    this.classListFilteritem.push(object.CRS_Course_Name);
-                                }
+                            // this.classListInt.forEach(object => {
+                            //     const found = this.classListFilteritem.find(d => d === object.CLS_Batch);
+                            //     if (!found) {
+                            //         this.classListFilteritem.push(object.CLS_Batch);
+                            //     }
+                            //     const foundLevel = this.classListFilteritem.find(d => d === object.CRS_Course_Name);
+                            //     if (!foundLevel) {
+                            //         this.classListFilteritem.push(object.CRS_Course_Name);
+                            //     }
+                            // });
+
+
+                            let classListList = response.Table;
+                            this.classListInt = classListList.filter(d => {
+                                return d.CLS_FK_Semester_ID === this.classListSemesterID && d.CLS_FK_Course_ID === this.classListCourseID && d.CLS_ClassName === this.classListClassName;
                             });
+
+
+                            this.currentClassProgs = this.classListInt.map(d => d.CLS_Batch);
+
                         }
                     }
                 } catch (e) {
@@ -502,6 +793,9 @@
                             window.location.replace('/');
                         } else {
                             this.classTypeList = response.Table;
+                            //
+                            // this.classTypeList = this.classTypeList.filter(d => d.ID !== fileId);
+                            //
                         }
                     }
                 } catch (e) {
@@ -532,13 +826,13 @@
             },
             async saveClass() {
                 try {
-                    if (this.ddlClassLevel === '' || this.ddlSemester === '' || this.ddlClassType === '' || this.inputClassName === '' || this.inputMaxStudents === '' || this.ddlClassTeacher === '') {
+                    if (this.programmeLevelID === '' || this.programmeSemID === '' || this.ddlClassType === '' || this.programmeClassName === '' || this.programmeMaxStudent === '' || this.programmeClassTeacher === '' || this.programmeSaveType === '') {
                         this.$notify.error({
                             title: 'Error',
                             message: 'Please fill in all information'
                         });
                     } else {
-                        const response = await DataSource.shared.saveClass(this.ddlClassLevel, this.ddlSemester, this.ddlClassType, this.inputClassName, this.inputMaxStudents, this.ddlClassTeacher);
+                        const response = await DataSource.shared.saveClass(this.programmeLevelID, this.programmeSemID, this.ddlClassType, this.programmeClassName, this.programmeMaxStudent, this.programmeClassTeacher, this.programmeSaveType);
                         if (response) {
                             if (response.code === '88') {
                                 window.location.replace('/');
@@ -546,6 +840,11 @@
                                 this.$notify.error({
                                     title: 'Error',
                                     message: 'Save Class Error!'
+                                });
+                            } else if (response.code === '2') {
+                                this.$notify.error({
+                                    title: 'Duplicated',
+                                    message: 'Duplicated Class with programme!'
                                 });
                             } else {
                                 this.$notify({
@@ -563,14 +862,18 @@
             },
             async updateClass() {
                 try {
-                    if (this.editClassID === '' || this.inputEditClassName === '' || this.inputEditClassName === '' || this.inputEditMaxStudents === '') {
-
+                    if (this.editSemesterID === '' || this.editCourseID === '' || this.editClassName === '') {
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Please close and open again'
+                        });
+                    } else if (this.inputEditClassName === '' || this.ddlEditClassStatus === '' || this.inputEditMaxStudents === '') {
                         this.$notify.error({
                             title: 'Error',
                             message: 'Please fill in all information'
                         });
                     } else {
-                        const response = await DataSource.shared.updateClass(this.editClassID, this.inputEditClassName, this.ddlEditClassStatus, this.inputEditMaxStudents);
+                        const response = await DataSource.shared.updateClass(this.ddlEditClassStatus, this.inputEditClassName, this.inputEditMaxStudents, this.editClassName, this.editCourseID, this.editSemesterID);
                         if (response) {
                             if (response.code === '88') {
                                 window.location.replace('/');
@@ -585,9 +888,8 @@
                                     message: 'Successfully Edited!',
                                     type: 'success'
                                 });
-                                this.getClass();
-                                this.editClassShowModal = false;
-                                // window.location.replace('/ClassManagement');
+                                this.getParentClassList();
+                                this.closeAssignModal();
                             }
                         }
                     }
@@ -615,6 +917,9 @@
                 this.assignClassModal = false;
                 this.newClassShowModal = false;
                 this.editClassShowModal = false;
+                this.newProgrammeShowModal = false;
+                this.ClassListModal = false;
+                this.ViewClassModal = false;
             },
             ViewStudentToClass(row) {
                 return [{
@@ -635,9 +940,11 @@
                 this.getAssignStudents();
                 this.$refs.ViewClassModal.show();
             },
+            returnAssignStudents() {
+                this.$refs.assignClassShowModal.show();
+            },
             async getAssignStudents() {
                 try {
-
                     this.$vs.loading();
                     const response = await DataSource.shared.getActiveStudentsByLevelSchool(this.assignClassLevelID, this.assignClassID);
                     if (response) {
@@ -655,8 +962,7 @@
                                 return d.assignToCurrentClass === "YES";
                             });
 
-
-                            console.log("assignStudentsListInt", this.assignStudentsListInt);
+                            //console.log("assignStudentsListInt", this.assignStudentsListInt);
 
                             // if (x.assignToCurrentClass !== "YES") {
                             //     this.assignStudentsListInt.push(x);
@@ -706,6 +1012,55 @@
                         window.location.replace('/ClassManagement');
                     }
                 }
+            },
+            createNewProgrmamme(value) {
+                if (value === 'New') {
+                    if (this.ddlClassLevel === '' || this.ddlSemester === '' || this.inputClassName === '' || this.inputMaxStudents === '' || this.ddlClassTeacher === '') {
+                        this.$notify.error({
+                            title: 'Error',
+                            message: 'Please fill in all information'
+                        });
+                    } else {
+                        this.programmeLevelID = this.ddlClassLevel;
+                        this.programmeSemID = this.ddlSemester;
+                        this.programmeClassName = this.inputClassName;
+                        this.programmeMaxStudent = this.inputMaxStudents;
+                        this.programmeClassTeacher = this.ddlClassTeacher;
+                        this.programmeSaveType = 'NEW CLASS';
+
+                        this.newProgrammeShowModal = true;
+                    }
+                } else if (value === 'Edit') {
+                    this.programmeLevelID = this.classListInt[0].CLS_FK_Course_ID;
+                    this.programmeSemID = this.classListInt[0].CLS_FK_Semester_ID;
+                    this.programmeClassName = this.classListInt[0].CLS_ClassName;
+                    this.programmeMaxStudent = this.classListInt[0].CLS_Class_Max_Students;
+                    this.programmeClassTeacher = this.classListInt[0].CLS_Class_Incharge_Staff;
+                    this.programmeSaveType = 'NEW BATCH ONLY';
+
+                    this.newProgrammeShowModal = true;
+
+
+                    this.currentClassTypeList = this.classTypeList.filter(d => {
+                        const found = this.currentClassProgs.find(c => {
+                            return d.CTY_ClassType === c;
+                        });
+                        if (!found) {
+                            return d;
+                        }
+                    });
+
+                }
+            },
+            editClass() {
+                this.editSemesterID = this.classListSemesterID;
+                this.editCourseID = this.classListCourseID;
+                this.editClassName = this.classListClassName;
+                this.inputEditClassName = this.classListClassName;
+                this.ddlEditClassStatus = 'Active';
+                this.inputEditMaxStudents = this.classListMaxStudents;
+                this.inputeditLevel = this.classListLevelName;
+                this.$refs.editClassShowModal.show();
             },
         },
     };

@@ -22,6 +22,7 @@
     "tiptap": "^1.7.0",
     "tiptap-extensions": "^1.7.0",
     "typeahead": "^0.2.2",
+    "v-calendar": "^0.9.7",
     "vue": "^2.5.17",
     "vue-at": "^2.5.0-beta",
     "vue-body-class": "^2.0.0-beta.2",

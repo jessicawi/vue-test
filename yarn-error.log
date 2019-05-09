@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add vuedraggable
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add v-calender
 
 PATH: 
-  C:\Python27\;C:\Python27\Scripts;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\jessi\AppData\Local\Microsoft\WindowsApps;C:\Users\jessi\AppData\Roaming\npm;C:\Users\jessi\AppData\Local\Yarn\bin
+  C:\Users\jessi\Documents\git\vue-test\node_modules\.bin;C:\Python27\;C:\Python27\Scripts;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\jessi\AppData\Local\Microsoft\WindowsApps;C:\Users\jessi\AppData\Roaming\npm;C:\Users\jessi\AppData\Local\Yarn\bin
 
 Yarn version: 
   1.13.0
@@ -14,7 +14,17 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\Users\jessi\Documents\git\vue-test\node_modules\node-sass\vendor\win32-x64-67\binding.node'
+  Error: https://registry.yarnpkg.com/v-calender: Not found
+      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65364:18)
+      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129397:22)
+      at Request.emit (events.js:197:13)
+      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130369:10)
+      at Request.emit (events.js:197:13)
+      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130291:12)
+      at Object.onceWrapper (events.js:285:13)
+      at IncomingMessage.emit (events.js:202:15)
+      at endReadableNT (_stream_readable.js:1129:12)
+      at processTicksAndRejections (internal/process/next_tick.js:76:17)
 
 npm manifest: 
   {
@@ -35,6 +45,7 @@ npm manifest:
       "element-ui": "^2.4.11",
       "is-image": "^2.0.0",
       "jquery": "^3.3.1",
+      "js-cookie": "^2.2.0",
       "material-icons": "^0.2.3",
       "moment": "^2.24.0",
       "tiptap": "^1.7.0",
@@ -53,9 +64,10 @@ npm manifest:
       "vue-upload-component": "^2.8.18",
       "vue2-datatable-component": "^2.3.1",
       "vue2-dropzone": "^3.5.2",
-      "vuedraggable": "^2.17.0",
+      "vuedraggable": "^2.19.2",
       "vuelidate": "^0.7.4",
       "vuesax": "^3.8.0",
+      "vuex": "^3.1.0",
       "webpack-cli": "^3.1.2",
       "webpack-dev-server": "^3.1.14"
     },
@@ -4808,6 +4820,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.5.0.tgz#42255ba183ab67ce59a0dee640afdc00ab5ae93e"
     integrity sha512-wlEBIZ5LP8usDylWbDNhKPEFVFdI5hCHpnVoT/Ysvoi/PRhJENm/Rlh9TvjYB38HFfKZN7OzEbRjmjvLkFw11g==
   
+  js-cookie@^2.2.0:
+    version "2.2.0"
+    resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.0.tgz#1b2c279a6eece380a12168b92485265b35b1effb"
+    integrity sha1-Gywnmm7s44ChIWi5JIUmWzWx7/s=
+  
   js-levenshtein@^1.1.3:
     version "1.1.4"
     resolved "https://registry.yarnpkg.com/js-levenshtein/-/js-levenshtein-1.1.4.tgz#3a56e3cbf589ca0081eb22cd9ba0b1290a16d26e"
@@ -7598,10 +7615,10 @@ Lockfile:
       faye-websocket "^0.10.0"
       uuid "^3.0.1"
   
-  sortablejs@^1.7.0:
-    version "1.8.3"
-    resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.8.3.tgz#5ae908ef96300966e95440a143340f5dd565a0df"
-    integrity sha512-AftvD4hdKcR5QlGi7L/JST506zGNGrysE8/QohDpwKXJarHWqCt+TUlrtoMk/wkECB607Q019/OZlJViyWiD6A==
+  sortablejs@^1.8.4:
+    version "1.8.4"
+    resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.8.4.tgz#1bbfeafa96d399b83f28e25d8e49d4fbfd867f30"
+    integrity sha512-Brqnzelu1AhFuc0Fn3N/qFex1tlIiuQIUsfu2J8luJ4cRgXYkWrByxa+y5mWEBlj8A0YoABukflIJwvHyrwJ6Q==
   
   source-list-map@^2.0.0:
     version "2.0.1"
@@ -8634,12 +8651,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.21.tgz#3d33dcd03bb813912ce894a8303ab553699c4a85"
     integrity sha512-Aejvyyfhn0zjVeLvXd70h4hrE4zZDx1wfZqia6ekkobLmUZ+vNFQer53B4fu0EjWBSiqApxPejzkO1Znt3joxQ==
   
-  vuedraggable@^2.17.0:
-    version "2.17.0"
-    resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.17.0.tgz#489c16c9bcb9eb06f441944d3c52e5f2bb7060f9"
-    integrity sha512-TAC5tJTSbHSINQCSB59qHnuzT0Ad+E3IgvSWuA1e9UaebD8DxKaY1tCdvL3XvuLoaM3wc1dhpP/NbjpdxYsrng==
+  vuedraggable@^2.19.2:
+    version "2.19.2"
+    resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.19.2.tgz#a82a35e081eb63272c53c71b51b7e4e4f906e394"
+    integrity sha512-O9xmztFDrs/bjWFBOHxQHm8cbvdMP6pPl5KwTewy+F8B89MtC3+dOrs0CUcsfRVQpq7vLSk890jndJJykODIgA==
     dependencies:
-      sortablejs "^1.7.0"
+      sortablejs "^1.8.4"
   
   vuelidate@^0.7.4:
     version "0.7.4"
@@ -8652,6 +8669,11 @@ Lockfile:
     integrity sha512-xRBtLJoHDrxT43mXtZNvbrGzCNECxYeYrQi/U+U87+a2yMKByWqypFDt2UK29uhTbHlMTShL+wu7HiYTYtJwvw==
     dependencies:
       vue "^2.5.17"
+  
+  vuex@^3.1.0:
+    version "3.1.0"
+    resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.0.tgz#634b81515cf0cfe976bd1ffe9601755e51f843b9"
+    integrity sha512-mdHeHT/7u4BncpUZMlxNaIdcN/HIt1GsGG5LKByArvYG/v6DvHcOxvDCts+7SRdCoIRGllK8IMZvQtQXLppDYg==
   
   w3c-keyname@^1.1.8:
     version "1.1.8"

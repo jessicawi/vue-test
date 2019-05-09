@@ -32,6 +32,7 @@ import transferIn from "../pages/TransferIn";
 import studentgraduation from "../pages/StudentGraduation";
 import classManagement from "../pages/ClassManagement";
 import studentPaymentPlan from "../pages/StudentPaymentPlan";
+import event from "../pages/Event";
 
 Vue.use(VueRouter);
 
@@ -195,6 +196,11 @@ const router = new VueRouter({
             path: '/StudentPaymentPlan',
             name: 'Student Payment Plan',
             component: studentPaymentPlan
+        },
+        {
+            path: '/Event',
+            name: 'Event',
+            component: event
         },
     ]
 });

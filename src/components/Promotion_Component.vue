@@ -10,6 +10,17 @@
                 {{student.Student_Name}}
             </el-tag>
         </div>
+
+
+        <div class="row promotion-clear-select" v-if="isStudent === true">
+            <div class="col-6">
+            </div>
+            <div class="col-6">
+                <button class="btn btn-secondary float-right" @click="clearSelection"><i class="material-icons">
+                    cancel
+                </i> Clear</button>
+            </div>
+        </div>
         <div class="form-group row">
             <label for="ddl_NewYear">Academic Year</label>
             <select id="ddl_NewYear" class="mb-3 form-control" v-model="obj_SelectedNewYear"
@@ -23,8 +34,8 @@
         </div>
 
         <div class="form-group row">
-            <label for="ddl_NewClass">Class</label>
-            <select id="ddl_NewClass" class="mb-3 form-control" v-model="obj_SelectedNewClass">
+            <label for="ddl_NewClass">Class </label>
+            <select id="ddl_NewClass" class="mb-3 form-control" v-model="obj_SelectedNewClass" @change="emitclasslevel">
                 <optgroup v-for="tempobj_Level of arrobj_NewClasses" :label="tempobj_Level.Str_SortBy"
                           :key="tempobj_Level.id">
                     <option v-for="tempobj_Class of tempobj_Level.ArrObj_Items" :value="tempobj_Class"
@@ -35,7 +46,7 @@
             </select>
         </div>
 
-        <div class="row">
+        <div class="row" v-if="showStudentTag === true">
             <div class="col-6">
                 <button class="btn btn-primary" @click="promoteStudents">OK</button>
             </div>
@@ -62,9 +73,13 @@
                 filterStudents: "",
             };
         },
-        props: ["selectedStudents","courseId","arrobjSelectedStudentID","showStudentTag"],
+        props: ["selectedStudents","courseId","arrobjSelectedStudentID","showStudentTag","isStudent"],
         // props: {selectedStudents: [Array], CourseId: String, arrobjSelectedStudentID: [Array]},
         methods: {
+            clearSelection(){
+                this.obj_SelectedNewYear = "";
+                this.obj_SelectedNewClass = "";
+            },
             sleep(milliseconds) {
                 return new Promise(resolve => setTimeout(resolve, milliseconds));
             },
@@ -118,6 +133,12 @@
                 // this.filterStudents = this.selectedStudents;
 
                 this.hideLoading();
+            },
+            emitclasslevel(){
+                if (this.isStudent === true){
+                    console.log("isstudent")
+                    this.$emit('studentPromoteAction', this.obj_SelectedNewYear.PK_Semester_ID, this.obj_SelectedNewClass.PK_Course_ID, this.obj_SelectedNewClass.PK_Class_ID);
+                }
             },
             loadNewYears() {
                 DataSource.shared.getAcademicYear().then((result) => {

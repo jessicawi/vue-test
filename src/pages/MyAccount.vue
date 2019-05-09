@@ -236,6 +236,17 @@
                                     <label>Company Email</label>
                                     <input type="text" class="form-control" ref="inputFatherCompanyEmail">
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working Commencement Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputFatherWorkingCommencementDate"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date"
+                                                        placeholder="Pick a day"></el-date-picker>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -464,6 +475,16 @@
                                     <label>Company Email</label>
                                     <input type="text" class="form-control" ref="inputMotherCompanyEmail">
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working Commencement Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputMotherWorkingCommencementDate"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date"
+                                                        placeholder="Pick a day"></el-date-picker>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -679,6 +700,16 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Company Email</label>
                                     <input type="text" class="form-control" ref="inputGuardianCompanyEmail">
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Working Commencement Date</label>
+                                    <div class="date">
+                                        <el-date-picker v-model="inputGuardianWorkingCommencementDate"
+                                                        format="dd/MM/yyyy"
+                                                        value-format="dd/MM/yyyy" type="date"
+                                                        placeholder="Pick a day"></el-date-picker>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -970,6 +1001,9 @@
                 ddlFatherEmploymentStatus: '',
                 ddlMotherEmploymentStatus: '',
                 ddlGuardianEmploymentStatus: '',
+                inputFatherWorkingCommencementDate: '',
+                inputMotherWorkingCommencementDate: '',
+                inputGuardianWorkingCommencementDate: '',
                 lblParentID: '',
 
                 //reset password
@@ -1041,7 +1075,7 @@
             }
         },
         async mounted() {
-this.userType = Cookies.get('userTypeSession');
+                this.userType = Cookies.get('userTypeSession');
         },
         methods: {
             showProfileModal(){
@@ -1250,6 +1284,9 @@ this.userType = Cookies.get('userTypeSession');
                         if (m.PAR_FComp_Email !== undefined) {
                             this.$refs.inputFatherCompanyEmail.value = m.PAR_FComp_Email;
                         }
+                        if (m.PAR_Father_WorkingCommencementDate_convert !== '01/01/1901') {
+                            this.inputFatherWorkingCommencementDate = m.PAR_Father_WorkingCommencementDate_convert;
+                        }
                         ;
                         //father
 
@@ -1376,6 +1413,9 @@ this.userType = Cookies.get('userTypeSession');
                         if (m.PAR_MComp_Email !== undefined) {
                             this.$refs.inputMotherCompanyEmail.value = m.PAR_MComp_Email;
                         }
+                        if (m.PAR_Mother_WorkingCommencementDate_convert !== '01/01/1901') {
+                            this.inputMotherWorkingCommencementDate = m.PAR_Mother_WorkingCommencementDate_convert;
+                        }
                         ;
                         //mother
 
@@ -1497,6 +1537,9 @@ this.userType = Cookies.get('userTypeSession');
                         ;
                         if (m.PAR_GComp_Email !== undefined) {
                             this.$refs.inputGuardianCompanyEmail.value = m.PAR_GComp_Email;
+                        }
+                        if (m.PAR_Guardian_WorkingCommencementDate_convert !== '01/01/1901') {
+                            this.inputGuardianWorkingCommencementDate = m.PAR_Guardian_WorkingCommencementDate_convert;
                         }
                         ;
                         //guardian
@@ -1687,6 +1730,15 @@ this.userType = Cookies.get('userTypeSession');
                         jsonString = jsonString + ',"PAR_TPCountry":"' + this.$refs.inputThirdPartyCountry.value + '"';
                         jsonString = jsonString + ',"PAR_TPPin":"' + this.$refs.inputThirdPartyPostalCode.value + '"';
                         jsonString = jsonString + ',"PAR_TPComp_Email":"' + this.$refs.inputThirdPartyCompanyEmail.value + '"';
+                        if (this.inputFatherWorkingCommencementDate !== undefined && this.inputFatherWorkingCommencementDate !== null) {
+                            jsonString = jsonString + ',"PAR_Father_WorkingCommencementDate":"' + this.inputFatherWorkingCommencementDate + '"';
+                        };
+                        if (this.inputMotherWorkingCommencementDate !== undefined && this.inputMotherWorkingCommencementDate !== null) {
+                            jsonString = jsonString + ',"PAR_Mother_WorkingCommencementDate":"' + this.inputMotherWorkingCommencementDate + '"';
+                        };
+                        if (this.inputGuardianWorkingCommencementDate !== undefined && this.inputGuardianWorkingCommencementDate !== null) {
+                            jsonString = jsonString + ',"PAR_Guardian_WorkingCommencementDate":"' + this.inputGuardianWorkingCommencementDate + '"';
+                        };
 
                         jsonString = '{ ' + jsonString + ' }';
 

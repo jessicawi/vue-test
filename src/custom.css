@@ -87,6 +87,11 @@ hr.custom-hr {
 /*
 1---form---
  */
+.btn-primary.disabled, .btn-primary:disabled {
+    background-color: #999;
+    border-color: #999;
+    color: #222;
+}
 .form-control:disabled, .form-control[readonly] {
     background: #fafafa;
     color: #a9a9a9;
@@ -349,6 +354,14 @@ label {
 .empty-list_image button {
     margin: 10px auto;
 }
+.el-tabs .el-badge__content {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    display: block;
+    line-height: 20px;
+    font-weight: bold;
+}
 /*
 5---notification---
  */
@@ -403,7 +416,17 @@ label {
     border-color: #409eff;
     color: #ffffff;
 }
+.custom-modal-footer {
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    padding: 20px 10px;
+    margin-bottom: -16px;
+}
 
+.custom-modal-footer button {
+    margin: 0px !important;
+}
 /*
 7---carousel---
  */
@@ -2428,7 +2451,268 @@ h4.title {
     width: 100%;
     padding: 20px;
 }
+.student-status {
+    display: table;
+    float: left;
+    position: relative;
+    top: -61px;
+    left: 222px;
+    padding: 0 10px;
+    border-radius: 11px;
+    height: 100px;
+    margin-bottom: -61px;
+    width: calc(100% - 222px);
+}
 
+span.student-status-current {
+    background: #5565cf;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 23px;
+    display: table;
+    margin: 0 10px;
+}
+
+.student-status .el-button.is-round {
+    padding: 13px 23px;
+    position: relative;
+    top: 1px;
+    background: #ccc;
+    border-color: #ccc;
+    color: #333;
+}
+.student-status .el-button.is-round:focus {
+    box-shadow: 0 0 10px -5px #5565cf;
+    outline: none;
+    border-color: #5565cf;
+    background: white;
+}
+
+div.student-status-popover {
+    padding: 20px !important;
+    margin-top: 10px !important;
+    border-radius: 9px;
+    box-shadow: none;
+    border-color: #e5eaf1;
+}
+
+div.student-status-popover label {
+    text-align: center !important;
+    display: block !important;
+    margin: 0px;
+}
+
+div.student-status-popover  .ddlChangeStatusTo {
+    margin: 15px auto;
+    display: block !important;
+    width: 100%;
+}
+
+div.student-status-popover button {
+    width: 100%;
+    border-radius: 7px;
+}
+.student-action-link {
+    display: table;
+    width: 100%;
+}
+.student-action-link .el-button-group {
+    display: flex;
+}
+
+.student-action-link .el-button-group button {
+    flex: 1;
+    background: #6171dc;
+    border-color: transparent;
+    border-radius: 0px;
+}
+.student-action-link .el-button-group button:hover {
+    background: #697af1;
+}
+.studentPageBTabs .nav-tabs {
+    width: 100%;
+}
+.studentPageBModal .modal-dialog, .studentPageBModal .modal-lg {
+    width: 90% !important;
+    max-width: 1000px !important;
+}
+.promotion-clear-select button {
+    background: #409eff;
+    border: 0px;
+    color: #fff;
+    padding: 3px 10px;
+}
+
+.promotion-clear-select {
+    margin-top: -64px;
+    margin-bottom: 20px;
+}
+
+.promotion-clear-select button i {
+    font-size: 18px;
+    position: relative;
+    top: 4px;
+}
+.imgStudentProfile img {
+    width: 100%;
+    /*min-height: 100%;*/
+}
+
+a.student-profile-edit {
+    position: absolute;
+    background: #000000;
+    width: 100%;
+    border-radius: 100%;
+    height: 100%;
+    text-align: center;
+    color: white;
+    right: 0px;
+    z-index: 9;
+    top: 0;
+    left: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.5s ease all;
+}
+
+a.student-profile-edit i {
+    font-size: 50px;
+    color: white;
+    top: 0px;
+}
+
+.imgStudentProfile:hover a.student-profile-edit {
+
+    opacity: 0.5;
+}
+.studentPageBTabs .el-tabs__nav-wrap {
+    width: 100%;
+}
+
+.studentPageBTabs .el-tabs__nav-wrap::after {
+    display: none;
+}
+
+.studentPageBTabs .el-tabs__content {
+    background: white;
+}
+
+.studentPageBTabs .el-tabs__header {
+    margin: 0px;
+}
+
+.studentPageBTabs .el-tabs__item {
+    padding: 10px;
+    height: auto;
+    color: #a6aab1;
+}
+.studentPageBTabs .el-tabs__item.is-active, .el-tabs__item:hover {
+    color: #5565cf !important;
+}
+
+.studentPageBTabs .el-tabs__active-bar {
+    background-color: #5565cf;
+}
+@keyframes anim {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+}
+
+.bar {
+    margin: auto;
+    width: 100%;
+    height: 6px;
+    overflow: hidden;
+    background-size: 100px 100px;
+    background-image: linear-gradient(-45deg, #ececec 25%, #d9dde4 25%, #d9dde4 50%, #ececec 50%, #ececec 75%, #d9dde4 75%);
+    -webkit-animation: anim 1s linear infinite;
+    animation: anim 1s linear infinite;
+    border-radius: 10px;
+}
+
+.bar p {
+    width: 100px;
+    margin: 0px auto;
+    text-align: center;
+    color: #222;
+}
+.file-upload-wrapper {
+    position: relative;
+    width: 100%;
+    height: 41px;
+    background: #f5f5f5;
+    border-radius: 5px;
+    margin-bottom: 18px;
+}
+.file-upload-wrapper:after {
+    content: attr(data-text);
+    /* font-size: 18px; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent;
+    padding: 10px 15px;
+    display: block;
+    width: calc(100% - 40px);
+    pointer-events: none;
+    z-index: 20;
+    height: 40px;
+    line-height: 21px;
+    color: #999;
+    border-radius: 5px 10px 10px 5px;
+    font-weight: 300;
+}
+.file-upload-wrapper:before {
+    content: 'Browse';
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    /* height: 60px; */
+    background: #409eff;
+    color: #fff;
+    font-weight: 700;
+    z-index: 25;
+    /* font-size: 16px; */
+    /* line-height: 60px; */
+    padding: 10px;
+    text-transform: uppercase;
+    pointer-events: none;
+    border-radius: 0 5px 5px 0;
+}
+.file-upload-wrapper:hover:before {
+    background: #007bff;
+}
+.file-upload-wrapper input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    display: block;
+    cursor: pointer;
+    width: 100%;
+}
+
+.upload-box {
+    width: 80%;
+    margin: 20px auto;
+    background: #fafafa;
+    padding: 40px 20px;
+    border: 2px dashed #cccccc4d;
+}
+
+.upload-box input, .upload-box .file-upload-wrapper:after {
+    background: #f3f3f3 !important;
+}
 /*
 24---student list---
  */
@@ -2470,7 +2754,9 @@ h4.title {
     border: 1px solid #edf0f4;
     border-width: 1px 1px 0px 0px;
 }
-
+.datatable_group .el-table td:first-child {
+    border-left: 1px solid #ebeef5;
+}
 .datatable-form__input input {
     background: #5f71e8;
     border-color: #7886e800;
@@ -2491,6 +2777,25 @@ label.withoutInput {
     /* border: 1px solid #eee; */
     margin-bottom: 20px;
 }
+.student-search-count {
+    background: #eee;
+    display: table;
+    float: right;
+    padding: 10px 20px;
+    border-radius: 43px;
+}
+.student-search-count span {
+    color: #5565cf;
+    font-weight: bold;
+}
+#student-list .action-list button {
+    width: 80% !important;
+}
+
+#student-list .action-list span {
+    margin:0px;
+}
+
 
 /*
 25---not found---

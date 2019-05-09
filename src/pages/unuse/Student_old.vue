@@ -2225,9 +2225,7 @@
 </style>
 
 <style>
-    .studentPageBModal .modal-dialog, .studentPageBModal .modal-lg {
-        min-width: 90% !important;
-    }
+
 
     .studentPageBTabs .tab-content {
         margin-top: 30px;
