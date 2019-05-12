@@ -136,7 +136,7 @@
                                     <!--</el-option>-->
                                 </el-select>
                             </td>
-                            <td><input type="text" class="form-control" :value="item.AttDtlRemark"
+                            <td><input type="text" class="form-control" v-model="item.AttDtlRemark"
                                        ref="studentRemark">
                             </td>
                             <td>
@@ -193,7 +193,6 @@
         },
         methods: {
             showBundleAttendance() {
-
                     const isCheck = this.studentList.find(m => m.checked === true);
                     if (isCheck) {
                         this.bundleAttendance = true;

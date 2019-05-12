@@ -468,12 +468,12 @@
                     {{ programmeMaxStudent }} - {{ programmeClassTeacher }} - {{ programmeSaveType }}
                 </div>
 
-                <div class="col-lg-12" v-if="currentClassTypeList > 0">
+                <div class="col-lg-12" v-if="currentClassTypeList.length > 0">
                     <label>Programme</label>
                 </div>
                 <div class="col-lg-6">
                     <el-select v-model="ddlClassType" placeholder="Select" class="fullwidth"
-                               v-if="currentClassTypeList > 0">
+                               v-if="currentClassTypeList.length > 0">
                         <el-option
                                 v-for="item in currentClassTypeList"
                                 :key="item.CTY_ClassType"
@@ -1029,6 +1029,8 @@
                         this.programmeSaveType = 'NEW CLASS';
 
                         this.newProgrammeShowModal = true;
+
+                        this.currentClassTypeList = this.classTypeList;
                     }
                 } else if (value === 'Edit') {
                     this.programmeLevelID = this.classListInt[0].CLS_FK_Course_ID;

@@ -134,12 +134,10 @@
             <input type="file" ref="file" accept="image/*" style="display:none" @change="previewImgStudentProfile">
         </div>
         <div class="mt-3 container">
-            <el-tabs v-model="activeTab" class="studentPageBTabs" stretch>
-                <el-tab-pane name="Student">
+            <el-tabs v-model="activeTab" class="studentPageBTabs" stretch @tab-click="activeTabHappen">
+                <el-tab-pane name="Student" label="Student">
                     <span slot="label">
-
-
-                        <span v-if="!$v.inputStudentFirstName.$error || !$v.inputStudentLastName.$error || !$v.ddlStudentNationality.$error || !$v.inputStudentDateOfBirth.$error || !$v.inputStudentIdentificationNo.$error || !$v.inputStudentIdentificationExpiryDate.$error || !$v.inputStudentBirthCertificate.$error || !$v.inputStudentIC.$error || !$v.inputStudentPassport.$error || !$v.inputStudentPassportExpiryDate.$error || !$v.inputFirstCommencementDate.$error || !$v.ddlStudentPayer.$error || !$v.inputStudentEnrolledCenterName.$error || !$v.ddlStudentEnrolledCenterType.$error">Student</span>
+                        <span v-if="!$v.$error">Student</span>
 
                         <el-badge value="!" class="item"
                                   v-if="$v.inputStudentFirstName.$error || $v.inputStudentLastName.$error || $v.ddlStudentNationality.$error || $v.inputStudentDateOfBirth.$error || $v.inputStudentIdentificationNo.$error || $v.inputStudentIdentificationExpiryDate.$error || $v.inputStudentBirthCertificate.$error || $v.inputStudentIC.$error || $v.inputStudentPassport.$error || $v.inputStudentPassportExpiryDate.$error || $v.inputFirstCommencementDate.$error || $v.ddlStudentPayer.$error || $v.inputStudentEnrolledCenterName.$error || $v.ddlStudentEnrolledCenterType.$error">
@@ -527,10 +525,10 @@
 
                     <span slot="label">
 
-                        <span v-if="!$v.ddlParentMode.$error || !$v.inputFatherFirstName.$error || !$v.inputFatherLastName.$error || !lblFatherNameDuplicated || !$v.inputFatherOccupation.$error || !$v.inputMotherFirstName.$error || !$v.inputMotherLastName.$error || !lblMotherNameDuplicated">Parents</span>
+                        <span v-if="!$v.ddlParentMode.$error || !$v.inputFatherFirstName.$error || !$v.inputFatherLastName.$error || !$v.inputFatherOccupation.$error || !$v.inputMotherFirstName.$error || !$v.inputMotherLastName.$error">Parents</span>
 
                         <el-badge value="!" class="item"
-                                  v-if="$v.ddlParentMode.$error || $v.inputFatherFirstName.$error || $v.inputFatherLastName.$error || lblFatherNameDuplicated || $v.inputFatherOccupation.$error || $v.inputMotherFirstName.$error || $v.inputMotherLastName.$error || lblMotherNameDuplicated">
+                                  v-if="$v.ddlParentMode.$error || $v.inputFatherFirstName.$error || $v.inputFatherLastName.$error || $v.inputFatherOccupation.$error || $v.inputMotherFirstName.$error || $v.inputMotherLastName.$error">
                             Parents</el-badge>
                     </span>
                     <div class="review-content-section">
@@ -3144,10 +3142,13 @@
                     this.results = e;
                 }
             },
+
             async Validation() {
                 try {
+                    console.log("11");
                     this.$v.$touch();
-
+                    console.log("22");
+                    this.activeTab = "Student";
                     if (this.$v.$error) {
                         //this.$nextTick(() => this.$refs.studentPageMain.focus())
                         this.$notify.error({
@@ -3156,6 +3157,7 @@
                         });
                         return;
                     }
+                    console.log("33");
 
                     const firstCommencementDate_array = this.inputFirstCommencementDate.split("/");
                     const studentDateOfBirth_array = this.inputStudentDateOfBirth.split("/");
@@ -3168,13 +3170,19 @@
                         });
                         return;
                     }
+                    console.log("44");
 
                     this.Save();
+                    console.log("55");
+
                     this.promoteStudents();
 
                 } catch (e) {
                     this.results = e;
                 }
+            },
+            activeTabHappen(tab,event){
+              console.log(tab,event)
             },
             async studentPromoteAction(PK_Semester_ID, PK_Course_ID, PK_Class_ID) {
                 this.tempPK_Semester_ID = PK_Semester_ID;

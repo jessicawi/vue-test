@@ -13,7 +13,7 @@
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.11",
     "chart.js": "^2.7.3",
-    "element-ui": "^2.4.11",
+    "element-ui": "2.4.11",
     "is-image": "^2.0.0",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
