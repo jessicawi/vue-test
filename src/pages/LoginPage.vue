@@ -21,11 +21,21 @@
                             <img src="../assets/kagami.jpg"/>
                         </div>
                     </div>
-                    <form class="needs-validation"  @submit.prevent="onSubmit">
+
+                    <el-alert
+                            title="Welcome Back"
+                            type="success"
+                            :description="results"
+                            show-icon
+                            class="mt-3 mb-3"
+                    v-if="results !== false">
+                    </el-alert>
+                    <form class="needs-validation" @submit.prevent="onSubmit">
 
                         <div class="mb-3" :class="{ 'form-group--error': $v.usernameInput.$error }">
                             <!--<label for="username">Username</label>-->
-                            <vs-input label-placeholder="Email ID"  class="form-control text-left" id="username" v-model="usernameInput" v-model.trim="$v.usernameInput.$model"/>
+                            <vs-input label-placeholder="Email ID" class="form-control text-left" id="username"
+                                      v-model="usernameInput" v-model.trim="$v.usernameInput.$model"/>
                             <div class="invalid-feedback" style="width: 100%;">
                                 Your username is required.
                             </div>
@@ -34,26 +44,19 @@
 
                         <div class="mb-2" :class="{ 'form-group--error': $v.passwordInput.$error }">
                             <!--<label for="password">Password</label>-->
-                            <vs-input type="password" label-placeholder="Password"  class="form-control text-left" id="password" v-model="passwordInput" v-model.trim="$v.passwordInput.$model"/>
+                            <vs-input type="password" label-placeholder="Password" class="form-control text-left"
+                                      id="password" v-model="passwordInput" v-model.trim="$v.passwordInput.$model"/>
                             <div class="error" v-if="!$v.passwordInput.required">Password is required</div>
                         </div>
                         <small class="d-block text-left">By signing in, you accept the terms found in our <a href="">Trust
                             Centre</a></small>
-                        <div class="system-msg"><p>{{results}}</p></div>
+                        <!--<div class="system-msg"><p>{{results}}</p></div>-->
                         <div class="row d-flex mt-3 mb-5">
                             <div class="col-md-6"></div>
                             <div class="col-md-6">
-                                <button class="btn btn-primary btn-lg btn-block login-btn" type="submit"
-                                        v-show="isLoading===false" :class="{ 'd-none': redirecting===true }">
+                                <button class="btn btn-primary btn-lg btn-block login-btn" type="submit">
                                     Login
                                 </button>
-                                <div class="loading mb-4" v-if="isLoading===true">
-                                    <div class="load-3">
-                                        <div class="line"></div>
-                                        <div class="line"></div>
-                                        <div class="line"></div>
-                                    </div>
-                                </div>
                                 <small><a href="/reset-email">Forgot password</a></small>
                             </div>
                         </div>
@@ -117,9 +120,9 @@
 <script>
     /* eslint-disable */
     import DataSource from "../data/datasource";
-    import parentRegisterComponent from "../components/Parent_Register_Component"
+    import parentRegisterComponent from "../components/Parent_Register_Component";
     import $ from "jquery";
-    import { required, minLength } from 'vuelidate/lib/validators';
+    import {required, minLength} from 'vuelidate/lib/validators';
     import Cookies from "js-cookie";
 
     export default {
@@ -128,7 +131,7 @@
                 status: "",
                 usernameInput: "",
                 passwordInput: "",
-                results: "",
+                results: false,
                 isLoading: false,
                 redirecting: "",
                 obj_ExternalLogin: {
@@ -154,14 +157,16 @@
                 this.$v.$touch();
                 //this.results = "<< Requesting.. >>";
 
+                this.$vs.loading();
 
                 try {
-                    this.isLoading = true;
                     const response = await DataSource.shared.login(this.usernameInput, this.passwordInput);
                     this.redirecting = true;
 
                     const isParent = Cookies.get('userTypeSession');
                     if (response) {
+
+                        this.$vs.loading.close();
                         if (response.token) {
                             this.results = `Login Success, Welcome Back`;
                             if (isParent === "Parent") {
@@ -188,13 +193,11 @@
                                     alert("Please try again later");
                                     this.results = JSON.stringify(response);
                             }
-                            this.isLoading = false;
                             this.redirecting = false;
                         }
                     }
                 } catch (e) {
                     this.results = e;
-                    this.isLoading = false;
                 }
             },
             checkUserAccount(str_Email, str_TokenId, str_Platform) {
@@ -309,7 +312,7 @@
 
                         gapi.signin2.render('google-signin-button', {
                             onsuccess: this.onGoogleSignIn
-                        })
+                        });
                     });
                 });
             },
@@ -332,7 +335,7 @@
         },
         mounted() {
             const isLogin = Cookies.get('authToken');
-            if (isLogin && isLogin !== "null") {
+            if (isLogin && isLogin !== "null" && isLogin !== "undefined") {
                 this.results = `You already logged in`;
                 // window.location.replace("/");
                 this.$router.go(-1);
@@ -346,7 +349,7 @@
             usernameInput: {
                 required
             },
-            passwordInput:{
+            passwordInput: {
                 required
             }
         }
@@ -391,5 +394,8 @@
     .login header {
         display: none;
     }
-    .login .menu-box-wrap{display: none;}
+
+    .login .menu-box-wrap {
+        display: none;
+    }
 </style>

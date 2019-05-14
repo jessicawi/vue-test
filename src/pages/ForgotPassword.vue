@@ -133,6 +133,8 @@
         margin-left: -15px !important;
         width: 100%;
         margin-right: -15px !important;
+        display: flex;
+        align-items: center;
     }
 
     body {

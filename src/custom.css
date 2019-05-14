@@ -288,7 +288,7 @@ label {
  */
 
 .fullwidth{
-    width: 100%;
+    width: 100% !important;
 }
 .whitespace-10 {
     display: block;
@@ -895,8 +895,13 @@ div#schoolListModal .vs-popup--content {
     margin-left: -15px !important;
     width: 100%;
     margin-right: -15px !important;
+    display: flex;
+    align-items: center;
 }
-
+.login-header img {
+    margin-left: auto;
+    display: block;
+}
 .login-header h4 {
     text-align: left;
     color: #222 !important;
@@ -1012,7 +1017,21 @@ div#schoolListModal .vs-popup--content {
 14---register parent---
 */
 
+div#modal_Registration .login-btn {
+    margin: auto;
+    min-width: 200px;
+}
+div#modal_Registration input {
+    border: 0px;
+    border-bottom: 1px solid #cccccca1;
+    border-radius: 0px;
+    background: transparent;
+    color: #222;
+}
 
+div#modal_Registration input::placeholder {
+    color: #222;
+}
 .parent-register .el-date-editor {
     width: 100% !important;
 }
@@ -1201,13 +1220,45 @@ li.info-menu__item i {
     margin-bottom: 30px;
     width: 100%;
     /*position: absolute;*/
+    padding: 0 20px;
 }
 
 .menu-wrap {
     color: #fff;
     float: left;
 }
+.menu-wrap__item a {
+    color: white;
+    font-weight: normal;
+    line-height: 25px;
+}
 
+.menu-wrap.nav-pills .nav-link.active,.menu-wrap.nav-pills .show >  .nav-link  {
+    background: #d64b58;
+    border-radius: 0px;
+}
+
+.menu-wrap .dropdown-menu {
+    background: #d64b58;
+    border-radius: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-wrap__item a.dropdown-item  {
+    border-bottom: 1px solid #ffffff26;
+    padding: 0.3rem 1.5rem;
+    font-size: 0.9rem;
+}
+
+.menu-wrap .dropdown-item:hover, .dropdown-item:focus {
+    background-color: #f8f9fa2b;
+    color: white;
+}
+
+.menu-wrap .dropdown-item.active, .dropdown-item:active {
+    background-color: transparent;
+}
 .parent-menu {
     cursor: pointer;
     padding: 10px 20px;

@@ -8,40 +8,65 @@
             <!--<div class="header-sidebar" slot="header">-->
             <!--<a href="/"><img src="../assets/kagami.jpg"/></a>-->
             <!--</div>-->
-
-            <div class="menu-wrap" v-for="item in primaryMenuFiltered" :key=item.MENid>
+            <b-nav pills v-for="item in primaryMenuFiltered" :key=item.MENid class="menu-wrap">
                 <!-- if menu has submenu, click will open submenu -->
-                <div v-if="item.subMenus" class="menu-wrap__item">
-                    <div class="parent-menu has-sub-menu"
-                         @click="handleParentMenuClick(item.MENid)">
-                        <i class="big-icon" :class="item.MENicon"></i><span>{{item.MENname}}</span> <i
-                            class="material-icons">keyboard_arrow_down</i>
-                    </div>
+                <b-nav-item-dropdown
+                        id="my-nav-dropdown"
+                        :text="item.MENname"
+                        toggle-class="nav-link-custom"
+                        v-if="item.subMenus"
+                        class="menu-wrap__item"
 
-                    <div class="sub-menu" v-if="item.subMenus" @mouseleave="didClickAway"
-                         :class="{'menu-wrap-active':currentParentMenuId===item.MENid}">
-                        <div v-for="submenu in item.subMenus">
-                            <a :href="submenu.MENnewurl">
-                                <i :class="submenu.MENicon"></i> {{submenu.MENname}}
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                >
+                    <b-dropdown-item v-for="submenu in item.subMenus" :href="submenu.MENnewurl">{{submenu.MENname}}</b-dropdown-item>
+                </b-nav-item-dropdown>
                 <!-- if menu has no submenu, click will route to url (MENnewurl) -->
-                <div v-else :class="{'null-item':item.MENnewurl===null}">
-                    <div class="parent-menu" v-if="item.MENnewurl">
-                        <!-- if MENnewurl has value -->
-                        <router-link v-if="item.MENnewurl" :to="item.MENnewurl">
-                            <i :class="item.MENicon"></i> <span>{{item.MENname}}</span>
-                        </router-link>
-                        <!-- if MENnewurl is null -->
-                        <div v-else class="url-null">
-                            <i :class="item.MENicon"></i> <span>{{item.MENname}}</span>
-                        </div>
+                <b-nav-item v-else class="parent-menu"  v-if="item.MENnewurl" :class="{'null-item':item.MENnewurl===null}">
+                    <!-- if MENnewurl has value -->
+                    <router-link v-if="item.MENnewurl" :to="item.MENnewurl">
+                        <i :class="item.MENicon"></i> <span>{{item.MENname}}</span>
+                    </router-link>
+                    <!-- if MENnewurl is null -->
+                    <div v-else class="url-null">
+                        <i :class="item.MENicon"></i> <span>{{item.MENname}}</span>
                     </div>
-                </div>
+                </b-nav-item>
+            </b-nav>
+            <!--<div class="menu-wrap" v-for="item in primaryMenuFiltered" :key=item.MENid>-->
+                <!--&lt;!&ndash; if menu has submenu, click will open submenu &ndash;&gt;-->
 
-            </div>
+
+                <!--<div v-if="item.subMenus" class="menu-wrap__item">-->
+                    <!--<div class="parent-menu has-sub-menu"-->
+                         <!--@click="handleParentMenuClick(item.MENid)">-->
+                        <!--<i class="big-icon" :class="item.MENicon"></i><span>{{item.MENname}}</span> <i-->
+                            <!--class="material-icons">keyboard_arrow_down</i>-->
+                    <!--</div>-->
+
+                    <!--<div class="sub-menu" v-if="item.subMenus" @mouseleave="didClickAway"-->
+                         <!--:class="{'menu-wrap-active':currentParentMenuId===item.MENid}">-->
+                        <!--<div v-for="submenu in item.subMenus">-->
+                            <!--<a :href="submenu.MENnewurl">-->
+                                <!--<i :class="submenu.MENicon"></i> {{submenu.MENname}}-->
+                            <!--</a>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--&lt;!&ndash; if menu has no submenu, click will route to url (MENnewurl) &ndash;&gt;-->
+                <!--<div v-else :class="{'null-item':item.MENnewurl===null}">-->
+                    <!--<div class="parent-menu" v-if="item.MENnewurl">-->
+                        <!--&lt;!&ndash; if MENnewurl has value &ndash;&gt;-->
+                        <!--<router-link v-if="item.MENnewurl" :to="item.MENnewurl">-->
+                            <!--<i :class="item.MENicon"></i> <span>{{item.MENname}}</span>-->
+                        <!--</router-link>-->
+                        <!--&lt;!&ndash; if MENnewurl is null &ndash;&gt;-->
+                        <!--<div v-else class="url-null">-->
+                            <!--<i :class="item.MENicon"></i> <span>{{item.MENname}}</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <!--</div>-->
             <!--</vs-sidebar>-->
         </div>
 

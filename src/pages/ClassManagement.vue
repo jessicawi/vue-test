@@ -309,7 +309,10 @@
 
                         <el-row style="margin-bottom: 10px" class="classManage-ActionBar">
                             <el-col :span="16">
-                                <el-input v-model="filters[0].value">
+                                <!--<el-input v-model="filters[0].value">-->
+                                    <!--<template slot="prepend">Search</template>-->
+                                <!--</el-input>-->
+                                <el-input v-model="assignStudentsListSearchFilter">
                                     <template slot="prepend">Search</template>
                                 </el-input>
                             </el-col>
@@ -318,9 +321,16 @@
                                 </el-button>
                             </el-col>
                         </el-row>
-                        <data-tables :data="assignStudentsListInt" :filters="filters"
-                                     :pagination-props="{ background: true, pageSizes: [2, 3, 4] }"
-                                     @selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">
+                        <!--<data-tables :data="assignStudentsListInt" :filters="filters" layout="table"-->
+                                     <!--:pagination-props="{ background: true, pageSizes: [2, 3, 4] }"-->
+                                     <!--@selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">-->
+                            <!--<el-table-column type="selection" width="55" :reserve-selection="true">-->
+                            <!--</el-table-column>-->
+
+                        <!--<el-table :data="assignStudentsListInt.filter(data => !assignStudentsListSearchFilter || data.Full_Name.toLowerCase().includes(assignStudentsListSearchFilter.toLowerCase()))"-->
+                                     <!--@selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">-->
+                        <el-table :data="assignStudentsListInt.filter(data => !assignStudentsListSearchFilter || data.Full_Name.toLowerCase().includes(assignStudentsListSearchFilter.toLowerCase())).slice((assignStudentsListCurrentPage-1)*assignStudentsListPageSize,assignStudentsListCurrentPage*assignStudentsListPageSize)"
+                                  @selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">
                             <el-table-column type="selection" width="55" :reserve-selection="true">
                             </el-table-column>
 
@@ -329,7 +339,16 @@
                                              :label="assignStudentsListInfo.label" :key="assignStudentsListInfo.prop"
                                              sortable="custom">
                             </el-table-column>
-                        </data-tables>
+                        </el-table>
+
+                        <el-pagination
+                            @current-change="assignStudentsListChangePage"
+                            @size-change="assignStudentsListChangePageSize"
+                            :page-sizes="[20, 40, 60, 80]"
+                            :page-size=assignStudentsListPageSize
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="assignStudentsListTotal">
+                        </el-pagination>
                     </div>
                 </div>
                 <hr class="custom-hr"/>
@@ -556,6 +575,7 @@
                 editSemesterID: '',
                 editCourseID: '',
                 editClassName: '',
+                assignStudentsListSearchFilter: '',
 
                 levelList: [],
                 semesterList: [],
@@ -566,6 +586,7 @@
                 classListFilteritem: [],
                 editClassStatusList: ['Active', 'Closed'],
                 assignStudentsListInt: [],
+
 
                 classList: [{
                     prop: "CLS_ClassName",
@@ -601,6 +622,11 @@
                 //     }]
                 // },
 
+
+                multipleSelection: [],
+                assignStudentsListCurrentPage: 1,
+                assignStudentsListPageSize: 20,
+                assignStudentsListTotal: 0,
                 assignStudentsList: [{
                     prop: "Index_No",
                     label: "Student ID"
@@ -628,11 +654,11 @@
                         value: [],
                         prop: 'CRS_Course_Name'
                     }],
-                filters: [{
-                    value: '',
-                    prop: 'Full_Name',
-                }],
-                multipleSelection: [],
+                // filters: [{
+                //     value: '',
+                //     prop: 'Full_Name',
+                // }],
+
 
                 currentStudent: [],
                 currentStudentList: [{
@@ -945,6 +971,10 @@
             },
             async getAssignStudents() {
                 try {
+                    if (this.multipleSelection.length > 0) {
+                        this.$refs.articleTable.clearSelection();
+                    }
+
                     this.$vs.loading();
                     const response = await DataSource.shared.getActiveStudentsByLevelSchool(this.assignClassLevelID, this.assignClassID);
                     if (response) {
@@ -961,6 +991,10 @@
                             this.currentStudent = assignStudentList.filter(d => {
                                 return d.assignToCurrentClass === "YES";
                             });
+
+                            this.assignStudentsListTotal = this.assignStudentsListInt.length;
+                            this.assignStudentsListCurrentPage = 1;
+                            this.assignStudentsListPageSize = 20;
 
                             //console.log("assignStudentsListInt", this.assignStudentsListInt);
 
@@ -1063,6 +1097,12 @@
                 this.inputEditMaxStudents = this.classListMaxStudents;
                 this.inputeditLevel = this.classListLevelName;
                 this.$refs.editClassShowModal.show();
+            },
+            assignStudentsListChangePage(currentPage){
+                this.assignStudentsListCurrentPage = currentPage;
+            },
+            assignStudentsListChangePageSize (currentPageSize) {
+                this.assignStudentsListPageSize = currentPageSize;
             },
         },
     };
