@@ -3071,7 +3071,6 @@
                 }
             },
             async StatusAction() {
-                this.$vs.loading();
                 try {
                     if (this.ddlChangeStatusTo === '' || this.ddlChangeStatusTo === null) {
                         this.$notify.error({
@@ -3090,7 +3089,6 @@
                 } catch (e) {
                     this.results = e;
                 }
-                this.$vs.loading.close();
             },
             async Active() {
                 try {

@@ -8,6 +8,13 @@ import Cookies from "js-cookie";
 const API_HOST = process.env.VUE_APP_ROOT_API || "http://local.emsv2";
 let GoogleGeocodeAPIKey = 'AIzaSyBSjzdBEO1Akg0aZfKpglWYBtdqLMHJLzM';
 
+function getMs() {
+    const d = new Date();
+    return d.getTime();
+}
+
+
+// let alertExpireDate = new Date(new Date().getTime() + 1 * 60 * 1000);
 function setToHappen(fn, d) {
     const t = d.getTime() - (new Date()).getTime();
     return setTimeout(fn, t);
@@ -60,7 +67,6 @@ export default class DataSource {
                 return response;
             }
         };
-
         if (method) {
             request.method = method;
         }
@@ -78,6 +84,9 @@ export default class DataSource {
             data.UserEmail_Session = Cookies.get('userEmailSession');
             data.USRid_Session = Cookies.get('usRidSession');
             data.UserName_Session = Cookies.get('userNameSession');
+            const extendTime = Cookies.get('extendTime');
+            const expireTime = Cookies.get('expireTime');
+            const nowMs = getMs();
             // const expireAlert = Cookies.get('alert');
             // if (expireAlert) {
             //     const date = Date.parse(expireAlert);
@@ -91,7 +100,24 @@ export default class DataSource {
             //     }
             // }
 
+            console.log(new Date(nowMs), "now");
+            console.log(new Date(Number(extendTime)), "extendTime");
+            console.log(new Date(Number(expireTime)), "expireTime");
 
+
+            if (nowMs > extendTime && nowMs < expireTime) {
+                const newExtendDate = new Date(Number(extendTime) + (1 * 60 * 1000));
+                console.log('first extend check');
+                console.log(newExtendDate, "new extend");
+                console.log(newExtendDate.getTime() + " " + Number(expireTime));
+                if (newExtendDate.getTime() >= Number(expireTime)) {
+                    const newExpireDate = new Date(Number(expireTime) + (2 * 60 * 1000));
+                    this.extendCookies(newExpireDate, newExtendDate);
+                    // alert('extend!');
+                    console.log(newExpireDate, "later");
+                }
+            }
+            console.log("=====");
         }
 
         // this is just testing, remove this if savePost not working
@@ -147,7 +173,6 @@ export default class DataSource {
         // return response;
     }
 
-
     async login(userId, password) {
         const data = {
             userID: userId,
@@ -155,10 +180,11 @@ export default class DataSource {
         };
 
         try {
-            const expireDate = new Date(new Date().getTime() + 350 * 60 * 1000);
-            const alertExpireDate = new Date(new Date().getTime() + 340 * 60 * 1000);
-            Cookies.set('alert', alertExpireDate, {expires: expireDate});
-
+            // Cookies.set('alert', alertExpireDate, {expires: expireDate});
+            let extendDate = new Date(new Date().getTime() + 1 * 60 * 1000);
+            let expireDate = new Date(new Date().getTime() + 2 * 60 * 1000);
+            const extendMs = extendDate.getTime();
+            const expiredMs = expireDate.getTime();
 
             const response = await this.callWebService("/controller/Login.asmx/checkLogin", data, "POST", false);
             Cookies.set('authToken', response.token, {expires: expireDate}); //expire in 3 hour);
@@ -169,12 +195,43 @@ export default class DataSource {
             Cookies.set('usRidSession', response.USRid_Session, {expires: expireDate}); //expire in 3 hour);
             Cookies.set('userEmailSession', response.UserEmail_Session, {expires: expireDate}); //expire in 3 hour);
             Cookies.set('userNameSession', response.UserName_Session, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('expireTime', expiredMs, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('extendTime', extendMs, {expires: expireDate}); //expire in 3 hour);
             return response;
         } catch (e) {
             throw e;
         }
-
     }
+
+    extendCookies(expireDate, extendTime) {
+        try {
+            const token = Cookies.get('authToken');
+            const UserSchool_Session = Cookies.get('schoolSession');
+            const UserID_Session = Cookies.get('userIDSession');
+            const UserType_Session = Cookies.get('userTypeSession');
+            const UserUniversity_Session = Cookies.get('userUniversitySession');
+            const UserEmail_Session = Cookies.get('userEmailSession');
+            const USRid_Session = Cookies.get('usRidSession');
+            const UserName_Session = Cookies.get('userNameSession');
+            const expiredMs = expireDate.getTime();
+            const extendMs = extendTime.getTime();
+
+
+            Cookies.set('authToken', token, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('schoolSession', UserSchool_Session, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('userIDSession', UserID_Session, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('userTypeSession', UserType_Session, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('userUniversitySession', UserUniversity_Session, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('usRidSession', USRid_Session, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('userEmailSession', UserEmail_Session, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('userNameSession', UserName_Session, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('expireTime', expiredMs, {expires: expireDate}); //expire in 3 hour);
+            Cookies.set('extendTime', extendMs, {expires: expireDate}); //expire in 3 hour);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
 
     async externalLogin(userId, tokenId) {
         const data = {
@@ -183,6 +240,14 @@ export default class DataSource {
         };
 
         const response = await this.callWebService("/controller/Login.asmx/checkLogin", data, "POST", false);
+        Cookies.set('authToken', response.token, {expires: 3 / 24}); //expire in 3 hour);
+        Cookies.set('schoolSession', response.UserSchool_Session, {expires: 3 / 24}); //expire in 3 hour);
+        Cookies.set('userIDSession', response.UserID_Session, {expires: 3 / 24}); //expire in 3 hour);
+        Cookies.set('userTypeSession', response.UserType_Session, {expires: 3 / 24}); //expire in 3 hour);
+        Cookies.set('userUniversitySession', response.UserUniversity_Session, {expires: 3 / 24}); //expire in 3 hour);
+        Cookies.set('usRidSession', response.USRid_Session, {expires: 3 / 24}); //expire in 3 hour);
+        Cookies.set('userEmailSession', response.UserEmail_Session, {expires: 3 / 24}); //expire in 3 hour);
+        Cookies.set('userNameSession', response.UserName_Session, {expires: 3 / 24}); //expire in 3 hour);
         return response;
     }
 
@@ -1282,6 +1347,7 @@ export default class DataSource {
     }
 
     async getApproverMaster() {
+        const data = {};
 
         const response = await this.callWebService("/controller/Approver.asmx/getApproverMaster", data, "POST");
         return response;
@@ -1317,6 +1383,8 @@ export default class DataSource {
 
     async updateApproverMasterSpecificUser(approverMasterSpecificID, actionStatus) {
         const data = {
+            approverMasterSpecificID: approverMasterSpecificID,
+            actionStatus: actionStatus
         };
 
         const response = await this.callWebService("/controller/Approver.asmx/updateApproverMasterSpecificUser", data, "POST");
@@ -1325,6 +1393,8 @@ export default class DataSource {
 
     async saveApproverMasterSpecificUser(neededApproveSpecificUserID, approverType) {
         const data = {
+            neededApproveSpecificUserID: neededApproveSpecificUserID,
+            approverType: approverType
         };
 
         const response = await this.callWebService("/controller/Approver.asmx/saveApproverMasterSpecificUser", data, "POST");
@@ -1332,6 +1402,7 @@ export default class DataSource {
     }
 
     async getPendingApprover() {
+        const data = {};
 
         const response = await this.callWebService("/controller/Approver.asmx/getPendingApprover", data, "POST");
         return response;
@@ -1353,6 +1424,7 @@ export default class DataSource {
             password: password
         };
         const response = await this.callAPI("/login", "POST", null, data);
+        Cookies.set('authToken', response.token, {expires: 3 / 24}); //expire in 3 hour);
         return response;
     }
 
@@ -1473,6 +1545,8 @@ export default class DataSource {
         try {
             response = await fetch("URL", request);
         } catch (err) {
+            console.log(err);
+            getApproverMaster;
             throw ERROR_SERVER_UNREACHABLE;
         }
         return await parseResponseAndHandleErrors(response);
@@ -1827,6 +1901,8 @@ export default class DataSource {
     }
 
     async savePostReaction(relatedPostID, postReaction, postType) {
+        const data = {
+            relatedPostID: relatedPostID,
             postReaction: postReaction,
             postType: postType,
         };
@@ -1835,6 +1911,8 @@ export default class DataSource {
     }
 
     async updatePostReaction(relatedPostID, actionMode) {
+        const data = {
+            relatedPostID: relatedPostID,
             actionMode: actionMode,
         };
 
@@ -1874,6 +1952,7 @@ export default class DataSource {
         return response;
     }
 
+    async updateDailyRoutine(btnUpdateObject) {
         const data = {
             studentID: btnUpdateObject.studentID,
             DrID: btnUpdateObject.drID,
@@ -1883,8 +1962,13 @@ export default class DataSource {
         return response;
     }
 
+    async addDailyRoutine(btnAddObject) {
+        const data = {
+            studentID: btnAddObject.studentID,
+            drRemark: btnAddObject.DrRemark,
             drStartTime: btnAddObject.DrStartTime,
             drEndTime: btnAddObject.DrEndTime,
+            drReferenceType: btnAddObject.DrReferenceType
         };
 
         const response = await this.callWebService("/controller/Daily_Routine.asmx/addDailyRoutine", data, "POST");
@@ -1900,6 +1984,7 @@ export default class DataSource {
         return response;
     }
 
+    async deString(inputString) {
         const data = {
             inputString: inputString
         };
@@ -1907,6 +1992,8 @@ export default class DataSource {
         return response;
     }
 
+    async getStaffProfileImage() {
+        const data = {};
         const response = await this.callWebService("/controller/User.asmx/getStaffProfileImage", data, "POST");
         return response;
     }
@@ -1956,6 +2043,7 @@ export default class DataSource {
         return response;
     }
 
+    async resetPasswordByPassword(userCurrentPassword, userNewPassword) {
         const data = {
             userCurrentPassword: userCurrentPassword,
             userNewPassword: userNewPassword
@@ -1964,10 +2052,13 @@ export default class DataSource {
         return response;
     }
 
+    async getAllActiveSchool() {
+        const data = {};
         const response = await this.callWebService("/controller/Operations.asmx/getAllActiveSchool", data, "POST");
         return response;
     }
 
+    async saveTransferSchool(studentID, toTransferSchoolID, remark, effectiveDate) {
         const data = {
             studentID: studentID,
             toTransferSchoolID: toTransferSchoolID,
@@ -1978,24 +2069,33 @@ export default class DataSource {
         return response;
     }
 
+    async getPendingAcceptTransferSchoolBySchool() {
+        const data = {};
         const response = await this.callWebService("/controller/Students.asmx/getPendingAcceptTransferSchoolBySchool", data, "POST");
         return response;
     }
 
+    async saveStudentWithdraw(obj) {
         const data = {
+            obj: obj
         };
         const response = await this.callWebService("/controller/Students.asmx/saveStudentWithdraw", data, "POST");
         return response;
     }
 
+    async getClassType() {
+        const data = {};
         const response = await this.callWebService("/controller/Class.asmx/getClassType", data, "POST");
         return response;
     }
 
+    async getTeacherListBySchool() {
+        const data = {};
         const response = await this.callWebService("/controller/User.asmx/getTeacherListBySchool", data, "POST");
         return response;
     }
 
+    async saveClass(levelID, semesterID, batch, className, maxStudents, classTeacher, saveType) {
         const data = {
             levelID: levelID,
             semesterID: semesterID,
@@ -2009,6 +2109,7 @@ export default class DataSource {
         return response;
     }
 
+    async getClass(academicYear) {
         const data = {
             academicYear: academicYear,
         };
@@ -2016,6 +2117,7 @@ export default class DataSource {
         return response;
     }
 
+    async getParentClassList(academicYear, modeType) {
         const data = {
             academicYear: academicYear,
             modeType: modeType,
@@ -2024,6 +2126,7 @@ export default class DataSource {
         return response;
     }
 
+    async updateClass(classStatus, newClassName, maxStudents, currentClassName, levelID, semesterID) {
         const data = {
             classStatus: classStatus,
             newClassName: newClassName,
@@ -2036,6 +2139,7 @@ export default class DataSource {
         return response;
     }
 
+    async getActiveStudentsByLevelSchool(levelID, classID) {
         const data = {
             levelID: levelID,
             classID: classID,
@@ -2044,7 +2148,9 @@ export default class DataSource {
         return response;
     }
 
+    async saveStudentGraduation(obj) {
         const data = {
+            obj: obj
         };
         const response = await this.callWebService("/controller/Students.asmx/saveStudentGraduation", data, "POST");
         return response;
@@ -2099,6 +2205,7 @@ export default class DataSource {
         return response;
     }
 
+    async getStudentDocument(studentID, docuType) {
         const data = {
             studentID: studentID,
             docuType: docuType,
@@ -2107,6 +2214,7 @@ export default class DataSource {
         return response;
     }
 
+    async updateStudentDocument(studentFilesID, actionStatus) {
         const data = {
             studentFilesID: studentFilesID,
             actionStatus: actionStatus,
@@ -2115,6 +2223,7 @@ export default class DataSource {
         return response;
     }
 
+    async getSchoolInfoBySchoolID(schoolID) {
         const data = {
             schoolID: schoolID,
         };
@@ -2122,6 +2231,7 @@ export default class DataSource {
         return response;
     }
 
+    async getStudentAllergies(studentID, allergiesType) {
         const data = {
             studentID: studentID,
             allergiesType: allergiesType,
@@ -2130,30 +2240,34 @@ export default class DataSource {
         return response;
     }
 
+    async getStudentPaymentList(studentCourseID) {
         const data = {
+            studentCourseID: studentCourseID,
         };
         const response = await this.callWebService("/controller/Billing.asmx/getStudentPaymentList", data, "POST");
         return response;
     }
 
+    async getItemTransDetailsList(SPDID) {
         const data = {
+            SPDID: SPDID,
         };
         const response = await this.callWebService("/controller/Billing.asmx/getItemTransDetailsList", data, "POST");
         return response;
     }
 
-    async saveEvent(obj, participantObj){
+    async saveEvent(obj, participantObj) {
         const data = {
-            obj:obj,
-            participantObj:participantObj,
+            obj: obj,
+            participantObj: participantObj,
         };
         const response = await this.callWebService("/controller/Event.asmx/saveEvent", data, "POST");
         return response;
     }
 
-    async getEvent(eventID){
+    async getEvent(eventID) {
         const data = {
-            eventID:eventID,
+            eventID: eventID,
         };
         const response = await this.callWebService("/controller/Event.asmx/getEvent", data, "POST");
         return response;

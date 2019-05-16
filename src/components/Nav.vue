@@ -120,9 +120,21 @@
             },
             logout() {
                 DataSource.shared.logout();
+                this.logoutGoogle();
                 window.location.replace("/login");
             },
-
+            logoutGoogle() {
+                $.getScript('https://apis.google.com/js/platform.js', function () {
+                    gapi.load("auth2", () => {
+                        gapi.auth2.init({
+                            client_id: "646978523324-lcudp248dvuuk0rda4q6kf2bti9qkk3b.apps.googleusercontent.com"
+                        }).then((auth2) => {
+                            auth2.signOut();
+                            console.log("Google Logout");
+                        });
+                    });
+                });
+            },
             isMobile() {
                 if (screen.width <= 770) {
                     return true;

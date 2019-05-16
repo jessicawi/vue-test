@@ -28,7 +28,15 @@
                             :description="results"
                             show-icon
                             class="mt-3 mb-3"
-                    v-if="results !== false">
+                    v-if="results !== false && errorresults === false">
+                    </el-alert>
+                    <el-alert
+                            title="Error"
+                            type="error"
+                            :description="errorresults"
+                            show-icon
+                            class="mt-3 mb-3"
+                            v-if="errorresults !== false && results === false">
                     </el-alert>
                     <form class="needs-validation" @submit.prevent="onSubmit">
 
@@ -132,6 +140,7 @@
                 usernameInput: "",
                 passwordInput: "",
                 results: false,
+                errorresults: false,
                 isLoading: false,
                 redirecting: "",
                 obj_ExternalLogin: {
@@ -178,20 +187,20 @@
                         } else {
                             switch (response.code) {
                                 case "2":
-                                    this.results = `Invalid Email ID`;
+                                    this.errorresults = `Invalid Email ID`;
                                     //this.results = `Invalid User Name - sample 1:${JSON.stringify(response)}`;
                                     break;
                                 case "3":
-                                    this.results = `Invalid Password`;
+                                    this.errorresults = `Invalid Password`;
                                     //this.results = `Invalid password - sample 2: code: ${response.code}`;
                                     break;
                                 case "99":
-                                    this.results = `Please fill in all field`;
+                                    this.errorresults = `Please fill in all field`;
                                     //this.results = `Please fill in all field - sample 3: code: ${response.code}`;
                                     break;
                                 default:
                                     alert("Please try again later");
-                                    this.results = JSON.stringify(response);
+                                    this.errorresults = JSON.stringify(response);
                             }
                             this.redirecting = false;
                         }
