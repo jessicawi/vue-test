@@ -33,6 +33,7 @@ import studentgraduation from "../pages/StudentGraduation";
 import classManagement from "../pages/ClassManagement";
 import studentPaymentPlan from "../pages/StudentPaymentPlan";
 import event from "../pages/Event";
+import vuetour from "../pages/vuetour";
 
 Vue.use(VueRouter);
 
@@ -201,6 +202,11 @@ const router = new VueRouter({
             path: '/Event',
             name: 'Event',
             component: event
+        },
+        {
+            path: '/vuetour',
+            name: 'Vue Tour',
+            component: vuetour
         },
     ]
 });

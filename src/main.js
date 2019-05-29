@@ -22,13 +22,14 @@ import VueCharts from 'vue-chartjs';
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead';
 import Cookies from "js-cookie";
 import Vuex from "vuex";
+import VueTour from 'vue-tour';
 
 Vue.component('file-upload', VueUploadComponent);
 
+require('vue-tour/dist/vue-tour.css')
 
 locale.use(lang);
 Vue.config.productionTip = false;
-
 Vue.use(BootstrapVue);
 Vue.use(DataTables);
 Vue.use(DataTablesServer);
@@ -40,6 +41,7 @@ Vue.use(Vuelidate);
 Vue.use(VueCharts);
 Vue.use(Cookies);
 Vue.use(Vuex);
+Vue.use(VueTour);
 Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead);
 new Vue({
     router,

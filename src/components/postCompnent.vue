@@ -222,7 +222,7 @@
             </li>
         </ul>
         <el-collapse-transition>
-            <div v-if="show3 === post.PostID">
+            <div v-if="show3 === post.PostID ">
                 <div class="comment_wrapper transition-box" v-if="!hideComment">
                     <form class="form-style">
                         <input type="text" class="form-control d-none" id="commentPostID" v-model="commentPostID">
@@ -351,7 +351,7 @@
                                             @okClick="deleteComment"/>
                         </div>
                         <button v-on:click=" post.collapsed = !post.collapsed "
-                                :class="{'d-none' : !post.collapsed }" v-if="post.commentItems.length !== 2">
+                                :class="{'d-none' : !post.collapsed }" v-if="post.commentItems&&post.commentItems.length !== 2">
                             More Comment
                         </button>
                     </div>
@@ -368,7 +368,7 @@
         <b-modal id="imageModal" ref="imageModal" hide-footer hide-header>
             <b-carousel id="modal_carousel"
                         style="text-shadow: 1px 1px 2px #333;"
-                        :controls="post.postFiles.length > 1"
+                        :controls="post.postFiles&&post.postFiles.length > 1"
                         indicators
                         background="#fff"
                         :interval="0">

@@ -18,7 +18,8 @@
             <div class="col-6">
                 <button class="btn btn-secondary float-right" @click="clearSelection"><i class="material-icons">
                     cancel
-                </i> Clear</button>
+                </i> Clear
+                </button>
             </div>
         </div>
         <div class="form-group row">
@@ -71,14 +72,17 @@
                 obj_SelectedNewYear: null,
                 obj_SelectedNewClass: null,
                 filterStudents: "",
+                nextlvl: null
             };
         },
-        props: ["selectedStudents","courseId","arrobjSelectedStudentID","showStudentTag","isStudent"],
+        props: ["selectedStudents", "courseId", "arrobjSelectedStudentID", "showStudentTag", "isStudent"],
         // props: {selectedStudents: [Array], CourseId: String, arrobjSelectedStudentID: [Array]},
         methods: {
-            clearSelection(){
-                this.obj_SelectedNewYear = "";
-                this.obj_SelectedNewClass = "";
+            clearSelection() {
+                if (this.isStudent === true) {
+                    this.obj_SelectedNewYear = "";
+                    this.obj_SelectedNewClass = "";
+                }
             },
             sleep(milliseconds) {
                 return new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -134,9 +138,9 @@
 
                 this.hideLoading();
             },
-            emitclasslevel(){
-                if (this.isStudent === true){
-                    console.log("isstudent")
+            emitclasslevel() {
+                if (this.isStudent === true) {
+                    console.log("isstudent");
                     this.$emit('studentPromoteAction', this.obj_SelectedNewYear.PK_Semester_ID, this.obj_SelectedNewClass.PK_Course_ID, this.obj_SelectedNewClass.PK_Class_ID);
                 }
             },
@@ -154,6 +158,7 @@
                 let promise_NextLevel = new Promise((resolve) => {
                     DataSource.shared.getNextLevel(this.courseId).then((result) => {
                         resolve(result.Table[0]);
+                        this.nextlvl = result.Table;
                     });
                 });
 
@@ -168,7 +173,12 @@
                     let temparrobj_Classes = result[1];
                     let index = temparrobj_Classes.findIndex(x => x.Str_SortBy === obj_NextLevel.CRS_Course_Name);
 
-                    this.arrobj_NewClasses = temparrobj_Classes.splice(0, index + 1);
+                    // this.arrobj_NewClasses = temparrobj_Classes.splice(0, index + 1);
+                    for (let obj of this.nextlvl) {
+                        this.arrobj_NewClasses = temparrobj_Classes.filter(d => {
+                            return d.Str_SortBy === obj.CRS_Course_Name;
+                        });
+                    }
                 });
 
                 /*let obj_NextLevel =

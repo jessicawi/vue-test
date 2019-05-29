@@ -187,6 +187,30 @@
                                         <option>Yes</option>
                                     </select>
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
+                                    <label>
+                                        <input type="checkbox" class="form-control" ref="cbFatherEtonStaff" @input="isStaffOnChange()">
+                                        Eton Staff
+                                        <span>
+                                        <span>
+                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path"
+                                                                                             fill="none" stroke="white"
+                                                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
+                                        </span>
+                                    </span>
+                                    </label>
+                                </div>
+
+                                <div v-if="isStaffFather" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Employee Name</label>
+                                    <select v-model="ddlFatherEmployeeName"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in staffList" v-bind:value="item.CONid.trim()">
+                                            {{ item.CONname.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -468,6 +492,30 @@
                                         <option>Yes</option>
                                     </select>
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
+                                    <label>
+                                        <input type="checkbox" class="form-control" ref="cbMotherEtonStaff" @input="isStaffOnChange()">
+                                        Eton Staff
+                                        <span>
+                                        <span>
+                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path"
+                                                                                             fill="none" stroke="white"
+                                                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
+                                        </span>
+                                    </span>
+                                    </label>
+                                </div>
+
+                                <div v-if="isStaffMother" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Employee Name</label>
+                                    <select v-model="ddlMotherEmployeeName"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in staffList" v-bind:value="item.CONid.trim()">
+                                            {{ item.CONname.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -727,6 +775,30 @@
                                         <option>Yes</option>
                                     </select>
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
+                                    <label>
+                                        <input type="checkbox" class="form-control" ref="cbGuardianEtonStaff" @input="isStaffOnChange()">
+                                        Eton Staff
+                                        <span>
+                                        <span>
+                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path"
+                                                                                             fill="none" stroke="white"
+                                                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
+                                        </span>
+                                    </span>
+                                    </label>
+                                </div>
+
+                                <div v-if="isStaffGuardian" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Employee Name</label>
+                                    <select v-model="ddlGuardianEmployeeName"
+                                            class="form-control pro-edt-select form-control-primary">
+                                        <option v-for="item in staffList" v-bind:value="item.CONid.trim()">
+                                            {{ item.CONname.trim() }}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -929,21 +1001,6 @@
                                     </span>
                                     </label>
                                 </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 checkbox_wrapper">
-                                    <label>
-                                        <input type="checkbox" class="form-control" ref="cbFatherEtonStaff">
-                                        Eton Staff
-                                        <span>
-                                        <span>
-                                            <svg class="checkmark" viewBox="0 0 24 24"><path class="checkmark-path"
-                                                                                             fill="none" stroke="white"
-                                                                                             d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>
-                                        </span>
-                                    </span>
-                                    </label>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -973,7 +1030,7 @@
 
 <script>
     import DataSource from "../data/datasource";
-    import {required} from "vuelidate/lib/validators";
+    import {required, requiredIf, requiredUnless} from "vuelidate/lib/validators";
 
     export default {
         name: "Parent",
@@ -991,6 +1048,7 @@
                 ddlGuardianEmploymentStatusList: [],
                 ddlMaritalStatusList: [],
                 ddlRaceList: [],
+                staffList: [],
 
                 inputFatherFirstName: '',
                 inputFatherLastName: '',
@@ -1023,7 +1081,36 @@
                 inputFatherWorkingCommencementDate: '',
                 inputMotherWorkingCommencementDate: '',
                 inputGuardianWorkingCommencementDate: '',
+                ddlFatherEmployeeName: '',
+                ddlMotherEmployeeName: '',
+                ddlGuardianEmployeeName: '',
+                isStaffFather: false,
+                isStaffMother: false,
+                isStaffGuardian: false,
             };
+        },
+        computed: {
+            reqFatherEmployeeName() {
+                if (this.$refs.cbFatherEtonStaff.checked === true && this.ddlFatherEmployeeName === '') {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            reqMotherEmployeeName() {
+                if (this.$refs.cbMotherEtonStaff.checked === true && this.ddlMotherEmployeeName === '') {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            reqGuardianEmployeeName() {
+                if (this.$refs.cbGuardianEtonStaff.checked === true && this.ddlGuardianEmployeeName === '') {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
         },
         validations: {
             inputFatherFirstName: {required},
@@ -1033,10 +1120,14 @@
             inputMotherLastName: {required},
             inputMotherDateofBirth: {required},
 
+            ddlFatherEmployeeName: {requiredIf: requiredIf('reqFatherEmployeeName')},
+            ddlMotherEmployeeName: {requiredIf: requiredIf('reqMotherEmployeeName')},
+            ddlGuardianEmployeeName: {requiredIf: requiredIf('reqGuardianEmployeeName')},
         },
         async created() {
             await this.BindCountryList();
             await this.BindParentDropdown();
+            await this.BindStaffList();
         },
         async mounted() {
             await this.LoadParentInfo();
@@ -1052,6 +1143,19 @@
                         this.countryListResponse = response.Table;
                         this.countryListResponse.forEach(m => {
                             this.countryList.push(m);
+                        });
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
+            async BindStaffList() {
+                try {
+                    const response = await DataSource.shared.getAllStaffListBySchool();
+                    if (response) {
+                        this.getAllStaffListBySchoolResponse = response.Table;
+                        this.getAllStaffListBySchoolResponse.forEach(m => {
+                            this.staffList.push(m);
                         });
                     }
                 } catch (e) {
@@ -1189,6 +1293,7 @@
                         }
                         if (m.PAR_Father_IsStaff == 'True') {
                             this.$refs.cbFatherEtonStaff.checked = true;
+                            this.isStaffFather = true;
                         } else {
                             this.$refs.cbFatherEtonStaff.checked = false;
                         }
@@ -1259,6 +1364,7 @@
                             this.inputFatherWorkingCommencementDate = m.PAR_Father_WorkingCommencementDate_convert;
                         }
                         ;
+                        this.ddlFatherEmployeeName = m.PAR_Father_FK_CONid;
                         //father
 
                         //mother
@@ -1392,6 +1498,13 @@
                             this.inputMotherWorkingCommencementDate = m.PAR_Mother_WorkingCommencementDate_convert;
                         }
                         ;
+                        if (m.PAR_Mother_IsStaff === 'True') {
+                            this.$refs.cbMotherEtonStaff.checked = true;
+                            this.isStaffMother = true;
+                        } else {
+                            this.$refs.cbMotherEtonStaff.checked = false;
+                        }
+                        this.ddlMotherEmployeeName = m.PAR_Mother_FK_CONid;
                         //mother
 
                         //guardian
@@ -1521,6 +1634,13 @@
                             this.inputGuardianWorkingCommencementDate = m.PAR_Guardian_WorkingCommencementDate_convert;
                         }
                         ;
+                        if (m.PAR_Guardian_IsStaff === 'True') {
+                            this.$refs.cbGuardianEtonStaff.checked = true;
+                            this.isStaffGuardian = true;
+                        } else {
+                            this.$refs.cbGuardianEtonStaff.checked = false;
+                        }
+                        this.ddlGuardianEmployeeName = m.PAR_Guardian_FK_CONid;
                         //guardian
 
                         //third party
@@ -1607,6 +1727,19 @@
                         } else {
                             jsonString = jsonString + ',"PAR_Father_IsStaff":"False"';
                         }
+                        if (this.$refs.cbMotherEtonStaff.checked === true) {
+                            jsonString = jsonString + ',"PAR_Mother_IsStaff":"True"';
+                        } else {
+                            jsonString = jsonString + ',"PAR_Mother_IsStaff":"False"';
+                        }
+                        if (this.$refs.cbGuardianEtonStaff.checked === true) {
+                            jsonString = jsonString + ',"PAR_Guardian_IsStaff":"True"';
+                        } else {
+                            jsonString = jsonString + ',"PAR_Guardian_IsStaff":"False"';
+                        }
+                        jsonString = jsonString + ',"PAR_Father_FK_CONid":"' + this.ddlFatherEmployeeName + '"';
+                        jsonString = jsonString + ',"PAR_Mother_FK_CONid":"' + this.ddlMotherEmployeeName + '"';
+                        jsonString = jsonString + ',"PAR_Guardian_FK_CONid":"' + this.ddlGuardianEmployeeName + '"';
                         jsonString = jsonString + ',"PAR_Father_Loc_Residence_No":"' + this.$refs.inputFatherAddress1.value + '"';
                         jsonString = jsonString + ',"PAR_Father_Loc_Address1":"' + this.$refs.inputFatherAddress2.value + '"';
                         jsonString = jsonString + ',"PAR_Father_Loc_Address2":"' + this.$refs.inputFatherAddress3.value + '"';
@@ -1751,6 +1884,28 @@
                     this.Save();
                 } catch (e) {
                     this.results = e;
+                }
+            },
+            isStaffOnChange () {
+                if (this.$refs.cbFatherEtonStaff.checked === true) {
+                    this.isStaffFather = true;
+                } else {
+                    this.isStaffFather = false;
+                    this.ddlFatherEmployeeName = '';
+                }
+
+                if (this.$refs.cbMotherEtonStaff.checked === true) {
+                    this.isStaffMother = true;
+                } else {
+                    this.isStaffMother = false;
+                    this.ddlMotherEmployeeName = '';
+                }
+
+                if (this.$refs.cbGuardianEtonStaff.checked === true) {
+                    this.isStaffGuardian = true;
+                } else {
+                    this.isStaffGuardian = false;
+                    this.ddlGuardianEmployeeName = '';
                 }
             },
         },

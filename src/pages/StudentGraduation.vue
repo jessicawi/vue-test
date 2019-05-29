@@ -71,12 +71,12 @@
                         <label>Graduation Date</label>
                         <el-date-picker v-model="inputGraduationDate" format="dd/MM/yyyy"
                                         value-format="dd/MM/yyyy" type="date"
-                                        placeholder="Pick a day"></el-date-picker>
+                                        placeholder="Pick a day" :picker-options="datePicker"></el-date-picker>
                     </div>
 
                 </div>
 
-                <button v-on:click="GraduationSave"
+                <button v-on:click="GraduationSave()"
                         class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Graduation
                 </button>
 
@@ -106,9 +106,18 @@
                 classStudentList:[],
                 inputGraduationDate:'',
                 //End graduation
+                datePicker:{
+                    disabledDate(date){
+
+                        return date<(new Date().getTime() - (1 * 24 * 60 * 60 * 1000));
+                        //  Without using the second variable, you can replace 7 for with your back x days:
+                        //e.g return date< Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
+                    }
+                },
             }
         },
         methods: {
+
             getSource(obj) {
                 let imgsrc = "";
                 if (obj.Profile_Img == null || obj.Profile_Img == "")
@@ -145,7 +154,7 @@
                     return;
 
                 this.showLoading();
-                DataSource.shared.getClassByLevelClassID(this.obj_SelectedClass.PK_Course_ID, this.obj_SelectedClass.PK_Class_ID).then((result) => {
+                DataSource.shared.getStudentGraduationListByClassLevel(this.obj_SelectedClass.PK_Course_ID, this.obj_SelectedClass.PK_Class_ID).then((result) => {
                     this.arrobj_Students = result.Table;
                     this.hideLoading();
                 });
@@ -175,7 +184,8 @@
 
                     };
 
-                    if(this.inputGraduationDate === '' || this.inputGraduationDate === null || this.inputGraduationDate === undefined){
+                    if(this.inputGraduationDate === ''||this.inputGraduationDate === null||this.inputGraduationDate===undefined)
+                    {
                         alert('Please select datetime');
                     }
                     else{
@@ -206,15 +216,13 @@
                     if (!$(this).prop("checked"))
                         $(this).click();
                 });
-            }
-            ,
+            },
             unselectAll() {
                 $("input[type='checkbox']").each(function () {
                     if ($(this).prop("checked"))
                         $(this).click();
                 });
-            }
-            ,
+            },
             /*#endregion*/
 
             /*#region Array Grouping Function*/
@@ -240,8 +248,7 @@
                 }
 
                 return ArrObj_Sorted;
-            }
-            ,
+            },
             /*#endregion*/
 
             /*#region Loader Functions*/

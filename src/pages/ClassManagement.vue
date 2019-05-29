@@ -19,16 +19,13 @@
                     <!--<b-btn v-b-modal.newClassModal variant="primary">-->
                     <!--Mass Promotion-->
                     <!--</b-btn>-->
-
                     <!--<b-btn variant="primary" v-on:click="directToPromotion()">-->
                     <!--Mass Promotion-->
                     <!--</b-btn>-->
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
                     <el-row style="margin-bottom: 10px">
                         <el-col :span="11">
                             <el-input v-model="ClassFilters[0].value" class="search-datatable" placeholder="Search">
@@ -52,7 +49,6 @@
                                     placement="bottom-end"
                                     width="400"
                                     trigger="click">
-
                                 <el-checkbox-group v-model="ClassFilters[1].value" class="custom-checkbox">
                                     <el-checkbox-button v-for="item in classListFilteritem" :label="item"
                                                         :key="item">{{item}}
@@ -77,7 +73,6 @@
                     </data-tables>
                 </div>
             </div>
-
             <!--<div class="row">-->
             <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
             <!--<div v-if="classListInt.length>0">-->
@@ -104,7 +99,6 @@
             <!--placement="bottom-end"-->
             <!--width="400"-->
             <!--trigger="click">-->
-
             <!--<el-checkbox-group v-model="ClassFilters[1].value" class="custom-checkbox">-->
             <!--<el-checkbox-button v-for="item in classListFilteritem" :label="item"-->
             <!--:key="item">{{item}}-->
@@ -125,7 +119,6 @@
             <!--:label="classListInfo.label" :key="classListInfo.prop"-->
             <!--sortable="custom">-->
             <!--</el-table-column>-->
-
             <!--<el-table-column label="Assign Students" min-width="100px">-->
             <!--<template slot-scope="scope">-->
             <!--<el-button v-for="assignStudents in assignStudentToClass(scope.row)"-->
@@ -149,7 +142,6 @@
             <!--</div>-->
             <!--</div>-->
         </div>
-
         <b-modal id="newClassModal" size="lg" title="Create New Class" ok-only ok-variant="secondary" hide-footer
                  ref="newClassShowModal" v-model="newClassShowModal">
             <div class="row ml-2 mr-2">
@@ -168,9 +160,7 @@
                                 :value="item.PK_Course_ID">
                         </el-option>
                     </el-select>
-
                 </div>
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Semester</label>
                     <el-select v-model="ddlSemester" placeholder="Select" class="fullwidth">
@@ -187,12 +177,10 @@
                     <!--</option>-->
                     <!--</select>-->
                 </div>
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Class Name</label>
                     <input type="text" class="form-control" v-model="inputClassName">
                 </div>
-
                 <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
                 <!--<label>Programme</label>-->
                 <!--<el-select v-model="ddlClassType" placeholder="Select" class="fullwidth">-->
@@ -209,7 +197,6 @@
                 <!--&lt;!&ndash;</option>&ndash;&gt;-->
                 <!--&lt;!&ndash;</select>&ndash;&gt;-->
                 <!--</div>-->
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Class Teacher</label>
                     <el-select v-model="ddlClassTeacher" filterable placeholder="Select" class="fullwidth">
@@ -226,7 +213,6 @@
                     <!--</option>-->
                     <!--</select>-->
                 </div>
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Maximum Student</label>
                     <input type="text" class="form-control" v-model="inputMaxStudents" @keypress="onlyNumber">
@@ -244,22 +230,18 @@
                 </div>
             </div>
         </b-modal>
-
         <b-modal id="editClassModal" size="lg" title="Edit Class" ok-only ok-variant="secondary"
                  ref="editClassShowModal" hide-footer v-model="editClassShowModal">
             <div class="row ml-2 mr-2">
                 <div style="display: none;">{{ editSemesterID }} - {{ editCourseID }} - {{ editClassName }}</div>
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Level</label>
                     <input type="text" class="form-control" v-model="inputeditLevel" readonly="readonly" disabled>
                 </div>
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Class Name</label>
                     <input type="text" class="form-control" v-model="inputEditClassName">
                 </div>
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Status</label>
                     <el-select v-model="ddlEditClassStatus" filterable placeholder="Select" class="fullwidth">
@@ -276,7 +258,6 @@
                     <!--</option>-->
                     <!--</select>-->
                 </div>
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Maximum Student</label>
                     <input type="text" class="form-control" v-model="inputEditMaxStudents" @keypress="onlyNumber">
@@ -289,28 +270,26 @@
                 </div>
                 <div class="col-lg-6">
                     <button v-on:click="updateClass()"
-                            class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Update
+                            class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Save
                     </button>
                 </div>
             </div>
         </b-modal>
-
         <b-modal id="assignClassModal" size="lg" title="Assign Class" ok-only ok-variant="secondary" hide-footer
                  ref="assignClassShowModal" v-model="assignClassModal">
             <div class="">
-                <div style="display: none;">{{ assignClassLevelID }} - {{ assignClassID }}</div>
-
+                <div style="display: none;">{{ assignClassLevelID }} - {{ assignClassID }} - {{ assignClassSemID }}
+                </div>
                 <div class="">
                     <div v-if="assignStudentsListInt.length<1" class="empty-list_image">
                         <strong>No Record ...</strong>
                         <img src="../assets/promotion.jpg"/>
                     </div>
                     <div v-if="assignStudentsListInt.length>0">
-
                         <el-row style="margin-bottom: 10px" class="classManage-ActionBar">
                             <el-col :span="16">
                                 <!--<el-input v-model="filters[0].value">-->
-                                    <!--<template slot="prepend">Search</template>-->
+                                <!--<template slot="prepend">Search</template>-->
                                 <!--</el-input>-->
                                 <el-input v-model="assignStudentsListSearchFilter">
                                     <template slot="prepend">Search</template>
@@ -322,32 +301,30 @@
                             </el-col>
                         </el-row>
                         <!--<data-tables :data="assignStudentsListInt" :filters="filters" layout="table"-->
-                                     <!--:pagination-props="{ background: true, pageSizes: [2, 3, 4] }"-->
-                                     <!--@selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">-->
-                            <!--<el-table-column type="selection" width="55" :reserve-selection="true">-->
-                            <!--</el-table-column>-->
-
+                        <!--:pagination-props="{ background: true, pageSizes: [2, 3, 4] }"-->
+                        <!--@selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">-->
+                        <!--<el-table-column type="selection" width="55" :reserve-selection="true">-->
+                        <!--</el-table-column>-->
                         <!--<el-table :data="assignStudentsListInt.filter(data => !assignStudentsListSearchFilter || data.Full_Name.toLowerCase().includes(assignStudentsListSearchFilter.toLowerCase()))"-->
-                                     <!--@selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">-->
-                        <el-table :data="assignStudentsListInt.filter(data => !assignStudentsListSearchFilter || data.Full_Name.toLowerCase().includes(assignStudentsListSearchFilter.toLowerCase())).slice((assignStudentsListCurrentPage-1)*assignStudentsListPageSize,assignStudentsListCurrentPage*assignStudentsListPageSize)"
-                                  @selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">
+                        <!--@selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">-->
+                        <el-table
+                                :data="assignStudentsListInt.filter(data => !assignStudentsListSearchFilter || data.Full_Name.toLowerCase().includes(assignStudentsListSearchFilter.toLowerCase())).slice((assignStudentsListCurrentPage-1)*assignStudentsListPageSize,assignStudentsListCurrentPage*assignStudentsListPageSize)"
+                                @selection-change="changeSelection" :row-key="getRowKey" ref="articleTable">
                             <el-table-column type="selection" width="55" :reserve-selection="true">
                             </el-table-column>
-
                             <el-table-column v-for="assignStudentsListInfo in assignStudentsList"
                                              :prop="assignStudentsListInfo.prop"
                                              :label="assignStudentsListInfo.label" :key="assignStudentsListInfo.prop"
                                              sortable="custom">
                             </el-table-column>
                         </el-table>
-
                         <el-pagination
-                            @current-change="assignStudentsListChangePage"
-                            @size-change="assignStudentsListChangePageSize"
-                            :page-sizes="[20, 40, 60, 80]"
-                            :page-size=assignStudentsListPageSize
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="assignStudentsListTotal">
+                                @current-change="assignStudentsListChangePage"
+                                @size-change="assignStudentsListChangePageSize"
+                                :page-sizes="[20, 40, 60, 80]"
+                                :page-size=assignStudentsListPageSize
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="assignStudentsListTotal">
                         </el-pagination>
                     </div>
                 </div>
@@ -360,19 +337,18 @@
                     </div>
                     <div class="col-lg-6">
                         <button v-on:click="assignClass()"
-                                class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch float-right" :disabled="assignStudentsListInt.length<1">
+                                class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch float-right"
+                                :disabled="assignStudentsListInt.length<1">
                             Assign
                         </button>
                     </div>
                 </div>
             </div>
         </b-modal>
-
         <b-modal id="ViewClassModal" size="lg" title="Assign Class" ok-only ok-variant="secondary"
                  ref="ViewClassModal" ok-title="Close" hide-footer v-model="ViewClassModal">
             <div class="">
                 <div style="display: none;">{{ assignClassLevelID }} - {{ assignClassID }}</div>
-
                 <div v-if="currentStudent.length<1" class="empty-list_image">
                     <strong>No Record ...</strong>
                     <img src="../assets/promotion.jpg"/>
@@ -380,7 +356,6 @@
                 <div class="">
                     <div>
                         <data-tables :data="currentStudent" v-if="currentStudent.length>0">
-
                             <el-table-column v-for="studentList in currentStudentList"
                                              :prop="studentList.prop"
                                              :label="studentList.label" :key="studentList.prop"
@@ -406,38 +381,47 @@
                 </div>
             </div>
         </b-modal>
-
         <b-modal id="ClassListModal" size="lg" title="Class List" ok-only ok-variant="secondary" hide-footer
                  ref="classListShowModal" v-model="ClassListModal">
             <div class="row ml-2 mr-2">
                 <div style="display: none;">{{ classListSemesterID }} - {{ classListCourseID }} - {{ classListClassName
                     }} - {{ classListLevelName }} - {{ classListMaxStudents }}
                 </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                    <div class="classModal-button-group">
+                        <el-button-group class=" ">
+                            <el-button type="primary" v-on:click="editClass()" variant="primary"><i class="material-icons">
+                                edit
+                            </i> Edit Class
+                            </el-button>
+                            <el-button type="primary" v-on:click="createNewProgrmamme('Edit')" variant="primary"><i
+                                    class="material-icons">
+                                note_add
+                            </i> Create New Programme
+                            </el-button>
+                        </el-button-group>
+                        <div class="delete_programme_btn">
+                            <small>Remove Programme</small>
+                            <el-button type="info" round v-on:click="" variant="primary"><i
+                                    class="material-icons">
+                                delete
+                            </i>
+                            </el-button>
+                        </div>
+                    </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                    <el-button-group class=" ">
-                        <el-button type="primary" v-on:click="editClass()" variant="primary"><i class="material-icons">
-                            edit
-                        </i> Edit Class
-                        </el-button>
-                        <el-button type="primary" v-on:click="createNewProgrmamme('Edit')" variant="primary"><i
-                                class="material-icons">
-                            note_add
-                        </i> Create New
-                            Programme
-                        </el-button>
-                    </el-button-group>
-
+                    <div class="totalNumberOfStudentAssignedToClass" v-if="totalNumberOfStudentAssignedToClass">
+                        <label>
+                            Total Student Assigned: {{ totalNumberOfStudentAssignedToClass }}
+                        </label>
+                    </div>
                     <div v-if="classListInt.length>0">
-
-                        <data-tables :data="classListInt" class="classManage-Table"
+                        <data-tables :data="classListInt" class="classManage-Table" :action-col="classListAction"
                                      :filters="ClassFilters">
                             <el-table-column v-for="classListInfo in classList" :prop="classListInfo.prop"
                                              :label="classListInfo.label" :key="classListInfo.prop"
                                              sortable="custom">
                             </el-table-column>
-
                             <el-table-column label="Assign Students" min-width="100px">
                                 <template slot-scope="scope">
                                     <el-button v-for="assignStudents in assignStudentToClass(scope.row)"
@@ -459,7 +443,6 @@
                         </data-tables>
                     </div>
                 </div>
-
                 <hr class="custom-hr"/>
                 <div class="col-lg-6">
                     <button v-on:click="closeAssignModal()"
@@ -470,7 +453,6 @@
                 <!--<button v-on:click="editClass()"-->
                 <!--class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Edit Class-->
                 <!--</button>-->
-
                 <!--<button v-on:click="createNewProgrmamme('Edit')"-->
                 <!--class="btn btn-primary waves-effect waves-light m-r-10 btnFamilyIDSearch">Create New-->
                 <!--Programme-->
@@ -478,7 +460,6 @@
                 <!--</div>-->
             </div>
         </b-modal>
-
         <b-modal id="newProgrammeModal" size="lg" title="Create New Programme" ok-only ok-variant="secondary"
                  hide-footer
                  ref="newProgrammeShowModal" v-model="newProgrammeShowModal">
@@ -486,7 +467,6 @@
                 <div style="display: none;">{{ programmeLevelID }} - {{ programmeSemID }} - {{ programmeClassName }} -
                     {{ programmeMaxStudent }} - {{ programmeClassTeacher }} - {{ programmeSaveType }}
                 </div>
-
                 <div class="col-lg-12" v-if="currentClassTypeList.length > 0">
                     <label>Programme</label>
                 </div>
@@ -508,7 +488,6 @@
                         <img src="../assets/promotion.jpg"/>
                     </div>
                 </div>
-
                 <hr class="custom-hr"/>
                 <div class="col-lg-6">
                     <button v-on:click="backtoClassList()"
@@ -525,7 +504,6 @@
         </b-modal>
     </div>
 </template>
-
 <script>
     import DataSource from "../data/datasource";
 
@@ -576,6 +554,8 @@
                 editCourseID: '',
                 editClassName: '',
                 assignStudentsListSearchFilter: '',
+                totalNumberOfStudentAssignedToClass: '',
+                assignClassSemID: '',
 
                 levelList: [],
                 semesterList: [],
@@ -594,33 +574,32 @@
                 }, {
                     prop: "CLS_Batch",
                     label: "Programme"
-                }, {
-                    prop: "CLS_Class_Max_Students",
-                    label: "Max Students"
+                    // }, {
+                    //     prop: "CLS_Class_Max_Students",
+                    //     label: "Max Students"
                 }, {
                     prop: "CRS_Course_Name",
                     label: "Level"
+                // }, {
+                //     prop: "PK_Class_ID",
+                //     label: "class id"
                 }],
-                // classListAction: {
-                //     label: 'Edit',
-                //     props: {
-                //         align: 'center',
-                //     },
-                //     buttons: [{
-                //         props: {
-                //             type: 'primary',
-                //             icon: 'el-icon-edit'
-                //         },
-                //         handler: row => {
-                //             this.inputEditClassName = row.CLS_ClassName;
-                //             this.ddlEditClassStatus = 'Active';
-                //             this.inputEditMaxStudents = row.CLS_Class_Max_Students;
-                //             this.inputeditLevel = row.CRS_Course_Name;
-                //             this.$refs.editClassShowModal.show();
-                //         },
-                //         label: 'Edit'
-                //     }]
-                // },
+                classListAction: {
+                    label: 'Delete',
+                    props: {
+                        align: 'center',
+                    },
+                    buttons: [{
+                        props: {
+                            type: 'primary',
+                            icon: 'el-icon-delete'
+                        },
+                        handler: row => {
+                            this.removeClassProgramme(row.PK_Class_ID);
+                        },
+                        label: ''
+                    }]
+                },
 
 
                 multipleSelection: [],
@@ -779,6 +758,19 @@
 
                         }
                     }
+
+                    const totalStudentsInClassResponse = await DataSource.shared.getClassStudentList(this.classListSemesterID, this.classListCourseID, this.classListClassName);
+                    if (totalStudentsInClassResponse) {
+                        if (totalStudentsInClassResponse.code === '88') {
+                            window.location.replace('/');
+                        } else if (totalStudentsInClassResponse.code === '99') {
+                            console.log('Error! in getClassStudentList');
+                        } else if (totalStudentsInClassResponse.code === '2') {
+                            console.log('No student in this class');
+                        } else {
+                            this.totalNumberOfStudentAssignedToClass = totalStudentsInClassResponse.Table.length;
+                        }
+                    }
                 } catch (e) {
                     this.results = e;
                 }
@@ -932,6 +924,7 @@
                     handler: _ => {
                         this.assignClassLevelID = row.PK_Course_ID;
                         this.assignClassID = row.PK_Class_ID;
+                        this.assignClassSemID = row.CLS_FK_Semester_ID;
                         this.getAssignStudents();
                         // this.$refs.assignClassShowModal.show();
                         this.assignClassModal = true;
@@ -953,6 +946,7 @@
                     handler: _ => {
                         this.assignClassLevelID = row.PK_Course_ID;
                         this.assignClassID = row.PK_Class_ID;
+                        this.assignClassSemID = row.CLS_FK_Semester_ID;
                         this.getAssignStudents();
                         this.$refs.ViewClassModal.show();
 
@@ -976,7 +970,7 @@
                     }
 
                     this.$vs.loading();
-                    const response = await DataSource.shared.getActiveStudentsByLevelSchool(this.assignClassLevelID, this.assignClassID);
+                    const response = await DataSource.shared.getActiveStudentsByLevelSchool(this.assignClassLevelID, this.assignClassID, this.assignClassSemID);
                     if (response) {
                         this.$vs.loading.close();
                         if (response.code === '88') {
@@ -991,7 +985,6 @@
                             this.currentStudent = assignStudentList.filter(d => {
                                 return d.assignToCurrentClass === "YES";
                             });
-
                             this.assignStudentsListTotal = this.assignStudentsListInt.length;
                             this.assignStudentsListCurrentPage = 1;
                             this.assignStudentsListPageSize = 20;
@@ -1032,6 +1025,7 @@
                             type: 'success'
                         });
                         this.closeAssignModal();
+                        this.getAssignStudents();
                         // window.location.replace('/ClassManagement');
                     } else if (response.code === '2') {
                         this.$notify.error({
@@ -1098,16 +1092,40 @@
                 this.inputeditLevel = this.classListLevelName;
                 this.$refs.editClassShowModal.show();
             },
-            assignStudentsListChangePage(currentPage){
+            assignStudentsListChangePage(currentPage) {
                 this.assignStudentsListCurrentPage = currentPage;
             },
-            assignStudentsListChangePageSize (currentPageSize) {
+            assignStudentsListChangePageSize(currentPageSize) {
                 this.assignStudentsListPageSize = currentPageSize;
+            },
+            removeClassProgramme(classID) {
+                try {
+                    const response = DataSource.shared.updateClassProgramme(classID, 'CLOSED');
+                    if (response) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        } else if (response.code === '99') {
+                            this.$notify.error({
+                                title: 'Error',
+                                message: 'Remove Class Programme Error!'
+                            });
+                        } else {
+                            this.$notify({
+                                title: 'Success',
+                                message: 'Successfully Removed Programme!',
+                                type: 'success'
+                            });
+                            //this.closeAssignModal();
+                            window.location.replace('/ClassManagement');
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
             },
         },
     };
 </script>
-
 <style scoped>
     .actionDiv {
         text-align: right;
@@ -1116,5 +1134,20 @@
     .actionDiv .btn-primary {
         display: inline;
         margin-left: 10px;
+    }
+
+    .totalNumberOfStudentAssignedToClass {
+        margin: 10px 0 0 0;
+    }
+
+    .totalNumberOfStudentAssignedToClass label {
+        display: inline-block !important;
+        background: linear-gradient(#1D976C, #93F9B9);
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .totalNumberOfStudentAssignedToClass label:hover {
+        opacity: 0.8;
     }
 </style>

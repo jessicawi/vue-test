@@ -153,7 +153,7 @@
                                            style="display:none;">
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="divFamilySearch">
-                                    <label class="lblSearchFamily">Search Family</label>
+                                    <label class="lblSearchFamily" id="v-step-StudentSearchFamily">Search Family</label>
                                     <b-btn v-b-modal.familyModal variant="primary" v-bind:disabled="editModeDisable">
                                         Search
                                     </b-btn>
@@ -181,7 +181,7 @@
 
                         <div class="studentAreaDiv">
                             <div class="">
-                                <h5 class="text-left student-form__title">Student's Personal Information</h5>
+                                <h5 class="text-left student-form__title" id="v-step-StudentPersonalInformation">Student's Personal Information</h5>
                             </div>
                             <div class="row form-group__wrapper">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -383,7 +383,7 @@
 
                         <div class="studentAreaDiv">
                             <div class="">
-                                <h5 class="text-left student-form__title">Student's Registration Details</h5>
+                                <h5 class="text-left student-form__title" id="v-step-StudentRegistrationDetails">Student's Registration Details</h5>
                             </div>
 
                             <div class="row form-group__wrapper">
@@ -475,7 +475,7 @@
 
                         <div class="studentAreaDiv">
                             <div class="">
-                                <h5 class="text-left student-form__title">Before Join Us</h5>
+                                <h5 class="text-left student-form__title">Before Commencement</h5>
                             </div>
 
                             <div class="row form-group__wrapper">
@@ -523,7 +523,7 @@
                 </el-tab-pane>
                 <el-tab-pane name="Parents" v-if="divParent">
 
-                    <span slot="label">
+                    <span slot="label" id="v-step-ParentsTab">
 
                         <span v-if="!$v.ddlParentMode.$error || !$v.inputFatherFirstName.$error || !$v.inputFatherLastName.$error || !$v.inputFatherOccupation.$error || !$v.inputMotherFirstName.$error || !$v.inputMotherLastName.$error">Parents</span>
 
@@ -593,17 +593,6 @@
                                                             v-bind:disabled="editModeDisable" format="dd/MM/yyyy"
                                                             value-format="dd/MM/yyyy" type="date"
                                                             placeholder="Pick a day"></el-date-picker>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label>* Occupation</label>
-                                        <input type="text" class="form-control" v-model="inputFatherOccupation"
-                                               v-bind:disabled="editModeDisable"
-                                               :class="{ 'requiredFields': $v.inputFatherOccupation.$error }">
-                                        <div class="requiredFieldsMsg" v-if="$v.inputFatherOccupation.$error">
-                                            Occupation
-                                            Require
                                         </div>
                                     </div>
 
@@ -679,6 +668,17 @@
                                             <option>No</option>
                                             <option>Yes</option>
                                         </select>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Occupation</label>
+                                        <input type="text" class="form-control" v-model="inputFatherOccupation"
+                                               v-bind:disabled="editModeDisable"
+                                               :class="{ 'requiredFields': $v.inputFatherOccupation.$error }">
+                                        <div class="requiredFieldsMsg" v-if="$v.inputFatherOccupation.$error">
+                                            Occupation
+                                            Require
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -804,12 +804,6 @@
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label>Occupation</label>
-                                        <input type="text" class="form-control" v-model="inputMotherOccupation"
-                                               v-bind:disabled="editModeDisable">
-                                    </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <label>Identification Type</label>
                                         <select v-model="ddlMotherIdentificationType"
                                                 v-bind:disabled="editModeDisable"
@@ -881,6 +875,17 @@
                                             <option>No</option>
                                             <option>Yes</option>
                                         </select>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Occupation</label>
+                                        <input type="text" class="form-control" v-model="inputMotherOccupation"
+                                               v-bind:disabled="editModeDisable"
+                                               :class="{ 'requiredFields': $v.inputMotherOccupation.$error }">
+                                        <div class="requiredFieldsMsg" v-if="$v.inputMotherOccupation.$error">
+                                            Occupation
+                                            Require
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -962,7 +967,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane name="emergencyContact">
-                    <span slot="label">
+                    <span slot="label" id="v-step-EmergencyContactTab">
                         Emergency Contact
                     </span>
                     <div class=" form-group ">
@@ -1014,7 +1019,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane name="Addresses">
-                    <span slot="label">
+                    <span slot="label" id="v-step-AddressesTab">
                         <span v-if="!$v.inputStudentPostalCode.$error || !$v.inputStudentAddress1.$error || !$v.inputStudentCorrespondancePostalCode.$error || !$v.inputStudentCorrespondanceAddress1.$error">Addresses</span>
                         <!--<span class="alert-badge2"-->
                         <!--v-if="$v.inputStudentPostalCode.$error || $v.inputStudentAddress1.$error || $v.inputStudentCorrespondancePostalCode.$error || $v.inputStudentCorrespondanceAddress1.$error">-->
@@ -1042,7 +1047,7 @@
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>* Postal Code</label>
+                                    <label id="v-step-AddressesLRAPostalCode">* Postal Code</label>
                                     <input type="text" class="form-control" v-model="inputStudentPostalCode"
                                            :class="{ 'requiredFields': $v.inputStudentPostalCode.$error }"
                                            v-on:blur="GetGoogleAPI('inputStudentPostalCode')"
@@ -1089,7 +1094,7 @@
 
                             <div class="row form-group__wrapper">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Copy Address From Student's Permanent Address</label>
+                                    <label id="v-step-AddressesBACopyAddress">Copy Address From Student's Permanent Address</label>
                                     <!--<div v-on:click="StuCorAddCopyStuPermAdd" class="ttStuCorAddCopy"><i class="fa fa-clone" aria-hidden="true"></i>-->
                                     <!--<span class="ttnStuCorAddCopy">Copy Address From Student's Correspondance Address</span>-->
                                     <!--</div>-->
@@ -1099,7 +1104,7 @@
                                             class="form-control pro-edt-select form-control-primary"
                                             @change="onchangeCopyAdd()">
                                         <option value="manuallyInput">Manually Input</option>
-                                        <option value="stuPerAdd">Student's Permanent Address</option>
+                                        <option value="stuPerAdd">Student's Local Residential Address</option>
                                     </select>
                                 </div>
 
@@ -1178,7 +1183,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane name="Medical">
-                    <span slot="label">
+                    <span slot="label" id="v-step-MedicalTab">
                         Medical
                     </span>
                     <div class=" form-group ">
@@ -1308,10 +1313,11 @@
                                 <template slot-scope="scope">
                                     <el-button type="primary"
                                                icon="el-icon-edit"
-                                               v-if="checkSiblingEditButton(siblingList[scope.$index].School_ID) === true"
+                                               :disabled="checkSiblingEditButton(siblingList[scope.$index].School_ID) !== true"
                                                @click.native.prevent="editSibling(siblingList[scope.$index].School_ID, siblingList[scope.$index].Student_ID)">
                                         Edit
                                     </el-button>
+                                    <!--v-if="checkSiblingEditButton(siblingList[scope.$index].School_ID) === true"-->
                                 </template>
                             </el-table-column>
                         </data-tables>
@@ -1418,20 +1424,28 @@
 
             <div class="buttonArea">
                 <div class="text-center mg-b-pro-edt custom-pro-edt-ds">
-
                     <button v-on:click="backToPrevious" type="button"
                             class="btn btn-primary waves-effect waves-light m-r-10 float-left">Cancel
                     </button>
-                    <button v-on:click="Validation" type="button"
+                    <button v-on:click="Validation" type="button" id="v-step-SaveButton"
                             class="btn btn-primary waves-effect waves-light m-r-10 float-right">
                         Save
                     </button>
                 </div>
             </div>
-        </div>
-        <div class="whitespace-30"></div>
 
-        <b-modal id="familyModal" class="studentPageBModal" title="Search Family ID" ok-only
+            <div class="whitespace-30" style="clear: both;"></div>
+
+            <div class="buttonArea" style="display: none;">
+                <el-button type="primary" class="btn btn-primary waves-effect waves-light m-r-10 float-left"
+                           v-if="!editModeDisable" @click="studentPageVueTourStart()">
+                    Guided Tour
+                </el-button>
+            </div>
+        </div>
+        <div class="whitespace-30" style="clear: both;"></div>
+
+        <b-modal id="familyModal" size="lg" class="studentPageBModal" title="Search Family ID" ok-only
                  ok-variant="secondary" ok-title="Cancel" ref="familyModalShowModal">
             <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -1768,6 +1782,40 @@
                 </div>
             </div>
         </b-modal>
+
+        <v-tour name="StudentPageVueTourName" :steps="studentPageVueTour" :options="studentPageVueTourOptions" :callbacks="studentPageVueTourCallBacks">
+            <template slot-scope="tour">
+                <transition name="fade">
+                    <v-step
+                            v-if="tour.currentStep === index"
+                            v-for="(step, index) of tour.steps"
+                            :key="index"
+                            :step="step"
+                            :previous-step="tour.previousStep"
+                            :next-step="tour.nextStep"
+                            :stop="tour.stop"
+                            :is-first="tour.isFirst"
+                            :is-last="tour.isLast"
+                            :labels="tour.labels"
+                    >
+                        <template v-if="tour.currentStep === 2">
+                            <div slot="actions">
+                                <button class="v-step__button" @click="tour.stop">Skip</button>
+                                <button class="v-step__button" @click="tour.previousStep">Previous</button>
+                                <button class="v-step__button" @click="studentPageVueTourParentTab(tour, 'Next')">Next</button>
+                            </div>
+                        </template>
+                        <template v-if="tour.currentStep === 4">
+                            <div slot="actions">
+                                <button class="v-step__button" @click="tour.stop">Skip tour</button>
+                                <button class="v-step__button" @click="studentPageVueTourParentTab(tour, 'Previous')">Previous</button>
+                                <button class="v-step__button" @click="tour.nextStep">Next</button>
+                            </div>
+                        </template>
+                    </v-step>
+                </transition>
+            </template>
+        </v-tour>
     </div>
 </template>
 
@@ -1778,6 +1826,11 @@
     import promotionComponent from "../components/Promotion_Component";
     import Cookies from "js-cookie";
     import axios from 'axios';
+
+    import VueTour from 'vue-tour';
+    import Vue from 'vue';
+    require('vue-tour/dist/vue-tour.css');
+    Vue.use(VueTour);
 
     const API_HOST = process.env.VUE_APP_ROOT_API;
 
@@ -1810,6 +1863,18 @@
         async mounted() {
             await this.LoadStudentParentInfo();
             await this.onChangeNationalityBirthPlace();
+
+            if (this.$route.query.tour === 'YES') {
+                // if (this.$route.params.guidedTour === 'YES') {
+                //     this.activeTab = 'Student';
+                //     this.$tours['StudentPageVueTourName'].start();
+                //     this.windowsSroll(0);
+                // }
+
+                this.activeTab = 'Student';
+                this.$tours['StudentPageVueTourName'].start();
+                this.windowsSroll(0);
+            }
         },
         data() {
             return {
@@ -2221,13 +2286,121 @@
                 uploadAllAboutMeShowModal: false,
                 tempPK_Semester_ID: "",
                 tempPK_Course_ID: "",
-                tempPK_Class_ID: ""
+                tempPK_Class_ID: "",
 
+                //vue tour
+                //https://github.com/pulsardev/vue-tour
+                studentPageVueTourOptions: {
+                    useKeyboardNavigation: false,
+                    labels: {
+                        buttonSkip: 'Skip tour',
+                        buttonPrevious: 'Previous',
+                        buttonNext: 'Next',
+                        buttonStop: 'Finish'
+                    }
+                },
+                studentPageVueTourCallBacks: {
+                    onPreviousStep: this.studentPageVueTourCallBacksPreviousSteps,
+                    onNextStep: this.studentPageVueTourCallBacksNextSteps
+                },
+                studentPageVueTour: [
+                    //Student Tab
+                    {
+                        target: '#v-step-StudentSearchFamily',
+                        content: `<div class="studentPageTourDiv">Step 1 / 10 <br>A student with a Sibling? <span class="studentPageTourSpecialColor">Search Family</span></div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    {
+                        target: '#v-step-StudentPersonalInformation',
+                        content: `<div class="studentPageTourDiv">Step 2 / 10 <br>Fill in the <span class="studentPageTourSpecialColor">Student Particular</span></div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    {
+                        target: '#v-step-StudentRegistrationDetails',
+                        content: `<div class="studentPageTourDiv">Step 3 / 10 <br>Fill in the <span class="studentPageTourSpecialColor">Registration Details</span> <br>Please fill <span class="studentPageTourSpecialColor">Commencement Date</span> and <span class="studentPageTourSpecialColor">Payer</span> correctly as this will impact the billing</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    //Parent Tab
+                    {
+                        target: '#v-step-ParentsTab',
+                        content: `<div class="studentPageTourDiv">Step 4 / 10 <br>Fill in the <span class="studentPageTourSpecialColor">Parents Particular</span></div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    //EmergencyContactTab
+                    {
+                        target: '#v-step-EmergencyContactTab',
+                        content: `<div class="studentPageTourDiv">Step 5 / 10 <br>Fill in the <span class="studentPageTourSpecialColor">Emergency Contact</span></div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    //Addresses Tab
+                    {
+                        target: '#v-step-AddressesTab',
+                        content: `<div class="studentPageTourDiv">Step 6 / 10 <br>Fill in the <span class="studentPageTourSpecialColor">Address</span></div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    {
+                        target: '#v-step-AddressesLRAPostalCode',
+                        content: `<div class="studentPageTourDiv">Step 7 / 10 <br>Fill in the <span class="studentPageTourSpecialColor">Postal Code</span> and <span class="studentPageTourSpecialColor">Address 1</span> will be populated (Singapore address only)</div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    {
+                        target: '#v-step-AddressesBACopyAddress',
+                        content: `<div class="studentPageTourDiv">Step 8 / 10 <br>Select <span class="studentPageTourSpecialColor">Student's Local Residential Address</span> to copy from above</div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    //Medical Tab
+                    {
+                        target: '#v-step-MedicalTab',
+                        content: `<div class="studentPageTourDiv">Step 9 / 10 <br>Fill in the <span class="studentPageTourSpecialColor">Student Medical Information</span></div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    //Save button
+                    {
+                        target: '#v-step-SaveButton',
+                        content: `<div class="studentPageTourDiv">Step 10 / 10 <br>Click the <span class="studentPageTourSpecialColor">Save</span> button to save</div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                ],
+                //vue tour
             };
         },
         computed: {
             isdivParent() {
                 if (this.divParent === true && this.lblCreateOrEdit === "New" && this.inputFamilyID === "") {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            fatherOccupation() {
+                if (this.divParent === true && this.lblCreateOrEdit === "New" && this.inputFamilyID === "" && this.ddlFatherWorking === 'Yes') {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            motherOccupation() {
+                if (this.divParent === true && this.lblCreateOrEdit === "New" && this.inputFamilyID === "" && this.ddlMotherWorking === 'Yes') {
                     return true;
                 } else {
                     return false;
@@ -2293,9 +2466,11 @@
             ddlParentMode: {requiredIf: requiredIf('isdivParent')},
             inputFatherFirstName: {requiredIf: requiredIf('isdivParent')},
             inputFatherLastName: {requiredIf: requiredIf('isdivParent')},
-            inputFatherOccupation: {requiredIf: requiredIf('isdivParent')},
             inputMotherFirstName: {requiredIf: requiredIf('isdivParent')},
             inputMotherLastName: {requiredIf: requiredIf('isdivParent')},
+
+            inputFatherOccupation: {requiredIf: requiredIf('fatherOccupation')},
+            inputMotherOccupation: {requiredIf: requiredIf('motherOccupation')},
 
             inputStudentEnrolledCenterName: {requiredIf: requiredIf('isdivEnrolledinOtherCenter')},
             ddlStudentEnrolledCenterType: {requiredIf: requiredIf('isdivEnrolledinOtherCenter')},
@@ -2303,6 +2478,7 @@
         components: {promotionComponent},
         methods: {
             hideModal() {
+                console.log("111")
                 this.withdrawShowModal = false;
                 this.transferModal = false;
             },
@@ -3140,7 +3316,6 @@
                     this.results = e;
                 }
             },
-
             async Validation() {
                 try {
                     console.log("11");
@@ -3472,7 +3647,7 @@
             },
             async BindTransferSchool() {
                 try {
-                    const response = await DataSource.shared.getAllActiveSchool();
+                    const response = await DataSource.shared.getAllActiveSchool('', 'UTY201300000061');
                     if (response) {
                         if (response.code === '88') {
                             window.location.replace('/');
@@ -3522,6 +3697,7 @@
                                     message: 'Student has been provisionally transfered!',
                                     type: 'success'
                                 });
+                                this.hideModal();
                             }
                         }
                     } else {
@@ -4048,6 +4224,62 @@
                     this.divEnrolledinOtherCenterShow = true;
                 }
             },
+            studentPageVueTourStart () {
+                this.activeTab = 'Student';
+                this.$tours['StudentPageVueTourName'].start();
+                this.windowsSroll(0);
+            },
+            studentPageVueTourParentTab (tour, nextOrPreviousStep) {
+                if (this.divParent === false) {
+                    if (nextOrPreviousStep === 'Next') {
+                        this.$tours['StudentPageVueTourName'].currentStep = tour.currentStep + 1;
+                        tour.nextStep();
+
+                    } else if (nextOrPreviousStep === 'Previous') {
+                        this.$tours['StudentPageVueTourName'].currentStep = tour.currentStep - 1;
+                        tour.previousStep();
+                    }
+                } else {
+                    if (nextOrPreviousStep === 'Next') {
+                        tour.nextStep();
+                    } else if (nextOrPreviousStep === 'Previous') {
+                        tour.previousStep();
+                    }
+                }
+
+                //setTimeout ( () => tour.nextStep(), 2000);
+            },
+            studentPageVueTourCallBacksPreviousSteps (currentStep) {
+                let finalSteps = currentStep - 1;
+
+                this.windowsSroll(finalSteps);
+            },
+            studentPageVueTourCallBacksNextSteps (currentStep) {
+                let finalSteps = currentStep + 1;
+
+                this.windowsSroll(finalSteps);
+            },
+            windowsSroll(finalSteps) {
+                if (finalSteps >= 0 && finalSteps <= 2) {
+                    this.activeTab = 'Student';
+                } else if (finalSteps >= 3 && finalSteps <= 3) {
+                    this.activeTab = 'Parents';
+                } else if (finalSteps >= 4 && finalSteps <= 4) {
+                    this.activeTab = 'emergencyContact';
+                } else if (finalSteps >= 5 && finalSteps <= 7) {
+                    this.activeTab = 'Addresses';
+                } else if (finalSteps >= 8 && finalSteps <= 8) {
+                    this.activeTab = 'Medical';
+                }
+
+                //setTimeout(() => window.scrollBy(0, -200), 500);
+                // let scrollOptions = {
+                //     left: 0,
+                //     top: -100,
+                //     behavior: 'smooth'
+                // };
+                // window.scrollBy(scrollOptions);
+            },
         },
     };
 </script>
@@ -4265,5 +4497,13 @@
 
     .studentPageBTabs .nav-tabs {
         border-bottom: 5px solid #dee2e6;
+    }
+
+    .studentPageTourDiv .studentPageTourSpecialColor {
+        color: #44D362;
+    }
+
+    .v-step {
+        z-index: 999;
     }
 </style>

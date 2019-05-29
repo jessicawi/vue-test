@@ -31,7 +31,7 @@
                     v-if="results !== false && errorresults === false">
                     </el-alert>
                     <el-alert
-                            title="Error"
+                            title=""
                             type="error"
                             :description="errorresults"
                             show-icon
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="social-login">
+                    <div class="social-login" style="display: none;">
                         <div id="google-signin-button"></div>
                         <button id="btn_FBLogin" @click="loginFB">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 216" class="_5h0m" color="#FFFFFF">
@@ -206,7 +206,9 @@
                         }
                     }
                 } catch (e) {
-                    this.results = e;
+                    console.log(e);
+                    this.errorresults = "server error, please contact administrator";
+                    this.$vs.loading.close();
                 }
             },
             checkUserAccount(str_Email, str_TokenId, str_Platform) {
@@ -270,7 +272,6 @@
                             client_id: "646978523324-lcudp248dvuuk0rda4q6kf2bti9qkk3b.apps.googleusercontent.com"
                         }).then((auth2) => {
                             auth2.signOut();
-                            console.log("Google Logout");
                         });
                     });
                 });

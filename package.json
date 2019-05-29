@@ -32,6 +32,7 @@
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.2",
     "vue-search-select": "^2.8.2",
+    "vue-tour": "^1.1.0",
     "vue-upload": "^1.0.0",
     "vue-upload-component": "^2.8.18",
     "vue2-datatable-component": "^2.3.1",

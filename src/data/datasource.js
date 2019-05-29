@@ -100,24 +100,23 @@ export default class DataSource {
             //     }
             // }
 
-            console.log(new Date(nowMs), "now");
-            console.log(new Date(Number(extendTime)), "extendTime");
-            console.log(new Date(Number(expireTime)), "expireTime");
+            // console.log(new Date(nowMs), "now");
+            // console.log(new Date(Number(extendTime)), "extendTime");
+            // console.log(new Date(Number(expireTime)), "expireTime");
 
 
             if (nowMs > extendTime && nowMs < expireTime) {
-                const newExtendDate = new Date(Number(extendTime) + (1 * 60 * 1000));
+                const newExtendDate = new Date(Number(extendTime) + (120 * 60 * 1000));
                 console.log('first extend check');
                 console.log(newExtendDate, "new extend");
                 console.log(newExtendDate.getTime() + " " + Number(expireTime));
                 if (newExtendDate.getTime() >= Number(expireTime)) {
-                    const newExpireDate = new Date(Number(expireTime) + (2 * 60 * 1000));
+                    const newExpireDate = new Date(Number(expireTime) + (90 * 60 * 1000));
                     this.extendCookies(newExpireDate, newExtendDate);
                     // alert('extend!');
                     console.log(newExpireDate, "later");
                 }
             }
-            console.log("=====");
         }
 
         // this is just testing, remove this if savePost not working
@@ -181,8 +180,8 @@ export default class DataSource {
 
         try {
             // Cookies.set('alert', alertExpireDate, {expires: expireDate});
-            let extendDate = new Date(new Date().getTime() + 1 * 60 * 1000);
-            let expireDate = new Date(new Date().getTime() + 2 * 60 * 1000);
+            let extendDate = new Date(new Date().getTime() + 120 * 60 * 1000);
+            let expireDate = new Date(new Date().getTime() + 90 * 60 * 1000);
             const extendMs = extendDate.getTime();
             const expiredMs = expireDate.getTime();
 
@@ -1488,7 +1487,7 @@ export default class DataSource {
     async getTransferStudent() {
         const data = {
             UserSchool_Session: Cookies.get('schoolSession'),
-            passHowManyDaysStudentCreated: "30"
+            passHowManyDaysStudentTransffered: "30"
         };
         const response = await this.callWebService("/controller/Students.asmx/getAllTransferredStudentsBySchoolDay", data, "POST");
         return response;
@@ -1567,9 +1566,8 @@ export default class DataSource {
         return response;
     }
 
-    async updateAttendanceList(attID, jsonString) {
+    async updateAttendanceList(jsonString) {
         const data = {
-            attID: attID,
             jsonString: jsonString,
         };
         const response = await this.callWebService("/controller/Attendance.asmx/updateAttendanceList", data, "POST");
@@ -2052,8 +2050,11 @@ export default class DataSource {
         return response;
     }
 
-    async getAllActiveSchool() {
-        const data = {};
+    async getAllActiveSchool(schoolCountry, universityCode) {
+        const data = {
+            schoolCountry: schoolCountry,
+            universityCode: universityCode,
+        };
         const response = await this.callWebService("/controller/Operations.asmx/getAllActiveSchool", data, "POST");
         return response;
     }
@@ -2139,10 +2140,20 @@ export default class DataSource {
         return response;
     }
 
-    async getActiveStudentsByLevelSchool(levelID, classID) {
+    async updateClassProgramme(classID, classStatus) {
+        const data = {
+            classID: classID,
+            classStatus: classStatus,
+        };
+        const response = await this.callWebService("/controller/Class.asmx/updateClassProgramme", data, "POST");
+        return response;
+    }
+
+    async getActiveStudentsByLevelSchool(levelID, classID, semID) {
         const data = {
             levelID: levelID,
             classID: classID,
+            semID: semID,
         };
         const response = await this.callWebService("/controller/Students.asmx/getActiveStudentsByLevelSchool", data, "POST");
         return response;
@@ -2273,6 +2284,69 @@ export default class DataSource {
         return response;
     }
 
+    async getEventParticipant(eventParticipantID) {
+        const data = {
+            eventParticipantID: eventParticipantID,
+        };
+        const response = await this.callWebService("/controller/Event.asmx/getEventParticipant", data, "POST");
+        return response;
+    }
 
+    async getEventParticipantByEventID(eventID) {
+        const data = {
+            eventID: eventID,
+        };
+        const response = await this.callWebService("/controller/Event.asmx/getEventParticipant", data, "POST");
+        return response;
+    }
+
+    async updateEvent(obj, participantObj) {
+        const data = {
+            obj: obj,
+            participantObj: participantObj,
+        };
+        const response = await this.callWebService("/controller/Event.asmx/updateEvent", data, "POST");
+        return response;
+    }
+
+    async getStudentGraduationListByClassLevel(str_LevelID, str_ClassID) {
+        const data = {levelID: str_LevelID, classID: str_ClassID};
+
+        const response = await this.callWebService("/controller/Students.asmx/getStudentGraduationListByClassLevel", data, "POST");
+        return response;
+    }
+
+    async getClassStudentList(academicYearID, levelID, className) {
+        const data = {
+            academicYearID: academicYearID,
+            levelID: levelID,
+            className: className
+        };
+
+        const response = await this.callWebService("/controller/Course.asmx/getClassStudentList", data, "POST");
+        return response;
+    }
+
+    async getStudentForecastByBranchMonthly() {
+        try {
+            const data={}
+            const response = await this.callWebService("/controller/Students.asmx/getStudentForecastByBranch_Monthly", data, "POST");
+            return response;
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
+
+    async getStudentMovementDetailNewEnroll() {
+        try {
+            const data={}
+            const response = await this.callWebService("/controller/Students.asmx/getStudentMovementDetail_NewEnroll", data, "POST");
+            return response;
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
 }
 

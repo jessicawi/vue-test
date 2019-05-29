@@ -17,7 +17,7 @@
                     <div class="overview__item">
                         <div class="overview__icon"><img src="../assets/home-student.png"/></div>
                         <div class="overview__desc"><span
-                                class="large">{{activeStudent.length}}</span><span>Students</span></div>
+                                class="large">{{activeStudent}}</span><span>Students</span></div>
                         <div class="quicklink" v-if="isParent !== 'Teacher'">
                             <a href="/student">NEW STUDENT</a>
                             <a href="/student-list?mode=Search">VIEW ALL</a>
@@ -27,13 +27,12 @@
                             <a href="#">STUDENT LIST</a>
                         </div>
                     </div>
-
                 </div>
                 <div class="col-md-3 teacher">
                     <div class="overview__item">
                         <div class="overview__icon"><img src="../assets/home-enroll.png"/></div>
                         <div class="overview__desc"><span
-                                class="large">{{enrollment.length}}</span><span>New Enrollment</span></div>
+                                class="large">{{enrollment}}</span><span>New Enrollment</span></div>
                         <!--<div class="quicklink" v-if="isParent !== 'Teacher'">-->
                         <!--<a href="/parent-list">VIEW / EDIT PARENT</a>-->
                         <!--</div>-->
@@ -42,7 +41,7 @@
                 <div class="col-md-3 course">
                     <div class="overview__item">
                         <div class="overview__icon"><img src="../assets/home-withdraw.png"/></div>
-                        <div class="overview__desc"><span class="large">{{withdraw.length}}</span><span>Withdraw</span>
+                        <div class="overview__desc"><span class="large">{{withdraw}}</span><span>Withdraw</span>
                         </div>
                     </div>
                 </div>
@@ -50,16 +49,19 @@
                     <div class="overview__item">
                         <div class="overview__icon"><img src="../assets/home-school.png"/></div>
                         <div class="overview__desc"><span
-                                class="large">{{transfer.length}}</span><span>Transferred</span></div>
+                                class="large">{{transfer}}</span><span>Transferred</span></div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-5" style="padding: 0 10px;">
+            <div class="row mb-4" style="padding: 0 10px;">
                 <div class="col-md-9 chartBox">
                     <div class="dashboard-title"><h4 class="text-left">Statistic</h4></div>
                     <div class="small">
-                        <!--<line-chart></line-chart>-->
-                        <div style="max-width: 100%;width:700px;margin: auto">
+                        <div class="chartbox-item" v-loading="loading">
+                            <div class="empty-list_image " v-if="emptyImage===true">
+                                <strong class="text-left">No Record Yet...</strong>
+                                <img src="../assets/notfound.png"/>
+                            </div>
                             <bar-chart
                                     v-if="isLoaded"
                                     :chartdata="chartdata"
@@ -67,7 +69,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-md-3 custom-wrapper">
                     <div class="dashboard-title"><h5 class="text-left">Recent Feed</h5></div>
                     <div class="dashboard-subtitle">
@@ -110,62 +111,101 @@
                     <!--</form>-->
                 </div>
             </div>
-
-            <div class=" mb-3 home-news">
-                <div class="dashboard-title"><h4 class="text-left float-left">Upcoming</h4><a class="float-right"
-                                                                                              href="#">MORE </a></div>
-                <div class="row">
-                    <div class="col-md-4 mt-2">
-                        <div class="home-news__item custom-wrapper">
-                            <strong>Key facts about our school</strong>
-                            <div class="thumbnail">
-                                <img src="../assets/news1.jpg" title="News"/>
-                            </div>
-                            <div class="news-content">
-                                we offer academic, social and personal success for every student. Through opportunities
-                                to learn from the best, experiences beyond the ordinary, and the encouragement to
-                                achieve
-                                more than what they thought possible.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mt-2">
-                        <div class="home-news__item custom-wrapper">
-                            <strong>Key facts about our school</strong>
-                            <div class="thumbnail">
-                                <img src="../assets/news2.jpg" title="News"/>
-                            </div>
-                            <div class="news-content">
-                                we offer academic, social and personal success for every student. Through opportunities
-                                to learn from the best, experiences beyond the ordinary, and the encouragement to
-                                achieve
-                                more than what they thought possible.
+            <div class="row mb-3" style="padding: 0 10px;">
+                <div class="col-md-6 pl-0">
+                    <div class="chartBox">
+                        <div class="dashboard-title"><h4 class="text-left">Student Forecast</h4></div>
+                        <div class="small">
+                            <!--<line-chart></line-chart>-->
+                            <div class="chartbox-item" v-loading="loading">
+                                <div class="empty-list_image " v-if="emptyImage===true">
+                                    <strong>No Record Yet...</strong>
+                                    <img src="../assets/notfound.png"/>
+                                </div>
+                                <span class="d-block text-left" v-if="emptyImage!==true">Student</span>
+                                <double-bar-chart
+                                        :chartdata2="chartdata2"
+                                        v-if="isLoaded"/>
+                                <span class="text-right" v-if="emptyImage!==true">Month</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mt-2">
-                        <div class="home-news__item custom-wrapper">
-                            <strong>Key facts about our school</strong>
-                            <div class="thumbnail">
-                                <img src="../assets/news3.jpg" title="News"/>
-                            </div>
-                            <div class="news-content">
-                                we offer academic, social and personal success for every student. Through opportunities
-                                to learn from the best, experiences beyond the ordinary, and the encouragement to
-                                achieve
-                                more than what they thought possible.
+                </div>
+                <div class="col-md-6 pr-0">
+                    <div class="chartBox">
+                        <div class="dashboard-title"><h4 class="text-left">Student Movement</h4></div>
+                        <div class="small ">
+                            <!--<line-chart></line-chart>-->
+                            <div class="chartbox-item" v-loading="loading">
+                                <div class="empty-list_image " v-if="emptyImage===true">
+                                    <strong>No Record Yet...</strong>
+                                    <img src="../assets/notfound.png"/>
+                                </div>
+                                <span class="d-block text-left" v-if="emptyImage!==true">Student</span>
+                                <bar-chart
+                                        v-if="isLoaded"
+                                        :chartdata="chartdata3"
+                                        :options="options"/>
+                                <!--<double-bar-chart-->
+                                <!--:chartdata2="chartdata3"-->
+                                <!--v-if="isLoaded"/>-->
+                                <span class="text-right" v-if="emptyImage!==true">Month</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <!--<div class=" mb-3 home-news">-->
+            <!--<div class="dashboard-title"><h4 class="text-left float-left">Upcoming</h4><a class="float-right"-->
+            <!--href="#">MORE </a></div>-->
+            <!--<div class="row">-->
+            <!--<div class="col-md-4 mt-2">-->
+            <!--<div class="home-news__item custom-wrapper">-->
+            <!--<strong>Key facts about our school</strong>-->
+            <!--<div class="thumbnail">-->
+            <!--<img src="../assets/news1.jpg" title="News"/>-->
+            <!--</div>-->
+            <!--<div class="news-content">-->
+            <!--we offer academic, social and personal success for every student. Through opportunities-->
+            <!--to learn from the best, experiences beyond the ordinary, and the encouragement to-->
+            <!--achieve-->
+            <!--more than what they thought possible.-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-4 mt-2">-->
+            <!--<div class="home-news__item custom-wrapper">-->
+            <!--<strong>Key facts about our school</strong>-->
+            <!--<div class="thumbnail">-->
+            <!--<img src="../assets/news2.jpg" title="News"/>-->
+            <!--</div>-->
+            <!--<div class="news-content">-->
+            <!--we offer academic, social and personal success for every student. Through opportunities-->
+            <!--to learn from the best, experiences beyond the ordinary, and the encouragement to-->
+            <!--achieve-->
+            <!--more than what they thought possible.-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-md-4 mt-2">-->
+            <!--<div class="home-news__item custom-wrapper">-->
+            <!--<strong>Key facts about our school</strong>-->
+            <!--<div class="thumbnail">-->
+            <!--<img src="../assets/news3.jpg" title="News"/>-->
+            <!--</div>-->
+            <!--<div class="news-content">-->
+            <!--we offer academic, social and personal success for every student. Through opportunities-->
+            <!--to learn from the best, experiences beyond the ordinary, and the encouragement to-->
+            <!--achieve-->
+            <!--more than what they thought possible.-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
         </div>
-
-
     </div>
 </template>
-
 <script>
     // import Step from "../components/Step";
     import DataSource from "../data/datasource";
@@ -173,6 +213,7 @@
     import barChart from "../components/charts/barChart.vue";
     import {countDuplicates} from "../helper/utily";
     import Cookies from "js-cookie";
+    import DoubleBarChart from "../components/charts/doubleBarChart";
 
     export default {
         name: 'homePage',
@@ -193,20 +234,66 @@
                 post: [],
                 isLoaded: false,
                 countedCrs: {},
+                loading: false,
+                emptyImage: false,
+                noresponse: false,
                 chartdata: {
                     labels: [],
                     datasets: [
                         {
                             label: 'Students by Crs',
-                            backgroundColor: ['rgba(255, 99, 132, 0.6)','rgba(0, 123, 255, 0.6)','rgba(23, 162, 184, 0.6)','rgba(255, 193, 7, 0.6)','rgba(237, 33, 124, 0.6)','rgba(0, 186, 255, 0.6)','rgba(18, 189, 215, 0.6)','rgba(255, 181, 0, 0.6)','rgba(154, 244, 23, 0.6)'],
-                            hoverBackgroundColor: ['rgba(255, 99, 132, 1)','rgba(0, 123, 255, 1)','rgba(23, 162, 184, 1)','rgba(255, 193, 7, 1)','rgba(237, 33, 124, 1)','rgba(0, 186, 255, 1)','rgba(18, 189, 215, 1)','rgba(255, 181, 0, 1)','rgba(154, 244, 23, 1)'],
+                            backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(0, 123, 255, 0.6)', 'rgba(23, 162, 184, 0.6)', 'rgba(255, 193, 7, 0.6)', 'rgba(237, 33, 124, 0.6)', 'rgba(0, 186, 255, 0.6)', 'rgba(18, 189, 215, 0.6)', 'rgba(255, 181, 0, 0.6)', 'rgba(154, 244, 23, 0.6)'],
+                            hoverBackgroundColor: ['rgba(255, 99, 132, 1)', 'rgba(0, 123, 255, 1)', 'rgba(23, 162, 184, 1)', 'rgba(255, 193, 7, 1)', 'rgba(237, 33, 124, 1)', 'rgba(0, 186, 255, 1)', 'rgba(18, 189, 215, 1)', 'rgba(255, 181, 0, 1)', 'rgba(154, 244, 23, 1)'],
                             borderColor: 'rgba(237, 240, 244, 1)',
                             borderWidth: 5,
                             data: []
                         }
                     ]
                 },
+                chartdata2: {
+                    labels: [],
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: '',
+                            backgroundColor: 'rgba(0, 123, 255, 0.6)',
+                            fill: false,
+                            data: []
+                        },
+
+                        {
+                            type: 'bar',
+                            label: '',
+                            backgroundColor: 'rgba(255, 193, 7, 0.6)',
+                            fill: false,
+                            data: []
+                        }
+                    ]
+                },
+                chartdata3: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: "",
+                            backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(0, 123, 255, 0.6)', 'rgba(23, 162, 184, 0.6)', 'rgba(255, 193, 7, 0.6)', 'rgba(237, 33, 124, 0.6)', 'rgba(0, 186, 255, 0.6)', 'rgba(18, 189, 215, 0.6)', 'rgba(255, 181, 0, 0.6)', 'rgba(154, 244, 23, 0.6)'],
+                            hoverBackgroundColor: ['rgba(255, 99, 132, 1)', 'rgba(0, 123, 255, 1)', 'rgba(23, 162, 184, 1)', 'rgba(255, 193, 7, 1)', 'rgba(237, 33, 124, 1)', 'rgba(0, 186, 255, 1)', 'rgba(18, 189, 215, 1)', 'rgba(255, 181, 0, 1)', 'rgba(154, 244, 23, 1)'],
+                            borderColor: 'rgba(237, 240, 244, 1)',
+                            borderWidth: 5,
+                            data: []
+                        }
+                    ]
+                },
+                chartdata3CustomLabel: [],
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.8
+                        }]
+                    }
+                },
+                options3: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
@@ -218,6 +305,7 @@
             };
         },
         components: {
+            DoubleBarChart,
             PostComponent,
             barChart
             // Step,
@@ -225,6 +313,8 @@
         },
         async mounted() {
             try {
+
+                this.loading = true;
                 this.isParent = Cookies.get('userTypeSession');
                 this.showSession();
                 // user menu
@@ -234,9 +324,20 @@
                     // window.location.replace("/");
                 }
                 let response = await DataSource.shared.getUserMenu();
-                this.list = response.Table;
+                if (response) {
+                    switch (response.code) {
+                        case "2":
+                            this.emptyImage = true;
+                            break;
+                        case "99":
+                            this.noresponse = true;
+                            this.loading = false;
+                            break;
+                    }
+                    this.list = response.Table;
+                    this.usermenu = response;
+                }
 
-                this.usermenu = response;
                 //login text
 
                 const isLogin = Cookies.get('authToken');
@@ -252,37 +353,81 @@
 
                 // activeStudent
                 let activeStudentResponse = await DataSource.shared.getAllActiveStudentsBySchool();
-                if (activeStudentResponse.Table) {
-                    this.activeStudent = activeStudentResponse.Table;
-                    const crsNames = activeStudentResponse.Table.map(d => d.CRS_Course_Name);
-                    this.chartdata.labels = [...new Set(crsNames)];
-                    this.countedCrs = countDuplicates(crsNames);
-                    this.chartdata.datasets[0].data = await this.chartdata.labels.map(d => {
-                        for (let key in this.countedCrs) {
-                            if (d === key) {
-                                return this.countedCrs[d];
-                            }
+                if (activeStudentResponse) {
+                    switch (activeStudentResponse.code) {
+                        case "2":
+                            this.activeStudent = `0`;
+                            break;
+                        case "99":
+                            this.emptyImage = true;
+                            this.loading = false;
+                            break;
+
+                    }
+                    if (activeStudentResponse.Table) {
+                        if (activeStudentResponse.Table && activeStudentResponse.Table.length > 0) {
+                            this.activeStudent = activeStudentResponse.Table.length;
                         }
-                    });
+                        const crsNames = activeStudentResponse.Table.map(d => d.CRS_Course_Name);
+                        this.chartdata.labels = [...new Set(crsNames)];
+                        this.countedCrs = countDuplicates(crsNames);
+                        this.chartdata.datasets[0].data = await this.chartdata.labels.map(d => {
+                            for (let key in this.countedCrs) {
+                                if (d === key) {
+                                    return this.countedCrs[d];
+                                }
+                            }
+                        });
+                    }
+                    this.loading = false;
                 }
 
                 //enrollment
                 let enrollmentResponse = await DataSource.shared.getStudentEnrollment();
-                if (enrollmentResponse.Table) {
-                    this.enrollment = enrollmentResponse.Table;
+                if (enrollmentResponse) {
+                    switch (enrollmentResponse.code) {
+                        case "2":
+                            this.enrollment = `0`;
+                            break;
+                    }
+                    if (enrollmentResponse.Table) {
+                        if (enrollmentResponse.Table && enrollmentResponse.Table.length > 0) {
+                            this.enrollment = enrollmentResponse.Table.length;
+                        }
+                    }
                 }
 
                 //withdraw
                 let withdrawResponse = await DataSource.shared.getWithdrawStudent();
-                if (withdrawResponse.Table) {
-                    this.withdraw = withdrawResponse.Table;
+                if (withdrawResponse) {
+                    switch (withdrawResponse.code) {
+                        case "2":
+                            this.withdraw = `0`;
+                            break;
+                    }
+                    if (withdrawResponse.Table) {
+                        if (withdrawResponse.Table && withdrawResponse.Table.length > 0) {
+                            this.withdraw = withdrawResponse.Table.length;
+                        }
+                    }
                 }
+
 
                 //transfer
                 let transferResponse = await DataSource.shared.getTransferStudent();
-                if (transferResponse.Table) {
-                    this.transfer = transferResponse.Table;
+                if (transferResponse) {
+                    switch (transferResponse.code) {
+                        case "2":
+                            this.transfer = `0`;
+                            break;
+                    }
+                    if (transferResponse.Table) {
+                        if (transferResponse && transferResponse.Table && transferResponse.Table.length > 0) {
+                            this.transfer = transferResponse.Table.length;
+                        }
+                    }
                 }
+
 
                 // graph
 
@@ -311,7 +456,188 @@
                     }
                 }
 
-                this.isLoaded = true;
+                //this.showCompareData();
+                const forecastResponse = await DataSource.shared.getStudentForecastByBranchMonthly();
+                if (forecastResponse) {
+                    let compareData = forecastResponse.Table1;
+
+                    console.log("compareData", compareData);
+
+                    let yearGroup = [];
+                    for (const d of compareData) {
+                        if (!yearGroup.includes(d.Year)) {
+                            yearGroup.push(d.Year);
+                        }
+                    }
+
+                    console.log("yearGroup", yearGroup);
+                    yearGroup.forEach((d, i) => {
+                        const data = compareData.filter(a => {
+                            return a.Year === d;
+                        });
+                        console.log("data", data);
+                        const firstDataMonth = Number(data[0].Month);
+                        console.log("firstDataMonth", firstDataMonth);
+
+                        let monthToPush = [];
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach((d, index) => {
+                            const startFromOne = index + 1;
+                            if (firstDataMonth > startFromOne) {
+                                monthToPush.push({
+                                    Month: String(d),
+                                    Value: "0",
+                                    Year: data[0].Year
+                                });
+                            }
+                        });
+
+                        console.log("newData", monthToPush);
+
+                        const finalData = [...monthToPush, ...data];
+                        console.log("finalData", finalData);
+                        console.log("=========");
+
+                        if (this.chartdata2 && this.chartdata2.datasets && this.chartdata2.datasets[i]) {
+                            console.log("this.chartdata2.datasets", this.chartdata2.datasets);
+                            this.chartdata2.datasets[i].data = finalData.map(b => b.Value);
+                            this.chartdata2.labels = finalData.map(c => c.Month);
+                            this.chartdata2.datasets[i].label = yearGroup;
+                        }
+                    });
+
+
+                    //CompareData2018
+                    // let CompareData2018 = [];
+                    // CompareData2018 = compareData.filter(d => {
+                    //     return d.Year === "2018";
+                    // });
+                    // // if (this.chartdata2 && this.chartdata2.datasets && this.chartdata2.datasets.length > 0) {
+                    // this.chartdata2.datasets[0].data = CompareData2018.map(d => d.Value);
+                    // this.chartdata2.labels = CompareData2018.map(d => d.Month);
+                    //
+                    // //CompareData2019
+                    // let CompareData2019 = [];
+                    // CompareData2019 = compareData.filter(d => {
+                    //     return d.Year === "2019";
+                    // });
+                    // this.chartdata2.datasets[1].data = CompareData2019.map(d => d.Value);
+                    // }
+                    this.loading = false;
+
+                    switch (forecastResponse.code) {
+                        case "2":
+                            this.emptyImage = true;
+                            break;
+                        case "99":
+                            this.emptyImage = true;
+                            this.loading = false;
+                            break;
+                    }
+                }
+
+                //show new enroll graph
+                const newEnrollResponse = await DataSource.shared.getStudentMovementDetailNewEnroll();
+
+
+                // const newEnrollResponse = {
+                //     "Table1": [
+                //         {"Year": "2019", "Enroll": "1", "Month": "5"},
+                //         {"Year": "2019", "Enroll": "1", "Month": "6"},
+                //         {"Year": "2019", "Enroll": "1", "Month": "7"},
+                //         {"Year": "2019", "Enroll": "1", "Month": "8"},
+                //         {"Year": "2019", "Enroll": "1", "Month": "9"},
+                //         {"Year": "2019", "Enroll": "1", "Month": "10"},
+                //         {"Year": "2019", "Enroll": "1", "Month": "11"},
+                //         {"Year": "2019", "Enroll": "1", "Month": "12"},
+                //         {"Year": "2020", "Enroll": "1", "Month": "1"},
+                //         {"Year": "2020", "Enroll": "1", "Month": "2"},
+                //         {"Year": "2020", "Enroll": "1", "Month": "3"},
+                //         {"Year": "2020", "Enroll": "1", "Month": "4"}
+                //     ]
+                // };
+                if (newEnrollResponse) {
+                    let enrollData = newEnrollResponse.Table;
+
+                    console.log("enrollData", enrollData);
+
+                    let yearGroup = [];
+                    for (const d of enrollData) {
+                        if (!yearGroup.includes(d.Year)) {
+                            yearGroup.push(d.Year);
+                        }
+                    }
+
+                    console.log("yearGroup", yearGroup);
+                    yearGroup.forEach((d, i) => {
+                        const data = enrollData.filter(a => {
+                            console.log("d", a);
+                            console.log();
+                            return a.Year === d;
+                        });
+                        console.log("data", data);
+                        if (this.chartdata3 && this.chartdata3.datasets && this.chartdata3.datasets[i]) {
+                            console.log("this.chartdata3", this.chartdata3);
+                            console.log("this.chartdata", this.chartdata);
+                            this.chartdata3.datasets[i].data = data.map(b => b.Enroll);
+                            this.chartdata3.labels = data.map(c => c.Month);
+                        }
+
+                    });
+                    this.loading = false;
+                    switch (newEnrollResponse.code) {
+                        case "2":
+                            this.emptyImage = true;
+                            break;
+                        case "99":
+                            this.emptyImage = true;
+                            this.loading = false;
+                            break;
+                    }
+
+                    this.loading = false;
+                    this.isLoaded = true;
+                }
+                // if (newEnrollResponse) {
+                //     console.log(newEnrollResponse);
+                //
+                //     const NewData = newEnrollResponse.Table;
+                //     const NewDataMonth = NewData.map(d => d.Month);
+                //
+                //     this.chartdata3.labels = [...new Set(NewDataMonth)];
+                //     this.chartdata3.datasets[0].data = NewData.map(d => d.Enroll);
+                //
+                //     console.log(this.chartdata3);
+
+
+                //CompareData2019
+                // let Enroll2019 = [];
+                // Enroll2019 = NewData.filter(d => {
+                //     return d.Year === "2019";
+                // });
+                // this.chartdata3.datasets[0].data = Enroll2019.map(d => d.Enroll);
+                // this.chartdata3.labels = Enroll2019.map(d => d.Month);
+
+                //CompareData2020
+                // let Enroll2020 = [];
+                // Enroll2020 = NewData.filter(d => {
+                //     return d.Year === "2020";
+                // });
+                // this.chartdata3.datasets[1].data = Enroll2020.map(d => d.Enroll);
+
+                // let uniqueMonths = [];
+                // NewData.forEach(object => {
+                //     const isExist = uniqueMonths.find(month => month.Month === object.Month);
+                //     if (!isExist) {
+                //         uniqueMonths.push(object);
+                //     }
+                // });
+                // console.log(uniqueMonths, "uniqueMonths");
+                // this.chartdata3.labels = uniqueMonths.map(d => d.Month);
+                // console.log(this.chartdata3.labels, "uniqueMonths2");
+                // console.log(this.chartdata3);
+
+
+                // }
             } catch (e) {
                 console.log(e);
             }
@@ -341,6 +667,23 @@
                         }
                     ]
                 };
+            },
+            async showCompareData() {
+                console.log("aa");
+                const response = await DataSource.shared.getStudentForecastByBranchMonthly();
+                if (response) {
+                    let compareData = response.Table1;
+                    let allCompareData = [];
+                    allCompareData = compareData && compareData.filter(d => {
+                        return d.Year === "2019";
+                    });
+
+                    if (this.chartdata2 && this.chartdata2.datasets) {
+                        this.chartdata2.datasets[0].data = allCompareData.map(d => d.Value);
+                        console.log(this.chartdata2);
+                    }
+
+                }
             }
         },
         computed: {
@@ -353,9 +696,7 @@
         }
     };
 </script>
-
 <style scoped>
-
     .Content {
         padding: 30px 20px;
         position: relative;
@@ -459,6 +800,7 @@
 
     .dashboard-title {
         display: table;
-        width: 100%; position: relative;
+        width: 100%;
+        position: relative;
     }
 </style>

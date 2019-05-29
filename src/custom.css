@@ -34,6 +34,7 @@
 33---myaccount---
 34---attendance---
 35---Class Management---
+36---Transfer In---
  */
 
 :root {
@@ -79,27 +80,43 @@ a {
     color: #585388;
     font-weight: bold;
 }
+
 hr.custom-hr {
     border: 1px solid #eee;
     display: block;
     width: 100%;
 }
+
 /*
 1---form---
  */
+.el-button--info {
+    background-color: #e7e8ed;
+    border-color: #e7e8ed;
+}
+
+.el-button--info span {
+    color: #999ba1;
+    font-weight: normal;
+    letter-spacing: 0;
+}
+
 .btn-primary.disabled, .btn-primary:disabled {
     background-color: #999;
     border-color: #999;
     color: #222;
 }
+
 .form-control:disabled, .form-control[readonly] {
     background: #fafafa;
     color: #a9a9a9;
 }
+
 .el-select input {
     border: 0px;
     background: whitesmoke;
 }
+
 input[type="checkbox"].form-control {
     width: 20px;
     display: inline-block;
@@ -232,6 +249,7 @@ label {
 .inputFile-box .btn:hover {
     background: #eee;
 }
+
 .search-datatable {
     background: #f5f6f9;
     padding: 5px;
@@ -249,6 +267,17 @@ label {
     background: transparent;
     border: 0px;
 }
+
+.el-date-editor.el-input {
+    width: 100% !important;
+}
+
+.el-date-editor.el-input input {
+    background: whitesmoke;
+    border: 0px;
+    border-radius: 4px;
+}
+
 /*
 2---button---
  */
@@ -287,9 +316,10 @@ label {
 4---layout---
  */
 
-.fullwidth{
+.fullwidth {
     width: 100% !important;
 }
+
 .whitespace-10 {
     display: block;
     height: 10px;
@@ -341,18 +371,36 @@ label {
     max-height: 500px !important;
     margin: auto;
     display: block;
+    width: 100%;
+    opacity: 0.2;
 }
 
 .empty-list_image {
     margin: auto;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 .empty-list_image strong {
     font-size: 30px;
-    color: #ccc;
+    color: #90939a;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    z-index: 1;
 }
+
 .empty-list_image button {
     margin: 10px auto;
+}
+.emptylist__img {
+    width: 80%;
+    margin: auto;
+    opacity: 0.5;
 }
 .el-tabs .el-badge__content {
     width: 20px;
@@ -362,6 +410,7 @@ label {
     line-height: 20px;
     font-weight: bold;
 }
+
 /*
 5---notification---
  */
@@ -416,6 +465,7 @@ label {
     border-color: #409eff;
     color: #ffffff;
 }
+
 .custom-modal-footer {
     background: #fafafa;
     display: flex;
@@ -427,6 +477,7 @@ label {
 .custom-modal-footer button {
     margin: 0px !important;
 }
+
 /*
 7---carousel---
  */
@@ -898,10 +949,12 @@ div#schoolListModal .vs-popup--content {
     display: flex;
     align-items: center;
 }
+
 .login-header img {
     margin-left: auto;
     display: block;
 }
+
 .login-header h4 {
     text-align: left;
     color: #222 !important;
@@ -1021,6 +1074,7 @@ div#modal_Registration .login-btn {
     margin: auto;
     min-width: 200px;
 }
+
 div#modal_Registration input {
     border: 0px;
     border-bottom: 1px solid #cccccca1;
@@ -1032,6 +1086,7 @@ div#modal_Registration input {
 div#modal_Registration input::placeholder {
     color: #222;
 }
+
 .parent-register .el-date-editor {
     width: 100% !important;
 }
@@ -1158,6 +1213,11 @@ div#modal_Registration input::placeholder {
 li.info-menu__item {
     list-style: none;
     margin: 0px 10px;
+    cursor: pointer;
+}
+
+li.info-menu__item:hover {
+    opacity: 0.7;
 }
 
 li.info-menu__item span {
@@ -1185,6 +1245,36 @@ li.info-menu__item span {
 
 li.info-menu__item i {
     font-size: 21px;
+}
+
+.nav-dropdown {
+    padding: 0 !important;
+    left: auto !important;
+    right: 8px;
+    border: 0px !important;
+    border-radius: 5px !important;
+    overflow: hidden;
+    margin-top: 20px !important;
+}
+
+.nav-dropdown .el-dropdown-menu__item.active {
+    background: linear-gradient(to right, #007bff, #409eff);
+    color: white;
+}
+
+.nav-dropdown .el-dropdown-menu__item {
+    padding: 0px;
+}
+
+.nav-dropdown .el-dropdown-menu__item a {
+    padding: 0 20px;
+    width: 100%;
+    display: block;
+}
+
+.nav-dropdown .popper__arrow {
+    border: 0px !important;
+    display: none !important;
 }
 
 .input-group.search .input-group-btn button {
@@ -1227,13 +1317,14 @@ li.info-menu__item i {
     color: #fff;
     float: left;
 }
+
 .menu-wrap__item a {
     color: white;
     font-weight: normal;
     line-height: 25px;
 }
 
-.menu-wrap.nav-pills .nav-link.active,.menu-wrap.nav-pills .show >  .nav-link  {
+.menu-wrap.nav-pills .nav-link.active, .menu-wrap.nav-pills .show > .nav-link {
     background: #d64b58;
     border-radius: 0px;
 }
@@ -1245,7 +1336,7 @@ li.info-menu__item i {
     padding: 0;
 }
 
-.menu-wrap__item a.dropdown-item  {
+.menu-wrap__item a.dropdown-item {
     border-bottom: 1px solid #ffffff26;
     padding: 0.3rem 1.5rem;
     font-size: 0.9rem;
@@ -1259,6 +1350,7 @@ li.info-menu__item i {
 .menu-wrap .dropdown-item.active, .dropdown-item:active {
     background-color: transparent;
 }
+
 .parent-menu {
     cursor: pointer;
     padding: 10px 20px;
@@ -1375,6 +1467,14 @@ li.info-menu__item i {
 .chartBox {
     background: #ffffff;
     padding: 20px;
+    min-height: 300px;
+}
+
+.chartbox-item {
+    max-width: 100%;
+    width: 700px;
+    margin: auto;
+    min-height: 300px;
 }
 
 .dashboard-studentList li img {
@@ -2502,6 +2602,7 @@ h4.title {
     width: 100%;
     padding: 20px;
 }
+
 .student-status {
     display: table;
     float: left;
@@ -2532,6 +2633,7 @@ span.student-status-current {
     border-color: #ccc;
     color: #333;
 }
+
 .student-status .el-button.is-round:focus {
     box-shadow: 0 0 10px -5px #5565cf;
     outline: none;
@@ -2553,7 +2655,7 @@ div.student-status-popover label {
     margin: 0px;
 }
 
-div.student-status-popover  .ddlChangeStatusTo {
+div.student-status-popover .ddlChangeStatusTo {
     margin: 15px auto;
     display: block !important;
     width: 100%;
@@ -2563,10 +2665,12 @@ div.student-status-popover button {
     width: 100%;
     border-radius: 7px;
 }
+
 .student-action-link {
     display: table;
     width: 100%;
 }
+
 .student-action-link .el-button-group {
     display: flex;
 }
@@ -2577,16 +2681,20 @@ div.student-status-popover button {
     border-color: transparent;
     border-radius: 0px;
 }
+
 .student-action-link .el-button-group button:hover {
     background: #697af1;
 }
+
 .studentPageBTabs .nav-tabs {
     width: 100%;
 }
+
 .studentPageBModal .modal-dialog, .studentPageBModal .modal-lg {
     width: 90% !important;
     max-width: 1000px !important;
 }
+
 .promotion-clear-select button {
     background: #409eff;
     border: 0px;
@@ -2604,6 +2712,7 @@ div.student-status-popover button {
     position: relative;
     top: 4px;
 }
+
 .imgStudentProfile img {
     width: 100%;
     /*min-height: 100%;*/
@@ -2639,6 +2748,7 @@ a.student-profile-edit i {
 
     opacity: 0.5;
 }
+
 .studentPageBTabs .el-tabs__nav-wrap {
     width: 100%;
 }
@@ -2660,6 +2770,7 @@ a.student-profile-edit i {
     height: auto;
     color: #a6aab1;
 }
+
 .studentPageBTabs .el-tabs__item.is-active, .el-tabs__item:hover {
     color: #5565cf !important;
 }
@@ -2667,9 +2778,14 @@ a.student-profile-edit i {
 .studentPageBTabs .el-tabs__active-bar {
     background-color: #5565cf;
 }
+
 @keyframes anim {
-    0% { background-position: 0 0; }
-    100% { background-position: 50px 50px; }
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
 }
 
 .bar {
@@ -2690,6 +2806,7 @@ a.student-profile-edit i {
     text-align: center;
     color: #222;
 }
+
 .file-upload-wrapper {
     position: relative;
     width: 100%;
@@ -2698,6 +2815,7 @@ a.student-profile-edit i {
     border-radius: 5px;
     margin-bottom: 18px;
 }
+
 .file-upload-wrapper:after {
     content: attr(data-text);
     /* font-size: 18px; */
@@ -2716,6 +2834,7 @@ a.student-profile-edit i {
     border-radius: 5px 10px 10px 5px;
     font-weight: 300;
 }
+
 .file-upload-wrapper:before {
     content: 'Browse';
     position: absolute;
@@ -2734,9 +2853,11 @@ a.student-profile-edit i {
     pointer-events: none;
     border-radius: 0 5px 5px 0;
 }
+
 .file-upload-wrapper:hover:before {
     background: #007bff;
 }
+
 .file-upload-wrapper input {
     opacity: 0;
     position: absolute;
@@ -2764,6 +2885,7 @@ a.student-profile-edit i {
 .upload-box input, .upload-box .file-upload-wrapper:after {
     background: #f3f3f3 !important;
 }
+
 /*
 24---student list---
  */
@@ -2805,9 +2927,11 @@ a.student-profile-edit i {
     border: 1px solid #edf0f4;
     border-width: 1px 1px 0px 0px;
 }
+
 .datatable_group .el-table td:first-child {
     border-left: 1px solid #ebeef5;
 }
+
 .datatable-form__input input {
     background: #5f71e8;
     border-color: #7886e800;
@@ -2828,6 +2952,7 @@ label.withoutInput {
     /* border: 1px solid #eee; */
     margin-bottom: 20px;
 }
+
 .student-search-count {
     background: #eee;
     display: table;
@@ -2835,16 +2960,18 @@ label.withoutInput {
     padding: 10px 20px;
     border-radius: 43px;
 }
+
 .student-search-count span {
     color: #5565cf;
     font-weight: bold;
 }
+
 #student-list .action-list button {
     width: 80% !important;
 }
 
 #student-list .action-list span {
-    margin:0px;
+    margin: 0px;
 }
 
 
@@ -3801,7 +3928,40 @@ div#dailyroutine .container.daily-activity__wrap hr {
 }
 
 .daily-activity .el-date-editor:last-child {
-    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.daily-activity form.el-form {
+    display: flex;
+    width: 100%;
+}
+
+.daily-activity form.el-form label.el-form-item__label {
+    padding: 0px 0px !important;
+    line-height: 20px;
+    color: #ffffffc2;
+    font-weight: normal;
+    margin: 0px;
+    font-size: 0.8rem !important;
+}
+
+.daily-activity .el-form-item .el-select {
+    width: 100%;
+}
+
+.daily-activity .el-form-item {
+    flex: 1;
+}
+
+.daily-activity .el-form-item__content {
+    display: flex;
+    width: 100%;
+}
+
+.daily-activity .el-date-editor.el-input input {
+    background: #da5c5c;
+    border: 0px;
+    color: white;
 }
 
 label.activity-title:after {
@@ -4335,13 +4495,14 @@ div#modal_uploadProfile .myaccount-image_wrap:hover .myaccount-image_overlay {
     top: 25%;
 }
 
-#myaccount .parentPageBTabs .nav-tabs .nav-link.active:after,.parentPageBTabs .nav-tabs li:hover .nav-link:after {
+#myaccount .parentPageBTabs .nav-tabs .nav-link.active:after, .parentPageBTabs .nav-tabs li:hover .nav-link:after {
     display: none;
 }
 
 #myaccount .parentPageBTabs .nav-link:hover {
     background: #6d7ef1;
 }
+
 div#myChild .profilePictureArea {
     background: white;
     padding: 20px 0;
@@ -4371,7 +4532,8 @@ div#myChild small.parent_wrap {
     float: right;
     cursor: pointer;
 }
-div#myChild small.parent_wrap:hover{
+
+div#myChild small.parent_wrap:hover {
     background: #dbdbdb;
 }
 
@@ -4410,15 +4572,15 @@ div#myChild small.parent_wrap:hover{
     overflow: hidden !important;
 }
 
-.attTable td .el-select input{
+.attTable td .el-select input {
     background: #dee2e6;
     color: white !important;
     border-radius: 20px;
 }
 
 .attTable td .el-select input::placeholder,
-.attTable td .el-select .el-input .el-select__caret{
-    color:#222;
+.attTable td .el-select .el-input .el-select__caret {
+    color: #222;
 }
 
 div#attendance-list .el-select.attend input {
@@ -4449,10 +4611,12 @@ div#attendance-list .vs-checkbox .vs-icon {
     top: 3px;
     left: -2px;
 }
+
 div#attendance-list .actionBar .vs-checkbox .vs-icon {
     top: 2px;
     left: -1px;
 }
+
 .actionBar .el-select {
     margin-left: auto;
     float: right;
@@ -4474,7 +4638,7 @@ div#attendance-list .actionBar .vs-checkbox .vs-icon {
     border-color: #eee;
 }
 
-.actionBar .el-select input{
+.actionBar .el-select input {
     background: #409eff;
     border: 0px;
     color: white;
@@ -4514,7 +4678,7 @@ div#attendance-list .actionBar .vs-checkbox .vs-icon {
 }
 
 .classManage-Table table {
-    overflow:hidden;
+    overflow: hidden;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
@@ -4588,4 +4752,95 @@ div#assignClassModal .el-input-group {
 .custom-checkbox label span {
     width: 100% !important;
     border-radius: 4px !important;
+}
+
+.delete_programme_btn .el-button.is-round {
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+    background: #ffffff;
+    border: 4px solid #eee;
+    /* box-shadow: 0 0 10px -5px #333; */
+    margin-left: 10px;
+}
+
+.delete_programme_btn .el-button.is-round span {
+    color: #303133;
+}
+
+.delete_programme_btn {
+    flex: 1;
+    text-align: right;
+}
+
+.classModal-button-group .el-button-group {
+    flex: 2;
+}
+
+.classModal-button-group {
+    display: flex;
+}
+
+.delete_programme_btn small {
+    color: #999;
+}
+
+.delete_programme_btn .el-button.is-round:hover {
+    border-color: #409eff;
+}
+
+.delete_programme_btn .el-button.is-round:hover span {
+    color: #409eff;
+}
+
+/*
+36---Transfer In---
+ */
+.transfer_card-item {
+    background: white;
+    border-radius: 5px;
+    padding: 30px 20px 8px;
+    margin: 0 10px 30px;
+    position: relative;
+    width: calc(25% - 20px);
+    text-align: left;
+}
+
+span.top-colorBar {
+    background: #f45f63;
+    color: white;
+    position: absolute;
+    top: -15px;
+    border-radius: 20px;
+    padding: 5px;
+    font-size: 0.8rem;
+    right: 17px;
+}
+
+.transfer_card {
+    padding: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.transfer_card-item small {
+    color: #409eff;
+}
+
+.transfer_card-item h4 {
+    font-weight: normal;
+}
+
+.transfer_card-item button {
+    float: right;
+    margin: -45px 0 30px !important;
+}
+
+.search-wrap {
+    flex: 1;
+}
+
+.search-wrap input {
+    border: 0px;
+    border-radius: 20px;
 }

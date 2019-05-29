@@ -1,9 +1,6 @@
 <template>
     <div id="event_Calendar">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <!--<b-btn v-b-modal.create_event_modal variant="primary" class="btnCreateEvent">-->
-                <!--Create Event-->
-            <!--</b-btn>-->
             <b-btn variant="primary" class="btnCreateEvent" v-on:click="eventNewEdit('New')">
                 Create Event
             </b-btn>
@@ -22,13 +19,23 @@
                         <b-form-radio v-model="rdEventType" name="some-radios" value="Event" checked>Event</b-form-radio>
                         <b-form-radio v-model="rdEventType" name="some-radios" value="SchoolClosure">School Closure</b-form-radio>
                         <b-form-radio v-model="rdEventType" name="some-radios" value="PublicHoliday">Public Holiday</b-form-radio>
-                        <!--<span align="left">Picked: {{ rdEventType }}</span>-->
                     </b-form-group>
                 </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label><b>Participant Email</b></label>
-                        <textarea v-model="textareaParticipantEmail" placeholder="Participant Email" class="fullwidth"></textarea>
+
+                            <div v-if="ParticipantNameListInt.length>0">
+                                <data-tables :data="ParticipantNameListInt" :action-col="ParticipantNameListAction">
+                                    <el-table-column v-for="item in ParticipantNameList"
+                                                     :prop="item.prop"
+                                                     :label="item.label"
+                                                     :key="item.prop"
+                                                     sortable="custom">
+                                    </el-table-column>
+                                </data-tables>
+                            </div>
+
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -87,11 +94,12 @@
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <el-select v-model="ddlParticipant" placeholder="Select" class="fullwidth">
-                            <el-option v-for="item in ParticipantList"
-                                       :value="item.CONid"
+                        <el-select v-model="ddlParticipant" placeholder="Select One" class="fullwidth"
+                                   filterable :filter-method="filterSelectedParticipant">
+                            <el-option v-for="item in CurrentParticipantList"
+                                       :value=item.CONid
                                        :label="item.CONname"
-                                       :key="item.CONid">
+                                       :key="item.ID">
                             </el-option>
                         </el-select>
                         <button v-on:click="AddParticipantList()">Add Participant</button>
@@ -117,7 +125,7 @@
                 <div class="col-lg">
                     <h5>Event Details</h5>
                     <div style="overflow-x:scroll; height:800px;background:whitesmoke;scrollbar-color:rebeccapurple green">
-                        <ul>
+                        <ul class ='eventUI'>
                             <li v-for="item in eventList" v-bind:key="item.EventID" ref="">
                                 {{item.EventTitle}}<br>
                                 {{convertToDate(item.EventStartTime)}}<br>
@@ -137,12 +145,11 @@
 
                 <div class="col-sm">
                     <h5>Calender</h5>
-                    <div>
-                        <v-calendar title-position="right" v-model="inputVCalendar"></v-calendar>
-                        <v-date-picker :mode='mode' v-model='selectedDate'/>
-                        <button v-on:click="btnAddToCalendar()">Add to calendar</button>
+                    <div style="overflow-x:scroll; >
+                        /*<v-calendar ></v-calendar>*/
+                        /*<v-date-picker :mode='mode' v-model='selectedDate'/>*/
+                        <!--<button v-on:click="btnAddToCalendar()">Add to calendar</button>-->
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -174,11 +181,9 @@
             return{
                 ddlParticipant:'',
                 selectedParticipantList:[],
-                textareaParticipantEmail:'',
-                rdEventType: 'Event',
+                rdEventType: '',
                 eventList:[],
                 levelList: [],
-                ParticipantList:[],
                 inputEventStartTime:'',
                 inputEventEndTime:'',
                 optFullDayEvent:false,
@@ -188,6 +193,7 @@
                 inputEventTitle:'',
                 inputEventLocation:'',
                 inputEventDesc:'',
+                selectedEventID:'',
                 ddlClassLevel: '',
                 //v-calendar
                 inputVCalendar:'',
@@ -195,11 +201,50 @@
                 selectedDate:null,
                 sessionID: '',
                 lblNewEditCalendar: '',
+                MasterParticipantList:[],
+                CurrentParticipantList:[],
+                ParticipantNameListIntTemp:[],
+                ParticipantNameListInt:[],
+                tempParticipantList:[],
+                ParticipantNameListAction: {
+                    label: 'Delete',
+                    props: {
+                        align: 'center',
+                    },
+                    buttons: [{
+                        props: {
+                            type: 'primary',
+                            icon: 'el-icon-edit'
+                        },
+                        handler: row => {
+                            console.log(row, row.SelectedConID, row.SelectedConEmail, row.StAllItem);
+                            this.ParticipantNameListInt.splice(this.ParticipantNameListInt.indexOf(row), 1);
+                            this.selectedParticipantList.splice(this.selectedParticipantList.indexOf(row), 1);
+                            let objValue= {
+                                CONname: row.StAllItem,
+                                CONEmail: row.SelectedConEmail,
+                                CONid: row.SelectedConID,
+                            }
+                            this.CurrentParticipantList.push(objValue);
+
+                        },
+                        label: 'Delete'
+                    }]
+                },
+                ParticipantNameList:[{
+                    prop: "StAllItem",
+                    label: "Email Address"
+                }],
             }
         },
         methods:{
             async BindEventFields(resultTable){
                 try {
+                    this.ParticipantNameListIntTemp=[];
+                    this.ParticipantNameListInt=[];
+                    this.CurrentParticipantList=[];
+
+
                     resultTable.forEach(m => {
                         this.inputEventTitle = m.EventTitle;
                         this.rdEventType = m.EventType;
@@ -208,6 +253,46 @@
                         this.inputEventRegLimit = m.EventRegLimit;
                         this.inputEventRegCutOffDay = m.EventRegCutOffDay;
                         this.inputEventLocation = m.EventLocation;
+
+                        const resp = DataSource.shared.getEventParticipantByEventID(m.EventID);
+                        resp.then((resp)=>{
+                            if(resp.code ==='2'){
+                                console.log('No record found');
+                                this.MasterParticipantList.forEach(m=>{
+                                    this.CurrentParticipantList.push(m);
+                                });
+                            }
+                            else {
+                                this.ParticipantNameListIntTemp=resp.Table;
+                                this.ParticipantNameListIntTemp.forEach(n=> {
+                                    let tempList ={
+                                            StAllItem: n.CONname,
+                                            SelectedConID:n.CONid,
+                                            SelectedConEmail:n.CONEmail,
+                                    }
+                                        this.ParticipantNameListInt.push(tempList);
+
+                                        this.MasterParticipantList.forEach(p=>{
+                                            if(n.CONid===p.CONid)
+                                            {
+                                               // this.CurrentParticipantList.splice(this.CurrentParticipantList.indexOf(m), 1);
+                                            }
+                                            else
+                                            {
+                                                let tempCurrentList ={
+                                                    CONname: p.CONname,
+                                                    CONid:p.CONid,
+                                                    CONEmail:p.CONEmail,
+                                                }
+                                                this.CurrentParticipantList.push(tempCurrentList);
+                                            }
+                                        });
+
+                                });
+
+                                this.selectedParticipantList = (resp.Table)? resp.Table:[];
+                            }
+                        });
 
                         if (m.EventFullDay === 'Yes') {
                             this.optFullDayEvent = true;
@@ -220,8 +305,24 @@
                     this.results = e;
                 }
             },
+            async BindParticipantList(){
+                try {
+                    const response = await DataSource.shared.getAllStaffListBySchool();
+                    if (response) {
+                        if (response.code === '88') {
+                            window.location.replace('/');
+                        } else {
+                            this.MasterParticipantList = response.Table;
+                        }
+                    }
+                } catch (e) {
+                    this.results = e;
+                }
+            },
             async editEvent(eventID){
                 try{
+                    //capture EventID
+                    this.selectedEventID = eventID;
                     const response = await DataSource.shared.getEvent(eventID);
                     if(response==='88') {
                         window.location.replace('/');
@@ -236,7 +337,6 @@
                         this.$refs['EventShowModal'].show();
                         console.log(eventID);
                     }
-
                     this.eventNewEdit('Edit');
 
                 }catch(e){
@@ -246,18 +346,39 @@
 
             },
             AddParticipantList(){
-                console.log(this.selectedParticipantList);
-                console.log(JSON.stringify(this.selectedParticipantList));
                 try{
                     if (this.ddlParticipant !== '') {
                         let addNewRowList = {
-                            participantID: this.ddlParticipant,
+                            participantConID: this.ddlParticipant,
                         };
                         this.selectedParticipantList.push(addNewRowList);
-                    } else {
+
+                        const filterParticipantList = this.CurrentParticipantList.filter(d => {
+                            return d.CONid === this.ddlParticipant;
+                        });
+                        let name=filterParticipantList[0].CONname;
+                        let conID=filterParticipantList[0].CONid;
+                        let conEmail=filterParticipantList[0].CONEmail;
+                        let addNameList={
+                            StAllItem: name,
+                            SelectedConID:conID,
+                            SelectedConEmail:conEmail,
+                        };
+                        this.ParticipantNameListInt.push(addNameList);
+                        console.log(this.ParticipantNameListInt);
+
+                        this.CurrentParticipantList.forEach(m => {
+                            if (m.CONid === this.ddlParticipant) {
+                                this.CurrentParticipantList.splice(this.CurrentParticipantList.indexOf(m), 1);
+                            }
+                        });
+
+                        this.ddlParticipant = '';
+                    }
+                    else {
                         this.$notify.error({
                             title: 'Error',
-                            message: 'Please select'
+                            message: 'Please select.'
                         });
                     }
                 }
@@ -275,23 +396,6 @@
                             window.location.replace('/');
                         } else {
                             this.levelList = response.Table;
-                        }
-                    }
-                } catch (e) {
-                    this.results = e;
-                }
-            },
-            async BindParticipantList(){
-                try {
-                    const response = await DataSource.shared.getAllStaffListBySchool();
-                    if (response) {
-                        if (response.code === '88') {
-                            window.location.replace('/');
-                        } else {
-                            this.participantListResponse = response.Table;
-                            this.participantListResponse.forEach(m => {
-                                this.ParticipantList.push(m);
-                            });
                         }
                     }
                 } catch (e) {
@@ -346,7 +450,6 @@
                 return date;
             },
             async btnCreateEvent(){
-
                 try
                 {
                     if(this.optFullDayEvent===true){
@@ -361,7 +464,6 @@
                     else{
                         this.optParentSignUp = "No";
                     }
-
                     let participantList=[];
                     var Obj = {
                         EventTitle:this.inputEventTitle,
@@ -380,10 +482,9 @@
                         this.selectedParticipantList.forEach(item => {
                             let participantListDetail = {
                                 Type: 'EventParConID',
-                                value: item.participantID,
+                                value: item.participantConID,
                             };
                             participantList.push(participantListDetail);
-                            console.log(JSON.stringify(participantList));
                         });
                     }
 
@@ -407,7 +508,7 @@
                             console.log('99');
                         }
                         else if(response.code==='1'){
-                            alert('Event added Successful');
+                            alert('Event edit Successful');
                             window.location.replace('/Event');
                         }
                     }
@@ -419,7 +520,7 @@
             async btnAddToCalendar(){
 
             },
-            LoadEventDetails() {
+            async LoadEventDetails() {
                 try{
                     const response = DataSource.shared.getEvent();
                     response.then((response)=>{
@@ -450,18 +551,84 @@
             refreshBModalValue(){
                 let getCurrentDateTime = new Date();
                 this.inputEventTitle = '';
-                this.rdEventType = '';
+                this.rdEventType = 'Event';
                 this.inputEventStartTime = getCurrentDateTime;
                 this.inputEventEndTime = getCurrentDateTime;
-                this.inputEventRegLimit = '';
-                this.inputEventRegCutOffDay = '';
+                this.inputEventRegLimit = '0';
+                this.inputEventRegCutOffDay = '0';
                 this.inputEventLocation = '';
                 this.optFullDayEvent = false;
                 this.optParentSignUp = false;
+                this.ParticipantNameListInt=[];
+                this.ddlParticipant='';
+
+                this.CurrentParticipantList=[];
+                this.MasterParticipantList.forEach(m => {
+                    this.CurrentParticipantList.push(m);
+                });
+            },
+            async filterSelectedParticipant(filterValue, allOptions) {
+                return allOptions.filter(option => option.includes(filterValue));
             },
 
-            //To be Cont..
-            async btnEditEvent(){},
+            async btnEditEvent(){
+                try
+                {
+                    let participantList=[];
+                    console.log(this.selectedEventID);
+                    var Obj = {
+                        EventID:this.selectedEventID,
+                        EventTitle:this.inputEventTitle,
+                        EventType:this.rdEventType,
+                        EventStartTime:this.inputEventStartTime,
+                        EventEndTime:this.inputEventEndTime,
+                        EventFullDay:this.optFullDayEvent,
+                        EventParentSignUp: this.optParentSignUp,
+                        EventRegCutOffDay:this.inputEventRegCutOffDay,
+                        EventRegLimit:this.inputEventRegLimit,
+                        EventLocation: this.inputEventLocation,
+                        // EventDesc:this:inputEventDesc
+                    };
+
+                    if(this.selectedParticipantList!==''|| this.selectedParticipantList !== null || this.selectedParticipantList !==undefined){
+                        this.selectedParticipantList.forEach(item => {
+                            let participantListDetail = {
+                                Type: 'EventParConID',
+                                value: item.participantConID,
+                            };
+                            participantList.push(participantListDetail);
+                        });
+                    }
+
+                    if(this.inputEventTitle=== '' || this.inputEventTitle === null || this.inputEventTitle === undefined){
+                        alert('Please insert event title.');
+                    }
+                    else if(this.inputEventStartTime === '' || this.inputEventStartTime === null || this.inputEventStartTime === undefined){
+                        alert('Please select date from.');
+                    }
+                    else if(this.inputEventEndTime === '' || this.inputEventEndTime === null || this.inputEventEndTime === undefined){
+                        alert('Please select date to');
+                    }
+                    else{
+
+                        const response = await DataSource.shared.updateEvent(JSON.stringify(Obj),JSON.stringify(participantList));
+
+                        if(response.code==='88'){
+                            console.log('88');
+                        }
+                        else if(response.code==="99"){
+                            console.log('99');
+                        }
+                        else if(response.code==='1'){
+                            alert('Event update successful');
+                            window.location.replace('/Event');
+                        }
+                    }
+                }
+                catch(e){
+                    alert(e);
+                }
+            },
             async btnAddClasses(){
                 console.log(this.ddlClassLevel);
             },

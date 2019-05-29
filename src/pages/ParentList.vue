@@ -2,16 +2,16 @@
     <div id="parent-list">
         <div class="datatable-form__header">
             <div class="datatable-form__input form-group">
-                <label>Family No</label>
-                <input class="form-control" ref="inputFamilyNo">
+                <!--<label>Family No</label>-->
+                <vs-input label-placeholder="Family No" v-model="inputFamilyNo" ref="inputFamilyNo" v-on:keyup.enter="Search"/>
             </div>
             <div class="datatable-form__input form-group">
-                <label>Parent First Name</label>
-                <input class="form-control" ref="inputParentFirstName">
+                <!--<label>Parent First Name</label>-->
+                <vs-input label-placeholder="Parent First Name" v-model="inputParentFirstName" ref="inputParentFirstName" v-on:keyup.enter="Search"/>
             </div>
             <div class="datatable-form__input form-group">
-                <label>Parent Last Name</label>
-                <input class="form-control" ref="inputParentLastName">
+                <!--<label>Parent Last Name</label>-->
+                <vs-input label-placeholder="Parent Last Name" v-model="inputParentLastName" ref="inputParentLastName" v-on:keyup.enter="Search"/>
             </div>
 
             <div class="datatable-form__submit text-center">
@@ -19,13 +19,13 @@
             </div>
         </div>
         <div class="mt-3 container">
-            <div class="emptylist-info" v-if="list.length===0" >
+            <div class="emptylist-info" v-if="list&&list.length===0" >
                 <span>PLEASE SEARCH TO VIEW LIST...</span>
                 <div class="emptylist__img">
                     <img src="../assets/table-loading.png"/>
                 </div>
             </div>
-            <div v-if="list.length>0" class="datatable_group">
+            <div v-if="list&&list.length>0" class="datatable_group">
                 <data-tables :data="list" :action-col="actionCol" @selection-change="handleSelectionChange">
                     <!--<el-table-column type="selection" width="55">-->
                     <!--</el-table-column>-->
@@ -80,6 +80,9 @@
                     }]
                 },
                 selectedRow: null,
+                inputFamilyNo:"",
+                inputParentFirstName:"",
+                inputParentLastName:""
             };
         },
         async mounted() {

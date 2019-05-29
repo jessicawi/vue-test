@@ -4,8 +4,6 @@
             <div class="row header mb-5">
                 <div class="col-lg-5 ">
                     <h3 class="text-left mb-3">ATTENDANCE</h3>
-                    <label style="display:none !important;">{{lblAttID}}</label>
-
                 </div>
                 <div class="col-lg-7">
                     <div class="row searchingArea attendance-search">
@@ -35,9 +33,9 @@
                 <div class="empty-list_image" v-if="studentList.length<1">
                     <strong v-if="hideStudentList===false">Please select Class...</strong>
                     <strong v-if="hideStudentList===true">No Student Found...</strong>
-                    <router-link :to="{name: 'Class Management'}">
-                    <el-button type="primary" round v-if="hideStudentList===true" class="d-table" @click="">Assign Student to Class</el-button>
-                    </router-link>
+                    <!--<router-link :to="{name: 'Class Management'}">-->
+                    <!--<el-button type="primary" round v-if="hideStudentList===true" class="d-table" @click="">Assign Student to Class</el-button>-->
+                    <!--</router-link>-->
                     <img src="../assets/attendance.jpg"/>
                 </div>
 
@@ -51,13 +49,13 @@
                         <!--sortable="custom">-->
                         <!--</el-table-column>-->
                         <!--</data-tables>-->
-                        <div class="col-lg-2">
-                            <vs-checkbox ref="isCheckAll" v-model="selectallStudent" @click="checkAllStudent()">Select
-                                All
-                            </vs-checkbox>
-                        </div>
-                        <div class="col-lg-10 ">
-                            <el-select placeholder="Select Attendance" v-model="studentCheck"
+                        <!--<div class="col-lg-2">-->
+                            <!--<vs-checkbox ref="isCheckAll" v-model="selectallStudent" @click="checkAllStudent()">Select-->
+                                <!--All-->
+                            <!--</vs-checkbox>-->
+                        <!--</div>-->
+                        <div class="col-lg-12 ">
+                            <el-select placeholder="Select Attendance For All" v-model="studentCheck"
                                        @change="selectedAttendance()" class="" v-if="bundleAttendance === true">
                                 <el-option
                                         v-for="itemCheckList in checkListSelect"
@@ -68,15 +66,15 @@
                                 </el-option>
                             </el-select>
 
-                            <router-link :to="{name: 'Class Management'}">
-                                <el-button type="primary"  class="float-right mr-3" @click="">Class Management</el-button>
-                            </router-link>
+                            <!--<router-link :to="{name: 'Class Management'}">-->
+                                <!--<el-button type="primary"  class="float-right mr-3" @click="">Add New Student</el-button>-->
+                            <!--</router-link>-->
                         </div>
                     </div>
                     <table class="attTable">
                         <tr>
                             <th></th>
-                            <th>Student ID</th>
+                            <!--<th>Student ID</th>-->
                             <th>Student Name</th>
                             <!--<th>Attendance <br> <input type="checkbox" @click="checkAll()" ref="checkAllBox"></th>-->
                             <th>Attendance</th>
@@ -84,15 +82,15 @@
                             <th>Parents Mobile</th>
                         </tr>
                         <tr v-for="(item,i) in studentList" ref="studentList_Update">
-                            <td style="display:none;"><input type="text" class="form-control" :value="item.AttDtlID"
-                                                             ref="studentAttID"></td>
+                            <td style="display:none;"><input type="text" class="form-control" :value="item.Index_No"
+                                                             ref="studentIndexNo"></td>
                             <td>
                                 <vs-checkbox ref="chkitems" v-model="item.checked"
                                              @change="showBundleAttendance()"></vs-checkbox>
                             </td>
                             <td style="display: none;">{{item.checked}}</td>
-                            <td><label>{{item.AttDtlStudentIndexNo}}</label></td>
-                            <td><label>{{item.AttDtlStudentName}}</label></td>
+                            <!--<td><label>{{item.AttDtlStudentIndexNo}}</label></td>-->
+                            <td><label>{{item.Student_Name}}</label></td>
                             <!--<td><input type="checkbox" :id="item.AttDtlID" :value="item.AttDtlID" :checked="item.AttDtlMark.includes('Yes')" ref="studentCheckList"></td>-->
                             <!--<td>-->
                             <!--<div class="form-group__wrapper row">-->
@@ -118,8 +116,8 @@
                                 <!--</option>-->
                                 <!--</select>-->
 
-                                <el-select ref="studentCheckList" placeholder="Select" v-model="item.AttDtlMark"
-                                           :class="[{attend: item.AttDtlMark === 'Attend'},{late: item.AttDtlMark === 'Late'},{absent: item.AttDtlMark === 'Absent'},{sick: item.AttDtlMark === 'Sick'},{holiday: item.AttDtlMark === 'On Holiday'},{home: item.AttDtlMark === 'Sent Home'}]">
+                                <el-select ref="studentCheckList" placeholder="Select" v-model="item.markingStatus"
+                                           :class="[{attend: item.markingStatus === 'Present'},{late: item.markingStatus === 'Late'},{absent: item.markingStatus === 'Absent'},{sick: item.markingStatus === 'Sick'},{holiday: item.markingStatus === 'On Holiday'},{home: item.markingStatus === 'Sent Home'}]">
                                     <el-option
                                             v-for="itemCheckList in checkListSelect"
                                             :key="itemCheckList"
@@ -136,7 +134,7 @@
                                     <!--</el-option>-->
                                 </el-select>
                             </td>
-                            <td><input type="text" class="form-control" v-model="item.AttDtlRemark"
+                            <td><input type="text" class="form-control" v-model="item.remarks"
                                        ref="studentRemark">
                             </td>
                             <td>
@@ -162,8 +160,6 @@
             </div>
         </div>
     </div>
-
-    </div>
 </template>
 
 <script>
@@ -173,8 +169,7 @@
         name: "AttendanceList",
         data() {
             return {
-                checkListSelect: ['Attend','Absent', 'Late', 'Sick', 'On Holiday', 'Sent Home'],
-                lblAttID: '',
+                checkListSelect: ['Present','Absent', 'Late', 'Sick', 'On Holiday', 'Sent Home'],
                 ddlClassList: [],
                 ddlClass: '',
                 studentList: [],
@@ -218,7 +213,7 @@
                 this.studentList.forEach(m => {
 
                     if (m.checked === true) {
-                        m.AttDtlMark = this.studentCheck;
+                        m.markingStatus = this.studentCheck;
                     }
                 });
             },
@@ -286,17 +281,17 @@
                                 this.studentList.forEach(m => {
                                     m.checked = false;
                                 });
-                                response.Table.forEach(x => {
-                                    if (x.AttDtlMark === "No") {
-                                        x.AttDtlMark = null;
-                                    }
-                                });
+                                // response.Table.forEach(x => {
+                                //     if (x.AttDtlMark === "No") {
+                                //         x.AttDtlMark = null;
+                                //     }
+                                // });
                                 this.studentList = response.Table;
 
                                 this.studentListResponse = response.Table;
-                                this.studentListResponse.forEach(m => {
-                                    this.lblAttID = m.AttDtlAttID;
-                                });
+                                // this.studentListResponse.forEach(m => {
+                                //     this.lblAttID = m.AttDtlAttID;
+                                // });
                             }
                         }
                         this.$vs.loading.close();
@@ -339,14 +334,14 @@
                         };
 
                         let attendanceListTemp = {
-                            attID: this.$refs.studentAttID[index].value,
+                            studentIndexNo: this.$refs.studentIndexNo[index].value,
                             attDetails: attendanceDetials
                         };
 
                         attendanceList.push(attendanceListTemp);
                     });
 
-                    const response = await DataSource.shared.updateAttendanceList(this.lblAttID, JSON.stringify(attendanceList));
+                    const response = await DataSource.shared.updateAttendanceList(JSON.stringify(attendanceList));
                     if (response) {
                         if (response.code == '1') {
                             this.$notify({

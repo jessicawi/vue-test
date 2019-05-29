@@ -89,7 +89,7 @@ mobile
 
     .login-header h4 {
         text-align: center;
-        color: #fff !important;
+        color: #222 !important;
         margin: auto !important;
         display: block;
     }
@@ -99,7 +99,7 @@ mobile
     }
 
     .login-header span, .login-header span a {
-        color: #fff;
+        color: #6c757d;
         /* margin: 10px auto; */
         display: block;
         text-align: center;
@@ -117,10 +117,10 @@ mobile
     .login-wrap .form-control,
     .reset-content .form-control,
     .resetlink-wrap .form-control {
-        background: transparent;
-        border: 1px solid #464646;
-        padding: 10px;
-        border-radius: 4px;
+        background: white;
+        border: 0px solid #464646;
+        padding: 0;
+        border-radius: 20px;
     }
 
     .login-wrap .form-control::placeholder,
@@ -135,16 +135,28 @@ mobile
     }
 
     .login-btn {
-        border-radius: 4px;
-        border: 0px;
-        box-shadow: 0px 3px 24px -5px black;
+        border-radius: 20px;
+        border: 0px
     }
 
     .login small a, .login small {
-        color: white;
+        color: #6c757d;
         text-align: center;
     }
+    .login .backstretch, .parent-register .backstretch, .resetPassword .backstretch, .resetEmail .backstretch {
+        display: none;
+    }
 
+    .parent-register .vs-con-input input, .login-box .vs-con-input input {
+        padding: 7px 15px;
+        border-radius: 20px;
+        border-color: #dadcde !important;
+    }
+
+    .parent-register .vs-input--placeholder, .login-box .vs-input--placeholder {
+        padding: 7px 15px;
+        border-radius: 20px;
+    }
     .info-menu {
         position: fixed;
         bottom: 0px;

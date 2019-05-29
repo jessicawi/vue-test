@@ -1,72 +1,126 @@
 <template>
-
     <div class="row nabarx topbar">
         <div class="col-md-12 col-lg-4 text-left">
             <a href="/"> <img src="../assets/kagami-white.png"/></a>
             {{$route.name}}
         </div>
         <div class="col-md-12 col-lg-8 info-menu">
-            <div class="input-group search" v-if="!isMobile()">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"><i class="fa fa-search"
-                                                                     aria-hidden="true"></i></button>
-                </span>
-            </div><!-- /input-group -->
-
+            <!--<div class="input-group search" v-if="!isMobile()">-->
+                <!--<input type="text" class="form-control" placeholder="Search for...">-->
+                <!--<span class="input-group-btn">-->
+                    <!--<button class="btn btn-default" type="button"><i class="fa fa-search"-->
+                                                                     <!--aria-hidden="true"></i></button>-->
+                <!--</span>-->
+            <!--</div>-->
+            <!-- /input-group -->
+            <!--<li class="info-menu__item">-->
+            <!--<a href="#">-->
+            <!--<i class="fa fa-commenting" aria-hidden="true"></i>-->
+            <!--<span>Feedback</span>-->
+            <!--</a>-->
+            <!--</li>-->
+            <!--<li class="info-menu__item">-->
+            <!--<a href="#">-->
+            <!--<i class="fa fa-code-fork" aria-hidden="true"></i>-->
+            <!--<span>Timeline</span>-->
+            <!--</a>-->
+            <!--</li>-->
+            <!--<li class="info-menu__item">-->
+            <!--<a href="#">-->
+            <!--<i class="fa fa-calendar" aria-hidden="true"></i>-->
+            <!--<span>Calendar</span>-->
+            <!--</a>-->
+            <!--</li>-->
             <li class="info-menu__item">
-                <a href="#">
-                    <i class="fa fa-commenting" aria-hidden="true"></i>
-                    <span>Feedback</span>
-                </a>
-            </li>
+                <!--<a class="a-icon" href="#" @click="showSchoolList()">-->
+                <!--<i class="fa fa-university" aria-hidden="true"></i>-->
+                <!--<span>School List</span>-->
+                <!--</a>-->
+                <el-dropdown trigger="click">
+                    <a class="el-dropdown-link">
+                        <i class="fa fa-university" aria-hidden="true"></i>
+                        <span>School List</span>
+                    </a>
+                    <el-dropdown-menu slot="dropdown" class="nav-dropdown">
+                        <el-dropdown-item icon="el-icon-plus" v-for="item in schList" :class="{ 'active': item.CONSchool.trim() === schSession }">
+                            <a @click="ChangeSchool(item.CONSchool.trim())" v-bind:value="item.CONSchool.trim()" >{{ item.SCH_Name.trim() }}</a>
+                            <!--<i v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"-->
+                                    <!--aria-hidden="true"></i>-->
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
 
-            <li class="info-menu__item">
-                <a href="#">
-                    <i class="fa fa-code-fork" aria-hidden="true"></i>
-                    <span>Timeline</span>
-                </a>
-            </li>
-
-            <li class="info-menu__item">
-                <a href="#">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                    <span>Calendar</span>
-                </a>
-            </li>
-
-            <li class="info-menu__item">
-                <a class="a-icon" href="#" @click="showSchoolList()">
-                    <i class="fa fa-university" aria-hidden="true"></i>
-                    <span>School List</span>
-                </a>
+                <!--<vs-popup id="schoolListModal" class="holamundo" title="Select School " :active.sync="schoolListOpen">-->
+                    <!--<ul v-model="schListCurrent">-->
+                        <!--<li v-for="item in schList">-->
+                            <!--<span v-on:click="ChangeSchool(item.CONSchool.trim())" v-bind:value="item.CONSchool.trim()">{{ item.SCH_Name.trim() }} <i-->
+                                    <!--v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"-->
+                                    <!--aria-hidden="true"></i></span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</vs-popup>-->
                 <!--<vs-dropdown>-->
-                <!--<vs-dropdown-menu v-model="schListCurrent">-->
-                <!--&lt;!&ndash;<vs-dropdown-item v-for="(key, value) in schList">&ndash;&gt;-->
-                <!--&lt;!&ndash;<span v-on:click="ChangeSchool(value)" v-bind:value=value>{{ key }} <i v-if="value === schSession" class="fa fa-check-square" aria-hidden="true"></i></span>&ndash;&gt;-->
-                <!--&lt;!&ndash;</vs-dropdown-item>&ndash;&gt;-->
-                <!--<vs-dropdown-item v-for="item in schList">-->
+                    <!--<vs-dropdown-menu v-model="schListCurrent">-->
+                        <!--<vs-dropdown-item v-for="(key, value) in schList">-->
+                            <!--<span v-on:click="ChangeSchool(value)" v-bind:value=value>{{ key }} <i-->
+                                    <!--v-if="value === schSession" class="fa fa-check-square"-->
+                                    <!--aria-hidden="true"></i></span>-->
+                        <!--</vs-dropdown-item>-->
+                        <!--<vs-dropdown-item v-for="item in schList">-->
                 <!--<span v-on:click="ChangeSchool(item.CONSchool.trim())" v-bind:value="item.CONSchool.trim()">{{ item.SCH_Name.trim() }} <i-->
-                <!--v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"-->
-                <!--aria-hidden="true"></i></span>-->
+                        <!--v-if="item.CONSchool.trim() === schSession" class="fa fa-check-square"-->
+                        <!--aria-hidden="true"></i></span>-->
+                        <!--</vs-dropdown-item>-->
+                    <!--</vs-dropdown-menu>-->
+                <!--</vs-dropdown>-->
+            </li>
+            <li class="info-menu__item">
+                <!--<vs-dropdown class="CSTEST">-->
+                <!--<a class="a-icon" href="#">-->
+                <!--<i class="fa fa-life-ring" aria-hidden="true"></i>-->
+                <!--<span>Guided Tour</span>-->
+                <!--</a>-->
+                <!--<vs-dropdown-menu>-->
+                <!--<vs-dropdown-item>-->
+                <!--<span @click="guidedTour('HowToCreateNewStudent')">How to create new student</span>-->
                 <!--</vs-dropdown-item>-->
                 <!--</vs-dropdown-menu>-->
                 <!--</vs-dropdown>-->
+                <el-dropdown trigger="click" class="CSTEST">
+                    <a class="el-dropdown-link">
+                        <i class="fa fa-life-ring" aria-hidden="true"></i>
+                        <span>Guided Tour</span>
+                    </a>
+                    <el-dropdown-menu slot="dropdown" class="nav-dropdown">
+                        <el-dropdown-item icon="el-icon-plus" >
+                            <a @click="guidedTour('HowToCreateNewStudent')"> How to create new student</a>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
             </li>
-
             <li class="info-menu__item">
-                <vs-dropdown>
-                    <a class="a-icon" href="#">
+                <!--<vs-dropdown>-->
+                <!--<a class="a-icon" href="#">-->
+                <!--<i class="fa fa-user-circle" aria-hidden="true"></i>-->
+                <!--<span>Account</span>-->
+                <!--</a>-->
+                <!--<vs-dropdown-menu>-->
+                <!--<vs-dropdown-item>-->
+                <!--<span @click="logout">Logout</span>-->
+                <!--</vs-dropdown-item>-->
+                <!--</vs-dropdown-menu>-->
+                <!--</vs-dropdown>-->
+                <el-dropdown trigger="click">
+                    <a class="el-dropdown-link">
                         <i class="fa fa-user-circle" aria-hidden="true"></i>
                         <span>Account</span>
                     </a>
-
-                    <vs-dropdown-menu>
-                        <vs-dropdown-item>
-                            <span @click="logout">Logout</span>
-                        </vs-dropdown-item>
-                    </vs-dropdown-menu>
-                </vs-dropdown>
+                    <el-dropdown-menu slot="dropdown" class="nav-dropdown">
+                        <el-dropdown-item icon="el-icon-plus" >
+                            <a @click="logout">Logout</a>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
             </li>
         </div>
         <!--<b-modal id="schoolListModal" hide-footer title="Select School " v-model="schoolListOpen">-->
@@ -89,11 +143,9 @@
         </vs-popup>
     </div>
 </template>
-
 <script>
     import DataSource from "../data/datasource";
     import Cookies from "js-cookie";
-
 
     export default {
         name: 'navBar',
@@ -142,7 +194,6 @@
                     return false;
                 }
             },
-
             async BindSchoolList() {
                 try {
                     const response = await DataSource.shared.getUserSch();
@@ -163,7 +214,6 @@
                     this.results = e;
                 }
             },
-
             async ChangeSchool(value) {
                 try {
                     //Cookies.set('schoolSession', value);
@@ -171,11 +221,11 @@
 
                     this.schList.forEach(m => {
                         if (m.CONSchool === value) {
-                            Cookies.set('schoolSession', m.CONSchool, { expires: 3/24 }); //expire in 3 hour
-                            Cookies.set('userIDSession', m.CONid,  { expires: 3/24 }); //expire in 3 hour
-                            Cookies.set('userTypeSession', m.CONType,  { expires: 3/24 }); //expire in 3 hour
-                            Cookies.set('userUniversitySession', m.CONUniversity,  { expires: 3/24 }); //expire in 3 hour
-                            Cookies.set('usRidSession', m.USRid,  { expires: 3/24 }); //expire in 3 hour
+                            Cookies.set('schoolSession', m.CONSchool, {expires: 3 / 24}); //expire in 3 hour
+                            Cookies.set('userIDSession', m.CONid, {expires: 3 / 24}); //expire in 3 hour
+                            Cookies.set('userTypeSession', m.CONType, {expires: 3 / 24}); //expire in 3 hour
+                            Cookies.set('userUniversitySession', m.CONUniversity, {expires: 3 / 24}); //expire in 3 hour
+                            Cookies.set('usRidSession', m.USRid, {expires: 3 / 24}); //expire in 3 hour
                             window.location.replace('/');
                         }
                     });
@@ -183,6 +233,20 @@
                     this.results = e;
                 }
             },
+            guidedTour(value) {
+                if (value === 'HowToCreateNewStudent') {
+                    // this.$router.push({
+                    //     name: 'Student',
+                    //     params: {
+                    //         guidedTour: 'YES'
+                    //     }
+                    // });
+
+                    //var currentUrl = window.location.pathname;
+
+                    window.location.replace('/student?tour=YES');
+                }
+            }
         }
         // mounted() {
         //     const isLogin = Cookies.get('authToken');
@@ -196,7 +260,5 @@
         // },
     };
 </script>
-
 <style>
-
 </style>
