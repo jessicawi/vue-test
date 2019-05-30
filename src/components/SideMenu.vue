@@ -1,15 +1,217 @@
+<template>
+    <div class="menu-box-wrap" >
+        <!--<div class="menu-box-wrap" :class="{'fixed-header':scrollPosition>120}">-->
+        <div class="menu-box">
+            <!--<vs-sidebar static-position default-index="1" color="primary" class="sidebarx" spacer v-model="active"-->
+            <!--icon-pack="fa">-->
 
-<nav id="sidebar" class="">
-    <div class="sidebar-header">
-        <a href="/"><img class="main-logo" src="/img/logo/logo.png" alt=""></a>
-        <strong><img src="/img/logo/logosn.png" alt=""></strong>
+            <!--<div class="header-sidebar" slot="header">-->
+            <!--<a href="/"><img src="../assets/kagami.jpg"/></a>-->
+            <!--</div>-->
+            <b-nav pills v-for="item in primaryMenuFiltered" :key=item.MENid class="menu-wrap">
+                <!-- if menu has submenu, click will open submenu -->
+                <b-nav-item-dropdown
+                        id="my-nav-dropdown"
+                        :text="item.MENname"
+                        toggle-class="nav-link-custom"
+                        v-if="item.subMenus"
+                        class="menu-wrap__item"
+
+                >
+                    <b-dropdown-item v-for="submenu in item.subMenus" :href="submenu.MENnewurl">{{submenu.MENname}}</b-dropdown-item>
+                </b-nav-item-dropdown>
+                <!-- if menu has no submenu, click will route to url (MENnewurl) -->
+                <b-nav-item v-else class="parent-menu"  v-if="item.MENnewurl" :class="{'null-item':item.MENnewurl===null}">
+                    <!-- if MENnewurl has value -->
+                    <router-link v-if="item.MENnewurl" :to="item.MENnewurl">
+                        <i :class="item.MENicon"></i> <span>{{item.MENname}}</span>
+                    </router-link>
+                    <!-- if MENnewurl is null -->
+                    <div v-else class="url-null">
+                        <i :class="item.MENicon"></i> <span>{{item.MENname}}</span>
+                    </div>
+                </b-nav-item>
+            </b-nav>
+            <!--<div class="menu-wrap" v-for="item in primaryMenuFiltered" :key=item.MENid>-->
+                <!--&lt;!&ndash; if menu has submenu, click will open submenu &ndash;&gt;-->
+
+
+                <!--<div v-if="item.subMenus" class="menu-wrap__item">-->
+                    <!--<div class="parent-menu has-sub-menu"-->
+                         <!--@click="handleParentMenuClick(item.MENid)">-->
+                        <!--<i class="big-icon" :class="item.MENicon"></i><span>{{item.MENname}}</span> <i-->
+                            <!--class="material-icons">keyboard_arrow_down</i>-->
+                    <!--</div>-->
+
+                    <!--<div class="sub-menu" v-if="item.subMenus" @mouseleave="didClickAway"-->
+                         <!--:class="{'menu-wrap-active':currentParentMenuId===item.MENid}">-->
+                        <!--<div v-for="submenu in item.subMenus">-->
+                            <!--<a :href="submenu.MENnewurl">-->
+                                <!--<i :class="submenu.MENicon"></i> {{submenu.MENname}}-->
+                            <!--</a>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--&lt;!&ndash; if menu has no submenu, click will route to url (MENnewurl) &ndash;&gt;-->
+                <!--<div v-else :class="{'null-item':item.MENnewurl===null}">-->
+                    <!--<div class="parent-menu" v-if="item.MENnewurl">-->
+                        <!--&lt;!&ndash; if MENnewurl has value &ndash;&gt;-->
+                        <!--<router-link v-if="item.MENnewurl" :to="item.MENnewurl">-->
+                            <!--<i :class="item.MENicon"></i> <span>{{item.MENname}}</span>-->
+                        <!--</router-link>-->
+                        <!--&lt;!&ndash; if MENnewurl is null &ndash;&gt;-->
+                        <!--<div v-else class="url-null">-->
+                            <!--<i :class="item.MENicon"></i> <span>{{item.MENname}}</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <!--</div>-->
+            <!--</vs-sidebar>-->
+        </div>
+
+        <div class="input-group search" v-if="isMobile()">
+            <input type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"
+                                                                     aria-hidden="true"></i></button>
+                </span>
+        </div><!-- /input-group -->
     </div>
-    <div class="left-custom-menu-adp-wrap comment-scrollbar mCustomScrollbar _mCS_1 mCS-autoHide" style="position: relative; overflow: visible;"><div id="mCSB_1" class="mCustomScrollBox mCS-light-1 mCSB_vertical mCSB_outside" style="max-height: none;" tabindex="0"><div id="mCSB_1_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
-        <nav class="sidebar-nav left-sidebar-menu-pro">
-            <ul class="metismenu" id="menu1">
+</template>
+
+<script>
+    import DataSource from "../data/datasource";
+
+    export default {
+        name: 'sideMenu',
+        data() {
+            return {
+                pathName: null,
+                primaryMenu: [],
+                nonPrimaryTable: [],
+                primaryMenuFiltered: [],
+                active: false,
+                currentMenu: null,
+                currentParentMenuId: null,
+                currentParentMenuId2: null,
+                isNullItem: "",
+                showMobileMenu: false,
+                mouseover: false,
+                scrollPosition: null,
+            };
+        },
+        destroy() {
+            window.removeEventListener('scroll', this.updateScroll)
+        },
+        async mounted() {
+            window.addEventListener('scroll', this.updateScroll);
+            const response = await DataSource.shared.getUserMenu();
+            if (response) {
+                this.primaryMenu = response.PrimaryTable && response.PrimaryTable.Table;
+                if (!this.primaryMenu) {
+                    return;
+                }
+                this.primaryMenu.forEach(m => {
+                    this.primaryMenuFiltered.push(m);
+
+                    // switch (m.MENname) {
+                    //     case "Administration":
+                    //     case "Dashboards":
+                    //     case "Pre Admission":
+                    //         this.primaryMenuFiltered.push(m);
+                    // }
+                });
+
+                this.nonPrimaryTable = response.NonPrimaryTable.Table;
+                this.nonPrimaryTable.map(d => {
+
+                    // set current active menu based on URL pathname
+                    // if (d.MENnewurl === window.location.pathname) {
+                    //     this.currentMenu = d.MENid;
+                    //     this.currentParentMenuId = d.MGPMENparentid;
+                    //     this.currentParentMenuId2 = d.MGPMENparentid_2;
+                    // }
+
+                    if (d.MENnewurl != null && d.MENnewurl != "") {
+                        //return null;
+
+                        if (d.MGPMENparentid_2 === null || d.MGPMENparentid_2 === "") {
+                            this.primaryMenuFiltered.find(parentMenu => {
+                                    if (parentMenu.MENid === d.MGPMENparentid) {
+                                        if (Array.isArray(parentMenu.subMenus)) {
+                                            parentMenu.subMenus.push(d);
+                                        } else {
+                                            parentMenu.subMenus = [d];
+                                        }
+
+                                    }
+                                }
+                            );
+                        } else {
+                            this.primaryMenuFiltered.find(parentMenu => {
+                                    if (parentMenu.MENid === d.MGPMENparentid_2) {
+                                        if (Array.isArray(parentMenu.subMenus)) {
+                                            parentMenu.subMenus.push(d);
+                                        } else {
+                                            parentMenu.subMenus = [d];
+                                        }
+                                    }
+                                }
+                            );
+                        }
+                    }
+                });
+            }
+
+        },
+        methods: {
+            updateScroll() {
+                this.scrollPosition = window.scrollY
+            },
+            didClickAway: function (e) {
+                this.event = function (event) {
+                    if (event.target !== e.target) {
+                        this.currentParentMenuId = null;
+                        document.body.removeEventListener("click", this.event);
+                    } else {
+                        this.currentParentMenuId = menuId
+                    }
+                }.bind(this);
+                document.body.addEventListener("click", this.event);
+            },
+            handleParentMenuClick(menuId) {
+                // if clicked menu already open, then make it close
+                if (this.currentParentMenuId === menuId) {
+                    this.currentParentMenuId = null;
+                }
+                // open clicked menu
+                else {
+                    this.currentParentMenuId = menuId;
+                }
+            },
+            isMobile() {
+                if (screen.width <= 760) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    };
+</script>
+
+<style scoped>
+    .fixed-header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 99;
+    }
+
+</style>
+
+<style>
 
 
-                <li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-gear icon-wrap"></i> <span class="mini-click-non">Administration</span></a><ul class="submenu-angle collapse" id="MEN301" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-list-alt icon-wrap"></i> <span class="mini-click-non">Dashboards</span></a><ul class="submenu-angle collapse" id="MENMIS100" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-file-archive-o icon-wrap"></i> <span class="mini-click-non">Document Management</span></a><ul class="submenu-angle collapse" id="MEN150" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-question-circle icon-wrap"></i> <span class="mini-click-non">Enquiry/Prospect</span></a><ul class="submenu-angle collapse" id="MEN100" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-credit-card custom icon-wrap"></i> <span class="mini-click-non">Finance</span></a><ul class="submenu-angle collapse" id="MEN801" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-book icon-wrap"></i> <span class="mini-click-non">Library Management</span></a><ul class="submenu-angle collapse" id="men9200" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-cubes icon-wrap"></i> <span class="mini-click-non">Operations</span></a><ul class="submenu-angle collapse" id="MEN441" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-reorder icon-wrap"></i> <span class="mini-click-non">Others</span></a><ul class="submenu-angle collapse" id="MEN3333" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-male icon-wrap"></i> <span class="mini-click-non">Parents</span></a><ul class="submenu-angle collapse" id="MEN1101" aria-expanded="false"><li><a href="/module/parent/manage-relationship.aspx"><i class="fa  null  sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Manage Relationship</span></a></li><li><a href="/module/parent/parent-list.aspx"><i class="fa  null  sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">View/Edit Parents Details</span></a></li></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-user-plus icon-wrap"></i> <span class="mini-click-non">Pre Admission</span></a><ul class="submenu-angle collapse" id="MEN9221" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-file-text icon-wrap"></i> <span class="mini-click-non">Reports</span></a><ul class="submenu-angle collapse" id="MEN901" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-user-secret icon-wrap"></i> <span class="mini-click-non">Security and Permissions</span></a><ul class="submenu-angle collapse" id="MEN401" aria-expanded="false"></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-mortar-board icon-wrap"></i> <span class="mini-click-non">Student</span></a><ul class="submenu-angle collapse" id="MEN0000" aria-expanded="false"><li><a href="/module/student/student-list.aspx"><i class="fa  null  sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Advance Search</span></a></li><li><a href="/module/student/student.aspx"><i class="fa  null  sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Create Student</span></a></li></ul></li><li id="removable"><a class="has-arrow" href="#" aria-expanded="false"><i class="fa big-icon fa fa-bus icon-wrap"></i> <span class="mini-click-non">Transportation</span></a><ul class="submenu-angle collapse" id="MENT901" aria-expanded="false"></ul></li></ul>
-        </nav>
-    </div></div><div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-light-1 mCSB_scrollTools_vertical" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; display: block; height: 787px; max-height: 790px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div></div>
-</nav>
+</style>

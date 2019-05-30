@@ -133,6 +133,8 @@
         margin-left: -15px !important;
         width: 100%;
         margin-right: -15px !important;
+        display: flex;
+        align-items: center;
     }
 
     body {
@@ -175,13 +177,6 @@
     .login-btn:hover {
         background-color: #404040;
         border-color: #999;
-    }
-
-    .system-msg p {
-        background: #dbdbdb;
-        margin: 10px 0px 0px;
-        border-radius: 3px;
-        line-height: 50px;
     }
 
     .login-box {
