@@ -32,9 +32,6 @@
                             barPercentage: 1
                         }]
                     },
-                    legend: {
-                        display: true
-                    },
                     responsive: true,
                     maintainAspectRatio: false
                 }

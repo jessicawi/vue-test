@@ -8,9 +8,14 @@
                 scales: {
                     yAxes: [{
                         ticks: {
+                            suggestedMin: 10,
                             beginAtZero: true,
-                            suggestedMax: 40
-                        }
+                            // suggestedMax: 40
+                        },
+                        stacked: false,
+                    }],
+                    xAxes: [{
+                        stacked: false,
                     }]
                 },
                 responsive: true, maintainAspectRatio: false

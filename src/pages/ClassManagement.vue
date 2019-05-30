@@ -7,11 +7,11 @@
                 </div>
                 <div class="col-lg-7 actionDiv">
                     <el-button-group>
-                        <el-button type="primary" v-b-modal.newClassModal variant="primary"><i class="material-icons">
+                        <el-button type="primary" v-b-modal.newClassModal variant="primary" id="btnAddNewClass"><i class="material-icons">
                             playlist_add
                         </i> New Class
                         </el-button>
-                        <el-button type="primary" variant="primary" v-on:click="directToPromotion()">Mass Promotion <i
+                        <el-button type="primary" variant="primary" v-on:click="directToPromotion()" id="btnMassPromotion">Mass Promotion <i
                                 class="material-icons">
                             view_module
                         </i></el-button>
@@ -28,7 +28,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <el-row style="margin-bottom: 10px">
                         <el-col :span="11">
-                            <el-input v-model="ClassFilters[0].value" class="search-datatable" placeholder="Search">
+                            <el-input v-model="ClassFilters[0].value" class="search-datatable" placeholder="Search" id="inputSearchClassName">
                                 <template slot="prepend"><i class="material-icons">
                                     search
                                 </i> Search Class Name
@@ -55,7 +55,7 @@
                                     </el-checkbox-button>
                                 </el-checkbox-group>
                                 <el-button slot="reference" type="primary" round
-                                           class="float-right large-btn classManage-filter"><i
+                                           class="float-right large-btn classManage-filter" id="btnFilterByLevel"><i
                                         class="material-icons">
                                     tune
                                 </i> Filter
@@ -68,7 +68,8 @@
                         <el-table-column v-for="parentClassListIntInfo in parentClassList"
                                          :prop="parentClassListIntInfo.prop"
                                          :label="parentClassListIntInfo.label" :key="parentClassListIntInfo.prop"
-                                         sortable="custom">
+                                         sortable="custom"
+                                         id="parentClassList">
                         </el-table-column>
                     </data-tables>
                 </div>
@@ -502,6 +503,51 @@
                 </div>
             </div>
         </b-modal>
+        <v-tour name="classManagementPageVueTourName" :steps="classManagementPageVueTour" :options="classManagementPageVueTourOptions" :callbacks="classManagementPageVueTourCallBacks">
+            <template slot-scope="tour">
+                <transition name="fade">
+                    <v-step
+                            v-if="tour.currentStep === index"
+                            v-for="(step, index) of tour.steps"
+                            :key="index"
+                            :step="step"
+                            :previous-step="tour.previousStep"
+                            :next-step="tour.nextStep"
+                            :stop="tour.stop"
+                            :is-first="tour.isFirst"
+                            :is-last="tour.isLast"
+                            :labels="tour.labels"
+                    >
+                        <template v-if="tour.currentStep === 0">
+                            <div slot="actions">
+                                <button class="v-step__button" @click="tourStop()">Finish</button>
+                                <button class="v-step__button" @click="tour.nextStep">Next</button>
+                            </div>
+                        </template>
+                        <template v-if="tour.currentStep !== 0 && tour.currentStep !== 7">
+                            <div slot="actions">
+                                <button class="v-step__button" @click="tourStop()">Skip tour</button>
+                                <button class="v-step__button" @click="tour.previousStep">Previous</button>
+                                <button class="v-step__button" @click="tour.nextStep">Next</button>
+                            </div>
+                        </template>
+                        <template v-if="tour.currentStep === 7">
+                            <div slot="actions">
+                                <button class="v-step__button" @click="tourStop()">Finish</button>
+                                <button class="v-step__button" @click="tour.previousStep">Previous</button>
+                            </div>
+                        </template>
+                    </v-step>
+                </transition>
+            </template>
+        </v-tour>
+
+        <div style="display:none;">
+            <el-button type="primary" class="btn btn-primary waves-effect waves-light m-r-10 float-left"
+                       @click="classManagementPageVueTourStart()">
+                Guided Tour
+            </el-button>
+        </div>
     </div>
 </template>
 <script>
@@ -516,6 +562,13 @@
             await this.getAcademicYear();
             await this.getClassType();
             await this.getClassTeacher();
+        },
+        async mounted() {
+            window.addEventListener('load', () => {
+                if (this.$route.query.tour === 'YES') {
+                    this.classManagementPageVueTourStart();
+                }
+            })
         },
         data() {
             return {
@@ -693,6 +746,83 @@
                         label: 'Edit'
                     }]
                 },
+
+                //vue tour
+                classManagementPageVueTourOptions: {
+                    useKeyboardNavigation: false,
+                    labels: {
+                        buttonSkip: 'Skip tour',
+                        buttonPrevious: 'Previous',
+                        buttonNext: 'Next',
+                        buttonStop: 'Finish'
+                    }
+                },
+                classManagementPageVueTourCallBacks: {
+                    onPreviousStep: this.classManagementPageVueTourCallBacksPreviousSteps,
+                    onNextStep: this.classManagementPageVueTourCallBacksNextSteps
+                },
+                classManagementPageVueTour: [
+                    //new class
+                    {
+                        target: '#btnAddNewClass',
+                        content: `<div>Step 1 / 8 <br> Create new class</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    {
+                        target: '#btnAddNewClass',
+                        content: `<div>Step 2 / 8 <br> Create new class <br> Select & fill in all the fields, click Next button <br> Select Programme, click Create button</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    //edit class
+                    {
+                        target: '#inputSearchClassName',
+                        content: `<div>Step 3 / 8 <br> Edit class <br> Fill in to search class name</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    {
+                        target: '#btnFilterByLevel',
+                        content: `<div>Step 4 / 8 <br> Edit class <br> Click and select to filter class by level</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    {
+                        target: '#parentClassList',
+                        content: `<div>Step 5 / 8 <br> Edit class <br> Click Edit button to edit</div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    {
+                        target: '#parentClassList',
+                        content: `<div>Step 6 / 8 <br> Edit class <br> Click Edit Class button to edit class information <br> Click Create New Programme button to create new programme for the class</div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    {
+                        target: '#parentClassList',
+                        content: `<div>Step 7 / 8 <br> Edit class <br> Inside programme list, click Assign button to assign student belong to the level into the class programme < br> click View button to view student that assigned to the class programme</div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                    //mass promotion
+                    {
+                        target: '#btnMassPromotion',
+                        content: `<div>Step 8 / 8 <br> Mass promotion <br> Redirect to the promotion page</div>`,
+                        params: {
+                            placement: 'top',
+                        }
+                    },
+                ],
+                //vue tour
             };
         },
         methods: {
@@ -1122,6 +1252,29 @@
                 } catch (e) {
                     this.results = e;
                 }
+            },
+            classManagementPageVueTourStart() {
+                this.$tours['classManagementPageVueTourName'].start();
+            },
+            classManagementPageVueTourCallBacksPreviousSteps (currentStep) {
+                let finalSteps = currentStep - 1;
+
+                this.tourCallBackStepsFunc(finalSteps);
+            },
+            classManagementPageVueTourCallBacksNextSteps (currentStep) {
+                let finalSteps = currentStep + 1;
+
+                this.tourCallBackStepsFunc(finalSteps);
+            },
+            tourCallBackStepsFunc (finalSteps) {
+                // if (finalSteps === 2) {
+                //     this.studentListAreaBorder = true;
+                // } else if (finalSteps === 3) {
+                //     this.btnPromoteVueSample = true;
+                // }
+            },
+            tourStop () {
+                this.$tours['classManagementPageVueTourName'].stop();
             },
         },
     };

@@ -3,7 +3,7 @@
         <div class="container admin-wrap">
             <div class="row header mb-5">
                 <div class="col-lg-3 ">
-                    <h3 class="text-left">PROMOTION</h3>
+                    <h3 class="text-left" id="promotionTitleVueTour">PROMOTION</h3>
                 </div>
 
                 <div class="col-lg-9">
@@ -92,7 +92,7 @@
             <!--#endregion-->
             <!--#region CONTAINER FOR STUDENT LIST-->
             <div class="row">
-                <div class=" promotion-student">
+                <div class=" promotion-student" id="studentListArea" v-bind:class="{divBorderClass:studentListAreaBorder}">
                     <div class="empty-list_image" v-if="emptyImage===true">
                         <img src="../assets/promotion.jpg"/>
                         <strong>No Record Yet...</strong>
@@ -119,11 +119,17 @@
             <!--@click="showPromotionModal"><i class="material-icons">-->
             <!--thumb_up_alt-->
             <!--</i> PROMOTE</button>-->
-            <el-button type="primary" id="btn_PromoteSelected"
-                       v-if="!this.isNull(arrobj_SelectedStudents) && arrobj_SelectedStudents.length > 0"
-                       @click="showPromotionModal" class="d-flex">
-                <i class="material-icons">thumb_up_alt</i> PROMOTE
-            </el-button>
+            <div>
+                <el-button v-if="btnPromoteVueSample" type="primary" id="btn_PromoteSelected" class="d-flex" style="z-index: 1;">
+                    <i class="material-icons">thumb_up_alt</i> PROMOTE
+                </el-button>
+                <el-button type="primary" id="btn_PromoteSelected" style="z-index: 2;"
+                           v-if="!this.isNull(arrobj_SelectedStudents) && arrobj_SelectedStudents.length > 0"
+                           @click="showPromotionModal" class="d-flex">
+                    <i class="material-icons">thumb_up_alt</i> PROMOTE
+                </el-button>
+            </div>
+
 
             <b-modal id="modal_Promotion" title="Promote selected student(s) to?" ref="modal_Promotion" centered
                      hide-footer >
@@ -138,6 +144,52 @@
                                                                                                                                                                                                                            <!--v-bind:course-id="str_CourseID" :arrobjSelectedStudentID="arrobj_selectedStudentID" v-bind:selected-students-ID="arrobj_selectedStudentID"></promotion-component>-->
             </b-modal>
         </div>
+
+        <v-tour name="PromotionPageVueTourName" :steps="promotionPageVueTour" :options="promotionPageVueTourOptions" :callbacks="promotionPageVueTourCallBacks">
+            <template slot-scope="tour">
+                <transition name="fade">
+                    <v-step
+                            v-if="tour.currentStep === index"
+                            v-for="(step, index) of tour.steps"
+                            :key="index"
+                            :step="step"
+                            :previous-step="tour.previousStep"
+                            :next-step="tour.nextStep"
+                            :stop="tour.stop"
+                            :is-first="tour.isFirst"
+                            :is-last="tour.isLast"
+                            :labels="tour.labels"
+                    >
+                        <template v-if="tour.currentStep === 0">
+                            <div slot="actions">
+                                <button class="v-step__button" @click="tourStop()">Finish</button>
+                                <button class="v-step__button" @click="tour.nextStep">Next</button>
+                            </div>
+                        </template>
+                        <template v-if="tour.currentStep !== 0 && tour.currentStep !== 3">
+                            <div slot="actions">
+                                <button class="v-step__button" @click="tourStop()">Skip tour</button>
+                                <button class="v-step__button" @click="tour.previousStep">Previous</button>
+                                <button class="v-step__button" @click="tour.nextStep">Next</button>
+                            </div>
+                        </template>
+                        <template v-if="tour.currentStep === 3">
+                            <div slot="actions">
+                                <button class="v-step__button" @click="tourStop()">Finish</button>
+                                <button class="v-step__button" @click="tour.previousStep">Previous</button>
+                            </div>
+                        </template>
+                    </v-step>
+                </transition>
+            </template>
+        </v-tour>
+
+        <div style="display:none;">
+            <el-button type="primary" class="btn btn-primary waves-effect waves-light m-r-10 float-left"
+                       @click="promotionPageVueTourStart()">
+                Guided Tour
+            </el-button>
+        </div>
     </div>
 
 </template>
@@ -147,6 +199,11 @@
     import $ from 'jquery';
     import DataSource from "../data/datasource";
     import promotionComponent from "../components/Promotion_Component";
+
+    import VueTour from 'vue-tour';
+    import Vue from 'vue';
+    require('vue-tour/dist/vue-tour.css');
+    Vue.use(VueTour);
 
     export default {
         name: "Promotion",
@@ -164,6 +221,54 @@
                 arrobj_selectedStudentID: "",
                 promotionModal: false,
                 emptyImage: true,
+                studentListAreaBorder: false,
+                btnPromoteVueSample: false,
+
+                //vue tour
+                promotionPageVueTourOptions: {
+                    useKeyboardNavigation: false,
+                    labels: {
+                        buttonSkip: 'Skip tour',
+                        buttonPrevious: 'Previous',
+                        buttonNext: 'Next',
+                        buttonStop: 'Finish'
+                    }
+                },
+                promotionPageVueTourCallBacks: {
+                    onPreviousStep: this.promotionPageVueTourCallBacksPreviousSteps,
+                    onNextStep: this.promotionPageVueTourCallBacksNextSteps
+                },
+                promotionPageVueTour: [
+                    {
+                        target: '#ddl_AcademicYear',
+                        content: `<div>Step 1 / 4 <br> Select Academic Year</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    {
+                        target: '#ddl_Class',
+                        content: `<div>Step 2 / 4 <br> Select Academic Class</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    {
+                        target: '#studentListArea',
+                        content: `<div>Step 3 / 4 <br> Select Student at this area</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                    {
+                        target: '#btn_PromoteSelected',
+                        content: `<div>Step 4 / 4 <br> Promotion <br> Select Academic Year & Class promoto to and click OK button</div>`,
+                        params: {
+                            placement: 'bottom',
+                        }
+                    },
+                ],
+                //vue tour
             };
         },
         methods: {
@@ -340,6 +445,36 @@
                 this.$vs.loading.close();
             },
             /*#endregion*/
+
+            promotionPageVueTourStart() {
+                this.$tours['PromotionPageVueTourName'].start();
+            },
+            promotionPageVueTourCallBacksPreviousSteps (currentStep) {
+                let finalSteps = currentStep - 1;
+
+                this.tourCallBackStepsFunc(finalSteps);
+            },
+            promotionPageVueTourCallBacksNextSteps (currentStep) {
+                let finalSteps = currentStep + 1;
+
+                this.tourCallBackStepsFunc(finalSteps);
+            },
+            tourCallBackStepsFunc (finalSteps) {
+                this.studentListAreaBorder = false;
+                this.btnPromoteVueSample = false;
+
+                if (finalSteps === 2) {
+                    this.studentListAreaBorder = true;
+                } else if (finalSteps === 3) {
+                    this.btnPromoteVueSample = true;
+                }
+            },
+            tourStop () {
+                this.studentListAreaBorder = false;
+                this.btnPromoteVueSample = false;
+
+                this.$tours['PromotionPageVueTourName'].stop();
+            },
         },
         mounted() {
             const self = this;
@@ -360,6 +495,12 @@
 
             $("input[type='checkbox']").change(() => {
             });
+
+            window.addEventListener('load', () => {
+                if (this.$route.query.tour === 'YES') {
+                    this.promotionPageVueTourStart();
+                }
+            })
         },
         components: {
             promotionComponent
@@ -369,7 +510,6 @@
                 this.str_CourseID = this.obj_SelectedClassID.PK_Course_ID;
             }
         }
-
     }
     ;
 </script>
@@ -421,5 +561,7 @@
         cursor: pointer;
     }
 
-
+    .divBorderClass {
+        border-style: solid;
+    }
 </style>

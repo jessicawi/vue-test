@@ -1864,17 +1864,17 @@
             await this.LoadStudentParentInfo();
             await this.onChangeNationalityBirthPlace();
 
-            if (this.$route.query.tour === 'YES') {
-                // if (this.$route.params.guidedTour === 'YES') {
-                //     this.activeTab = 'Student';
-                //     this.$tours['StudentPageVueTourName'].start();
-                //     this.windowsSroll(0);
-                // }
+            window.addEventListener('load', () => {
+                if (this.$route.query.tour === 'YES') {
+                    // if (this.$route.params.guidedTour === 'YES') {
+                    //     this.activeTab = 'Student';
+                    //     this.$tours['StudentPageVueTourName'].start();
+                    //     this.windowsSroll(0);
+                    // }
 
-                this.activeTab = 'Student';
-                this.$tours['StudentPageVueTourName'].start();
-                this.windowsSroll(0);
-            }
+                    this.studentPageVueTourStart();
+                }
+            })
         },
         data() {
             return {

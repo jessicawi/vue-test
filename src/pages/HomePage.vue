@@ -53,66 +53,48 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-4" style="padding: 0 10px;">
-                <div class="col-md-9 chartBox">
-                    <div class="dashboard-title"><h4 class="text-left">Statistic</h4></div>
-                    <div class="small">
-                        <div class="chartbox-item" v-loading="loading">
-                            <div class="empty-list_image " v-if="emptyImage===true">
-                                <strong class="text-left">No Record Yet...</strong>
-                                <img src="../assets/notfound.png"/>
+            <div class="row mb-4">
+                <div class="col-lg-12 ">
+                    <div class="chartBox">
+                        <div class="dashboard-title"><h4 class="text-left">Statistic</h4></div>
+                        <div class="small">
+                            <div class="chartbox-item" v-loading="loading">
+                                <div class="empty-list_image " v-if="emptyImage===true">
+                                    <strong class="text-left">No Record Yet...</strong>
+                                    <img src="../assets/notfound.png"/>
+                                </div>
+                                <bar-chart
+                                        v-if="isLoaded"
+                                        :chartdata="chartdata"
+                                        :options="options"/>
                             </div>
-                            <bar-chart
-                                    v-if="isLoaded"
-                                    :chartdata="chartdata"
-                                    :options="options"/>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 custom-wrapper">
-                    <div class="dashboard-title"><h5 class="text-left">Recent Feed</h5></div>
-                    <div class="dashboard-subtitle">
-                        <el-tooltip class="item" effect="dark" content="View All Activities" placement="top-start">
-                            <a href="/feed">
-                                <small>VIEW ALL</small>
-                            </a>
-                        </el-tooltip>
-                    </div>
-                    <hr/>
-                    <div class="dashboard-studentList">
-                        <div class="" v-for="object in post" :key="`${object.PostID}`">
-                            <PostComponent
-                                    :parent-post="object"
-                                    :hideComment="true"
-                                    :isHome="true"
-                            />
-                            <hr/>
-                        </div>
-                        <!--<li><img src="../assets/thumb1.jpg"/> <span>when an unknown printer took a galley of type </span></li>-->
-                    </div>
-                    <!--<form class="needs-validation form-style" novalidate @submit.prevent="onSubmit">-->
-                    <!--<div class="form-group">-->
-                    <!--<label for="userID">ID</label>-->
-                    <!--<input type="text" class="form-control" id="userID" v-model="userID"-->
-                    <!--required>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                    <!--<label for="userType">User Type</label>-->
-                    <!--<select class="form-control" id="userType" v-model="userType">-->
-                    <!--<option selected value="">Parent</option>-->
-                    <!--<option value="">Student</option>-->
-                    <!--<option value="">Teacher</option>-->
-                    <!--</select>-->
-                    <!--</div>-->
-                    <!--<div class="">-->
-                    <!--<button class="custom-btn btn btn-primary col-md-12" type="submit">Submit-->
-                    <!--</button>-->
-                    <!--</div>-->
-                    <!--</form>-->
-                </div>
+                <!--<div class="col-md-3 custom-wrapper">-->
+                <!--<div class="dashboard-title"><h5 class="text-left">Recent Feed</h5></div>-->
+                <!--<div class="dashboard-subtitle">-->
+                <!--<el-tooltip class="item" effect="dark" content="View All Activities" placement="top-start">-->
+                <!--<a href="/feed">-->
+                <!--<small>VIEW ALL</small>-->
+                <!--</a>-->
+                <!--</el-tooltip>-->
+                <!--</div>-->
+                <!--<hr/>-->
+                <!--<div class="dashboard-studentList">-->
+                <!--<div class="" v-for="object in post" :key="`${object.PostID}`">-->
+                <!--<PostComponent-->
+                <!--:parent-post="object"-->
+                <!--:hideComment="true"-->
+                <!--:isHome="true"-->
+                <!--/>-->
+                <!--<hr/>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
             </div>
-            <div class="row mb-3" style="padding: 0 10px;">
-                <div class="col-md-6 pl-0">
+            <div class="row mb-3">
+                <div class="col-lg-12 ">
                     <div class="chartBox">
                         <div class="dashboard-title"><h4 class="text-left">Student Forecast</h4></div>
                         <div class="small">
@@ -123,15 +105,17 @@
                                     <img src="../assets/notfound.png"/>
                                 </div>
                                 <span class="d-block text-left" v-if="emptyImage!==true">Student</span>
-                                <double-bar-chart
-                                        :chartdata2="chartdata2"
+                                <bar-chart
+                                        :chartdata="chartdata2"
                                         v-if="isLoaded"/>
                                 <span class="text-right" v-if="emptyImage!==true">Month</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 pr-0">
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-12 ">
                     <div class="chartBox">
                         <div class="dashboard-title"><h4 class="text-left">Student Movement</h4></div>
                         <div class="small ">
@@ -260,7 +244,6 @@
                             fill: false,
                             data: []
                         },
-
                         {
                             type: 'bar',
                             label: '',
@@ -379,7 +362,6 @@
                             }
                         });
                     }
-                    this.loading = false;
                 }
 
                 //enrollment
@@ -459,7 +441,7 @@
                 //this.showCompareData();
                 const forecastResponse = await DataSource.shared.getStudentForecastByBranchMonthly();
                 if (forecastResponse) {
-                    let compareData = forecastResponse.Table1;
+                    let compareData = forecastResponse.Table;
 
                     console.log("compareData", compareData);
 
@@ -498,10 +480,14 @@
                         console.log("=========");
 
                         if (this.chartdata2 && this.chartdata2.datasets && this.chartdata2.datasets[i]) {
-                            console.log("this.chartdata2.datasets", this.chartdata2.datasets);
-                            this.chartdata2.datasets[i].data = finalData.map(b => b.Value);
-                            this.chartdata2.labels = finalData.map(c => c.Month);
-                            this.chartdata2.datasets[i].label = yearGroup;
+                            console.log("this.chartdata2", this.chartdata2);
+                            this.chartdata2.datasets[i].data = compareData.map((b, i) => {
+                                if (b.Year === d) {
+                                    return b.Value;
+                                }
+                            });
+                            this.chartdata2.labels = compareData.map(c => c.Month);
+                            this.chartdata2.datasets[i].label = yearGroup[i];
                         }
                     });
 
@@ -522,7 +508,6 @@
                     // });
                     // this.chartdata2.datasets[1].data = CompareData2019.map(d => d.Value);
                     // }
-                    this.loading = false;
 
                     switch (forecastResponse.code) {
                         case "2":
@@ -533,6 +518,7 @@
                             this.loading = false;
                             break;
                     }
+
                 }
 
                 //show new enroll graph
@@ -579,11 +565,11 @@
                             console.log("this.chartdata3", this.chartdata3);
                             console.log("this.chartdata", this.chartdata);
                             this.chartdata3.datasets[i].data = data.map(b => b.Enroll);
+                            this.chartdata3.datasets[i].label = yearGroup[i];
                             this.chartdata3.labels = data.map(c => c.Month);
                         }
 
                     });
-                    this.loading = false;
                     switch (newEnrollResponse.code) {
                         case "2":
                             this.emptyImage = true;

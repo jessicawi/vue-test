@@ -86,7 +86,7 @@
                 <!--</vs-dropdown-item>-->
                 <!--</vs-dropdown-menu>-->
                 <!--</vs-dropdown>-->
-                <el-dropdown trigger="click" class="CSTEST">
+                <el-dropdown trigger="click">
                     <a class="el-dropdown-link">
                         <i class="fa fa-life-ring" aria-hidden="true"></i>
                         <span>Guided Tour</span>
@@ -94,6 +94,12 @@
                     <el-dropdown-menu slot="dropdown" class="nav-dropdown">
                         <el-dropdown-item icon="el-icon-plus" >
                             <a @click="guidedTour('HowToCreateNewStudent')"> How to create new student</a>
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-plus" >
+                            <a @click="guidedTour('HowToPromoteStudents')"> How to promote students</a>
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-plus" >
+                            <a @click="guidedTour('HowToManageClasses')"> How to manage classes</a>
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -245,6 +251,10 @@
                     //var currentUrl = window.location.pathname;
 
                     window.location.replace('/student?tour=YES');
+                } else if (value === 'HowToPromoteStudents') {
+                    window.location.replace('/promotion?tour=YES');
+                } else if (value === 'HowToManageClasses') {
+                    window.location.replace('/ClassManagement?tour=YES');
                 }
             }
         }
